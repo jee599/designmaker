@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #ffffff;
@@ -28,7 +28,7 @@
       background-size: 24px 24px;
     }
     .font-heading { font-family: 'Space Grotesk', sans-serif; }
-    .font-body { font-family: 'Inter', sans-serif; }
+    .font-body { font-family: 'IBM Plex Sans', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
 
     /* Scroll-triggered fade-in */
@@ -60,6 +60,12 @@
       vertical-align: middle;
       margin-right: 12px;
     }
+
+    /* Focus-visible for all interactive */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body class="font-body" style="background-color: var(--bg); color: var(--text);">
@@ -73,9 +79,9 @@
           <a href="#features" class="text-sm font-normal transition-colors duration-150 hover:opacity-70" style="color: var(--muted);">Features</a>
           <a href="#how-it-works" class="text-sm font-normal transition-colors duration-150 hover:opacity-70" style="color: var(--muted);">How It Works</a>
           <a href="#pricing" class="text-sm font-normal transition-colors duration-150 hover:opacity-70" style="color: var(--muted);">Pricing</a>
-          <a href="#signup" class="rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: var(--bg);">Get Started</a>
+          <a href="#signup" class="rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:opacity-90" style="background-color: var(--accent); color: var(--bg);">Get Started</a>
         </div>
-        <button class="rounded-lg p-2 md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="color: var(--text);" aria-label="Open menu" onclick="document.getElementById('mobile-menu-a').classList.toggle('hidden')">
+        <button class="rounded-lg p-2 md:hidden" style="color: var(--text);" aria-label="Open menu" onclick="document.getElementById('mobile-menu-a').classList.toggle('hidden')">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
         </button>
       </div>
@@ -102,14 +108,14 @@
             Project management<br>that thinks ahead
           </h1>
           <p class="mx-auto mt-8 max-w-xl text-lg" style="color: var(--muted); line-height: 1.7;">
-            TaskFlow learns your team's workflow and automates repetitive tasks. Less busywork, more shipping.
+            TaskFlow learns your team's workflow and automates repetitive tasks — routing, status updates, handoffs. Less busywork, more shipping.
           </p>
           <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="#signup" class="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-base font-medium transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: var(--bg);">
+            <a href="#signup" class="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-base font-medium transition-all duration-200 hover:opacity-90" style="background-color: var(--accent); color: var(--bg);">
               Start Free
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
             </a>
-            <a href="#how-it-works" class="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-base font-medium transition-all duration-200 hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: var(--border); color: var(--text);">
+            <a href="#how-it-works" class="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-base font-medium transition-all duration-200 hover:opacity-70" style="border-color: var(--border); color: var(--text);">
               See How It Works
             </a>
           </div>
@@ -120,15 +126,7 @@
     <!-- Social Proof -->
     <section class="py-14" style="background-color: var(--subtle-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <p class="section-label mb-8 text-center">Trusted by teams at</p>
-        <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-          <span class="font-heading text-lg font-medium opacity-30 transition-opacity duration-200 hover:opacity-70" style="color: var(--text); letter-spacing: -0.01em;">Vercel</span>
-          <span class="font-heading text-lg font-medium opacity-30 transition-opacity duration-200 hover:opacity-70" style="color: var(--text); letter-spacing: -0.01em;">Stripe</span>
-          <span class="font-heading text-lg font-medium opacity-30 transition-opacity duration-200 hover:opacity-70" style="color: var(--text); letter-spacing: -0.01em;">Linear</span>
-          <span class="font-heading text-lg font-medium opacity-30 transition-opacity duration-200 hover:opacity-70" style="color: var(--text); letter-spacing: -0.01em;">Notion</span>
-          <span class="font-heading text-lg font-medium opacity-30 transition-opacity duration-200 hover:opacity-70" style="color: var(--text); letter-spacing: -0.01em;">Figma</span>
-          <span class="font-heading text-lg font-medium opacity-30 transition-opacity duration-200 hover:opacity-70" style="color: var(--text); letter-spacing: -0.01em;">Raycast</span>
-        </div>
+        <p class="section-label text-center">[N]+ teams use TaskFlow to ship faster</p>
       </div>
     </section>
 
@@ -158,7 +156,7 @@
             <p class="text-base leading-relaxed" style="color: var(--muted);">Repetitive sequences get detected and automated. Status updates, notifications, handoffs — all on autopilot.</p>
           </article>
           <!-- Card 3 -->
-          <article class="fade-in group rounded-lg border p-8 transition-all duration-200 hover:border-black" style="border-color: var(--border);">
+          <article class="fade-in group rounded-lg border p-6 transition-all duration-200 hover:border-black" style="border-color: var(--border);">
             <div class="mb-5 inline-flex rounded-lg p-2.5" style="background-color: var(--subtle-bg);">
               <svg width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="3" y="13" width="7" height="7" rx="1"/><rect x="13" y="3" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
             </div>
@@ -174,7 +172,7 @@
             <p class="text-base leading-relaxed" style="color: var(--muted);">Know before deadlines slip. AI flags at-risk tasks and suggests rebalancing before problems surface.</p>
           </article>
           <!-- Card 5 -->
-          <article class="fade-in group rounded-lg border p-8 transition-all duration-200 hover:border-black" style="border-color: var(--border);">
+          <article class="fade-in group rounded-lg border p-6 transition-all duration-200 hover:border-black" style="border-color: var(--border);">
             <div class="mb-5 inline-flex rounded-lg p-2.5" style="background-color: var(--subtle-bg);">
               <svg width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg>
             </div>
@@ -231,15 +229,15 @@
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div class="fade-in grid gap-8 sm:grid-cols-3 text-center">
           <div class="border-r-0 sm:border-r" style="border-color: var(--border);">
-            <span class="font-heading text-5xl md:text-6xl font-medium block" style="letter-spacing: -0.03em;">94%</span>
+            <span class="font-heading text-5xl md:text-6xl font-medium block" style="letter-spacing: -0.03em;">[N]%</span>
             <span class="mt-2 block text-sm" style="color: var(--muted);">On-time delivery rate</span>
           </div>
           <div class="border-r-0 sm:border-r" style="border-color: var(--border);">
-            <span class="font-heading text-5xl md:text-6xl font-medium block" style="letter-spacing: -0.03em;">12h</span>
+            <span class="font-heading text-5xl md:text-6xl font-medium block" style="letter-spacing: -0.03em;">[N]h</span>
             <span class="mt-2 block text-sm" style="color: var(--muted);">Saved per team per week</span>
           </div>
           <div>
-            <span class="font-heading text-5xl md:text-6xl font-medium block" style="letter-spacing: -0.03em;">2.4k</span>
+            <span class="font-heading text-5xl md:text-6xl font-medium block" style="letter-spacing: -0.03em;">[N]</span>
             <span class="mt-2 block text-sm" style="color: var(--muted);">Teams using TaskFlow</span>
           </div>
         </div>
@@ -252,42 +250,41 @@
         <div class="mx-auto mb-16 max-w-2xl text-center fade-in">
           <span class="section-label mb-4 inline-block">Testimonials</span>
           <h2 class="font-heading text-3xl font-medium sm:text-4xl" style="letter-spacing: -0.02em;">What teams are saying</h2>
-          <p class="mt-4 text-base" style="color: var(--muted);">Real results from real teams.</p>
         </div>
         <div class="grid gap-6 sm:grid-cols-3">
           <!-- Testimonial 1 -->
           <blockquote class="fade-in rounded-lg border p-6 transition-all duration-200 hover:border-black" style="border-color: var(--border); background-color: var(--bg);">
             <svg width="20" height="20" class="mb-4 opacity-20" fill="currentColor"><path d="M3 13h4l-2 6h4l2-6V3H3v10zm10 0h4l-2 6h4l2-6V3H13v10z"/></svg>
-            <p class="mb-6 text-base leading-relaxed">"We eliminated our Monday planning meeting entirely. TaskFlow routes everything automatically now. That's 2 hours back every week for 12 people."</p>
+            <p class="mb-6 text-base leading-relaxed">"We killed our Monday planning meeting. TaskFlow routes everything now. Took about a week to trust it — the first 2 days felt weird not assigning manually."</p>
             <footer class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-medium" style="background-color: var(--subtle-bg); color: var(--muted); border: 1px solid var(--border);">JK</div>
+              <div class="flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-medium" style="background-color: var(--subtle-bg); color: var(--muted); border: 1px solid var(--border);">@</div>
               <div>
-                <cite class="font-heading block text-sm font-semibold not-italic">James Kim</cite>
-                <span class="text-xs" style="color: var(--muted);">Engineering Lead, Raycast</span>
+                <cite class="font-heading block text-sm font-semibold not-italic">@jnkwrk</cite>
+                <span class="text-xs" style="color: var(--muted);">via ProductHunt review</span>
               </div>
             </footer>
           </blockquote>
           <!-- Testimonial 2 (highlighted) -->
           <blockquote class="fade-in rounded-lg border-2 p-6 transition-all duration-200 sm:scale-105" style="border-color: var(--accent); background-color: var(--bg);">
             <svg width="20" height="20" class="mb-4 opacity-20" fill="currentColor"><path d="M3 13h4l-2 6h4l2-6V3H3v10zm10 0h4l-2 6h4l2-6V3H13v10z"/></svg>
-            <p class="mb-6 text-base leading-relaxed">"The predictive deadlines alone paid for TaskFlow. We went from 60% on-time delivery to 94% in the first quarter."</p>
+            <p class="mb-6 text-base leading-relaxed">"Predictive deadlines are the main thing. On-time went from [N]% to [N]% in Q1. Onboarding was clunky though — docs could be better."</p>
             <footer class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-medium" style="background-color: var(--subtle-bg); color: var(--muted); border: 1px solid var(--border);">AL</div>
+              <div class="flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-medium" style="background-color: var(--subtle-bg); color: var(--muted); border: 1px solid var(--border);">@</div>
               <div>
-                <cite class="font-heading block text-sm font-semibold not-italic">Ana Lopez</cite>
-                <span class="text-xs" style="color: var(--muted);">VP Product, Loom</span>
+                <cite class="font-heading block text-sm font-semibold not-italic">@ana_ops</cite>
+                <span class="text-xs" style="color: var(--muted);">via X (Twitter)</span>
               </div>
             </footer>
           </blockquote>
           <!-- Testimonial 3 -->
           <blockquote class="fade-in rounded-lg border p-6 transition-all duration-200 hover:border-black" style="border-color: var(--border); background-color: var(--bg);">
             <svg width="20" height="20" class="mb-4 opacity-20" fill="currentColor"><path d="M3 13h4l-2 6h4l2-6V3H3v10zm10 0h4l-2 6h4l2-6V3H13v10z"/></svg>
-            <p class="mb-6 text-base leading-relaxed">"Clean, fast, no bloat. It's the Linear of project management — does exactly what you need, nothing you don't."</p>
+            <p class="mb-6 text-base leading-relaxed">"Clean, fast, no bloat. It does task routing and automation well. Wish the calendar view had drag-and-drop but apparently that's coming."</p>
             <footer class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-medium" style="background-color: var(--subtle-bg); color: var(--muted); border: 1px solid var(--border);">DW</div>
+              <div class="flex h-10 w-10 items-center justify-center rounded-full font-mono text-xs font-medium" style="background-color: var(--subtle-bg); color: var(--muted); border: 1px solid var(--border);">@</div>
               <div>
-                <cite class="font-heading block text-sm font-semibold not-italic">David Walsh</cite>
-                <span class="text-xs" style="color: var(--muted);">CTO, Incident.io</span>
+                <cite class="font-heading block text-sm font-semibold not-italic">@d_walsh_dev</cite>
+                <span class="text-xs" style="color: var(--muted);">via G2 review</span>
               </div>
             </footer>
           </blockquote>
@@ -318,7 +315,7 @@
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Basic AI suggestions</li>
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Community support</li>
             </ul>
-            <a href="#signup" class="mt-8 block rounded-full border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: var(--border); color: var(--text);">Get Started</a>
+            <a href="#signup" class="mt-8 block rounded-full border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:opacity-80" style="border-color: var(--border); color: var(--text);">Get Started</a>
           </article>
           <!-- Pro (highlighted) -->
           <article class="fade-in rounded-lg border-2 p-8 sm:scale-105" style="border-color: var(--accent); background-color: var(--bg);">
@@ -337,7 +334,7 @@
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Priority support</li>
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Custom integrations</li>
             </ul>
-            <a href="#signup" class="mt-8 block rounded-full px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: var(--bg);">Start Free Trial</a>
+            <a href="#signup" class="mt-8 block rounded-full px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:opacity-90" style="background-color: var(--accent); color: var(--bg);">Start Free Trial</a>
           </article>
           <!-- Enterprise -->
           <article class="fade-in rounded-lg border p-8 transition-all duration-200 hover:border-black" style="border-color: var(--border); background-color: var(--bg);">
@@ -355,7 +352,7 @@
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Custom contracts</li>
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>On-premise option</li>
             </ul>
-            <a href="#contact" class="mt-8 block rounded-full border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: var(--border); color: var(--text);">Contact Sales</a>
+            <a href="#contact" class="mt-8 block rounded-full border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:opacity-80" style="border-color: var(--border); color: var(--text);">Contact Sales</a>
           </article>
         </div>
       </div>
@@ -367,7 +364,7 @@
         <div class="mx-auto max-w-2xl text-center fade-in">
           <h2 class="font-heading text-3xl font-medium sm:text-5xl" style="color: #ffffff; letter-spacing: -0.03em; line-height: 1.1;">Stop managing tasks.<br>Start shipping products.</h2>
           <p class="mt-6 text-base" style="color: rgba(255,255,255,0.5);">Free for teams up to 5. No credit card required.</p>
-          <a href="#signup" class="mt-10 inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-base font-medium transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: #ffffff; color: #111111;">
+          <a href="#signup" class="mt-10 inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-base font-medium transition-all duration-200 hover:opacity-90" style="background-color: #ffffff; color: #111111;">
             Get Started Free
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>

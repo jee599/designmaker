@@ -34,12 +34,25 @@
     }
   </script>
   <style>
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
       }
+      .fade-up { opacity: 1; transform: none; }
     }
+
     .drop-cap::first-letter {
       font-family: 'Playfair Display', Georgia, serif;
       float: left;
@@ -55,21 +68,31 @@
 <body class="bg-cream text-ink antialiased">
 
   <!-- Nav -->
-  <nav class="bg-cream border-b border-border">
+  <nav class="bg-cream border-b border-border sticky top-0 z-50" style="background-color: rgba(250,248,245,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
     <div class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-      <a href="#" class="font-serif text-2xl font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Chronicle</a>
+      <a href="#" class="font-serif text-2xl font-bold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">[Your Publication]</a>
       <div class="hidden md:flex items-center gap-8">
         <a href="#" class="font-mono text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Culture</a>
         <a href="#" class="font-mono text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Technology</a>
         <a href="#" class="font-mono text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Opinion</a>
         <a href="#" class="font-mono text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Archive</a>
-        <a href="#" class="bg-accent text-white font-mono text-xs uppercase tracking-widest px-4 py-2 rounded-btn hover:bg-red-700 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Subscribe</a>
+        <a href="#newsletter" class="bg-accent text-white font-mono text-xs uppercase tracking-widest px-4 py-2 rounded-btn hover:bg-red-700 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Subscribe</a>
       </div>
+      <button class="md:hidden rounded-btn p-2 transition-colors duration-200 hover:bg-cream-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" aria-label="Open menu" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="mobile-nav" class="hidden md:hidden border-t border-border px-6 pb-4 pt-2">
+      <a href="#" class="block py-2 font-mono text-xs uppercase tracking-widest text-muted">Culture</a>
+      <a href="#" class="block py-2 font-mono text-xs uppercase tracking-widest text-muted">Technology</a>
+      <a href="#" class="block py-2 font-mono text-xs uppercase tracking-widest text-muted">Opinion</a>
+      <a href="#" class="block py-2 font-mono text-xs uppercase tracking-widest text-muted">Archive</a>
+      <a href="#newsletter" class="mt-2 block text-center bg-accent text-white font-mono text-xs uppercase tracking-widest px-4 py-2 rounded-btn">Subscribe</a>
     </div>
   </nav>
 
-  <!-- Hero: Text-only editorial -->
-  <section class="py-20 md:py-32 bg-cream">
+  <!-- Hero: Featured Essay -->
+  <section class="py-20 md:py-32 bg-cream fade-up">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="font-mono text-xs uppercase tracking-[0.1em] text-accent mb-6 block">Featured Essay</span>
       <h1 class="font-serif text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-8">
@@ -79,10 +102,10 @@
         In an age obsessed with velocity, a counter-movement is reshaping how we think about craft, attention, and the spaces between things.
       </p>
       <div class="flex items-center justify-center gap-4 text-sm">
-        <div class="w-10 h-10 rounded-full bg-cream-dark border border-border"></div>
-        <span class="font-body font-semibold">Elena Morrow</span>
+        <div class="w-10 h-10 rounded-full bg-cream-dark border border-border flex items-center justify-center font-serif text-sm font-bold text-muted" aria-hidden="true">A</div>
+        <span class="font-body font-semibold">[Author Name]</span>
         <span class="text-muted">·</span>
-        <span class="font-mono text-xs text-muted">Mar 14, 2026</span>
+        <time class="font-mono text-xs text-muted" datetime="2026-03-14">Mar 14, 2026</time>
         <span class="text-muted">·</span>
         <span class="font-mono text-xs text-muted">8 min read</span>
       </div>
@@ -90,10 +113,10 @@
   </section>
 
   <!-- Featured Article Content Preview -->
-  <section class="py-16 md:py-24 bg-cream">
+  <section class="py-12 md:py-20 bg-cream">
     <div class="max-w-3xl mx-auto px-6">
       <p class="font-body text-lg md:text-xl leading-[1.8] text-ink/90 drop-cap">
-        Something shifted in the last decade of design. Not a loud revolution — no manifestos pinned to cathedral doors — but a gradual, almost imperceptible turning away from the relentless pursuit of more. More features. More pixels. More noise. The designers leading this quiet revolt aren't rejecting technology; they're asking a simpler question: what if we designed for presence instead of productivity?
+        Something shifted in the last decade of design. Not a loud revolution -- no manifestos pinned to cathedral doors -- but a gradual, almost imperceptible turning away from the relentless pursuit of more. More features. More pixels. More noise. The designers leading this quiet revolt aren't rejecting technology; they're asking a simpler question: what if we designed for presence instead of productivity?
       </p>
       <p class="font-body text-lg md:text-xl leading-[1.8] text-ink/90 mt-6">
         The evidence is everywhere once you learn to see it. Typography that breathes. Interfaces that wait. Products that resist the urge to notify, ping, and demand. This is the aesthetic of restraint, and it's producing some of the most compelling work of our generation.
@@ -102,15 +125,15 @@
   </section>
 
   <!-- Pull Quote -->
-  <section class="py-16 md:py-20 bg-cream-dark">
+  <section class="py-16 md:py-20 bg-cream-dark fade-up">
     <div class="max-w-4xl mx-auto px-6">
       <blockquote class="relative pl-8 border-l-2 border-accent">
         <span class="absolute -top-6 -left-2 text-8xl font-serif text-accent/20 leading-none select-none" aria-hidden="true">&ldquo;</span>
         <p class="font-serif text-3xl md:text-4xl italic font-bold leading-[1.3] text-ink">
-          The most radical act a designer can perform today is to leave space — to resist filling every pixel with purpose.
+          A typeface earns trust the way a building earns it -- not through ornament, but through the honest proportion of its parts.
         </p>
         <footer class="mt-6 font-mono text-xs uppercase tracking-[0.1em] text-muted">
-          — Dieter Rams, revisited
+          — From "[Article Title]," Issue [N]
         </footer>
       </blockquote>
     </div>
@@ -119,54 +142,54 @@
   <!-- Latest Posts Grid -->
   <section class="py-16 md:py-24 bg-cream">
     <div class="max-w-5xl mx-auto px-6">
-      <div class="flex items-center justify-between mb-12">
+      <div class="flex items-center justify-between mb-12 fade-up">
         <h2 class="font-serif text-3xl md:text-4xl font-bold tracking-tight">Latest Stories</h2>
-        <a href="#" class="font-mono text-xs uppercase tracking-[0.1em] text-accent hover:underline transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">View all →</a>
+        <a href="#" class="font-mono text-xs uppercase tracking-[0.1em] text-accent hover:underline transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">View all &rarr;</a>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Card 1 -->
-        <article class="group">
+        <article class="group fade-up">
           <div class="overflow-hidden rounded-card mb-4 bg-cream-dark aspect-[4/3]">
             <div class="w-full h-full bg-gradient-to-br from-cream-dark to-border group-hover:scale-[1.02] transition-transform duration-[400ms] ease-out"></div>
           </div>
           <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-accent">Culture</span>
           <h3 class="font-serif text-xl font-bold mt-2 mb-2 leading-snug group-hover:text-accent transition-colors duration-200">
-            <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Why Bookstores Are the New Third Places</a>
+            <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Vinyl Map of Shibuya: How Record Shops Outlasted Streaming</a>
           </h3>
-          <p class="font-body text-sm text-muted leading-relaxed">The resurgence of independent bookshops as community anchors in a post-pandemic world.</p>
+          <p class="font-body text-sm text-muted leading-relaxed">Thirty-seven record stores survive within a one-kilometer radius. We walked every one of them to understand why.</p>
           <div class="flex items-center gap-2 mt-3">
-            <span class="font-body text-sm font-semibold">James Park</span>
-            <span class="font-mono text-xs text-muted">· 5 min</span>
+            <span class="font-body text-sm font-semibold">[Author]</span>
+            <span class="font-mono text-xs text-muted">&middot; 6 min</span>
           </div>
         </article>
         <!-- Card 2 -->
-        <article class="group">
+        <article class="group fade-up">
           <div class="overflow-hidden rounded-card mb-4 bg-cream-dark aspect-[4/3]">
             <div class="w-full h-full bg-gradient-to-br from-border to-muted/20 group-hover:scale-[1.02] transition-transform duration-[400ms] ease-out"></div>
           </div>
           <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-accent">Technology</span>
           <h3 class="font-serif text-xl font-bold mt-2 mb-2 leading-snug group-hover:text-accent transition-colors duration-200">
-            <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Ethics of Calm Technology</a>
+            <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The 14-Pixel Argument: Why Default Font Size Still Matters</a>
           </h3>
-          <p class="font-body text-sm text-muted leading-relaxed">When your software decides not to interrupt you, that's a design decision worth examining.</p>
+          <p class="font-body text-sm text-muted leading-relaxed">Browser defaults haven't changed since 1996. A small coalition of typographers is trying to fix that -- and failing instructively.</p>
           <div class="flex items-center gap-2 mt-3">
-            <span class="font-body text-sm font-semibold">Ada Lin</span>
-            <span class="font-mono text-xs text-muted">· 7 min</span>
+            <span class="font-body text-sm font-semibold">[Author]</span>
+            <span class="font-mono text-xs text-muted">&middot; 9 min</span>
           </div>
         </article>
         <!-- Card 3 -->
-        <article class="group">
+        <article class="group fade-up">
           <div class="overflow-hidden rounded-card mb-4 bg-cream-dark aspect-[4/5]">
             <div class="w-full h-full bg-gradient-to-br from-accent/10 to-cream-dark group-hover:scale-[1.02] transition-transform duration-[400ms] ease-out"></div>
           </div>
           <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-accent">Opinion</span>
           <h3 class="font-serif text-xl font-bold mt-2 mb-2 leading-snug group-hover:text-accent transition-colors duration-200">
-            <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Design Systems Are Killing Personality</a>
+            <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Against the Grid: What We Lost When Layouts Got Logical</a>
           </h3>
-          <p class="font-body text-sm text-muted leading-relaxed">A provocative take on how standardization is erasing the handmade quality of the web.</p>
+          <p class="font-body text-sm text-muted leading-relaxed">CSS Grid gave us power. But did the death of the float also kill a certain kind of visual serendipity?</p>
           <div class="flex items-center gap-2 mt-3">
-            <span class="font-body text-sm font-semibold">Marco Bellini</span>
-            <span class="font-mono text-xs text-muted">· 12 min</span>
+            <span class="font-body text-sm font-semibold">[Author]</span>
+            <span class="font-mono text-xs text-muted">&middot; 11 min</span>
           </div>
         </article>
       </div>
@@ -177,12 +200,12 @@
   <section class="py-10 bg-cream-dark">
     <div class="max-w-5xl mx-auto px-6">
       <div class="flex flex-wrap gap-3">
-        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn bg-ink text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">All</button>
-        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Culture</button>
-        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Technology</button>
-        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Opinion</button>
-        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Design</button>
-        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Architecture</button>
+        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn bg-ink text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">All</button>
+        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Culture</button>
+        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Technology</button>
+        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Opinion</button>
+        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Design</button>
+        <button class="font-mono text-[11px] uppercase tracking-[0.1em] px-4 py-2 rounded-btn border border-border text-muted hover:border-ink hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Architecture</button>
       </div>
     </div>
   </section>
@@ -190,9 +213,9 @@
   <!-- Long-form Highlights -->
   <section class="py-20 md:py-28 bg-cream">
     <div class="max-w-5xl mx-auto px-6">
-      <h2 class="font-serif text-3xl md:text-4xl font-bold tracking-tight mb-12">Long Reads</h2>
+      <h2 class="font-serif text-3xl md:text-4xl font-bold tracking-tight mb-12 fade-up">Long Reads</h2>
       <!-- Highlight 1 -->
-      <article class="border-b border-border pb-10 mb-10 group">
+      <article class="border-b border-border pb-10 mb-10 group fade-up">
         <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
           <div class="overflow-hidden rounded-card bg-cream-dark aspect-[3/2]">
             <div class="w-full h-full bg-gradient-to-br from-cream-dark to-muted/30 group-hover:scale-[1.02] transition-transform duration-[400ms] ease-out"></div>
@@ -202,17 +225,17 @@
             <h3 class="font-serif text-2xl md:text-3xl font-bold mt-2 mb-3 leading-tight group-hover:text-accent transition-colors duration-200">
               <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Concrete Dreams: How Brutalism Found a Second Life Online</a>
             </h3>
-            <p class="font-body text-base text-muted leading-[1.8] mb-4">From Instagram aesthetics to a genuine architectural revival, the most divisive style in building history is having its moment — again. We trace the digital pipeline from hashtag to hardscape.</p>
+            <p class="font-body text-base text-muted leading-[1.8] mb-4">From Instagram aesthetics to a genuine architectural revival, the most divisive style in building history is having its moment -- again. We trace the digital pipeline from hashtag to hardscape.</p>
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-cream-dark border border-border"></div>
-              <span class="font-body text-sm font-semibold">Yuki Tanaka</span>
-              <span class="font-mono text-xs text-muted">Mar 10, 2026 · 15 min</span>
+              <div class="w-8 h-8 rounded-full bg-cream-dark border border-border flex items-center justify-center font-serif text-xs font-bold text-muted" aria-hidden="true">Y</div>
+              <span class="font-body text-sm font-semibold">[Author]</span>
+              <time class="font-mono text-xs text-muted" datetime="2026-03-10">Mar 10, 2026 &middot; 15 min</time>
             </div>
           </div>
         </div>
       </article>
       <!-- Highlight 2 -->
-      <article class="border-b border-border pb-10 mb-10 group">
+      <article class="border-b border-border pb-10 mb-10 group fade-up">
         <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
           <div class="overflow-hidden rounded-card bg-cream-dark aspect-[3/2]">
             <div class="w-full h-full bg-gradient-to-br from-border to-cream group-hover:scale-[1.02] transition-transform duration-[400ms] ease-out"></div>
@@ -220,13 +243,33 @@
           <div>
             <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-accent">Design</span>
             <h3 class="font-serif text-2xl md:text-3xl font-bold mt-2 mb-3 leading-tight group-hover:text-accent transition-colors duration-200">
-              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Typography of Trust: What Fonts Say About Your Brand</a>
+              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Weight of Garamond: What 500 Years of One Typeface Teaches Us About Permanence</a>
             </h3>
-            <p class="font-body text-base text-muted leading-[1.8] mb-4">A deep dive into typographic psychology — why serif still means authority, why geometric sans feels modern, and why Comic Sans will never be forgiven.</p>
+            <p class="font-body text-base text-muted leading-[1.8] mb-4">Claude Garamond cut his first punches in the 1530s. The face that bears his name has survived movable type, phototypesetting, and digitization. We asked eight type designers: what makes it endure?</p>
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-cream-dark border border-border"></div>
-              <span class="font-body text-sm font-semibold">Sofia Reyes</span>
-              <span class="font-mono text-xs text-muted">Mar 8, 2026 · 11 min</span>
+              <div class="w-8 h-8 rounded-full bg-cream-dark border border-border flex items-center justify-center font-serif text-xs font-bold text-muted" aria-hidden="true">S</div>
+              <span class="font-body text-sm font-semibold">[Author]</span>
+              <time class="font-mono text-xs text-muted" datetime="2026-03-08">Mar 8, 2026 &middot; 13 min</time>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- Highlight 3 -->
+      <article class="group fade-up">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 items-start">
+          <div class="overflow-hidden rounded-card bg-cream-dark aspect-[3/2]">
+            <div class="w-full h-full bg-gradient-to-br from-accent/5 to-cream-dark group-hover:scale-[1.02] transition-transform duration-[400ms] ease-out"></div>
+          </div>
+          <div>
+            <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-accent">Culture</span>
+            <h3 class="font-serif text-2xl md:text-3xl font-bold mt-2 mb-3 leading-tight group-hover:text-accent transition-colors duration-200">
+              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Last Darkroom in Reykjavik</a>
+            </h3>
+            <p class="font-body text-base text-muted leading-[1.8] mb-4">Sigurdur Einarsson processes film for photographers across three continents from a converted fishing shed. He has no website and a six-month waitlist.</p>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-cream-dark border border-border flex items-center justify-center font-serif text-xs font-bold text-muted" aria-hidden="true">K</div>
+              <span class="font-body text-sm font-semibold">[Author]</span>
+              <time class="font-mono text-xs text-muted" datetime="2026-03-05">Mar 5, 2026 &middot; 18 min</time>
             </div>
           </div>
         </div>
@@ -234,12 +277,76 @@
     </div>
   </section>
 
+  <!-- Second Pull Quote -->
+  <section class="py-16 md:py-20 bg-cream-dark fade-up">
+    <div class="max-w-4xl mx-auto px-6">
+      <blockquote class="relative pl-8 border-l-2 border-accent">
+        <span class="absolute -top-6 -left-2 text-8xl font-serif text-accent/20 leading-none select-none" aria-hidden="true">&ldquo;</span>
+        <p class="font-serif text-2xl md:text-3xl italic font-bold leading-[1.3] text-ink">
+          We spent three decades making screens brighter, faster, more saturated. The interesting question now is whether we have the discipline to make them quieter.
+        </p>
+        <footer class="mt-6 font-mono text-xs uppercase tracking-[0.1em] text-muted">
+          — From "[Article Title]," Issue [N]
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Editor's Picks: Compact List -->
+  <section class="py-16 md:py-20 bg-cream">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="flex items-center justify-between mb-10 fade-up">
+        <h2 class="font-serif text-2xl md:text-3xl font-bold tracking-tight">Editor&rsquo;s Picks</h2>
+        <span class="font-mono text-[11px] uppercase tracking-[0.1em] text-muted">From the archive</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+        <article class="flex gap-4 items-start border-b border-border pb-6 group fade-up">
+          <span class="font-serif text-4xl font-bold text-cream-dark leading-none shrink-0 mt-1">01</span>
+          <div>
+            <h3 class="font-serif text-lg font-bold leading-snug group-hover:text-accent transition-colors duration-200">
+              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Why Every Museum Gift Shop Looks the Same Now</a>
+            </h3>
+            <p class="font-body text-sm text-muted mt-1">[Author] &middot; 7 min</p>
+          </div>
+        </article>
+        <article class="flex gap-4 items-start border-b border-border pb-6 group fade-up">
+          <span class="font-serif text-4xl font-bold text-cream-dark leading-none shrink-0 mt-1">02</span>
+          <div>
+            <h3 class="font-serif text-lg font-bold leading-snug group-hover:text-accent transition-colors duration-200">
+              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">The Sound of a Room: Acoustic Design as Invisible Architecture</a>
+            </h3>
+            <p class="font-body text-sm text-muted mt-1">[Author] &middot; 14 min</p>
+          </div>
+        </article>
+        <article class="flex gap-4 items-start border-b border-border pb-6 group fade-up">
+          <span class="font-serif text-4xl font-bold text-cream-dark leading-none shrink-0 mt-1">03</span>
+          <div>
+            <h3 class="font-serif text-lg font-bold leading-snug group-hover:text-accent transition-colors duration-200">
+              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Paper Weight: The Craft Behind Mohawk Superfine</a>
+            </h3>
+            <p class="font-body text-sm text-muted mt-1">[Author] &middot; 10 min</p>
+          </div>
+        </article>
+        <article class="flex gap-4 items-start border-b border-border pb-6 group fade-up">
+          <span class="font-serif text-4xl font-bold text-cream-dark leading-none shrink-0 mt-1">04</span>
+          <div>
+            <h3 class="font-serif text-lg font-bold leading-snug group-hover:text-accent transition-colors duration-200">
+              <a href="#" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Letter Spacing and Class: The Hidden Politics of Kerning</a>
+            </h3>
+            <p class="font-body text-sm text-muted mt-1">[Author] &middot; 8 min</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- Newsletter CTA -->
-  <section class="py-20 bg-ink">
-    <div class="max-w-3xl mx-auto px-6 text-center">
-      <h2 class="font-serif text-3xl md:text-4xl font-bold text-cream tracking-tight mb-4">Stay in the conversation.</h2>
+  <section id="newsletter" class="py-20 bg-ink">
+    <div class="max-w-3xl mx-auto px-6 text-center fade-up">
+      <span class="font-mono text-[11px] uppercase tracking-[0.15em] text-red-400 mb-4 block">[Your Publication] Weekly</span>
+      <h2 class="font-serif text-3xl md:text-4xl font-bold text-cream tracking-tight mb-4">Writing that rewards your attention.</h2>
       <p class="font-body text-base text-cream/60 leading-relaxed mb-8 max-w-xl mx-auto">
-        One essay, every Thursday. No algorithms, no feeds — just writing that rewards your attention.
+        One essay, every Thursday morning. No algorithms, no feeds, no engagement tricks. Just [N] minutes of reading selected by our editors, delivered to your inbox.
       </p>
       <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
         <label for="email-input" class="sr-only">Email address</label>
@@ -247,7 +354,8 @@
           id="email-input"
           type="email"
           placeholder="your@email.com"
-          class="flex-1 px-4 py-3 rounded-btn bg-white/10 border border-white/20 text-cream placeholder-cream/40 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+          required
+          class="flex-1 px-4 py-3 rounded-btn bg-white/10 border border-white/20 text-cream placeholder-cream/40 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-shadow duration-200"
         />
         <button
           type="submit"
@@ -256,41 +364,41 @@
           Subscribe
         </button>
       </form>
-      <p class="font-mono text-[11px] text-cream/30 mt-4">12,400+ readers. Unsubscribe anytime.</p>
+      <p class="font-mono text-[11px] text-cream/30 mt-4">[N] readers. Unsubscribe anytime. No spam, ever.</p>
     </div>
   </section>
 
-  <!-- Author Spotlight -->
+  <!-- Contributors -->
   <section class="py-16 bg-cream-dark">
     <div class="max-w-3xl mx-auto px-6">
-      <h2 class="font-serif text-2xl font-bold tracking-tight mb-8">Contributors</h2>
+      <h2 class="font-serif text-2xl font-bold tracking-tight mb-8 fade-up">Contributors</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="flex items-start gap-4">
-          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0"></div>
+        <div class="flex items-start gap-4 fade-up">
+          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0 flex items-center justify-center font-serif text-lg font-bold text-muted" aria-hidden="true">A</div>
           <div>
-            <h3 class="font-serif text-lg font-bold">Elena Morrow</h3>
-            <p class="font-body text-sm text-muted leading-relaxed">Editor-in-chief. Writes about design, craft, and the tension between old and new.</p>
+            <h3 class="font-serif text-lg font-bold">[Editor-in-Chief]</h3>
+            <p class="font-body text-sm text-muted leading-relaxed">[Role and beat. What they write about, what shapes their perspective. One sentence with a specific detail.]</p>
           </div>
         </div>
-        <div class="flex items-start gap-4">
-          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0"></div>
+        <div class="flex items-start gap-4 fade-up">
+          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0 flex items-center justify-center font-serif text-lg font-bold text-muted" aria-hidden="true">B</div>
           <div>
-            <h3 class="font-serif text-lg font-bold">James Park</h3>
-            <p class="font-body text-sm text-muted leading-relaxed">Culture correspondent. Covers bookshops, cities, and disappearing spaces.</p>
+            <h3 class="font-serif text-lg font-bold">[Culture Writer]</h3>
+            <p class="font-body text-sm text-muted leading-relaxed">[Their angle and expertise. A specific credential or previous publication adds credibility.]</p>
           </div>
         </div>
-        <div class="flex items-start gap-4">
-          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0"></div>
+        <div class="flex items-start gap-4 fade-up">
+          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0 flex items-center justify-center font-serif text-lg font-bold text-muted" aria-hidden="true">C</div>
           <div>
-            <h3 class="font-serif text-lg font-bold">Ada Lin</h3>
-            <p class="font-body text-sm text-muted leading-relaxed">Technology editor. Focused on calm computing and ethical design systems.</p>
+            <h3 class="font-serif text-lg font-bold">[Technology Editor]</h3>
+            <p class="font-body text-sm text-muted leading-relaxed">[Technical background and editorial focus. Name a specific interest or past project.]</p>
           </div>
         </div>
-        <div class="flex items-start gap-4">
-          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0"></div>
+        <div class="flex items-start gap-4 fade-up">
+          <div class="w-14 h-14 rounded-full bg-border flex-shrink-0 flex items-center justify-center font-serif text-lg font-bold text-muted" aria-hidden="true">D</div>
           <div>
-            <h3 class="font-serif text-lg font-bold">Marco Bellini</h3>
-            <p class="font-body text-sm text-muted leading-relaxed">Opinion columnist. Provocateur. Says what others are thinking about design trends.</p>
+            <h3 class="font-serif text-lg font-bold">[Opinion Columnist]</h3>
+            <p class="font-body text-sm text-muted leading-relaxed">[Voice and stance. What makes their opinion column distinct from the rest of the publication.]</p>
           </div>
         </div>
       </div>
@@ -301,17 +409,32 @@
   <footer class="py-12 bg-ink">
     <div class="max-w-5xl mx-auto px-6">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <span class="font-serif text-xl font-bold text-cream">The Chronicle</span>
-        <div class="flex gap-6">
+        <span class="font-serif text-xl font-bold text-cream">[Your Publication]</span>
+        <nav class="flex gap-6" aria-label="Footer">
           <a href="#" class="font-mono text-xs uppercase tracking-widest text-cream/40 hover:text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">About</a>
+          <a href="#" class="font-mono text-xs uppercase tracking-widest text-cream/40 hover:text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Ethics</a>
           <a href="#" class="font-mono text-xs uppercase tracking-widest text-cream/40 hover:text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Privacy</a>
           <a href="#" class="font-mono text-xs uppercase tracking-widest text-cream/40 hover:text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">RSS</a>
           <a href="#" class="font-mono text-xs uppercase tracking-widest text-cream/40 hover:text-cream transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-btn">Contact</a>
-        </div>
+        </nav>
       </div>
-      <p class="font-mono text-[11px] text-cream/20 text-center mt-8">&copy; 2026 The Chronicle. All rights reserved.</p>
+      <p class="font-mono text-[11px] text-cream/20 text-center mt-8">&copy; 2026 [Your Publication]. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+  </script>
 
 </body>
 </html>

@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #ffffff;
@@ -24,7 +24,7 @@
       }
     }
     .font-heading { font-family: 'DM Sans', sans-serif; }
-    .font-body { font-family: 'Inter', sans-serif; }
+    .font-body { font-family: 'IBM Plex Sans', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
     .dot-pattern {
       background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
@@ -43,16 +43,25 @@
     .btn-primary:hover {
       box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
     }
+
+    /* Scroll-triggered fade-in */
     .fade-in {
       opacity: 0;
-      transform: translateY(16px);
-      animation: fadeUp 0.6s ease forwards;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    .fade-in-delay-1 { animation-delay: 0.1s; }
-    .fade-in-delay-2 { animation-delay: 0.2s; }
-    .fade-in-delay-3 { animation-delay: 0.3s; }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+
+    /* Focus-visible for all interactive */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
   </style>
 </head>
@@ -70,9 +79,9 @@
           <a href="#how-it-works" class="text-sm font-normal transition-colors duration-150 hover:opacity-70" style="color: var(--muted);">How It Works</a>
           <a href="#pricing" class="text-sm font-normal transition-colors duration-150 hover:opacity-70" style="color: var(--muted);">Pricing</a>
           <a href="#" class="text-sm font-normal transition-colors duration-150 hover:opacity-70" style="color: var(--muted);">Docs</a>
-          <a href="#signup" class="btn-primary rounded-lg px-4 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: #ffffff;">Start Free Trial</a>
+          <a href="#signup" class="btn-primary rounded-lg px-4 py-2 text-sm font-medium" style="background-color: var(--accent); color: #ffffff;">Start Free Trial</a>
         </div>
-        <button class="rounded-lg p-2 md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="color: var(--text);" aria-label="Open menu" onclick="document.getElementById('mobile-menu-b').classList.toggle('hidden')">
+        <button class="rounded-lg p-2 md:hidden" style="color: var(--text);" aria-label="Open menu" onclick="document.getElementById('mobile-menu-b').classList.toggle('hidden')">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
         </button>
       </div>
@@ -95,28 +104,21 @@
           <div class="fade-in">
             <span class="font-mono mb-6 inline-block rounded-full px-3 py-1 text-xs font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent); border: 1px solid rgba(37,99,235,0.2);">v2.4 — AI Workflows</span>
             <h1 class="font-heading text-5xl font-bold md:text-6xl" style="line-height: 1.08; letter-spacing: -0.02em;">
-              Ship projects faster with <span style="color: var(--accent);">AI-powered</span> management
+              Ship projects faster with <span style="color: var(--accent);">AI-powered</span> task routing
             </h1>
             <p class="mt-6 text-lg leading-relaxed" style="color: var(--muted);">
-              TaskFlow learns your team's workflow and automates repetitive tasks. Reduce planning overhead by 60% and hit deadlines consistently.
+              TaskFlow learns your team's workflow and automates the repetitive parts — assignment, status updates, handoffs. Your team plans less and ships more.
             </p>
             <div class="mt-10 flex flex-col gap-4 sm:flex-row">
-              <a href="#signup" class="btn-primary inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: #ffffff;">
+              <a href="#signup" class="btn-primary inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-medium" style="background-color: var(--accent); color: #ffffff;">
                 Start Free Trial
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
               </a>
-              <a href="#how-it-works" class="inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: var(--border); color: var(--text);">
+              <a href="#how-it-works" class="inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-slate-50" style="border-color: var(--border); color: var(--text);">
                 Watch Demo
               </a>
             </div>
-            <div class="mt-8 flex items-center gap-4">
-              <div class="flex -space-x-2">
-                <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-medium" style="background-color: #dbeafe; color: var(--accent);">JK</div>
-                <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-medium" style="background-color: #e0e7ff; color: #4338ca;">LM</div>
-                <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-xs font-medium" style="background-color: #dbeafe; color: var(--accent);">RW</div>
-              </div>
-              <p class="text-sm" style="color: var(--muted);">Joined by <span class="font-medium" style="color: var(--text);">2,400+</span> teams this month</p>
-            </div>
+            <p class="mt-8 text-sm" style="color: var(--muted);">Free for up to 5 members. No credit card required.</p>
           </div>
           <!-- Right: Browser Mockup (Enhanced Dashboard) -->
           <div class="fade-in fade-in-delay-2 overflow-hidden rounded-lg border shadow-sm" style="border-color: var(--border); background-color: var(--subtle-bg);">
@@ -170,7 +172,7 @@
                   </div>
                   <div class="rounded-lg p-2.5" style="background-color: var(--bg); border: 1px solid var(--border);">
                     <p class="font-mono text-xs" style="color: var(--muted);">On Track</p>
-                    <p class="font-heading text-xl font-bold" style="color: #22c55e;">94%</p>
+                    <p class="font-heading text-xl font-bold" style="color: #22c55e;">—</p>
                     <div class="mt-1 flex items-center gap-1">
                       <svg width="10" height="10" fill="none" stroke="#22c55e" stroke-width="2"><path d="M1 7l3-4 3 2 2-3"/></svg>
                       <p class="font-mono text-xs" style="color: #22c55e;">+8%</p>
@@ -225,22 +227,14 @@
     <!-- Social Proof -->
     <section class="py-12" style="background-color: var(--subtle-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <p class="font-body mb-8 text-center text-sm font-medium uppercase tracking-wider" style="color: var(--muted);">Trusted by 2,000+ teams worldwide</p>
-        <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-          <span class="font-heading text-lg font-semibold opacity-40 transition-opacity duration-200 hover:opacity-80" style="color: var(--text);">Shopify</span>
-          <span class="font-heading text-lg font-semibold opacity-40 transition-opacity duration-200 hover:opacity-80" style="color: var(--text);">Datadog</span>
-          <span class="font-heading text-lg font-semibold opacity-40 transition-opacity duration-200 hover:opacity-80" style="color: var(--text);">Twilio</span>
-          <span class="font-heading text-lg font-semibold opacity-40 transition-opacity duration-200 hover:opacity-80" style="color: var(--text);">HashiCorp</span>
-          <span class="font-heading text-lg font-semibold opacity-40 transition-opacity duration-200 hover:opacity-80" style="color: var(--text);">GitLab</span>
-          <span class="font-heading text-lg font-semibold opacity-40 transition-opacity duration-200 hover:opacity-80" style="color: var(--text);">PlanetScale</span>
-        </div>
+        <p class="font-body text-center text-sm font-medium" style="color: var(--muted);">Used by [N]+ teams — from 3-person startups to [N]-seat engineering orgs</p>
       </div>
     </section>
 
     <!-- Features Bento Grid -->
     <section id="features" class="py-20" style="background-color: var(--bg);">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto mb-16 max-w-2xl text-center">
+        <div class="mx-auto mb-16 max-w-2xl text-center fade-in">
           <span class="font-mono mb-4 inline-block rounded-full px-3 py-1 text-xs font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent); border: 1px solid rgba(37,99,235,0.15);">Features</span>
           <h2 class="font-heading text-3xl font-bold tracking-tight sm:text-4xl">Built for teams that ship</h2>
           <p class="mt-4 text-base" style="color: var(--muted);">Powerful AI features that eliminate busywork and keep your team focused on what matters.</p>
@@ -271,7 +265,7 @@
             <p class="text-base leading-relaxed" style="color: var(--muted);">Real-time risk scoring flags at-risk deadlines before they slip. Rebalance workloads with one click.</p>
           </article>
           <!-- Card 4 -->
-          <article class="card-hover group rounded-lg border p-6 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
+          <article class="card-hover group rounded-lg border p-8 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
             <div class="mb-4 inline-flex rounded-lg p-2.5" style="background-color: rgba(37,99,235,0.08);">
               <svg width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
             </div>
@@ -293,7 +287,7 @@
     <!-- How It Works -->
     <section id="how-it-works" class="py-20" style="background-color: var(--subtle-bg);">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto mb-16 max-w-2xl text-center">
+        <div class="mx-auto mb-16 max-w-2xl text-center fade-in">
           <span class="font-mono mb-4 inline-block rounded-full px-3 py-1 text-xs font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent); border: 1px solid rgba(37,99,235,0.15);">How It Works</span>
           <h2 class="font-heading text-3xl font-bold tracking-tight sm:text-4xl">Up and running in minutes</h2>
           <p class="mt-4 text-base" style="color: var(--muted);">No complex setup. No lengthy onboarding. Just results.</p>
@@ -301,19 +295,19 @@
         <div class="relative grid gap-8 sm:grid-cols-3">
           <div class="absolute left-0 right-0 top-10 hidden h-px sm:block" style="background: linear-gradient(to right, transparent, var(--border) 15%, var(--border) 85%, transparent);" aria-hidden="true"></div>
           <!-- Step 1 -->
-          <div class="relative text-center">
+          <div class="fade-in relative text-center">
             <div class="relative z-10 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full font-mono text-xl font-medium" style="background-color: var(--bg); color: var(--accent); border: 2px solid var(--accent); box-shadow: 0 0 0 8px var(--subtle-bg);">01</div>
             <h3 class="font-heading mb-3 text-lg font-semibold">Connect your tools</h3>
             <p class="mx-auto max-w-xs text-base leading-relaxed" style="color: var(--muted);">Import from Jira, Asana, Trello, or Linear. Your data migrates in under 5 minutes.</p>
           </div>
           <!-- Step 2 -->
-          <div class="relative text-center">
+          <div class="fade-in relative text-center">
             <div class="relative z-10 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full font-mono text-xl font-medium" style="background-color: var(--bg); color: var(--accent); border: 2px solid var(--accent); box-shadow: 0 0 0 8px var(--subtle-bg);">02</div>
             <h3 class="font-heading mb-3 text-lg font-semibold">AI learns your patterns</h3>
             <p class="mx-auto max-w-xs text-base leading-relaxed" style="color: var(--muted);">TaskFlow observes your team for 48 hours and maps your actual workflow, not just your org chart.</p>
           </div>
           <!-- Step 3 -->
-          <div class="relative text-center">
+          <div class="fade-in relative text-center">
             <div class="relative z-10 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full font-mono text-xl font-medium" style="background-color: var(--bg); color: var(--accent); border: 2px solid var(--accent); box-shadow: 0 0 0 8px var(--subtle-bg);">03</div>
             <h3 class="font-heading mb-3 text-lg font-semibold">Activate automations</h3>
             <p class="mx-auto max-w-xs text-base leading-relaxed" style="color: var(--muted);">Review AI-suggested automations, approve with one click, and reclaim hours every week.</p>
@@ -325,62 +319,40 @@
     <!-- Testimonials -->
     <section class="py-20" style="background-color: var(--bg);">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto mb-16 max-w-2xl text-center">
-          <h2 class="font-heading text-3xl font-bold tracking-tight sm:text-4xl">Loved by engineering teams</h2>
-          <p class="mt-4 text-base" style="color: var(--muted);">See why thousands of teams switched to TaskFlow.</p>
+        <div class="mx-auto mb-16 max-w-2xl text-center fade-in">
+          <h2 class="font-heading text-3xl font-bold tracking-tight sm:text-4xl">What real users say</h2>
         </div>
         <div class="grid gap-6 sm:grid-cols-3">
           <!-- Testimonial 1 -->
-          <blockquote class="card-hover rounded-lg border p-6 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
-            <div class="mb-4 flex items-center gap-1">
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-            </div>
-            <p class="mb-6 text-base leading-relaxed">"TaskFlow's AI routing eliminated our entire weekly triage meeting. That's 90 minutes back for every engineer, every week."</p>
+          <blockquote class="fade-in card-hover rounded-lg border p-6 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
+            <p class="mb-6 text-base leading-relaxed">"AI routing killed our triage meeting. That's [N] minutes back per engineer per week. Setup took longer than I expected — maybe 3 hours, not the '5 minutes' they claim."</p>
             <footer class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent);">SC</div>
+              <div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent);">@</div>
               <div>
-                <cite class="font-heading block text-sm font-semibold not-italic">Sarah Chen</cite>
-                <span class="text-xs" style="color: var(--muted);">CTO, Incident.io</span>
+                <cite class="font-heading block text-sm font-semibold not-italic">@schen_eng</cite>
+                <span class="text-xs" style="color: var(--muted);">via G2 review, 4/5 stars</span>
               </div>
             </footer>
           </blockquote>
           <!-- Testimonial 2 (highlighted) -->
-          <blockquote class="rounded-lg border-2 p-6 shadow-sm sm:scale-105" style="border-color: var(--accent); background-color: var(--bg);">
-            <div class="mb-4 flex items-center gap-1">
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-            </div>
-            <p class="mb-6 text-base leading-relaxed">"We went from 62% on-time delivery to 94% in one quarter. The predictive analytics alone justify the entire cost."</p>
+          <blockquote class="fade-in rounded-lg border-2 p-6 shadow-sm sm:scale-105" style="border-color: var(--accent); background-color: var(--bg);">
+            <p class="mb-6 text-base leading-relaxed">"On-time delivery went from [N]% to [N]% in one quarter. The predictive stuff is genuinely useful. Mobile app is weak though — I mostly use desktop."</p>
             <footer class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent);">MR</div>
+              <div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent);">@</div>
               <div>
-                <cite class="font-heading block text-sm font-semibold not-italic">Marcus Rivera</cite>
-                <span class="text-xs" style="color: var(--muted);">VP Engineering, Datadog</span>
+                <cite class="font-heading block text-sm font-semibold not-italic">@marcusR</cite>
+                <span class="text-xs" style="color: var(--muted);">via X (Twitter)</span>
               </div>
             </footer>
           </blockquote>
           <!-- Testimonial 3 -->
-          <blockquote class="card-hover rounded-lg border p-6 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
-            <div class="mb-4 flex items-center gap-1">
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-              <svg width="16" height="16" fill="#2563eb" class="opacity-80"><polygon points="8,1 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6"/></svg>
-            </div>
-            <p class="mb-6 text-base leading-relaxed">"The integrations are seamless. GitHub PRs auto-link to tasks, Slack threads become action items. Everything just connects."</p>
+          <blockquote class="fade-in card-hover rounded-lg border p-6 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
+            <p class="mb-6 text-base leading-relaxed">"GitHub PRs auto-link to tasks, Slack threads become action items. Integrations are the strong point. Pricing could be clearer — had to email sales to understand enterprise tier."</p>
             <footer class="flex items-center gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent);">AP</div>
+              <div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent);">@</div>
               <div>
-                <cite class="font-heading block text-sm font-semibold not-italic">Aisha Patel</cite>
-                <span class="text-xs" style="color: var(--muted);">Lead Engineer, GitLab</span>
+                <cite class="font-heading block text-sm font-semibold not-italic">@aisha_p</cite>
+                <span class="text-xs" style="color: var(--muted);">via ProductHunt review</span>
               </div>
             </footer>
           </blockquote>
@@ -391,14 +363,14 @@
     <!-- Pricing -->
     <section id="pricing" class="py-20" style="background-color: var(--subtle-bg);">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto mb-16 max-w-2xl text-center">
+        <div class="mx-auto mb-16 max-w-2xl text-center fade-in">
           <span class="font-mono mb-4 inline-block rounded-full px-3 py-1 text-xs font-medium" style="background-color: rgba(37,99,235,0.08); color: var(--accent); border: 1px solid rgba(37,99,235,0.15);">Pricing</span>
           <h2 class="font-heading text-3xl font-bold tracking-tight sm:text-4xl">Transparent pricing, no surprises</h2>
           <p class="mt-4 text-base" style="color: var(--muted);">Start free. Upgrade when you're ready. Cancel anytime.</p>
         </div>
         <div class="grid items-start gap-6 sm:grid-cols-3">
           <!-- Starter -->
-          <article class="card-hover rounded-lg border p-8 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
+          <article class="fade-in card-hover rounded-lg border p-8 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
             <h3 class="font-heading text-lg font-semibold">Starter</h3>
             <p class="mt-1 text-sm" style="color: var(--muted);">For small teams just getting started.</p>
             <div class="mt-6 flex items-baseline gap-1">
@@ -411,10 +383,10 @@
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Basic AI suggestions</li>
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Community support</li>
             </ul>
-            <a href="#signup" class="mt-8 block rounded-lg border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: var(--border); color: var(--text);">Get Started Free</a>
+            <a href="#signup" class="mt-8 block rounded-lg border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:bg-slate-50" style="border-color: var(--border); color: var(--text);">Get Started Free</a>
           </article>
           <!-- Pro (highlighted) -->
-          <article class="rounded-lg border-2 p-8 shadow-sm sm:scale-105" style="border-color: var(--accent); background-color: var(--bg);">
+          <article class="fade-in rounded-lg border-2 p-8 shadow-sm sm:scale-105" style="border-color: var(--accent); background-color: var(--bg);">
             <span class="font-mono mb-4 inline-block rounded-full px-3 py-1 text-xs font-medium" style="background-color: var(--accent); color: #ffffff;">Most Popular</span>
             <h3 class="font-heading text-lg font-semibold">Pro</h3>
             <p class="mt-1 text-sm" style="color: var(--muted);">For growing teams shipping fast.</p>
@@ -430,10 +402,10 @@
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Priority support</li>
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Custom integrations</li>
             </ul>
-            <a href="#signup" class="btn-primary mt-8 block rounded-lg px-6 py-3 text-center text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: #ffffff;">Start Free Trial</a>
+            <a href="#signup" class="btn-primary mt-8 block rounded-lg px-6 py-3 text-center text-sm font-medium" style="background-color: var(--accent); color: #ffffff;">Start Free Trial</a>
           </article>
           <!-- Enterprise -->
-          <article class="card-hover rounded-lg border p-8 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
+          <article class="fade-in card-hover rounded-lg border p-8 shadow-sm" style="background-color: var(--bg); border-color: var(--border);">
             <h3 class="font-heading text-lg font-semibold">Enterprise</h3>
             <p class="mt-1 text-sm" style="color: var(--muted);">For organizations with advanced needs.</p>
             <div class="mt-6 flex items-baseline gap-1">
@@ -448,25 +420,25 @@
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>Custom contracts</li>
               <li class="flex items-start gap-2 text-sm"><svg width="16" height="16" class="mt-0.5 shrink-0" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 8l3 3 5-6"/></svg>On-premise deployment</li>
             </ul>
-            <a href="#contact" class="mt-8 block rounded-lg border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: var(--border); color: var(--text);">Contact Sales</a>
+            <a href="#contact" class="mt-8 block rounded-lg border px-6 py-3 text-center text-sm font-medium transition-all duration-200 hover:bg-slate-50" style="border-color: var(--border); color: var(--text);">Contact Sales</a>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- CTA — dark-to-darker gradient (gray-900 to gray-950) -->
+    <!-- CTA -->
     <section class="py-24" style="background: linear-gradient(180deg, #111827 0%, #030712 100%); color: #ffffff;">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center">
+        <div class="mx-auto max-w-2xl text-center fade-in">
           <span class="font-mono mb-6 inline-block rounded-full px-3 py-1 text-xs font-medium" style="background-color: rgba(37,99,235,0.15); color: #93b4f8; border: 1px solid rgba(37,99,235,0.25);">Get Started</span>
           <h2 class="font-heading text-3xl font-bold tracking-tight sm:text-4xl" style="color: #ffffff;">Ready to automate your workflow?</h2>
-          <p class="mt-4 text-base" style="color: rgba(255,255,255,0.55);">Join 2,000+ teams shipping faster with TaskFlow. Free to start, no credit card required.</p>
+          <p class="mt-4 text-base" style="color: rgba(255,255,255,0.55);">Free to start, no credit card required.</p>
           <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a href="#signup" class="btn-primary inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="background-color: var(--accent); color: #ffffff;">
+            <a href="#signup" class="btn-primary inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-medium" style="background-color: var(--accent); color: #ffffff;">
               Start Free Trial
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
             </a>
-            <a href="#" class="inline-flex items-center gap-2 rounded-lg border px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2" style="border-color: rgba(255,255,255,0.15); color: #ffffff;">
+            <a href="#" class="inline-flex items-center gap-2 rounded-lg border px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-white/5" style="border-color: rgba(255,255,255,0.15); color: #ffffff;">
               Schedule Demo
             </a>
           </div>
@@ -525,6 +497,26 @@
       </div>
     </div>
   </footer>
+
+  <!-- Scroll-triggered fade-in animation -->
+  <script>
+    (function() {
+      var els = document.querySelectorAll('.fade-in');
+      if (!window.IntersectionObserver) {
+        els.forEach(function(el) { el.classList.add('visible'); });
+        return;
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      els.forEach(function(el) { observer.observe(el); });
+    })();
+  </script>
 
 </body>
 </html>
