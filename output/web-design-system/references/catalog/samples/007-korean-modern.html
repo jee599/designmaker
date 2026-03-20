@@ -48,6 +48,12 @@
       }
       .reveal { opacity: 1 !important; transform: none !important; }
       .phone-float { animation: none !important; }
+      .kanban-col { opacity: 1 !important; transform: none !important; }
+      .kanban-card { opacity: 1 !important; transform: none !important; }
+      .kanban-progress { width: var(--target-width) !important; }
+      .notif-item { opacity: 1 !important; transform: none !important; }
+      .cursor-mover { transition: none !important; }
+      .hero-task-check .task-checkbox { transition: none !important; }
     }
 
     /* Scroll reveal */
@@ -124,6 +130,136 @@
     .hero-glow {
       background: radial-gradient(ellipse 600px 400px at 50% 60%, rgba(49,130,246,0.06) 0%, transparent 70%);
     }
+
+    /* === ANIMATION 2: Kanban board === */
+    .kanban-col {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .kanban-animated .kanban-col {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .kanban-card {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    }
+    .kanban-animated .kanban-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .kanban-progress {
+      width: 0%;
+      transition: width 1.5s ease-out;
+    }
+    .kanban-animated .kanban-progress {
+      width: var(--target-width);
+    }
+
+    /* Kanban done checkmark */
+    @keyframes checkPop {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .done-check {
+      opacity: 0;
+      transform: scale(0);
+    }
+    .kanban-animated .done-check {
+      animation: checkPop 0.4s ease-out forwards;
+    }
+
+    /* === ANIMATION 3: Hero phone checkbox === */
+    .hero-task-check .task-checkbox {
+      transition: all 0.4s ease-out;
+    }
+    .hero-task-check .task-checkbox.checked {
+      background-color: #3182f6;
+      border-color: #3182f6;
+    }
+    .hero-task-check .task-checkbox .check-icon {
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease-out;
+    }
+    .hero-task-check .task-checkbox.checked .check-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .hero-task-check .task-label {
+      transition: all 0.4s ease-out;
+    }
+    .hero-task-check .task-label.checked {
+      text-decoration: line-through;
+      color: #8b95a1;
+    }
+    .hero-progress-bar {
+      transition: width 0.8s ease-out;
+    }
+
+    /* Confetti dots */
+    @keyframes confettiFloat {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-28px) scale(0.3); opacity: 0; }
+    }
+    .confetti-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #3182f6;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .confetti-dot.active {
+      animation: confettiFloat 1s ease-out forwards;
+    }
+
+    /* === ANIMATION 4: Document cursor movement === */
+    .cursor-mover {
+      transition: left 4s ease-in-out;
+    }
+
+    /* Shimmer effect for document content */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .doc-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .doc-shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(49,130,246,0.06) 50%, transparent 100%);
+      background-size: 200% 100%;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .doc-animated .doc-shimmer::after {
+      opacity: 1;
+      animation: shimmer 2.5s ease-in-out infinite;
+    }
+
+    /* === ANIMATION 5: Notification entrance === */
+    .notif-item {
+      opacity: 0;
+      transform: translateY(-16px) scale(0.95);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .notif-animated .notif-item {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    /* Restore muted notification's intended opacity */
+    .notif-animated .notif-item.notif-muted {
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body class="bg-white">
@@ -141,7 +277,7 @@
   </nav>
 
   <!-- ===== HERO ===== -->
-  <section class="pt-32 md:pt-40 pb-0 relative">
+  <section class="pt-32 md:pt-40 pb-0 relative" id="hero-section">
     <div class="hero-glow absolute inset-0 pointer-events-none"></div>
     <div class="max-w-[1100px] mx-auto px-6 text-center relative z-10">
       <!-- Badge -->
@@ -166,7 +302,7 @@
       <div class="reveal flex justify-center" style="transition-delay:600ms;">
         <div class="phone-float">
           <div class="phone-frame">
-            <div class="phone-screen bg-white">
+            <div class="phone-screen bg-white hero-task-check">
               <div class="px-5 pt-1">
                 <!-- App header -->
                 <div class="flex items-center justify-between mb-5">
@@ -179,13 +315,20 @@
                   </div>
                 </div>
                 <!-- Progress bar -->
-                <div class="mb-5">
+                <div class="mb-5 relative">
                   <div class="flex items-center justify-between mb-1.5">
                     <span class="text-[11px] font-semibold text-t-sub">진행률</span>
-                    <span class="text-[11px] font-bold text-t-blue">3/5</span>
+                    <span class="text-[11px] font-bold text-t-blue" id="hero-progress-count">3/5</span>
                   </div>
                   <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div class="h-full bg-t-blue rounded-full" style="width:60%"></div>
+                    <div class="h-full bg-t-blue rounded-full hero-progress-bar" id="hero-progress-bar" style="width:60%"></div>
+                  </div>
+                  <!-- Confetti container -->
+                  <div id="confetti-container" style="position:relative;">
+                    <div class="confetti-dot" style="left:20%; bottom:0;"></div>
+                    <div class="confetti-dot" style="left:45%; bottom:0;"></div>
+                    <div class="confetti-dot" style="left:70%; bottom:0;"></div>
+                    <div class="confetti-dot" style="left:90%; bottom:0;"></div>
                   </div>
                 </div>
                 <!-- Task list -->
@@ -217,18 +360,24 @@
                     </div>
                     <div class="w-5 h-5 rounded-full bg-green-100"></div>
                   </div>
-                  <div class="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-2xl">
-                    <div class="w-5 h-5 rounded-full border-2 border-gray-200"></div>
+                  <!-- Task 4: unchecked, will animate -->
+                  <div class="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-2xl" id="hero-task-4">
+                    <div class="task-checkbox w-5 h-5 rounded-full border-2 border-gray-200 flex items-center justify-center">
+                      <svg class="check-icon w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
                     <div class="flex-1 min-w-0">
-                      <p class="text-xs font-medium text-t-text">배포 스크립트 작성</p>
+                      <p class="task-label text-xs font-medium text-t-text">배포 스크립트 작성</p>
                       <p class="text-[10px] text-t-muted mt-0.5">오늘 6시 마감</p>
                     </div>
                     <div class="w-5 h-5 rounded-full bg-amber-100"></div>
                   </div>
-                  <div class="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-2xl">
-                    <div class="w-5 h-5 rounded-full border-2 border-gray-200"></div>
+                  <!-- Task 5: unchecked, will animate -->
+                  <div class="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-2xl" id="hero-task-5">
+                    <div class="task-checkbox w-5 h-5 rounded-full border-2 border-gray-200 flex items-center justify-center">
+                      <svg class="check-icon w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
                     <div class="flex-1 min-w-0">
-                      <p class="text-xs font-medium text-t-text">주간 보고서 작성</p>
+                      <p class="task-label text-xs font-medium text-t-text">주간 보고서 작성</p>
                       <p class="text-[10px] text-t-muted mt-0.5">내일 오전</p>
                     </div>
                     <div class="w-5 h-5 rounded-full bg-purple-100"></div>
@@ -265,10 +414,10 @@
   <div class="h-24 md:h-32"></div>
 
   <!-- ===== FEATURE 1 — Task Management ===== -->
-  <section class="py-32 md:py-40">
+  <section class="py-32 md:py-40" id="kanban-section">
     <div class="max-w-[1100px] mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20">
-        <p class="reveal text-t-blue text-sm font-semibold mb-4" style="transition-delay:0ms;">태스크 관리</p>
+        <p class="reveal inline-block text-t-blue text-base font-bold mb-4 bg-blue-50 px-4 py-1.5 rounded-full" style="transition-delay:0ms;">태스크 관리</p>
         <h2 class="reveal font-bold text-3xl md:text-5xl tracking-tight leading-[1.12] text-t-text mb-5" style="transition-delay:100ms;">
           할 일을 한눈에.<br>놓치는 건 없게.
         </h2>
@@ -277,31 +426,31 @@
         </p>
       </div>
       <!-- Wide mockup: Kanban board -->
-      <div class="reveal mockup-wide p-6 md:p-10" style="transition-delay:300ms;">
+      <div class="reveal mockup-wide p-6 md:p-10" style="transition-delay:300ms;" id="kanban-board">
         <div class="grid grid-cols-3 gap-4 md:gap-6">
           <!-- Column: To Do -->
-          <div>
+          <div class="kanban-col" style="transition-delay:0ms;">
             <div class="flex items-center gap-2 mb-4">
               <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
               <span class="text-sm font-semibold text-t-sub">할 일</span>
               <span class="text-xs text-t-muted ml-auto">3</span>
             </div>
             <div class="space-y-3">
-              <div class="bg-white rounded-xl p-4 shadow-sm">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm" style="transition-delay:0ms;">
                 <p class="text-sm font-medium text-t-text mb-2">온보딩 플로우 설계</p>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-t-blue font-medium">디자인</span>
                   <div class="w-4 h-4 rounded-full bg-pink-100 ml-auto"></div>
                 </div>
               </div>
-              <div class="bg-white rounded-xl p-4 shadow-sm">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm" style="transition-delay:100ms;">
                 <p class="text-sm font-medium text-t-text mb-2">에러 핸들링 개선</p>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-red-50 text-red-500 font-medium">버그</span>
                   <div class="w-4 h-4 rounded-full bg-blue-100 ml-auto"></div>
                 </div>
               </div>
-              <div class="bg-white rounded-xl p-4 shadow-sm opacity-60">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm opacity-60" style="transition-delay:200ms;">
                 <p class="text-sm font-medium text-t-text mb-2">주간 회의 안건</p>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 text-t-muted font-medium">기타</span>
@@ -311,17 +460,17 @@
             </div>
           </div>
           <!-- Column: In Progress -->
-          <div>
+          <div class="kanban-col" style="transition-delay:200ms;">
             <div class="flex items-center gap-2 mb-4">
               <div class="w-2.5 h-2.5 rounded-full bg-t-blue"></div>
               <span class="text-sm font-semibold text-t-sub">진행 중</span>
               <span class="text-xs text-t-muted ml-auto">2</span>
             </div>
             <div class="space-y-3">
-              <div class="bg-white rounded-xl p-4 shadow-sm border-l-2 border-t-blue">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm border-l-2 border-t-blue" style="transition-delay:200ms;">
                 <p class="text-sm font-medium text-t-text mb-2">결제 모듈 연동</p>
                 <div class="h-1 bg-gray-100 rounded-full mb-2 overflow-hidden">
-                  <div class="h-full bg-t-blue rounded-full" style="width:70%"></div>
+                  <div class="kanban-progress h-full bg-t-blue rounded-full" style="--target-width:70%"></div>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-t-blue font-medium">개발</span>
@@ -331,10 +480,10 @@
                   </div>
                 </div>
               </div>
-              <div class="bg-white rounded-xl p-4 shadow-sm border-l-2 border-t-blue">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm border-l-2 border-t-blue" style="transition-delay:300ms;">
                 <p class="text-sm font-medium text-t-text mb-2">푸시 알림 기획</p>
                 <div class="h-1 bg-gray-100 rounded-full mb-2 overflow-hidden">
-                  <div class="h-full bg-t-blue rounded-full" style="width:40%"></div>
+                  <div class="kanban-progress h-full bg-t-blue rounded-full" style="--target-width:40%; transition-delay:300ms;"></div>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-t-blue font-medium">기획</span>
@@ -344,29 +493,38 @@
             </div>
           </div>
           <!-- Column: Done -->
-          <div>
+          <div class="kanban-col" style="transition-delay:400ms;">
             <div class="flex items-center gap-2 mb-4">
               <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
               <span class="text-sm font-semibold text-t-sub">완료</span>
               <span class="text-xs text-t-muted ml-auto">4</span>
             </div>
             <div class="space-y-3">
-              <div class="bg-white rounded-xl p-4 shadow-sm opacity-50">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm opacity-50" style="transition-delay:400ms;">
                 <p class="text-sm font-medium text-t-text line-through mb-2">랜딩페이지 배포</p>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-green-50 text-emerald-600 font-medium">완료</span>
+                  <div class="done-check ml-auto" style="animation-delay:600ms;">
+                    <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
                 </div>
               </div>
-              <div class="bg-white rounded-xl p-4 shadow-sm opacity-50">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm opacity-50" style="transition-delay:500ms;">
                 <p class="text-sm font-medium text-t-text line-through mb-2">DB 스키마 설계</p>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-green-50 text-emerald-600 font-medium">완료</span>
+                  <div class="done-check ml-auto" style="animation-delay:800ms;">
+                    <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
                 </div>
               </div>
-              <div class="bg-white rounded-xl p-4 shadow-sm opacity-50">
+              <div class="kanban-card bg-white rounded-xl p-4 shadow-sm opacity-50" style="transition-delay:600ms;">
                 <p class="text-sm font-medium text-t-text line-through mb-2">GA 이벤트 세팅</p>
                 <div class="flex items-center gap-2">
                   <span class="text-[10px] px-2 py-0.5 rounded-md bg-green-50 text-emerald-600 font-medium">완료</span>
+                  <div class="done-check ml-auto" style="animation-delay:1000ms;">
+                    <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  </div>
                 </div>
               </div>
             </div>
@@ -377,7 +535,7 @@
   </section>
 
   <!-- ===== FEATURE 2 — Real-time Collab ===== -->
-  <section class="bg-t-bg py-32 md:py-40">
+  <section class="bg-t-bg py-32 md:py-40" id="collab-section">
     <div class="max-w-[1100px] mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20">
         <p class="reveal text-t-blue text-sm font-semibold mb-4" style="transition-delay:0ms;">실시간 협업</p>
@@ -389,7 +547,7 @@
         </p>
       </div>
       <!-- Wide mockup: Document editor -->
-      <div class="reveal mockup-wide bg-white p-6 md:p-10" style="transition-delay:300ms;">
+      <div class="reveal mockup-wide bg-white p-6 md:p-10" style="transition-delay:300ms;" id="doc-editor">
         <div class="max-w-2xl mx-auto">
           <!-- Doc toolbar -->
           <div class="flex items-center gap-3 mb-8 pb-4 border-b border-gray-100">
@@ -412,27 +570,31 @@
           <div class="space-y-4">
             <div class="h-6 bg-t-text rounded w-64"></div>
             <div class="space-y-2.5">
-              <div class="h-3.5 bg-gray-200 rounded-full w-full"></div>
-              <div class="h-3.5 bg-gray-200 rounded-full w-11/12"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-full doc-shimmer"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-11/12 doc-shimmer"></div>
               <div class="h-3.5 bg-gray-200 rounded-full w-4/5 relative">
-                <!-- Cursor 1 -->
-                <div class="absolute -top-1 left-[60%] w-0.5 h-5 bg-t-blue animate-pulse"></div>
-                <div class="absolute -top-5 left-[60%] text-[9px] bg-t-blue text-white px-1.5 py-0.5 rounded font-medium whitespace-nowrap">민수</div>
+                <!-- Cursor 1: 민수 -->
+                <div class="absolute -top-1 cursor-mover" id="cursor-minsu" style="left:60%;">
+                  <div class="w-0.5 h-5 bg-t-blue animate-pulse"></div>
+                  <div class="absolute -top-4 left-0 text-[9px] bg-t-blue text-white px-1.5 py-0.5 rounded font-medium whitespace-nowrap">민수</div>
+                </div>
               </div>
-              <div class="h-3.5 bg-gray-200 rounded-full w-full"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-full doc-shimmer"></div>
               <div class="h-3.5 bg-gray-200 rounded-full w-3/4 relative">
-                <!-- Cursor 2 -->
-                <div class="absolute -top-1 left-[40%] w-0.5 h-5 bg-rose-400 animate-pulse"></div>
-                <div class="absolute -top-5 left-[40%] text-[9px] bg-rose-400 text-white px-1.5 py-0.5 rounded font-medium whitespace-nowrap">지은</div>
+                <!-- Cursor 2: 지은 -->
+                <div class="absolute -top-1 cursor-mover" id="cursor-jieun" style="left:40%;">
+                  <div class="w-0.5 h-5 bg-rose-400 animate-pulse"></div>
+                  <div class="absolute -top-4 left-0 text-[9px] bg-rose-400 text-white px-1.5 py-0.5 rounded font-medium whitespace-nowrap">지은</div>
+                </div>
               </div>
             </div>
             <div class="mt-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-              <div class="h-3.5 bg-gray-200 rounded-full w-2/3 mb-2"></div>
-              <div class="h-3.5 bg-gray-200 rounded-full w-1/2"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-2/3 mb-2 doc-shimmer"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-1/2 doc-shimmer"></div>
             </div>
             <div class="space-y-2.5">
-              <div class="h-3.5 bg-gray-200 rounded-full w-full"></div>
-              <div class="h-3.5 bg-gray-200 rounded-full w-5/6"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-full doc-shimmer"></div>
+              <div class="h-3.5 bg-gray-200 rounded-full w-5/6 doc-shimmer"></div>
             </div>
           </div>
         </div>
@@ -441,7 +603,7 @@
   </section>
 
   <!-- ===== FEATURE 3 — Smart Notifications ===== -->
-  <section class="py-32 md:py-40">
+  <section class="py-32 md:py-40" id="notif-section">
     <div class="max-w-[1100px] mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20">
         <p class="reveal text-t-blue text-sm font-semibold mb-4" style="transition-delay:0ms;">스마트 알림</p>
@@ -453,14 +615,14 @@
         </p>
       </div>
       <!-- Wide mockup: Notification center -->
-      <div class="reveal mockup-wide p-6 md:p-10" style="transition-delay:300ms;">
+      <div class="reveal mockup-wide p-6 md:p-10" style="transition-delay:300ms;" id="notif-center">
         <div class="max-w-xl mx-auto">
           <div class="flex items-center gap-3 mb-6">
             <span class="text-sm font-bold text-t-text">알림 센터</span>
             <span class="text-[11px] text-t-muted ml-auto">지금</span>
           </div>
           <!-- Urgent notification -->
-          <div class="bg-white rounded-2xl p-5 mb-3 shadow-sm border border-gray-100">
+          <div class="notif-item bg-white rounded-2xl p-5 mb-3 shadow-sm border border-gray-100" style="transition-delay:0ms;">
             <div class="flex items-start gap-4">
               <div class="w-10 h-10 rounded-xl bg-red-50 flex-shrink-0 flex items-center justify-center">
                 <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg>
@@ -473,7 +635,7 @@
             </div>
           </div>
           <!-- Normal notification -->
-          <div class="bg-white rounded-2xl p-5 mb-3 shadow-sm border border-gray-100">
+          <div class="notif-item bg-white rounded-2xl p-5 mb-3 shadow-sm border border-gray-100" style="transition-delay:200ms;">
             <div class="flex items-start gap-4">
               <div class="w-10 h-10 rounded-xl bg-blue-50 flex-shrink-0 flex items-center justify-center">
                 <svg class="w-5 h-5 text-t-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/></svg>
@@ -486,7 +648,7 @@
             </div>
           </div>
           <!-- Muted notifications -->
-          <div class="bg-gray-50 rounded-2xl p-5 opacity-50">
+          <div class="notif-item notif-muted bg-gray-50 rounded-2xl p-5" style="transition-delay:400ms;">
             <div class="flex items-start gap-4">
               <div class="w-10 h-10 rounded-xl bg-gray-100 flex-shrink-0 flex items-center justify-center">
                 <svg class="w-5 h-5 text-t-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/></svg>
@@ -580,29 +742,147 @@
     </div>
   </footer>
 
-  <!-- Scroll reveal script -->
+  <!-- Scroll reveal + internal animations script -->
   <script>
     (function() {
       var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       if (prefersReduced) {
         document.querySelectorAll('.reveal').forEach(function(el) {
           el.classList.add('is-visible');
         });
+        document.querySelectorAll('.kanban-col, .kanban-card').forEach(function(el) {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+        document.querySelectorAll('.kanban-progress').forEach(function(el) {
+          el.style.width = el.style.getPropertyValue('--target-width');
+        });
+        document.querySelectorAll('.notif-item').forEach(function(el) {
+          el.style.opacity = el.classList.contains('notif-muted') ? '0.5' : '1';
+          el.style.transform = 'none';
+        });
         return;
       }
 
-      var observer = new IntersectionObserver(function(entries) {
+      // === Scroll reveal (existing) ===
+      var revealObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
+            revealObserver.unobserve(entry.target);
           }
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
       document.querySelectorAll('.reveal').forEach(function(el) {
-        observer.observe(el);
+        revealObserver.observe(el);
       });
+
+      // === ANIMATION 3: Hero phone checkbox animation ===
+      var heroAnimated = false;
+      var heroObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !heroAnimated) {
+            heroAnimated = true;
+            heroObserver.unobserve(entry.target);
+
+            // Task 4 checks at 3s
+            setTimeout(function() {
+              var task4 = document.getElementById('hero-task-4');
+              var cb4 = task4.querySelector('.task-checkbox');
+              var label4 = task4.querySelector('.task-label');
+              cb4.classList.add('checked');
+              label4.classList.add('checked');
+
+              // Progress bar 60% -> 80%
+              document.getElementById('hero-progress-bar').style.width = '80%';
+              document.getElementById('hero-progress-count').textContent = '4/5';
+            }, 3000);
+
+            // Task 5 checks at 4.5s
+            setTimeout(function() {
+              var task5 = document.getElementById('hero-task-5');
+              var cb5 = task5.querySelector('.task-checkbox');
+              var label5 = task5.querySelector('.task-label');
+              cb5.classList.add('checked');
+              label5.classList.add('checked');
+
+              // Progress bar 80% -> 100%
+              document.getElementById('hero-progress-bar').style.width = '100%';
+              document.getElementById('hero-progress-count').textContent = '5/5';
+
+              // Confetti after a short beat
+              setTimeout(function() {
+                var dots = document.querySelectorAll('.confetti-dot');
+                dots.forEach(function(dot, i) {
+                  setTimeout(function() {
+                    dot.classList.add('active');
+                  }, i * 120);
+                });
+              }, 400);
+            }, 4500);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      var heroSection = document.getElementById('hero-section');
+      if (heroSection) heroObserver.observe(heroSection);
+
+      // === ANIMATION 2: Kanban board ===
+      var kanbanAnimated = false;
+      var kanbanObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !kanbanAnimated) {
+            kanbanAnimated = true;
+            kanbanObserver.unobserve(entry.target);
+            entry.target.classList.add('kanban-animated');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      var kanbanBoard = document.getElementById('kanban-board');
+      if (kanbanBoard) kanbanObserver.observe(kanbanBoard);
+
+      // === ANIMATION 4: Document cursor movement ===
+      var docAnimated = false;
+      var docObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !docAnimated) {
+            docAnimated = true;
+            docObserver.unobserve(entry.target);
+
+            entry.target.classList.add('doc-animated');
+
+            // Move cursors after a short delay
+            setTimeout(function() {
+              var cursorMinsu = document.getElementById('cursor-minsu');
+              var cursorJieun = document.getElementById('cursor-jieun');
+              if (cursorMinsu) cursorMinsu.style.left = '75%';
+              if (cursorJieun) cursorJieun.style.left = '30%';
+            }, 500);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      var docEditor = document.getElementById('doc-editor');
+      if (docEditor) docObserver.observe(docEditor);
+
+      // === ANIMATION 5: Notification entrance ===
+      var notifAnimated = false;
+      var notifObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !notifAnimated) {
+            notifAnimated = true;
+            notifObserver.unobserve(entry.target);
+            entry.target.classList.add('notif-animated');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      var notifCenter = document.getElementById('notif-center');
+      if (notifCenter) notifObserver.observe(notifCenter);
+
     })();
   </script>
 
