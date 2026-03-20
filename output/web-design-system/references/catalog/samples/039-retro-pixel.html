@@ -7,128 +7,200 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'JetBrains Mono', monospace;
-      background: #1a1a2e;
-      color: #e0fbfc;
+      background: #0a0a0a;
+      color: #c0c0c0;
       overflow-x: hidden;
+      margin: 0;
     }
+
     /* CRT scanline overlay */
     body::after {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
       z-index: 9999;
       background: repeating-linear-gradient(
-        transparent 0px,
-        transparent 2px,
-        rgba(0, 0, 0, 0.03) 2px,
-        rgba(0, 0, 0, 0.03) 4px
+        transparent 0px, transparent 2px,
+        rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 4px
       );
     }
 
     .pixel-font { font-family: 'Press Start 2P', monospace; }
     .mono { font-family: 'JetBrains Mono', monospace; }
 
-    /* Typewriter effect */
-    @keyframes typewriter {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .typewriter-text {
+    /* Matrix rain container */
+    .matrix-rain {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
       overflow: hidden;
+    }
+    .matrix-col {
+      position: absolute;
+      top: -100%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #00ff41;
+      opacity: 0.06;
+      writing-mode: vertical-rl;
       white-space: nowrap;
-      border-right: 3px solid #00ff41;
-      animation: typewriter 3s steps(32) 0.5s forwards, blink 1s steps(1) infinite 3.5s;
-      width: 0;
-      display: inline-block;
+      animation: matrixFall linear infinite;
+    }
+    @keyframes matrixFall {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(calc(100vh + 100%)); }
     }
 
-    /* CRT flicker on hero */
+    /* Boot sequence */
+    .boot-line {
+      opacity: 0;
+      animation: bootAppear 0.3s ease forwards;
+    }
+    @keyframes bootAppear {
+      0% { opacity: 0; transform: translateX(-4px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Glitch effect on hover */
+    .glitch-hover {
+      position: relative;
+      transition: all 0.1s ease;
+    }
+    .glitch-hover:hover {
+      animation: glitchText 0.3s ease;
+    }
+    @keyframes glitchText {
+      0% { clip-path: inset(0 0 0 0); }
+      10% { clip-path: inset(20% 0 60% 0); transform: translateX(-2px); }
+      20% { clip-path: inset(60% 0 10% 0); transform: translateX(2px); }
+      30% { clip-path: inset(40% 0 30% 0); transform: translateX(-1px); }
+      40% { clip-path: inset(0 0 80% 0); transform: translateX(1px); }
+      50% { clip-path: inset(0 0 0 0); transform: translateX(0); }
+      100% { clip-path: inset(0 0 0 0); transform: translateX(0); }
+    }
+
+    /* CRT flicker */
     @keyframes crtFlicker {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.97; }
     }
-    .crt-flicker {
-      animation: crtFlicker 0.1s infinite;
-    }
+    .crt-flicker { animation: crtFlicker 0.1s infinite; }
 
-    /* Retro window panel */
-    .retro-window {
-      background: #0f3460;
-      border: 2px solid #533483;
-      transition: border-color 0.3s ease, transform 0.2s ease;
+    /* Terminal window */
+    .term-window {
+      background: #0d1117;
+      border: 1px solid #1a3a1a;
+      transition: border-color 0.3s ease;
     }
-    .retro-window:hover {
+    .term-window:hover {
       border-color: #00ff41;
-      transform: translate(1px, 1px);
     }
-    .retro-window-titlebar {
-      background: #533483;
-      padding: 6px 10px;
+    .term-titlebar {
+      background: #161b22;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       gap: 6px;
+      border-bottom: 1px solid #1a3a1a;
     }
-    .retro-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 0;
-    }
-
-    /* Pixel button via box-shadow */
-    .pixel-btn {
-      background: #00ff41;
-      color: #1a1a2e;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.625rem;
-      padding: 12px 24px;
-      border: none;
-      cursor: pointer;
-      position: relative;
-      box-shadow:
-        4px 0 0 0 #00cc33,
-        0 4px 0 0 #00cc33,
-        4px 4px 0 0 #00cc33,
-        -2px 0 0 0 #66ff99,
-        0 -2px 0 0 #66ff99;
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-    .pixel-btn:hover {
-      transform: translate(2px, 2px);
-      box-shadow:
-        2px 0 0 0 #00cc33,
-        0 2px 0 0 #00cc33,
-        2px 2px 0 0 #00cc33;
-    }
-
-    /* Star field */
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #e0fbfc;
-      border-radius: 0;
-    }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 0.8; }
+    .term-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
     }
 
     /* Green text glow */
     .green-glow {
       color: #00ff41;
-      text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+      text-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+    }
+    .amber-glow {
+      color: #ffb000;
+      text-shadow: 0 0 8px rgba(255, 176, 0, 0.3);
+    }
+
+    /* Pixel button */
+    .term-btn {
+      background: #00ff41;
+      color: #0a0a0a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+    }
+    .term-btn:hover {
+      background: #33ff66;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    }
+    .term-btn-outline {
+      background: transparent;
+      color: #00ff41;
+      border: 1px solid #00ff41;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .term-btn-outline:hover {
+      background: rgba(0, 255, 65, 0.08);
+    }
+
+    /* Progress bar animation */
+    @keyframes progressPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    .progress-pulse {
+      animation: progressPulse 2s ease-in-out infinite;
+    }
+
+    /* Network node */
+    .network-node {
+      width: 6px; height: 6px;
+      background: #00ff41;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+    }
+    @keyframes nodePulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.4); opacity: 1; }
+    }
+    .node-pulse { animation: nodePulse 2s ease-in-out infinite; }
+
+    /* Data packet traveling along path */
+    @keyframes packetFlow1 {
+      0% { left: 15%; top: 30%; opacity: 0; }
+      10% { opacity: 1; }
+      50% { left: 50%; top: 50%; }
+      90% { opacity: 1; }
+      100% { left: 85%; top: 35%; opacity: 0; }
+    }
+    @keyframes packetFlow2 {
+      0% { left: 50%; top: 50%; opacity: 0; }
+      10% { opacity: 1; }
+      50% { left: 30%; top: 70%; }
+      90% { opacity: 1; }
+      100% { left: 70%; top: 20%; opacity: 0; }
+    }
+    .data-packet {
+      width: 4px; height: 4px;
+      background: #ffb000;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 0 8px rgba(255, 176, 0, 0.6);
     }
 
     /* Scroll reveal */
@@ -144,141 +216,206 @@
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
 
-    /* Terminal readout animation */
-    @keyframes dataCycle {
-      0%, 90%, 100% { opacity: 1; }
-      95% { opacity: 0.3; }
+    /* Typing cursor */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
-    .data-cycle {
-      animation: dataCycle 4s ease-in-out infinite;
+    .cursor-blink {
+      display: inline-block;
+      width: 8px; height: 16px;
+      background: #00ff41;
+      animation: blink 1s steps(1) infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+
+    /* Network topology lines (SVG-based) */
+    .topology-line {
+      stroke: #1a3a1a;
+      stroke-width: 1;
+      fill: none;
+    }
+    .topology-line-active {
+      stroke: #00ff41;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+      animation: dashFlow 2s linear infinite;
+    }
+    @keyframes dashFlow {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -16; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Matrix Rain Background -->
+  <div class="matrix-rain" aria-hidden="true">
+    <div class="matrix-col" style="left:3%;animation-duration:12s;animation-delay:0s;font-size:12px;">01001010 SYNC NODE ALLOC 11010 PIPE RSA 00110</div>
+    <div class="matrix-col" style="left:10%;animation-duration:15s;animation-delay:2s;font-size:11px;">DEPLOY HASH 0xAF3 MODULE INIT TCP 10110 KERNEL</div>
+    <div class="matrix-col" style="left:18%;animation-duration:10s;animation-delay:4s;font-size:13px;">SSH 443 TLS HANDSHAKE 11001 ROUTE PROXY</div>
+    <div class="matrix-col" style="left:25%;animation-duration:18s;animation-delay:1s;font-size:10px;">CONTAINER BUILD PUSH REGISTRY WEBHOOK 01101</div>
+    <div class="matrix-col" style="left:33%;animation-duration:14s;animation-delay:3s;font-size:12px;">NGINX UPSTREAM HEALTH 200 LATENCY 12ms CACHE HIT</div>
+    <div class="matrix-col" style="left:40%;animation-duration:11s;animation-delay:5s;font-size:11px;">K8S POD READY REPLICAS 3/3 CPU 0.2 MEM 128Mi</div>
+    <div class="matrix-col" style="left:48%;animation-duration:16s;animation-delay:0s;font-size:13px;">GIT COMMIT a3f7b21 MERGE MAIN CI PASS 10010</div>
+    <div class="matrix-col" style="left:55%;animation-duration:13s;animation-delay:6s;font-size:10px;">DNS RESOLVE A RECORD TTL 300 QUERY 01001</div>
+    <div class="matrix-col" style="left:63%;animation-duration:17s;animation-delay:2s;font-size:12px;">PROMETHEUS SCRAPE GRAFANA ALERT RESOLVED 11100</div>
+    <div class="matrix-col" style="left:70%;animation-duration:12s;animation-delay:4s;font-size:11px;">REDIS SET EX 3600 QUEUE WORKER BATCH 00111</div>
+    <div class="matrix-col" style="left:78%;animation-duration:15s;animation-delay:1s;font-size:13px;">POSTGRES WAL REPLICATION SLOT ACTIVE 10101</div>
+    <div class="matrix-col" style="left:85%;animation-duration:10s;animation-delay:3s;font-size:10px;">TERRAFORM APPLY PLAN INFRA STATE LOCK 01010</div>
+    <div class="matrix-col" style="left:93%;animation-duration:14s;animation-delay:5s;font-size:12px;">DOCKER LAYER CACHE MULTI-STAGE BUILD 11011</div>
+  </div>
+
   <!-- Nav -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#1a1a2e]/95 border-b border-[#533483]/50">
-    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-sm border-b border-[#1a3a1a]/60">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <span class="green-glow text-xs">>&gt;</span>
-        <span class="pixel-font text-xs text-[#e0fbfc]">[PRODUCT]</span>
+        <span class="green-glow text-sm font-bold">$</span>
+        <span class="mono text-sm text-[#c0c0c0] font-medium">TaskFlow</span>
+        <span class="mono text-xs text-[#3a3a3a]">v3.2.1</span>
       </div>
       <div class="hidden md:flex items-center gap-6">
-        <a href="#features" class="mono text-xs text-[#7b8794] hover:text-[#00ff41] transition-colors duration-300">/features</a>
-        <a href="#data" class="mono text-xs text-[#7b8794] hover:text-[#00ff41] transition-colors duration-300">/data</a>
-        <a href="#stats" class="mono text-xs text-[#7b8794] hover:text-[#00ff41] transition-colors duration-300">/stats</a>
-        <button class="pixel-btn">[ENTER]</button>
+        <a href="#features" class="mono text-xs text-[#555] hover:text-[#00ff41] transition-colors duration-300 glitch-hover">/modules</a>
+        <a href="#network" class="mono text-xs text-[#555] hover:text-[#00ff41] transition-colors duration-300 glitch-hover">/network</a>
+        <a href="#metrics" class="mono text-xs text-[#555] hover:text-[#00ff41] transition-colors duration-300 glitch-hover">/status</a>
+        <a href="#docs" class="mono text-xs text-[#555] hover:text-[#00ff41] transition-colors duration-300 glitch-hover">/docs</a>
+        <button class="term-btn text-xs py-2 px-5">DEPLOY</button>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="relative py-28 pt-32 px-6 min-h-screen flex items-center justify-center overflow-hidden crt-flicker">
-    <!-- Star field -->
-    <div class="absolute inset-0">
-      <div class="star" style="top:5%;left:12%;opacity:0.3;animation:twinkle 2.3s infinite 0.2s;"></div>
-      <div class="star" style="top:15%;left:45%;opacity:0.5;animation:twinkle 3.1s infinite 0.8s;"></div>
-      <div class="star" style="top:8%;left:78%;opacity:0.2;animation:twinkle 2.7s infinite 1.4s;"></div>
-      <div class="star" style="top:25%;left:23%;opacity:0.6;animation:twinkle 2.1s infinite 0.5s;"></div>
-      <div class="star" style="top:35%;left:67%;opacity:0.4;animation:twinkle 3.5s infinite 1.1s;"></div>
-      <div class="star" style="top:45%;left:89%;opacity:0.3;animation:twinkle 2.9s infinite 0.3s;"></div>
-      <div class="star" style="top:55%;left:34%;opacity:0.7;animation:twinkle 2.5s infinite 1.7s;"></div>
-      <div class="star" style="top:65%;left:56%;opacity:0.2;animation:twinkle 3.3s infinite 0.9s;"></div>
-      <div class="star" style="top:75%;left:11%;opacity:0.5;animation:twinkle 2.8s infinite 1.2s;"></div>
-      <div class="star" style="top:85%;left:72%;opacity:0.4;animation:twinkle 2.2s infinite 0.6s;"></div>
-      <div class="star" style="top:12%;left:92%;opacity:0.6;animation:twinkle 3.0s infinite 1.5s;"></div>
-      <div class="star" style="top:42%;left:8%;opacity:0.3;animation:twinkle 2.6s infinite 0.4s;"></div>
-      <div class="star" style="top:58%;left:82%;opacity:0.5;animation:twinkle 3.2s infinite 1.0s;"></div>
-      <div class="star" style="top:72%;left:38%;opacity:0.2;animation:twinkle 2.4s infinite 1.8s;"></div>
-      <div class="star" style="top:88%;left:55%;opacity:0.4;animation:twinkle 2.7s infinite 0.7s;"></div>
-      <div class="star" style="top:18%;left:62%;opacity:0.6;width:3px;height:3px;"></div>
-      <div class="star" style="top:48%;left:18%;opacity:0.5;width:3px;height:3px;"></div>
-      <div class="star" style="top:78%;left:48%;opacity:0.3;width:1px;height:1px;"></div>
-      <div class="star" style="top:32%;left:85%;opacity:0.4;width:1px;height:1px;"></div>
-      <div class="star" style="top:92%;left:25%;opacity:0.6;width:1px;height:1px;"></div>
-    </div>
-
-    <div class="max-w-4xl mx-auto text-center relative z-10">
-      <div class="reveal mb-2">
-        <span class="mono text-xs text-[#7b8794]">SYSTEM BOOT v2.4.7 // [READY]</span>
+  <!-- Hero — Boot Sequence -->
+  <section class="relative min-h-screen flex items-center justify-center px-6 pt-20 crt-flicker">
+    <div class="max-w-4xl mx-auto relative z-10">
+      <!-- Boot sequence terminal -->
+      <div class="reveal term-window max-w-2xl mx-auto mb-10">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#ff5f57]"></div>
+          <div class="term-dot bg-[#febc2e]"></div>
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-3">taskflow — boot</span>
+        </div>
+        <div class="p-5 mono text-xs leading-loose">
+          <div class="boot-line" style="animation-delay: 0.2s;">
+            <span class="text-[#555]">[<span class="green-glow">BOOT</span>]</span> Initializing system kernel... <span class="green-glow ml-4">OK</span>
+          </div>
+          <div class="boot-line" style="animation-delay: 0.6s;">
+            <span class="text-[#555]">[<span class="green-glow">BOOT</span>]</span> Loading infrastructure modules... <span class="green-glow ml-4">OK</span>
+          </div>
+          <div class="boot-line" style="animation-delay: 1.0s;">
+            <span class="text-[#555]">[<span class="green-glow">BOOT</span>]</span> Establishing secure connections... <span class="green-glow ml-4">OK</span>
+          </div>
+          <div class="boot-line" style="animation-delay: 1.4s;">
+            <span class="text-[#555]">[<span class="green-glow">BOOT</span>]</span> Mounting data volumes... <span class="green-glow ml-4">OK</span>
+          </div>
+          <div class="boot-line" style="animation-delay: 1.8s;">
+            <span class="text-[#555]">[<span class="amber-glow">SYS</span>]</span> <span class="text-[#c0c0c0]">TaskFlow v3.2.1 ready.</span> <span class="cursor-blink"></span>
+          </div>
+        </div>
       </div>
-      <h1 class="pixel-font text-2xl sm:text-3xl md:text-4xl mb-8 leading-relaxed">
-        <span class="typewriter-text green-glow">BUILDING_THE_FUTURE.exe</span>
-      </h1>
-      <p class="reveal reveal-delay-1 mono text-sm text-[#7b8794] max-w-lg mx-auto mb-10 leading-relaxed">
-        > [Your product description here — what it does,<br>
-        > who it's for, why it matters. Keep it raw.]<br>
-        > STATUS: OPERATIONAL_
-      </p>
-      <div class="reveal reveal-delay-2">
-        <button class="pixel-btn">[  INITIALIZE  ]</button>
+
+      <div class="text-center">
+        <h1 class="reveal reveal-delay-1 pixel-font text-xl sm:text-2xl md:text-3xl mb-6 leading-relaxed green-glow glitch-hover">
+          INFRASTRUCTURE<br>INTELLIGENCE
+        </h1>
+        <p class="reveal reveal-delay-2 mono text-sm text-[#555] max-w-lg mx-auto mb-8 leading-relaxed">
+          [Your deployment pipeline, reimagined. One command<br>
+          to orchestrate what used to take an entire ops team.]
+        </p>
+        <div class="reveal reveal-delay-3 flex items-center justify-center gap-4">
+          <button class="term-btn">$ taskflow init</button>
+          <button class="term-btn-outline">Read docs</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Features — Retro OS Windows -->
-  <section id="features" class="py-24 px-6">
+  <!-- Command Prompt Section -->
+  <section class="py-20 px-6 relative z-10">
+    <div class="max-w-3xl mx-auto">
+      <div class="reveal term-window">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#ff5f57]"></div>
+          <div class="term-dot bg-[#febc2e]"></div>
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-3">taskflow — terminal</span>
+        </div>
+        <div class="p-6 mono text-xs leading-loose">
+          <div class="text-[#555]">~/project <span class="green-glow">$</span> taskflow deploy --env production</div>
+          <div class="mt-2 text-[#c0c0c0]">
+            <span class="text-[#555]">→</span> Scanning 23 services...<br>
+            <span class="text-[#555]">→</span> Building containers <span class="green-glow">[████████████████████████] 100%</span><br>
+            <span class="text-[#555]">→</span> Running health checks...<br>
+            <span class="text-[#555]">→</span> Rolling deploy to 3 regions<br>
+          </div>
+          <div class="mt-2">
+            <span class="green-glow">✓</span> <span class="text-[#c0c0c0]">Deployed in 47s. All services healthy.</span>
+          </div>
+          <div class="mt-3 text-[#555]">~/project <span class="green-glow">$</span> <span class="cursor-blink"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features — Terminal Modules -->
+  <section id="features" class="py-24 px-6 relative z-10">
     <div class="max-w-5xl mx-auto">
-      <h2 class="reveal pixel-font text-xl sm:text-2xl text-center mb-4 green-glow">MODULES</h2>
-      <p class="reveal reveal-delay-1 mono text-xs text-[#7b8794] text-center mb-16">// CORE SYSTEM CAPABILITIES</p>
+      <div class="reveal mb-2">
+        <span class="mono text-xs text-[#555]">$ taskflow list-modules</span>
+      </div>
+      <h2 class="reveal reveal-delay-1 pixel-font text-lg sm:text-xl mb-12 green-glow">CORE MODULES</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Window 1 — tall -->
-        <div class="reveal retro-window md:row-span-2">
-          <div class="retro-window-titlebar">
-            <div class="retro-dot bg-[#ff6b6b]"></div>
-            <div class="retro-dot bg-[#ffd93d]"></div>
-            <div class="retro-dot bg-[#00ff41]"></div>
-            <span class="pixel-font text-[8px] text-[#e0fbfc] ml-2">module_01.sys</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Module 1 — tall -->
+        <div class="reveal term-window md:row-span-2">
+          <div class="term-titlebar">
+            <div class="term-dot bg-[#28c840]"></div>
+            <span class="mono text-[10px] text-[#555] ml-2">orchestrator.sys</span>
+            <span class="mono text-[10px] green-glow ml-auto">ACTIVE</span>
           </div>
-          <div class="p-6">
-            <div class="mono text-xs text-[#00ff41] mb-4">
-              [>>] ACTIVE<br>
-              [██████████] 100%
-            </div>
-            <h3 class="pixel-font text-sm text-[#e0fbfc] mb-3">[FEATURE ONE]</h3>
-            <p class="mono text-xs text-[#7b8794] leading-relaxed mb-4">
-              [Describe your first and most important module. What does it process? What's the input/output?]
+          <div class="p-5">
+            <h3 class="pixel-font text-[10px] text-[#c0c0c0] mb-3 glitch-hover">[FEATURE ONE]</h3>
+            <p class="mono text-xs text-[#555] leading-relaxed mb-5">
+              [Your primary module. Describe the core engine — what infrastructure problem it solves, how it automates what was manual.]
             </p>
-            <div class="mono text-xs text-[#7b8794] mt-6 pt-4 border-t border-[#533483]/30">
-              THROUGHPUT: [N] ops/sec<br>
-              LATENCY: [N]ms avg<br>
-              UPTIME: [N]%
+            <div class="mono text-xs text-[#555] border-t border-[#1a3a1a] pt-4 space-y-2">
+              <div>$ taskflow orchestrate --auto</div>
+              <div class="text-[#c0c0c0]">→ [N] services managed</div>
+              <div class="text-[#c0c0c0]">→ [N]ms avg response</div>
+              <div class="text-[#c0c0c0]">→ [N]% uptime SLA</div>
             </div>
           </div>
         </div>
 
-        <!-- Window 2 -->
-        <div class="reveal reveal-delay-1 retro-window">
-          <div class="retro-window-titlebar">
-            <div class="retro-dot bg-[#ff6b6b]"></div>
-            <div class="retro-dot bg-[#ffd93d]"></div>
-            <div class="retro-dot bg-[#00ff41]"></div>
-            <span class="pixel-font text-[8px] text-[#e0fbfc] ml-2">module_02.sys</span>
+        <!-- Module 2 -->
+        <div class="reveal reveal-delay-1 term-window">
+          <div class="term-titlebar">
+            <div class="term-dot bg-[#28c840]"></div>
+            <span class="mono text-[10px] text-[#555] ml-2">monitor.sys</span>
+            <span class="mono text-[10px] green-glow ml-auto">ACTIVE</span>
           </div>
-          <div class="p-6">
-            <div class="mono text-xs text-[#00ff41] mb-3">[>>] STANDBY</div>
-            <h3 class="pixel-font text-sm text-[#e0fbfc] mb-3">[FEATURE TWO]</h3>
-            <p class="mono text-xs text-[#7b8794] leading-relaxed">
-              [Second capability. What problem does it solve? Be technical but clear.]
+          <div class="p-5">
+            <h3 class="pixel-font text-[10px] text-[#c0c0c0] mb-3 glitch-hover">[FEATURE TWO]</h3>
+            <p class="mono text-xs text-[#555] leading-relaxed">
+              [Second capability. Monitoring, alerting, observability — how does it keep systems healthy?]
             </p>
           </div>
         </div>
 
-        <!-- Window 3 -->
-        <div class="reveal reveal-delay-2 retro-window">
-          <div class="retro-window-titlebar">
-            <div class="retro-dot bg-[#ff6b6b]"></div>
-            <div class="retro-dot bg-[#ffd93d]"></div>
-            <div class="retro-dot bg-[#00ff41]"></div>
-            <span class="pixel-font text-[8px] text-[#e0fbfc] ml-2">module_03.sys</span>
+        <!-- Module 3 -->
+        <div class="reveal reveal-delay-2 term-window">
+          <div class="term-titlebar">
+            <div class="term-dot bg-[#febc2e]"></div>
+            <span class="mono text-[10px] text-[#555] ml-2">secure.sys</span>
+            <span class="mono text-[10px] amber-glow ml-auto">ENHANCED</span>
           </div>
-          <div class="p-6">
-            <div class="mono text-xs text-[#ff00ff] mb-3">[>>] ENHANCED</div>
-            <h3 class="pixel-font text-sm text-[#e0fbfc] mb-3">[FEATURE THREE]</h3>
-            <p class="mono text-xs text-[#7b8794] leading-relaxed">
-              [Third capability. Differentiate from the other two — what makes this one special?]
+          <div class="p-5">
+            <h3 class="pixel-font text-[10px] text-[#c0c0c0] mb-3 glitch-hover">[FEATURE THREE]</h3>
+            <p class="mono text-xs text-[#555] leading-relaxed">
+              [Third module. Security, compliance, access control — what makes this layer different?]
             </p>
           </div>
         </div>
@@ -286,179 +423,252 @@
     </div>
   </section>
 
-  <!-- ASCII Art Section -->
-  <section id="data" class="py-16 px-6">
-    <div class="max-w-3xl mx-auto">
-      <div class="reveal">
-        <pre class="mono text-xs sm:text-sm green-glow text-center leading-tight overflow-x-auto" style="letter-spacing: 0.05em;">
-  ██████╗ ██████╗  ██████╗ ██████╗ ██╗   ██╗ ██████╗████████╗
-  ██╔══██╗██╔══██╗██╔═══██╗██╔══██╗██║   ██║██╔════╝╚══██╔══╝
-  ██████╔╝██████╔╝██║   ██║██║  ██║██║   ██║██║        ██║
-  ██╔═══╝ ██╔══██╗██║   ██║██║  ██║██║   ██║██║        ██║
-  ██║     ██║  ██║╚██████╔╝██████╔╝╚██████╔╝╚██████╗   ██║
-  ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝
-        </pre>
-      </div>
-      <p class="reveal reveal-delay-1 mono text-xs text-[#7b8794] text-center mt-6">
-        // [YOUR PRODUCT NAME] — SYSTEM ARCHITECTURE v[N]
-      </p>
-
-      <!-- ASCII diagram -->
-      <div class="reveal reveal-delay-2 mt-10 retro-window">
-        <div class="retro-window-titlebar">
-          <div class="retro-dot bg-[#ff6b6b]"></div>
-          <div class="retro-dot bg-[#ffd93d]"></div>
-          <div class="retro-dot bg-[#00ff41]"></div>
-          <span class="pixel-font text-[8px] text-[#e0fbfc] ml-2">architecture.map</span>
-        </div>
-        <div class="p-6">
-          <pre class="mono text-xs text-[#7b8794] leading-relaxed overflow-x-auto">
-  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-  │   <span class="green-glow">INPUT</span>     │────▶│  <span class="green-glow">PROCESS</span>   │────▶│   <span class="green-glow">OUTPUT</span>   │
-  │  [your      │     │  [your      │     │  [your      │
-  │   data]     │     │   engine]   │     │   result]   │
-  └─────────────┘     └──────┬──────┘     └─────────────┘
-                             │
-                      ┌──────▼──────┐
-                      │   <span style="color:#ff00ff;">CACHE</span>     │
-                      │  [N]ms TTL  │
-                      └─────────────┘
-          </pre>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats — Terminal Readouts -->
-  <section id="stats" class="py-20 px-6">
+  <!-- Real-time System Metrics (animated ASCII bars) -->
+  <section id="metrics" class="py-20 px-6 relative z-10">
     <div class="max-w-4xl mx-auto">
-      <h2 class="reveal pixel-font text-xl sm:text-2xl text-center mb-12 green-glow">SYS_METRICS</h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="reveal retro-window">
-          <div class="retro-window-titlebar">
-            <span class="pixel-font text-[8px] text-[#e0fbfc]">metric_01</span>
-          </div>
-          <div class="p-6 text-center">
-            <div class="mono text-3xl green-glow mb-2 data-cycle">[N]</div>
-            <div class="mono text-xs text-[#7b8794]">[YOUR METRIC LABEL]</div>
-            <div class="mono text-xs text-[#533483] mt-2">████████░░ [N]%</div>
-          </div>
+      <div class="reveal term-window">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#ff5f57]"></div>
+          <div class="term-dot bg-[#febc2e]"></div>
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-3">taskflow — system monitor</span>
+          <span class="mono text-[10px] green-glow ml-auto progress-pulse">● LIVE</span>
         </div>
-
-        <div class="reveal reveal-delay-1 retro-window">
-          <div class="retro-window-titlebar">
-            <span class="pixel-font text-[8px] text-[#e0fbfc]">metric_02</span>
+        <div class="p-6 mono text-xs leading-loose" id="sysMetrics">
+          <div class="text-[#555] mb-3">SYSTEM RESOURCE UTILIZATION — [YOUR INFRASTRUCTURE]</div>
+          <div class="space-y-2">
+            <div class="flex items-center gap-3">
+              <span class="text-[#555] w-16">CPU</span>
+              <span class="green-glow" id="cpuBar">██████████████░░░░░░</span>
+              <span class="text-[#c0c0c0]" id="cpuVal">74%</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[#555] w-16">MEM</span>
+              <span class="amber-glow" id="memBar">████████████████████</span>
+              <span class="text-[#c0c0c0]" id="memVal">92%</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[#555] w-16">DISK</span>
+              <span class="green-glow" id="diskBar">████████░░░░░░░░░░░░</span>
+              <span class="text-[#c0c0c0]" id="diskVal">38%</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[#555] w-16">NET</span>
+              <span class="green-glow" id="netBar">██████████████████░░</span>
+              <span class="text-[#c0c0c0]" id="netVal">87%</span>
+            </div>
           </div>
-          <div class="p-6 text-center">
-            <div class="mono text-3xl green-glow mb-2 data-cycle" style="animation-delay: 1.3s;">[N]</div>
-            <div class="mono text-xs text-[#7b8794]">[YOUR METRIC LABEL]</div>
-            <div class="mono text-xs text-[#533483] mt-2">██████████ [N]%</div>
-          </div>
-        </div>
-
-        <div class="reveal reveal-delay-2 retro-window">
-          <div class="retro-window-titlebar">
-            <span class="pixel-font text-[8px] text-[#e0fbfc]">metric_03</span>
-          </div>
-          <div class="p-6 text-center">
-            <div class="mono text-3xl mb-2 data-cycle" style="color: #ff00ff; text-shadow: 0 0 8px rgba(255,0,255,0.4); animation-delay: 2.6s;">[N]</div>
-            <div class="mono text-xs text-[#7b8794]">[YOUR METRIC LABEL]</div>
-            <div class="mono text-xs text-[#533483] mt-2">███████░░░ [N]%</div>
+          <div class="mt-4 pt-3 border-t border-[#1a3a1a] text-[#555]">
+            <div>CONTAINERS: <span class="text-[#c0c0c0]">[N] running</span> / <span class="green-glow">[N] healthy</span> / <span class="text-[#555]">[N] stopped</span></div>
+            <div>REQUESTS:   <span class="text-[#c0c0c0]">[N]/min</span> — P99: <span class="text-[#c0c0c0]">[N]ms</span> — ERROR RATE: <span class="green-glow">[N]%</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonial Window -->
-  <section class="py-20 px-6">
+  <!-- Network Topology Visualization -->
+  <section id="network" class="py-20 px-6 relative z-10">
+    <div class="max-w-4xl mx-auto">
+      <div class="reveal mb-2">
+        <span class="mono text-xs text-[#555]">$ taskflow network --topology</span>
+      </div>
+      <h2 class="reveal reveal-delay-1 pixel-font text-lg sm:text-xl mb-10 green-glow">NETWORK MAP</h2>
+
+      <div class="reveal reveal-delay-2 term-window">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-2">topology.map</span>
+          <span class="mono text-[10px] green-glow ml-auto progress-pulse">● MONITORING</span>
+        </div>
+        <div class="p-6 relative" style="height: 320px;">
+          <!-- SVG topology lines -->
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 800 280" preserveAspectRatio="xMidYMid meet">
+            <!-- Connections -->
+            <line x1="120" y1="140" x2="400" y2="80" class="topology-line-active"/>
+            <line x1="120" y1="140" x2="400" y2="140" class="topology-line-active"/>
+            <line x1="120" y1="140" x2="400" y2="200" class="topology-line-active"/>
+            <line x1="400" y1="80" x2="680" y2="100" class="topology-line-active"/>
+            <line x1="400" y1="140" x2="680" y2="100" class="topology-line-active"/>
+            <line x1="400" y1="200" x2="680" y2="100" class="topology-line-active"/>
+            <line x1="400" y1="80" x2="680" y2="200" class="topology-line"/>
+            <line x1="400" y1="200" x2="680" y2="200" class="topology-line-active"/>
+          </svg>
+
+          <!-- Nodes -->
+          <div class="absolute" style="left:12%;top:45%;transform:translate(-50%,-50%);">
+            <div class="text-center">
+              <div class="w-10 h-10 border border-[#00ff41] flex items-center justify-center mx-auto mb-1">
+                <span class="green-glow text-lg">⬡</span>
+              </div>
+              <span class="mono text-[9px] text-[#555]">GATEWAY</span>
+            </div>
+          </div>
+
+          <div class="absolute" style="left:48%;top:22%;transform:translate(-50%,-50%);">
+            <div class="text-center">
+              <div class="network-node node-pulse mx-auto mb-1" style="width:10px;height:10px;position:relative;"></div>
+              <span class="mono text-[9px] text-[#555]">SVC-A</span>
+            </div>
+          </div>
+          <div class="absolute" style="left:48%;top:48%;transform:translate(-50%,-50%);">
+            <div class="text-center">
+              <div class="network-node node-pulse mx-auto mb-1" style="width:10px;height:10px;position:relative;animation-delay:0.5s;"></div>
+              <span class="mono text-[9px] text-[#555]">SVC-B</span>
+            </div>
+          </div>
+          <div class="absolute" style="left:48%;top:72%;transform:translate(-50%,-50%);">
+            <div class="text-center">
+              <div class="network-node node-pulse mx-auto mb-1" style="width:10px;height:10px;position:relative;animation-delay:1s;"></div>
+              <span class="mono text-[9px] text-[#555]">SVC-C</span>
+            </div>
+          </div>
+
+          <div class="absolute" style="left:84%;top:32%;transform:translate(-50%,-50%);">
+            <div class="text-center">
+              <div class="w-10 h-10 border border-[#ffb000] flex items-center justify-center mx-auto mb-1">
+                <span class="amber-glow text-lg">◆</span>
+              </div>
+              <span class="mono text-[9px] text-[#555]">DB-PRIMARY</span>
+            </div>
+          </div>
+          <div class="absolute" style="left:84%;top:70%;transform:translate(-50%,-50%);">
+            <div class="text-center">
+              <div class="w-8 h-8 border border-[#1a3a1a] flex items-center justify-center mx-auto mb-1">
+                <span class="text-[#555] text-sm">◇</span>
+              </div>
+              <span class="mono text-[9px] text-[#555]">CACHE</span>
+            </div>
+          </div>
+
+          <!-- Animated data packets -->
+          <div class="data-packet" style="animation: packetFlow1 3s linear infinite;"></div>
+          <div class="data-packet" style="animation: packetFlow2 4s linear infinite 1.5s;"></div>
+          <div class="data-packet" style="animation: packetFlow1 3.5s linear infinite 2s;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture — System Diagram -->
+  <section class="py-16 px-6 relative z-10">
     <div class="max-w-3xl mx-auto">
-      <div class="reveal retro-window">
-        <div class="retro-window-titlebar">
-          <div class="retro-dot bg-[#ff6b6b]"></div>
-          <div class="retro-dot bg-[#ffd93d]"></div>
-          <div class="retro-dot bg-[#00ff41]"></div>
-          <span class="pixel-font text-[8px] text-[#e0fbfc] ml-2">user_feedback.log</span>
+      <div class="reveal term-window">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#ff5f57]"></div>
+          <div class="term-dot bg-[#febc2e]"></div>
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-3">architecture.map</span>
         </div>
         <div class="p-6">
-          <pre class="mono text-xs text-[#7b8794] leading-relaxed">
-> LOADING USER FEEDBACK...
-> TIMESTAMP: [DATE]
-> SOURCE: VERIFIED_USER
+          <pre class="mono text-xs text-[#555] leading-relaxed overflow-x-auto">
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  <span class="green-glow">INGRESS</span>          │────▶│  <span class="green-glow">ORCHESTRATOR</span>    │────▶│  <span class="green-glow">CLUSTER</span>          │
+│  Load Balancer   │     │  [your engine]   │     │  [N] nodes       │
+│  TLS termination │     │  Auto-scaling    │     │  Multi-region    │
+└──────────────────┘     └────────┬─────────┘     └──────────────────┘
+                                  │
+                         ┌────────▼─────────┐
+                         │  <span class="amber-glow">PERSISTENCE</span>      │
+                         │  Primary + Read  │
+                         │  replicas        │
+                         └──────────────────┘</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial — Log Format -->
+  <section class="py-20 px-6 relative z-10">
+    <div class="max-w-3xl mx-auto">
+      <div class="reveal term-window">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#ff5f57]"></div>
+          <div class="term-dot bg-[#febc2e]"></div>
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-3">feedback.log</span>
+        </div>
+        <div class="p-6">
+          <pre class="mono text-xs text-[#555] leading-loose">
+<span class="text-[#555]">$ cat /var/log/user-feedback/latest.log</span>
+
+<span class="text-[#555]">TIMESTAMP:</span> <span class="text-[#c0c0c0]">[DATE]</span>
+<span class="text-[#555]">SOURCE:</span>   <span class="text-[#c0c0c0]">VERIFIED_OPERATOR</span>
+<span class="text-[#555]">CONTEXT:</span>  <span class="text-[#c0c0c0]">Production deployment — [N] services</span>
 
 <span class="green-glow">"[A raw, specific testimonial. Include a concrete</span>
-<span class="green-glow"> detail — a number, a before/after, a specific</span>
-<span class="green-glow"> workflow that changed. Not polished marketing.]"</span>
+<span class="green-glow"> detail — a deployment time before/after, a specific</span>
+<span class="green-glow"> incident that was resolved, infrastructure cost saved.]"</span>
 
-> USER: [Real person name]
-> ROLE: [Specific role] @ [Specific company]
-> RATING: ★★★★★ (5/5)
-> END_LOG
-          </pre>
+<span class="text-[#555]">USER:</span>  <span class="text-[#c0c0c0]">[Real person name]</span>
+<span class="text-[#555]">ROLE:</span>  <span class="text-[#c0c0c0]">[Specific role] @ [Specific company]</span>
+<span class="text-[#555]">---EOF---</span></pre>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Social Proof — Terminal Style -->
-  <section class="py-16 px-6">
+  <!-- Social Proof -->
+  <section class="py-12 px-6 relative z-10">
     <div class="max-w-4xl mx-auto">
-      <div class="reveal text-center mb-8">
-        <span class="pixel-font text-[10px] text-[#7b8794]">// TRUSTED BY DEVELOPERS AT</span>
+      <div class="reveal text-center mb-6">
+        <span class="mono text-xs text-[#555]">// DEPLOYED IN PRODUCTION BY</span>
       </div>
-      <div class="reveal reveal-delay-1 flex flex-wrap justify-center gap-8 items-center opacity-40">
-        <span class="pixel-font text-[10px] text-[#e0fbfc]">[COMPANY_1]</span>
-        <span class="mono text-xs text-[#533483]">|</span>
-        <span class="pixel-font text-[10px] text-[#e0fbfc]">[COMPANY_2]</span>
-        <span class="mono text-xs text-[#533483]">|</span>
-        <span class="pixel-font text-[10px] text-[#e0fbfc]">[COMPANY_3]</span>
-        <span class="mono text-xs text-[#533483]">|</span>
-        <span class="pixel-font text-[10px] text-[#e0fbfc]">[COMPANY_4]</span>
-        <span class="mono text-xs text-[#533483]">|</span>
-        <span class="pixel-font text-[10px] text-[#e0fbfc]">[COMPANY_5]</span>
+      <div class="reveal reveal-delay-1 flex flex-wrap justify-center gap-8 items-center opacity-30">
+        <span class="mono text-xs text-[#c0c0c0]">[COMPANY_1]</span>
+        <span class="text-[#1a3a1a]">│</span>
+        <span class="mono text-xs text-[#c0c0c0]">[COMPANY_2]</span>
+        <span class="text-[#1a3a1a]">│</span>
+        <span class="mono text-xs text-[#c0c0c0]">[COMPANY_3]</span>
+        <span class="text-[#1a3a1a]">│</span>
+        <span class="mono text-xs text-[#c0c0c0]">[COMPANY_4]</span>
+        <span class="text-[#1a3a1a]">│</span>
+        <span class="mono text-xs text-[#c0c0c0]">[COMPANY_5]</span>
       </div>
     </div>
   </section>
 
-  <!-- FAQ — Terminal Style -->
-  <section class="py-20 px-6">
+  <!-- FAQ — Terminal -->
+  <section id="docs" class="py-20 px-6 relative z-10">
     <div class="max-w-3xl mx-auto">
-      <h2 class="reveal pixel-font text-xl sm:text-2xl text-center mb-12 green-glow">FAQ.TXT</h2>
+      <div class="reveal mb-2">
+        <span class="mono text-xs text-[#555]">$ taskflow help --faq</span>
+      </div>
+      <h2 class="reveal reveal-delay-1 pixel-font text-lg sm:text-xl mb-10 green-glow">FAQ</h2>
 
       <div class="space-y-4">
-        <div class="reveal retro-window">
-          <div class="retro-window-titlebar">
-            <span class="pixel-font text-[8px] text-[#e0fbfc]">Q_01</span>
+        <div class="reveal term-window">
+          <div class="term-titlebar">
+            <span class="mono text-[10px] text-[#555]">Q_01</span>
           </div>
           <div class="p-5">
-            <p class="pixel-font text-[10px] green-glow mb-3">[Common question about pricing or limits?]</p>
-            <p class="mono text-xs text-[#7b8794] leading-relaxed">
-              > [Direct, honest answer. No fluff. Terminal-style brevity.]
+            <p class="pixel-font text-[9px] green-glow mb-3 glitch-hover">[Common question about pricing or limits?]</p>
+            <p class="mono text-xs text-[#555] leading-relaxed">
+              <span class="green-glow">$</span> [Direct, honest answer. No fluff. Terminal-style brevity.]
             </p>
           </div>
         </div>
 
-        <div class="reveal reveal-delay-1 retro-window">
-          <div class="retro-window-titlebar">
-            <span class="pixel-font text-[8px] text-[#e0fbfc]">Q_02</span>
+        <div class="reveal reveal-delay-1 term-window">
+          <div class="term-titlebar">
+            <span class="mono text-[10px] text-[#555]">Q_02</span>
           </div>
           <div class="p-5">
-            <p class="pixel-font text-[10px] green-glow mb-3">[Technical question about integration?]</p>
-            <p class="mono text-xs text-[#7b8794] leading-relaxed">
-              > [Answer with a concrete example or code reference.]
+            <p class="pixel-font text-[9px] green-glow mb-3 glitch-hover">[Technical question about integration?]</p>
+            <p class="mono text-xs text-[#555] leading-relaxed">
+              <span class="green-glow">$</span> [Answer with a concrete example or code reference.]
             </p>
           </div>
         </div>
 
-        <div class="reveal reveal-delay-2 retro-window">
-          <div class="retro-window-titlebar">
-            <span class="pixel-font text-[8px] text-[#e0fbfc]">Q_03</span>
+        <div class="reveal reveal-delay-2 term-window">
+          <div class="term-titlebar">
+            <span class="mono text-[10px] text-[#555]">Q_03</span>
           </div>
           <div class="p-5">
-            <p class="pixel-font text-[10px] green-glow mb-3">[Question about data/security/privacy?]</p>
-            <p class="mono text-xs text-[#7b8794] leading-relaxed">
-              > [Transparent answer. Link to docs if needed.]
+            <p class="pixel-font text-[9px] green-glow mb-3 glitch-hover">[Question about data/security/privacy?]</p>
+            <p class="mono text-xs text-[#555] leading-relaxed">
+              <span class="green-glow">$</span> [Transparent answer. Link to docs if needed.]
             </p>
           </div>
         </div>
@@ -467,31 +677,42 @@
   </section>
 
   <!-- CTA -->
-  <section class="py-28 px-6">
-    <div class="max-w-2xl mx-auto text-center">
-      <div class="reveal">
-        <pre class="pixel-font text-xs green-glow mb-6">
-> READY TO DEPLOY?
-> Y/N: _
-        </pre>
-      </div>
-      <p class="reveal reveal-delay-1 mono text-sm text-[#7b8794] mb-10">
-        [One sentence about getting started. Free? Open source? No sign-up?]
-      </p>
-      <div class="reveal reveal-delay-2">
-        <button class="pixel-btn text-xs">[  START SESSION  ]</button>
+  <section class="py-28 px-6 relative z-10">
+    <div class="max-w-2xl mx-auto">
+      <div class="reveal term-window">
+        <div class="term-titlebar">
+          <div class="term-dot bg-[#ff5f57]"></div>
+          <div class="term-dot bg-[#febc2e]"></div>
+          <div class="term-dot bg-[#28c840]"></div>
+          <span class="mono text-[10px] text-[#555] ml-3">taskflow — deploy</span>
+        </div>
+        <div class="p-8 text-center">
+          <div class="mono text-xs text-[#555] mb-6">
+            $ taskflow status<br>
+            → <span class="green-glow">All systems operational.</span><br>
+            → Ready to onboard.
+          </div>
+          <h2 class="reveal pixel-font text-lg green-glow mb-4 glitch-hover">READY TO DEPLOY?</h2>
+          <p class="reveal reveal-delay-1 mono text-xs text-[#555] mb-8">
+            [One sentence about getting started. Free tier? No credit card? Instant setup?]
+          </p>
+          <div class="reveal reveal-delay-2 flex items-center justify-center gap-4">
+            <button class="term-btn">$ taskflow init</button>
+            <button class="term-btn-outline">View source</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-12 px-6 border-t border-[#533483]/30">
+  <footer class="py-10 px-6 border-t border-[#1a3a1a]/40 relative z-10">
     <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="flex items-center gap-2">
-        <span class="green-glow text-xs">>&gt;</span>
-        <span class="pixel-font text-[10px] text-[#e0fbfc]">[PRODUCT]</span>
+        <span class="green-glow text-sm font-bold">$</span>
+        <span class="mono text-sm text-[#555]">TaskFlow</span>
       </div>
-      <div class="flex gap-6 mono text-xs text-[#7b8794]">
+      <div class="flex gap-6 mono text-xs text-[#555]">
         <a href="#" class="hover:text-[#00ff41] transition-colors duration-300">/privacy</a>
         <a href="#" class="hover:text-[#00ff41] transition-colors duration-300">/terms</a>
         <a href="#" class="hover:text-[#00ff41] transition-colors duration-300">/docs</a>
@@ -500,8 +721,9 @@
     </div>
   </footer>
 
-  <!-- Scroll Reveal Script — repeats on scroll -->
+  <!-- Scroll Reveal + System Metrics Animation -->
   <script>
+    // Scroll reveal — repeats on scroll
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -515,6 +737,39 @@
     document.querySelectorAll('.reveal').forEach(el => {
       revealObserver.observe(el);
     });
+
+    // Animate system metrics (fluctuating ASCII bars)
+    const metrics = {
+      cpu: { el: 'cpuBar', valEl: 'cpuVal', base: 74, range: 12 },
+      mem: { el: 'memBar', valEl: 'memVal', base: 92, range: 5 },
+      disk: { el: 'diskBar', valEl: 'diskVal', base: 38, range: 3 },
+      net: { el: 'netBar', valEl: 'netVal', base: 87, range: 10 },
+    };
+
+    function makeBar(pct, width) {
+      const filled = Math.round((pct / 100) * width);
+      return '█'.repeat(filled) + '░'.repeat(width - filled);
+    }
+
+    function updateMetrics() {
+      Object.values(metrics).forEach(m => {
+        const val = Math.max(5, Math.min(99, m.base + Math.round((Math.random() - 0.5) * m.range)));
+        const barEl = document.getElementById(m.el);
+        const valEl = document.getElementById(m.valEl);
+        if (barEl && valEl) {
+          barEl.textContent = makeBar(val, 20);
+          valEl.textContent = val + '%';
+          // Color coding: >85% amber, else green
+          if (val > 85) {
+            barEl.className = 'amber-glow';
+          } else {
+            barEl.className = 'green-glow';
+          }
+        }
+      });
+    }
+
+    setInterval(updateMetrics, 2000);
   </script>
 
 </body>
