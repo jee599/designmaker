@@ -1,0 +1,404 @@
+{
+  "urls": [
+    {
+      "url": "https://christopherireland.net",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://opalcamera.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://atlascard.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://ped.ro",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://authkit.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://springsummer.dk",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://bpco.kr",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://shuttle.zip",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://savoirfaire.nyc",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://duties.xyz",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://status.app",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://reflect.app",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://andagain.uk",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://yinger.dev",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://unveil.fr",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://kons.fyi",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://roasted.design",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://superhi.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://lovi.care",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://thisispam.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://endless.design",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://tatem.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://superpower.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://dzrgo.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://10xdesigners.co",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://desktop.fm",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://augen.pro",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://limitless.ai",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://phantom.app",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://cosmos.so",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://pasteapp.io",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://umbrel.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://family.co",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://samara.com",
+      "category": "gallery",
+      "source": "godly"
+    },
+    {
+      "url": "https://burocratik.com",
+      "category": "gallery",
+      "source": "awwwards"
+    },
+    {
+      "url": "https://oddcommon.com",
+      "category": "gallery",
+      "source": "awwwards"
+    },
+    {
+      "url": "https://aristidebenoist.com",
+      "category": "gallery",
+      "source": "awwwards"
+    },
+    {
+      "url": "https://locomotive.ca",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://kprverse.com",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://toyfight.co",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://metalab.com",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://gsap.com",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://itsoffbrand.com",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://playground.it",
+      "category": "gallery",
+      "source": "curated"
+    },
+    {
+      "url": "https://ko-collective.com",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://truecolorfilms.com",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://originalsin.co",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://jinsupark.com",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://poch.studio",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://vogel.haus",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://iamrob.in",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://moxey.no",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://wearewoodid.com",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://cubiflow.com",
+      "category": "gallery",
+      "source": "minimal"
+    },
+    {
+      "url": "https://midday.ai",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://obsidianos.com",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://owo.app",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://belka.ai",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://flomodia.com",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://trionn.com",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://superset.sh",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://mobbin.com",
+      "category": "gallery",
+      "source": "dark"
+    },
+    {
+      "url": "https://igloo.inc",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://sorenwest.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://fourpillars.studio",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://canals-amsterdam.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://msport-raptor.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://hivetown.co",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://hadaka.jp",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://kubrick.life",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://nasaprospect.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://twinbru.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://homesociete.ca",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://fillet.com.br",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://nolanomura.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://sleepiest.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://verholy.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://1-placevendome.com",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://theo.be",
+      "category": "gallery",
+      "source": "scroll"
+    },
+    {
+      "url": "https://gyre-omotesando.com",
+      "category": "gallery",
+      "source": "scroll"
+    }
+  ]
+}

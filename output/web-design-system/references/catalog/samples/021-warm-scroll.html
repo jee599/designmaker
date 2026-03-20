@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>021 — Warm Scroll Story Reference</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Cormorant Garamond"', 'serif'],
+            body: ['"DM Sans"', 'sans-serif'],
+          },
+          colors: {
+            forest: '#122223',
+            forestLight: '#1a2e2f',
+            gold: '#c4a97d',
+            cream: '#e8dcc8',
+            warmDark: '#1a1714',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+      background: #122223;
+      color: #e8dcc8;
+    }
+
+    /* Parallax-like fixed background */
+    .parallax-bg {
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Warm gradient overlays for image placeholders */
+    .img-warm-1 {
+      background: linear-gradient(135deg, #2a3a2e 0%, #1a2e2f 30%, #3a2a1a 70%, #122223 100%);
+    }
+    .img-warm-2 {
+      background: linear-gradient(160deg, #1a1714 0%, #2a2015 40%, #122223 80%);
+    }
+    .img-warm-3 {
+      background: linear-gradient(180deg, #0d1a1b 0%, #1e332a 50%, #2a1f12 100%);
+    }
+    .img-warm-4 {
+      background: linear-gradient(120deg, #1a2e2f 0%, #2a1a10 60%, #122223 100%);
+    }
+
+    /* Slow elegant fade-in */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes revealLine {
+      from { width: 0; }
+      to { width: 80px; }
+    }
+
+    .fade-up { opacity: 0; }
+    .fade-up.visible { animation: fadeUp 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+    .fade-in { opacity: 0; }
+    .fade-in.visible { animation: fadeIn 1200ms ease forwards; }
+    .reveal-line { width: 0; height: 1px; background: #c4a97d; }
+    .reveal-line.visible { animation: revealLine 1200ms ease forwards; }
+
+    /* Stagger children */
+    .stagger-1 { animation-delay: 200ms !important; }
+    .stagger-2 { animation-delay: 400ms !important; }
+    .stagger-3 { animation-delay: 600ms !important; }
+
+    /* Horizontal scroll for gallery */
+    .scroll-gallery { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    .scroll-gallery > * { scroll-snap-align: start; }
+
+    /* Hover for links */
+    .link-gold { transition: color 300ms ease, border-color 300ms ease; }
+    .link-gold:hover { color: #c4a97d; }
+
+    /* Minimal menu overlay */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 34, 35, 0.97);
+      z-index: 100;
+      display: none;
+      opacity: 0;
+      transition: opacity 500ms ease;
+    }
+    .menu-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MINIMAL NAV — Logo + Menu Icon -->
+  <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-6">
+    <a href="#" class="font-heading text-cream text-2xl tracking-widest" style="font-weight: 300; letter-spacing: 0.2em;">VERHOLY</a>
+    <button id="menuToggle" class="text-cream flex items-center gap-3 group cursor-pointer" aria-label="Menu">
+      <span class="font-body text-sm uppercase tracking-widest text-cream/60 group-hover:text-gold transition-colors duration-300">Menu</span>
+      <div class="flex flex-col gap-1.5">
+        <span class="block w-7 h-px bg-cream group-hover:bg-gold transition-colors duration-300"></span>
+        <span class="block w-5 h-px bg-cream group-hover:bg-gold transition-colors duration-300"></span>
+      </div>
+    </button>
+  </nav>
+
+  <!-- MENU OVERLAY -->
+  <div id="menuOverlay" class="menu-overlay items-center justify-center flex-col">
+    <button id="menuClose" class="absolute top-6 right-6 md:right-12 text-cream hover:text-gold transition-colors duration-300 cursor-pointer" aria-label="Close">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <div class="flex flex-col items-center gap-8">
+      <a href="#story" class="font-heading text-cream text-5xl md:text-7xl hover:text-gold transition-colors duration-300" style="font-weight: 300;">Story</a>
+      <a href="#experience" class="font-heading text-cream text-5xl md:text-7xl hover:text-gold transition-colors duration-300" style="font-weight: 300;">Experience</a>
+      <a href="#gallery" class="font-heading text-cream text-5xl md:text-7xl hover:text-gold transition-colors duration-300" style="font-weight: 300;">Gallery</a>
+      <a href="#reserve" class="font-heading text-cream text-5xl md:text-7xl hover:text-gold transition-colors duration-300" style="font-weight: 300;">Reserve</a>
+    </div>
+  </div>
+
+  <!-- HERO — Full screen, dark forest, elegant type -->
+  <section class="min-h-screen flex items-end relative overflow-hidden">
+    <!-- Background image placeholder -->
+    <div class="absolute inset-0 img-warm-1 parallax-bg"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(18,34,35,0.95) 0%, rgba(18,34,35,0.3) 50%, transparent 100%);"></div>
+    <div class="relative z-10 px-6 md:px-16 pb-20 md:pb-28 w-full max-w-6xl">
+      <div class="reveal-line mb-8"></div>
+      <h1 class="fade-up font-heading text-cream tracking-wide leading-none"
+          style="font-size: clamp(48px, 8vw, 96px); font-weight: 300; letter-spacing: 0.02em;">
+        A place where<br>time dissolves
+      </h1>
+      <p class="fade-up stagger-1 font-body text-cream/50 text-lg md:text-xl mt-8 max-w-md leading-relaxed">
+        [Location] — Nestled in [N] hectares of ancient forest, where nature sets the pace.
+      </p>
+    </div>
+  </section>
+
+  <!-- STORY — Full height, text only, massive whitespace -->
+  <section id="story" class="min-h-screen flex items-center px-6 md:px-16 py-32" style="background: #122223;">
+    <div class="max-w-4xl mx-auto">
+      <div class="fade-up">
+        <span class="font-body text-gold text-sm uppercase tracking-widest block mb-10">Our Story</span>
+        <h2 class="font-heading text-cream leading-snug mb-12"
+            style="font-size: clamp(36px, 5vw, 72px); font-weight: 300;">
+          Born from a belief that the deepest luxury is stillness.
+          We built [name] not as a hotel, but as a threshold —
+          between the world you know and the one you've forgotten.
+        </h2>
+        <div class="reveal-line stagger-1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE SECTION — Full bleed with parallax -->
+  <section class="min-h-screen relative overflow-hidden">
+    <div class="absolute inset-0 img-warm-2 parallax-bg"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(18,34,35,0.6) 0%, transparent 40%, rgba(18,34,35,0.7) 100%);"></div>
+    <div class="relative z-10 flex items-center justify-center min-h-screen px-6">
+      <div class="text-center fade-in">
+        <span class="font-body text-cream/40 text-sm uppercase tracking-widest block mb-6">Editorial Photography</span>
+        <p class="font-heading text-cream text-3xl md:text-5xl" style="font-weight: 300;">[Image placeholder — landscape]</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE — Two-column, alternating -->
+  <section id="experience" class="min-h-screen py-32 px-6 md:px-16" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto">
+      <span class="fade-up font-body text-gold text-sm uppercase tracking-widest block mb-20">The Experience</span>
+
+      <!-- Experience 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 mb-32 items-center">
+        <div class="fade-up order-2 md:order-1">
+          <h3 class="font-heading text-cream text-4xl md:text-6xl mb-6" style="font-weight: 300;">[Experience name]</h3>
+          <p class="font-body text-cream/50 text-base leading-relaxed mb-6">
+            [Description of the experience — what guests encounter, feel, remember.
+            Be specific about details: materials, scents, times of day.]
+          </p>
+          <a href="#" class="link-gold font-body text-gold text-sm uppercase tracking-widest border-b border-gold/30 pb-1">
+            Discover →
+          </a>
+        </div>
+        <div class="fade-up stagger-1 order-1 md:order-2">
+          <div class="aspect-[3/4] w-full img-warm-3 flex items-center justify-center">
+            <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience 2 — reversed -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 mb-32 items-center">
+        <div class="fade-up">
+          <div class="aspect-[3/4] w-full img-warm-4 flex items-center justify-center">
+            <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image</span>
+          </div>
+        </div>
+        <div class="fade-up stagger-1">
+          <h3 class="font-heading text-cream text-4xl md:text-6xl mb-6" style="font-weight: 300;">[Experience name]</h3>
+          <p class="font-body text-cream/50 text-base leading-relaxed mb-6">
+            [Description of the second experience — contrast with the first.
+            Morning vs evening, active vs still, social vs solitary.]
+          </p>
+          <a href="#" class="link-gold font-body text-gold text-sm uppercase tracking-widest border-b border-gold/30 pb-1">
+            Discover →
+          </a>
+        </div>
+      </div>
+
+      <!-- Experience 3 — full-width quote -->
+      <div class="fade-up py-20 border-t border-cream/10">
+        <blockquote class="font-heading text-cream text-3xl md:text-5xl text-center max-w-4xl mx-auto leading-snug" style="font-weight: 300;">
+          "[A guest quote that sounds real — hesitant, personal, maybe unfinished.
+          Not polished marketing copy.]"
+        </blockquote>
+        <cite class="font-body text-cream/30 text-sm block text-center mt-8 not-italic">
+          — [Name], [when they visited]
+        </cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY — Horizontal scroll of tall images -->
+  <section id="gallery" class="py-32 overflow-hidden" style="background: #122223;">
+    <div class="px-6 md:px-16 mb-12">
+      <span class="fade-up font-body text-gold text-sm uppercase tracking-widest">Gallery</span>
+    </div>
+    <div class="scroll-gallery flex gap-4 md:gap-6 overflow-x-auto px-6 md:px-16 pb-8" style="scrollbar-width: none;">
+      <div class="fade-up shrink-0 w-72 md:w-96">
+        <div class="aspect-[2/3] w-full img-warm-1 flex items-center justify-center">
+          <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image 1</span>
+        </div>
+      </div>
+      <div class="fade-up stagger-1 shrink-0 w-72 md:w-96">
+        <div class="aspect-[2/3] w-full img-warm-2 flex items-center justify-center">
+          <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image 2</span>
+        </div>
+      </div>
+      <div class="fade-up stagger-2 shrink-0 w-72 md:w-96">
+        <div class="aspect-[2/3] w-full img-warm-3 flex items-center justify-center">
+          <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image 3</span>
+        </div>
+      </div>
+      <div class="fade-up stagger-3 shrink-0 w-72 md:w-96">
+        <div class="aspect-[2/3] w-full img-warm-4 flex items-center justify-center">
+          <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image 4</span>
+        </div>
+      </div>
+      <div class="fade-up shrink-0 w-72 md:w-96">
+        <div class="aspect-[2/3] w-full img-warm-1 flex items-center justify-center">
+          <span class="text-cream/20 font-body text-xs uppercase tracking-widest">Image 5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY — Full screen text, like story section but different -->
+  <section class="min-h-screen flex items-center relative overflow-hidden">
+    <div class="absolute inset-0 img-warm-4 parallax-bg"></div>
+    <div class="absolute inset-0" style="background: rgba(26, 23, 20, 0.92);"></div>
+    <div class="relative z-10 px-6 md:px-16 w-full">
+      <div class="max-w-5xl mx-auto text-center">
+        <div class="fade-up">
+          <span class="font-body text-gold text-sm uppercase tracking-widest block mb-10">Philosophy</span>
+          <h2 class="font-heading text-cream leading-snug mb-10"
+              style="font-size: clamp(32px, 4vw, 56px); font-weight: 300;">
+            We don't offer activities.<br>
+            We offer the absence of them.<br>
+            The agenda is no agenda.
+          </h2>
+          <div class="reveal-line stagger-1 mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEASONS — Two column with big numbers -->
+  <section class="py-32 px-6 md:px-16" style="background: #122223;">
+    <div class="max-w-6xl mx-auto">
+      <span class="fade-up font-body text-gold text-sm uppercase tracking-widest block mb-16">Seasons</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+        <div class="fade-up">
+          <span class="font-heading text-cream/10 block leading-none" style="font-size: clamp(80px, 10vw, 140px); font-weight: 300;">I—II</span>
+          <h3 class="font-heading text-cream text-3xl md:text-4xl mt-4 mb-4" style="font-weight: 300;">Winter & Spring</h3>
+          <p class="font-body text-cream/40 text-base leading-relaxed">
+            [Description of the property in cold months — snow, silence, fireplaces, shorter days,
+            the particular quality of light through bare branches.]
+          </p>
+        </div>
+        <div class="fade-up stagger-1">
+          <span class="font-heading text-cream/10 block leading-none" style="font-size: clamp(80px, 10vw, 140px); font-weight: 300;">III—IV</span>
+          <h3 class="font-heading text-cream text-3xl md:text-4xl mt-4 mb-4" style="font-weight: 300;">Summer & Autumn</h3>
+          <p class="font-body text-cream/40 text-base leading-relaxed">
+            [Description of warm months — the garden peaks, outdoor dining, long evenings,
+            the forest turns gold. Specific months, specific activities.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANOTHER IMAGE BREAK — Full bleed -->
+  <section class="min-h-screen relative overflow-hidden">
+    <div class="absolute inset-0 img-warm-1 parallax-bg"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(26,23,20,0.8) 0%, transparent 40%, rgba(18,34,35,0.5) 100%);"></div>
+    <div class="relative z-10 flex items-end min-h-screen px-6 md:px-16 pb-16">
+      <div class="fade-up">
+        <p class="font-heading text-cream/60 text-2xl md:text-3xl max-w-md" style="font-weight: 300;">
+          [Caption text — a single poetic observation about the place]
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DETAILS — Sparse info section -->
+  <section class="min-h-screen flex items-center py-32 px-6 md:px-16" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto w-full">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24">
+        <div class="fade-up">
+          <span class="font-body text-gold text-sm uppercase tracking-widest block mb-6">Rooms</span>
+          <h3 class="font-heading text-cream text-3xl md:text-4xl mb-4" style="font-weight: 300;">[N] suites</h3>
+          <p class="font-body text-cream/40 text-base leading-relaxed">
+            Each one different. Wood, stone, linen — materials that age well, like the forest around them.
+          </p>
+        </div>
+        <div class="fade-up stagger-1">
+          <span class="font-body text-gold text-sm uppercase tracking-widest block mb-6">Dining</span>
+          <h3 class="font-heading text-cream text-3xl md:text-4xl mb-4" style="font-weight: 300;">Farm to table</h3>
+          <p class="font-body text-cream/40 text-base leading-relaxed">
+            [Chef name] sources within [N]km. The menu changes when the garden changes. No menu cards — the kitchen decides.
+          </p>
+        </div>
+        <div class="fade-up stagger-2">
+          <span class="font-body text-gold text-sm uppercase tracking-widest block mb-6">Wellness</span>
+          <h3 class="font-heading text-cream text-3xl md:text-4xl mb-4" style="font-weight: 300;">Forest bathing</h3>
+          <p class="font-body text-cream/40 text-base leading-relaxed">
+            No spa menu. A [N]-minute walk into old-growth forest, guided or alone. That's the treatment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESS / RECOGNITION — Minimal list -->
+  <section class="py-28 px-6 md:px-16" style="background: #122223;">
+    <div class="max-w-6xl mx-auto">
+      <span class="fade-up font-body text-gold text-sm uppercase tracking-widest block mb-16">Press</span>
+      <div class="fade-up border-t border-cream/10">
+        <a href="#" class="flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-cream/10 group">
+          <div class="flex items-center gap-6">
+            <span class="font-body text-cream/20 text-sm tracking-widest">[Year]</span>
+            <span class="font-heading text-cream text-2xl md:text-3xl group-hover:text-gold transition-colors duration-300" style="font-weight: 300;">[Publication Name]</span>
+          </div>
+          <span class="font-body text-cream/30 text-sm mt-2 md:mt-0">[Article title or quote]</span>
+        </a>
+        <a href="#" class="flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-cream/10 group">
+          <div class="flex items-center gap-6">
+            <span class="font-body text-cream/20 text-sm tracking-widest">[Year]</span>
+            <span class="font-heading text-cream text-2xl md:text-3xl group-hover:text-gold transition-colors duration-300" style="font-weight: 300;">[Publication Name]</span>
+          </div>
+          <span class="font-body text-cream/30 text-sm mt-2 md:mt-0">[Article title or quote]</span>
+        </a>
+        <a href="#" class="flex flex-col md:flex-row md:items-center justify-between py-8 border-b border-cream/10 group">
+          <div class="flex items-center gap-6">
+            <span class="font-body text-cream/20 text-sm tracking-widest">[Year]</span>
+            <span class="font-heading text-cream text-2xl md:text-3xl group-hover:text-gold transition-colors duration-300" style="font-weight: 300;">[Publication Name]</span>
+          </div>
+          <span class="font-body text-cream/30 text-sm mt-2 md:mt-0">[Article title or quote]</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION — Map placeholder -->
+  <section class="py-28 px-6 md:px-16" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="fade-up">
+        <span class="font-body text-gold text-sm uppercase tracking-widest block mb-8">Getting Here</span>
+        <h3 class="font-heading text-cream text-3xl md:text-5xl mb-6" style="font-weight: 300;">
+          [N] hours from [city]
+        </h3>
+        <p class="font-body text-cream/40 text-base leading-relaxed mb-6">
+          [Specific directions — by car from the nearest city, by train to which station,
+          whether you arrange transfer, landmarks to watch for. Real logistical detail.]
+        </p>
+        <p class="font-body text-cream/40 text-base leading-relaxed">
+          [Coordinates or address. Nearest airport. Seasonal road conditions if relevant.]
+        </p>
+      </div>
+      <div class="fade-up stagger-1">
+        <div class="aspect-square w-full flex items-center justify-center" style="background: linear-gradient(135deg, #1a2e2f 0%, #0d1a1b 100%); border: 1px solid rgba(196, 169, 125, 0.15);">
+          <div class="text-center">
+            <svg class="w-12 h-12 text-gold/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-width="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="font-body text-cream/20 text-xs uppercase tracking-widest">Map placeholder</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA — Full screen, centered -->
+  <section id="reserve" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0 img-warm-3 parallax-bg"></div>
+    <div class="absolute inset-0" style="background: rgba(18,34,35,0.85);"></div>
+    <div class="relative z-10 text-center px-6">
+      <div class="fade-up">
+        <div class="reveal-line mx-auto mb-12"></div>
+        <h2 class="font-heading text-cream leading-tight mb-8"
+            style="font-size: clamp(40px, 6vw, 80px); font-weight: 300;">
+          Ready to<br>disappear?
+        </h2>
+        <p class="font-body text-cream/40 text-lg mb-12 max-w-md mx-auto leading-relaxed">
+          [Season] availability is limited. We host a maximum of [N] guests at a time.
+        </p>
+        <a href="#" class="inline-block font-body text-gold text-sm uppercase tracking-widest border border-gold/40 px-10 py-5 hover:bg-gold hover:text-forest transition-all duration-500">
+          Reserve your stay
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER — Minimal -->
+  <footer class="py-16 px-6 md:px-16" style="background: #0d1a1b;">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+        <div>
+          <span class="font-heading text-cream text-xl tracking-widest" style="font-weight: 300; letter-spacing: 0.2em;">VERHOLY</span>
+          <p class="font-body text-cream/20 text-sm mt-3">[Address], [Country]</p>
+          <p class="font-body text-cream/20 text-sm mt-1">[phone] · [email]</p>
+        </div>
+        <div class="flex gap-12">
+          <a href="#" class="font-body text-cream/30 text-sm hover:text-gold transition-colors duration-300">Instagram</a>
+          <a href="#" class="font-body text-cream/30 text-sm hover:text-gold transition-colors duration-300">Pinterest</a>
+        </div>
+      </div>
+      <div class="border-t border-cream/5 pt-8">
+        <p class="font-body text-cream/15 text-xs text-center">© [Year] [Name]. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Scroll reveal with repeat
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    const resetObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0 });
+
+    document.querySelectorAll('.fade-up, .fade-in, .reveal-line').forEach(el => {
+      observer.observe(el);
+      resetObserver.observe(el);
+    });
+
+    // Menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const menuClose = document.getElementById('menuClose');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    menuToggle.addEventListener('click', () => {
+      menuOverlay.style.display = 'flex';
+      requestAnimationFrame(() => menuOverlay.classList.add('open'));
+    });
+    menuClose.addEventListener('click', () => {
+      menuOverlay.classList.remove('open');
+      setTimeout(() => { menuOverlay.style.display = 'none'; }, 500);
+    });
+    // Close on link click
+    menuOverlay.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        menuOverlay.classList.remove('open');
+        setTimeout(() => { menuOverlay.style.display = 'none'; }, 500);
+      });
+    });
+  </script>
+
+</body>
+</html>
