@@ -1,0 +1,364 @@
+{
+  "urls": [
+    {
+      "url": "https://vercel.com",
+      "category": "devtools",
+      "source": "thebranx",
+      "style_note": "Dark/light mode, developer-first minimal layout, sharp grid, no ornaments"
+    },
+    {
+      "url": "https://lovable.dev",
+      "category": "ai-startup",
+      "source": "thebranx",
+      "style_note": "Light neutral bg #fcfbf8, Camera Plain Variable font, card-based template display"
+    },
+    {
+      "url": "https://formless.xyz",
+      "category": "ai-startup",
+      "source": "thebranx",
+      "style_note": "Generative aesthetics, spatial interaction, fluid and conceptually bold"
+    },
+    {
+      "url": "https://diamo.ai",
+      "category": "ai-startup",
+      "source": "thebranx",
+      "style_note": "AI product with modern layout"
+    },
+    {
+      "url": "https://north.cloud",
+      "category": "devtools",
+      "source": "thebranx",
+      "style_note": "Cloud platform with clean layout"
+    },
+    {
+      "url": "https://composio.dev",
+      "category": "devtools",
+      "source": "thebranx",
+      "style_note": "Dark bg #1e1e1e, Menlo monospace, ASCII art blocks, minimal cards"
+    },
+    {
+      "url": "https://wisprflow.ai",
+      "category": "ai-startup",
+      "source": "ebaqdesign",
+      "style_note": "Cream bg #FFFFEB, animated SVG paths, split text animations, cobalt accent #4d65ff"
+    },
+    {
+      "url": "https://saharaai.com",
+      "category": "ai-startup",
+      "source": "ebaqdesign",
+      "style_note": "AI data platform with modern design"
+    },
+    {
+      "url": "https://trymeridian.com",
+      "category": "ai-startup",
+      "source": "ebaqdesign",
+      "style_note": "AI startup landing page"
+    },
+    {
+      "url": "https://cosmos.network",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Black bg, Future custom font, modular sections, pill buttons rounded-full"
+    },
+    {
+      "url": "https://rainbow.me",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Dark navy #0f101a, SF Pro Rounded, pink #ff54bb + orange #ff8a00 accents"
+    },
+    {
+      "url": "https://celestia.org",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Light gray #F6F6F6, Untitled Sans font, clean card-based layout"
+    },
+    {
+      "url": "https://family.co",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Warm beige #FBFAF9, Family custom font, blue #3784F4 accent, organic animations"
+    },
+    {
+      "url": "https://multiversx.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Dark web3 with immersive 3D elements"
+    },
+    {
+      "url": "https://worldcoin.org",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Bold web3 with distinctive orb imagery"
+    },
+    {
+      "url": "https://layerzero.network",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Dark #1e1e1e, sharp corners border-radius 0, monospace elements"
+    },
+    {
+      "url": "https://ironfish.network",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Privacy-focused web3 with clean design"
+    },
+    {
+      "url": "https://privy.io",
+      "category": "devtools",
+      "source": "webstacks",
+      "style_note": "Auth/wallet SDK with developer-focused design"
+    },
+    {
+      "url": "https://gnosis.io",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Web3 infrastructure with modular layout"
+    },
+    {
+      "url": "https://paragraph.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Web3 publishing platform"
+    },
+    {
+      "url": "https://linear.app",
+      "category": "devtools",
+      "source": "saasframe",
+      "style_note": "Sophisticated variable-driven design, animated grid patterns, semantic colors"
+    },
+    {
+      "url": "https://notion.com",
+      "category": "productivity",
+      "source": "producthunt",
+      "style_note": "Clean workspace app, organic illustrations, modular layout"
+    },
+    {
+      "url": "https://framer.com",
+      "category": "design-tool",
+      "source": "awwwards",
+      "style_note": "Design tool with bold visual identity and smooth interactions"
+    },
+    {
+      "url": "https://jeton.com",
+      "category": "fintech",
+      "source": "thebranx",
+      "style_note": "Fintech startup with clean modern layout"
+    },
+    {
+      "url": "https://ory.com",
+      "category": "devtools",
+      "source": "thebranx",
+      "style_note": "Auth infrastructure with developer-first design"
+    },
+    {
+      "url": "https://hedera.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Enterprise web3 with professional design"
+    },
+    {
+      "url": "https://inter.trade",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Trading platform with modern UI"
+    },
+    {
+      "url": "https://zestprotocol.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "DeFi protocol with clean design"
+    },
+    {
+      "url": "https://junonetwork.io",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Cosmos ecosystem chain with modern design"
+    },
+    {
+      "url": "https://blocknative.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Web3 infrastructure with data-rich design"
+    },
+    {
+      "url": "https://flow.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Blockchain for open worlds with playful design"
+    },
+    {
+      "url": "https://trustmachines.co",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Bitcoin apps with bold typography"
+    },
+    {
+      "url": "https://kleros.io",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Decentralized arbitration with unique visual identity"
+    },
+    {
+      "url": "https://syndicate.io",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Web3 investment infrastructure"
+    },
+    {
+      "url": "https://curve.fi",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "DeFi with retro/unique aesthetic, custom illustration style"
+    },
+    {
+      "url": "https://matterapp.com",
+      "category": "productivity",
+      "source": "claymorphism",
+      "style_note": "Purple #25277a accent, PT Serif + Open Sans, 3D geometric shapes, playful"
+    },
+    {
+      "url": "https://guardrailsai.com",
+      "category": "ai-startup",
+      "source": "ebaqdesign",
+      "style_note": "AI safety platform with professional design"
+    },
+    {
+      "url": "https://ventriloc.ca",
+      "category": "ai-startup",
+      "source": "ebaqdesign",
+      "style_note": "AI voice platform"
+    },
+    {
+      "url": "https://audius.co",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Decentralized music streaming with creative design"
+    },
+    {
+      "url": "https://staratlas.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Space-themed web3 game with immersive dark design"
+    },
+    {
+      "url": "https://godsunchained.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Web3 game with fantasy aesthetic"
+    },
+    {
+      "url": "https://circle.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "USDC stablecoin with vibrant illustrations and immersive design"
+    },
+    {
+      "url": "https://replit.com",
+      "category": "devtools",
+      "source": "producthunt",
+      "style_note": "Dark coding environment with orange accent, developer-first"
+    },
+    {
+      "url": "https://cursor.com",
+      "category": "devtools",
+      "source": "producthunt",
+      "style_note": "AI code editor with minimal dark design"
+    },
+    {
+      "url": "https://bolt.new",
+      "category": "devtools",
+      "source": "producthunt",
+      "style_note": "AI web builder with modern gradient design"
+    },
+    {
+      "url": "https://emergent.sh",
+      "category": "devtools",
+      "source": "producthunt",
+      "style_note": "AI-native application builder"
+    },
+    {
+      "url": "https://webflow.com",
+      "category": "design-tool",
+      "source": "codrops",
+      "style_note": "Visual web builder with blue accent, clean professional layout"
+    },
+    {
+      "url": "https://figma.com",
+      "category": "design-tool",
+      "source": "codrops",
+      "style_note": "Design tool with collaborative features, clean colorful UI"
+    },
+    {
+      "url": "https://miro.com",
+      "category": "productivity",
+      "source": "producthunt",
+      "style_note": "Whiteboard tool with yellow accent, organic shapes"
+    },
+    {
+      "url": "https://trello.com",
+      "category": "productivity",
+      "source": "producthunt",
+      "style_note": "Project management with blue gradient, playful illustrations"
+    },
+    {
+      "url": "https://meistertask.com",
+      "category": "productivity",
+      "source": "producthunt",
+      "style_note": "Task management with clean UI, gradient accents"
+    },
+    {
+      "url": "https://zapier.com",
+      "category": "productivity",
+      "source": "zapier",
+      "style_note": "Automation platform with bold colors, clean grid"
+    },
+    {
+      "url": "https://fhynix.com",
+      "category": "productivity",
+      "source": "producthunt",
+      "style_note": "Productivity app with modern design"
+    },
+    {
+      "url": "https://nothing.tech",
+      "category": "tech-product",
+      "source": "godly",
+      "style_note": "Minimalist tech brand with dot-matrix aesthetic, monochrome"
+    },
+    {
+      "url": "https://ledger.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Hardware wallet with premium dark design"
+    },
+    {
+      "url": "https://kraken.com",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "Exchange with purple accent, data-rich design"
+    },
+    {
+      "url": "https://1inch.io",
+      "category": "web3",
+      "source": "webstacks",
+      "style_note": "DEX aggregator with unicorn branding, bold dark design"
+    },
+    {
+      "url": "https://scroll-driven-animations.style",
+      "category": "devtools",
+      "source": "bram.us",
+      "style_note": "CSS scroll-driven animation demos, card stack examples"
+    },
+    {
+      "url": "https://skiper-ui.com",
+      "category": "design-tool",
+      "source": "skiper",
+      "style_note": "Card stack scroll animation component library"
+    },
+    {
+      "url": "https://poolsuite.net",
+      "category": "retro",
+      "source": "colorlib",
+      "style_note": "Retro 90s OS simulation, pixelated icons, skeuomorphic dialog boxes"
+    }
+  ]
+}

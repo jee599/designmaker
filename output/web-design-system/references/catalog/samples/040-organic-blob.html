@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>040 — Organic Blob</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #FFFDF7;
+      color: #1C1917;
+      overflow-x: hidden;
+    }
+    h1, h2 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+    h3, h4 { font-family: 'DM Sans', sans-serif; font-weight: 500; }
+
+    /* Hero blobs */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.4;
+      z-index: 0;
+    }
+    @keyframes blobFloat1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -25px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+    @keyframes blobFloat2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-25px, 30px) scale(0.95); }
+      66% { transform: translate(35px, -15px) scale(1.08); }
+    }
+    @keyframes blobFloat3 {
+      0%, 100% { transform: translate(0, 0) scale(1.02); }
+      50% { transform: translate(25px, 20px) scale(0.96); }
+    }
+
+    /* Organic clip paths for image placeholders */
+    .organic-clip-1 {
+      clip-path: path('M200,10 C250,0 300,30 310,80 C320,130 290,180 240,190 C190,200 130,180 100,140 C70,100 80,50 120,25 C150,5 170,15 200,10 Z');
+    }
+
+    /* Card hover */
+    .organic-card {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 24px rgba(28, 25, 23, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .organic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(28, 25, 23, 0.08);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+
+    /* SVG blob section divider */
+    .blob-divider {
+      height: 80px;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    /* Big quotation mark */
+    .big-quote {
+      font-family: 'DM Serif Display', serif;
+      font-size: 8rem;
+      line-height: 1;
+      opacity: 0.08;
+      position: absolute;
+      top: -1rem;
+      left: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#FFFDF7]/80 backdrop-blur-lg">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-7 h-7 text-[#2563EB]" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="2"/>
+          <circle cx="14" cy="14" r="5" fill="currentColor"/>
+        </svg>
+        <span class="font-medium text-[#1C1917]">[Product]</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm text-[#78716C] hover:text-[#2563EB] transition-colors duration-300">Features</a>
+        <a href="#testimonial" class="text-sm text-[#78716C] hover:text-[#2563EB] transition-colors duration-300">Reviews</a>
+        <a href="#cta" class="text-sm text-[#78716C] hover:text-[#2563EB] transition-colors duration-300">Pricing</a>
+        <a href="#cta" class="bg-[#2563EB] text-white rounded-full px-5 py-2.5 text-sm font-medium hover:bg-[#1D4ED8] transition-colors duration-300">
+          Get Started
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative py-32 pt-40 px-6 overflow-hidden">
+    <!-- Animated blobs -->
+    <div class="hero-blob w-80 h-80 -top-20 -left-20" style="background: #E8D5B7; animation: blobFloat1 12s ease-in-out infinite;"></div>
+    <div class="hero-blob w-64 h-64 top-10 right-0" style="background: #B8D4E3; animation: blobFloat2 15s ease-in-out infinite;"></div>
+    <div class="hero-blob w-72 h-72 bottom-0 left-1/4" style="background: #D4E8D0; animation: blobFloat3 18s ease-in-out infinite;"></div>
+
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <h1 class="reveal text-4xl sm:text-5xl md:text-6xl text-[#1C1917] mb-6" style="letter-spacing: -0.01em; line-height: 1.1;">
+        Where ideas take<br class="hidden sm:block"> their natural shape
+      </h1>
+      <p class="reveal reveal-delay-1 text-lg text-[#78716C] max-w-lg mx-auto mb-10 leading-relaxed">
+        [Your product brings order to creative chaos. Describe the transformation — from messy input to beautiful output.]
+      </p>
+      <div class="reveal reveal-delay-2 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#cta" class="bg-[#2563EB] text-white rounded-full px-8 py-3.5 font-medium hover:bg-[#1D4ED8] transition-colors duration-300 text-center">
+          Start for free
+        </a>
+        <a href="#features" class="text-[#2563EB] font-medium px-8 py-3.5 rounded-full hover:bg-[#DBEAFE] transition-colors duration-300 text-center">
+          See how it works →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blob Divider -->
+  <div class="blob-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1380,20 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+
+  <!-- Features — Alternating 2-column -->
+  <section id="features" class="bg-white py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-20">
+        <h2 class="reveal text-3xl sm:text-4xl text-[#1C1917] mb-4">Designed to flow</h2>
+        <p class="reveal reveal-delay-1 text-[#78716C] max-w-md mx-auto">
+          [Subheading — what makes your approach different from rigid alternatives.]
+        </p>
+      </div>
+
+      <!-- Feature 1: image left, text right -->
+      <div class="reveal flex flex-col md:flex-row items-center gap-12 mb-20">
+        <div class="flex-1">
+          <div class="bg-[#F5F0E8] rounded-3xl h-64 md:h-80 flex items-center justify-center relative overflow-hidden">
+            <div class="w-48 h-48 rounded-full bg-[#B8D4E3] opacity-30 absolute -bottom-8 -left-8" style="animation: blobFloat2 10s ease-in-out infinite;"></div>
+            <span class="text-sm text-[#78716C] relative z-10">[Product screenshot / illustration]</span>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-[#DBEAFE] flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#2563EB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg text-[#1C1917]">[Feature name]</h3>
+          </div>
+          <p class="text-[#78716C] leading-relaxed">
+            [Describe what this feature does in concrete terms. What changes for the user? What was hard before, and what's easy now? Include a specific detail.]
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 2: text left, image right -->
+      <div class="reveal flex flex-col md:flex-row-reverse items-center gap-12 mb-20">
+        <div class="flex-1">
+          <div class="bg-[#F5F0E8] rounded-3xl h-64 md:h-80 flex items-center justify-center relative overflow-hidden">
+            <div class="w-40 h-40 rounded-full bg-[#D4E8D0] opacity-30 absolute -top-6 -right-6" style="animation: blobFloat1 11s ease-in-out infinite;"></div>
+            <span class="text-sm text-[#78716C] relative z-10">[Product screenshot / illustration]</span>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-[#DBEAFE] flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#2563EB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg text-[#1C1917]">[Feature name]</h3>
+          </div>
+          <p class="text-[#78716C] leading-relaxed">
+            [Different angle. Maybe speed, maybe collaboration, maybe AI-assisted. Whatever your second differentiator is, show it here concretely.]
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 3: image left, text right -->
+      <div class="reveal flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1">
+          <div class="bg-[#F5F0E8] rounded-3xl h-64 md:h-80 flex items-center justify-center relative overflow-hidden">
+            <div class="w-44 h-44 rounded-full bg-[#E8D5B7] opacity-30 absolute -bottom-10 right-4" style="animation: blobFloat3 13s ease-in-out infinite;"></div>
+            <span class="text-sm text-[#78716C] relative z-10">[Product screenshot / illustration]</span>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-[#DBEAFE] flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#2563EB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg text-[#1C1917]">[Feature name]</h3>
+          </div>
+          <p class="text-[#78716C] leading-relaxed">
+            [Third differentiator. Maybe integration, maybe export, maybe pricing model. Ground it in what the user actually does.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blob Divider -->
+  <div class="blob-divider bg-white">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,40 C240,0 480,80 720,40 C960,0 1200,80 1440,40 L1440,80 L0,80 Z" fill="#F5F0E8"/>
+    </svg>
+  </div>
+
+  <!-- Testimonial -->
+  <section id="testimonial" class="py-20 px-6" style="background: #F5F0E8;">
+    <div class="max-w-3xl mx-auto">
+      <div class="reveal relative">
+        <span class="big-quote text-[#1C1917]">"</span>
+        <div class="organic-card p-8 md:p-12 relative z-10" style="margin-left: 2rem;">
+          <blockquote class="text-lg md:text-xl text-[#1C1917] leading-relaxed mb-6" style="font-family: 'DM Serif Display', serif;">
+            "[A real testimonial that sounds like a human wrote it. Include a concrete detail — a number, a time saved, a specific situation. Messy is better than polished.]"
+          </blockquote>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-[#B8D4E3] flex items-center justify-center relative overflow-hidden">
+              <span class="text-sm text-[#1C1917]">JD</span>
+            </div>
+            <div>
+              <p class="font-medium text-[#1C1917] text-sm">[Real person name]</p>
+              <p class="text-xs text-[#78716C]">[Specific role] at [Specific company]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blob Divider -->
+  <div style="background: #F5F0E8;">
+    <div class="blob-divider">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" class="w-full h-full">
+        <path d="M0,30 C360,70 720,10 1080,50 C1260,65 1380,30 1440,40 L1440,80 L0,80 Z" fill="#FFFDF7"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <section class="py-24 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-3xl sm:text-4xl text-[#1C1917] mb-4">Simple by nature</h2>
+        <p class="reveal reveal-delay-1 text-[#78716C] max-w-md mx-auto">
+          [Explain the flow in 3 steps. Keep it organic — each step grows from the last.]
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="reveal organic-card p-8 relative overflow-hidden">
+          <div class="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-[#E8D5B7] opacity-20" style="animation: blobFloat1 10s ease-in-out infinite;"></div>
+          <div class="relative z-10">
+            <span class="inline-block w-8 h-8 rounded-full bg-[#DBEAFE] flex items-center justify-center text-sm font-medium text-[#2563EB] mb-4">1</span>
+            <h3 class="text-lg text-[#1C1917] mb-2">[Connect]</h3>
+            <p class="text-sm text-[#78716C] leading-relaxed">
+              [What does the user do first? Import, connect, paste, upload? Be literal about the action.]
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="reveal reveal-delay-1 organic-card p-8 relative overflow-hidden">
+          <div class="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-[#B8D4E3] opacity-20" style="animation: blobFloat2 11s ease-in-out infinite;"></div>
+          <div class="relative z-10">
+            <span class="inline-block w-8 h-8 rounded-full bg-[#DBEAFE] flex items-center justify-center text-sm font-medium text-[#2563EB] mb-4">2</span>
+            <h3 class="text-lg text-[#1C1917] mb-2">[Transform]</h3>
+            <p class="text-sm text-[#78716C] leading-relaxed">
+              [What happens to their input? Processing, analysis, generation? Describe the transformation.]
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="reveal reveal-delay-2 organic-card p-8 relative overflow-hidden">
+          <div class="absolute -top-6 -left-6 w-28 h-28 rounded-full bg-[#D4E8D0] opacity-20" style="animation: blobFloat3 13s ease-in-out infinite;"></div>
+          <div class="relative z-10">
+            <span class="inline-block w-8 h-8 rounded-full bg-[#DBEAFE] flex items-center justify-center text-sm font-medium text-[#2563EB] mb-4">3</span>
+            <h3 class="text-lg text-[#1C1917] mb-2">[Grow]</h3>
+            <p class="text-sm text-[#78716C] leading-relaxed">
+              [What's the result? What can the user now do that they couldn't before?]
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blob Divider -->
+  <div class="blob-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,50 C300,20 600,70 900,40 C1100,20 1300,60 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+
+  <!-- Pricing Section -->
+  <section class="bg-white py-24 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-3xl sm:text-4xl text-[#1C1917] mb-4">Grow at your own pace</h2>
+        <p class="reveal reveal-delay-1 text-[#78716C]">
+          [Pricing that scales with you. No surprises.]
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <!-- Free plan -->
+        <div class="reveal organic-card p-8">
+          <h3 class="text-lg text-[#1C1917] mb-1">Starter</h3>
+          <p class="text-sm text-[#78716C] mb-4">[For individuals exploring]</p>
+          <p class="text-3xl text-[#1C1917] mb-6" style="font-family: 'DM Serif Display', serif;">Free</p>
+          <ul class="space-y-3 text-sm text-[#78716C] mb-8">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [What's included — be specific]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Another included feature]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Limit or cap — be honest]
+            </li>
+          </ul>
+          <a href="#" class="block text-center rounded-full py-3 border border-[#2563EB] text-[#2563EB] font-medium hover:bg-[#DBEAFE] transition-colors duration-300">
+            Start free
+          </a>
+        </div>
+
+        <!-- Pro plan -->
+        <div class="reveal reveal-delay-1 organic-card p-8 border-2 border-[#2563EB] relative">
+          <span class="absolute -top-3 left-6 bg-[#2563EB] text-white text-xs font-medium px-3 py-1 rounded-full">Popular</span>
+          <h3 class="text-lg text-[#1C1917] mb-1">Pro</h3>
+          <p class="text-sm text-[#78716C] mb-4">[For teams shipping fast]</p>
+          <p class="text-3xl text-[#1C1917] mb-6" style="font-family: 'DM Serif Display', serif;">$[N]<span class="text-base text-[#78716C]">/mo</span></p>
+          <ul class="space-y-3 text-sm text-[#78716C] mb-8">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              Everything in Starter
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Pro-specific feature]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Another pro feature]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Priority support or similar]
+            </li>
+          </ul>
+          <a href="#" class="block text-center rounded-full py-3 bg-[#2563EB] text-white font-medium hover:bg-[#1D4ED8] transition-colors duration-300">
+            Upgrade to Pro
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blob Divider -->
+  <div class="blob-divider bg-white">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,40 C240,70 480,10 720,40 C960,70 1200,10 1440,40 L1440,80 L0,80 Z" fill="#FFFDF7"/>
+    </svg>
+  </div>
+
+  <!-- CTA -->
+  <section id="cta" class="py-28 px-6 relative overflow-hidden">
+    <div class="hero-blob w-64 h-64 -bottom-20 -right-20" style="background: #D4E8D0; animation: blobFloat1 14s ease-in-out infinite;"></div>
+    <div class="hero-blob w-48 h-48 top-10 -left-10" style="background: #B8D4E3; animation: blobFloat2 16s ease-in-out infinite;"></div>
+
+    <div class="max-w-2xl mx-auto text-center relative z-10">
+      <h2 class="reveal text-3xl sm:text-4xl text-[#1C1917] mb-4">Let your work breathe</h2>
+      <p class="reveal reveal-delay-1 text-[#78716C] mb-10 leading-relaxed">
+        [Remove friction. Free plan? No credit card? Quick setup? Say it.]
+      </p>
+      <div class="reveal reveal-delay-2">
+        <a href="#" class="inline-block bg-[#2563EB] text-white rounded-full px-10 py-4 font-medium text-lg hover:bg-[#1D4ED8] transition-colors duration-300">
+          Start building — free
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal text-3xl sm:text-4xl text-[#1C1917] text-center mb-12">Frequently asked</h2>
+
+      <div class="space-y-4">
+        <div class="reveal organic-card p-6">
+          <h3 class="text-base font-medium text-[#1C1917] mb-2">[Is there a free plan?]</h3>
+          <p class="text-sm text-[#78716C] leading-relaxed">
+            [Direct, honest answer. Include specific limits or caps.]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-1 organic-card p-6">
+          <h3 class="text-base font-medium text-[#1C1917] mb-2">[How does it handle [specific use case]?]</h3>
+          <p class="text-sm text-[#78716C] leading-relaxed">
+            [Concrete answer. Reference a feature or integration.]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-2 organic-card p-6">
+          <h3 class="text-base font-medium text-[#1C1917] mb-2">[Can I export my data?]</h3>
+          <p class="text-sm text-[#78716C] leading-relaxed">
+            [Yes/no + specifics. Formats, frequency, automation.]
+          </p>
+        </div>
+
+        <div class="reveal organic-card p-6">
+          <h3 class="text-base font-medium text-[#1C1917] mb-2">[What happens if I cancel?]</h3>
+          <p class="text-sm text-[#78716C] leading-relaxed">
+            [Transparent answer about data retention, downgrade path.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blob Divider -->
+  <div class="blob-divider">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0,50 C400,20 800,70 1200,30 C1350,20 1420,45 1440,50 L1440,80 L0,80 Z" fill="#1C1917"/>
+    </svg>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6" style="background: #1C1917;">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-5 h-5 text-[#78716C]" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="2"/>
+          <circle cx="14" cy="14" r="5" fill="currentColor"/>
+        </svg>
+        <span class="text-sm text-[#A8A29E]">[Product]</span>
+      </div>
+      <div class="flex gap-6 text-sm text-[#78716C]">
+        <a href="#" class="hover:text-[#B8D4E3] transition-colors duration-300">Privacy</a>
+        <a href="#" class="hover:text-[#B8D4E3] transition-colors duration-300">Terms</a>
+        <a href="#" class="hover:text-[#B8D4E3] transition-colors duration-300">Blog</a>
+        <a href="#" class="hover:text-[#B8D4E3] transition-colors duration-300">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Reveal Script — repeats on scroll -->
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      revealObserver.observe(el);
+    });
+  </script>
+
+</body>
+</html>

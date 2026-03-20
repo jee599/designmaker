@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>043 — Horizontal Scroll</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0C0C0C;
+      color: #EDEDED;
+      overflow-x: hidden;
+      margin: 0;
+    }
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Horizontal scroll container */
+    .horizontal-outer {
+      height: 500vh;
+      position: relative;
+    }
+    .horizontal-inner {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+    .h-panel {
+      flex-shrink: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 4rem;
+      position: relative;
+    }
+
+    /* Panel divider */
+    .panel-divider {
+      position: absolute;
+      right: 0;
+      top: 10%;
+      bottom: 10%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(167, 139, 250, 0.3), transparent);
+    }
+
+    /* Decorative section number */
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10rem;
+      color: rgba(167, 139, 250, 0.06);
+      position: absolute;
+      bottom: 2rem;
+      right: 3rem;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* Scroll progress bar at bottom */
+    .h-progress {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: #A78BFA;
+      z-index: 60;
+      transition: width 0.05s linear;
+    }
+
+    /* Scroll arrow indicator */
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(8px); }
+    }
+    .scroll-arrow {
+      animation: arrowBounce 1.5s ease-in-out infinite;
+    }
+
+    /* Violet button */
+    .violet-btn {
+      background: #A78BFA;
+      color: #0C0C0C;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.875rem 2.5rem;
+      font-weight: 500;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .violet-btn:hover {
+      background: #C4B5FD;
+      transform: translateY(-1px);
+    }
+
+    /* Feature block */
+    .feature-block {
+      background: #161616;
+      border: 1px solid #2A2A2A;
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: border-color 0.3s ease;
+      width: 320px;
+      flex-shrink: 0;
+    }
+    .feature-block:hover {
+      border-color: #A78BFA;
+    }
+
+    /* Showcase frame */
+    .showcase-frame {
+      border: 1px solid #A78BFA;
+      border-radius: 1rem;
+      padding: 2rem;
+      background: #161616;
+    }
+
+    /* Reveal within horizontal panels */
+    .h-reveal {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .h-reveal.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .h-reveal-delay-1 { transition-delay: 0.15s; }
+    .h-reveal-delay-2 { transition-delay: 0.3s; }
+    .h-reveal-delay-3 { transition-delay: 0.45s; }
+
+    /* Normal vertical reveal for footer */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Big quote */
+    .big-serif-quote {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 6rem;
+      line-height: 1;
+      color: rgba(167, 139, 250, 0.15);
+      position: absolute;
+      top: 15%;
+      left: 2rem;
+    }
+
+    /* Mobile override — vertical layout */
+    @media (max-width: 767px) {
+      .horizontal-outer {
+        height: auto;
+      }
+      .horizontal-inner {
+        position: relative;
+        flex-direction: column;
+        height: auto;
+      }
+      .h-panel {
+        height: auto;
+        min-height: 100vh;
+        padding: 4rem 1.5rem;
+      }
+      .section-num {
+        font-size: 5rem;
+      }
+      .feature-block {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Horizontal Progress Bar -->
+  <div class="h-progress" id="hProgress"></div>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="mainNav" style="background: transparent;">
+    <div class="max-w-none px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-[#A78BFA] flex items-center justify-center">
+          <svg class="w-4 h-4 text-[#0C0C0C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+        </div>
+        <span class="font-medium text-sm" style="font-family: 'Space Grotesk', sans-serif;">[Product]</span>
+      </div>
+      <div class="hidden md:flex items-center gap-6">
+        <span class="mono text-xs text-[#666666]">Scroll horizontally →</span>
+        <button class="violet-btn text-sm py-2 px-5">Get Access</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Horizontal Scroll Section -->
+  <div class="horizontal-outer" id="horizontalOuter">
+    <div class="horizontal-inner" id="horizontalInner">
+
+      <!-- Panel 1: Hero -->
+      <div class="h-panel" style="width: 100vw;">
+        <div class="max-w-3xl">
+          <div class="h-reveal">
+            <span class="mono text-xs text-[#666666] block mb-6">INTRODUCING [PRODUCT]</span>
+          </div>
+          <h1 class="h-reveal h-reveal-delay-1 text-5xl md:text-6xl lg:text-8xl mb-8" style="letter-spacing: -0.04em; line-height: 0.95;">
+            Move<br>
+            forward<span class="text-[#A78BFA]">.</span>
+          </h1>
+          <p class="h-reveal h-reveal-delay-2 text-lg text-[#666666] max-w-md leading-relaxed mb-10">
+            [Your product's core promise. One sentence that captures the shift — from old way to new way.]
+          </p>
+          <div class="h-reveal h-reveal-delay-3 flex items-center gap-4">
+            <button class="violet-btn">Start building</button>
+            <span class="scroll-arrow text-[#A78BFA] text-xl">→</span>
+          </div>
+        </div>
+        <span class="section-num">01</span>
+        <div class="panel-divider"></div>
+      </div>
+
+      <!-- Panel 2: Features -->
+      <div class="h-panel" style="width: 120vw;">
+        <div>
+          <span class="h-reveal mono text-xs text-[#666666] block mb-4">CAPABILITIES</span>
+          <h2 class="h-reveal h-reveal-delay-1 text-3xl md:text-5xl mb-12" style="letter-spacing: -0.03em;">What you get</h2>
+          <div class="flex gap-6 overflow-visible">
+            <div class="h-reveal h-reveal-delay-1 feature-block">
+              <svg class="w-8 h-8 text-[#A78BFA] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+              </svg>
+              <h3 class="text-xl mb-3">[Feature one]</h3>
+              <p class="text-sm text-[#666666] leading-relaxed">
+                [Describe concretely. What input goes in, what output comes out, why it matters to the user.]
+              </p>
+            </div>
+            <div class="h-reveal h-reveal-delay-2 feature-block">
+              <svg class="w-8 h-8 text-[#A78BFA] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <h3 class="text-xl mb-3">[Feature two]</h3>
+              <p class="text-sm text-[#666666] leading-relaxed">
+                [Different angle. If feature 1 is about speed, this one is about control or flexibility.]
+              </p>
+            </div>
+            <div class="h-reveal h-reveal-delay-3 feature-block">
+              <svg class="w-8 h-8 text-[#A78BFA] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/>
+              </svg>
+              <h3 class="text-xl mb-3">[Feature three]</h3>
+              <p class="text-sm text-[#666666] leading-relaxed">
+                [Third differentiator. Integration, pricing model, or unique approach.]
+              </p>
+            </div>
+          </div>
+        </div>
+        <span class="section-num">02</span>
+        <div class="panel-divider"></div>
+      </div>
+
+      <!-- Panel 3: Showcase -->
+      <div class="h-panel" style="width: 100vw;">
+        <div class="w-full max-w-3xl mx-auto">
+          <span class="h-reveal mono text-xs text-[#666666] block mb-4">IN ACTION</span>
+          <h2 class="h-reveal h-reveal-delay-1 text-3xl md:text-5xl mb-10" style="letter-spacing: -0.03em;">The product</h2>
+          <div class="h-reveal h-reveal-delay-2 showcase-frame">
+            <div class="h-64 md:h-80 bg-[#1C1C1C] rounded-lg flex items-center justify-center">
+              <span class="text-sm text-[#666666]">[Product screenshot or interactive demo placeholder]</span>
+            </div>
+          </div>
+        </div>
+        <span class="section-num">03</span>
+        <div class="panel-divider"></div>
+      </div>
+
+      <!-- Panel 4: Testimonial -->
+      <div class="h-panel" style="width: 80vw;">
+        <div class="max-w-2xl relative">
+          <span class="big-serif-quote">"</span>
+          <div class="relative z-10">
+            <span class="h-reveal mono text-xs text-[#666666] block mb-8">WHAT THEY SAY</span>
+            <blockquote class="h-reveal h-reveal-delay-1 text-2xl md:text-3xl leading-relaxed mb-8" style="font-family: 'Space Grotesk', sans-serif; font-weight: 500;">
+              "[Specific, raw testimonial. A concrete before/after. A real number. Something that sounds like a human typed it, not a copywriter.]"
+            </blockquote>
+            <div class="h-reveal h-reveal-delay-2 flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-[#A78BFA]/15 flex items-center justify-center">
+                <span class="mono text-sm text-[#A78BFA]">SK</span>
+              </div>
+              <div>
+                <p class="font-medium text-[#EDEDED]">[Real person name]</p>
+                <p class="mono text-xs text-[#666666]">[Role] @ [Company]</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="section-num">04</span>
+        <div class="panel-divider"></div>
+      </div>
+
+      <!-- Panel 5: CTA -->
+      <div class="h-panel" style="width: 100vw;">
+        <div class="max-w-2xl mx-auto text-center">
+          <span class="h-reveal mono text-xs text-[#666666] block mb-6">START NOW</span>
+          <h2 class="h-reveal h-reveal-delay-1 text-4xl md:text-6xl mb-6" style="letter-spacing: -0.03em;">
+            Time to move<span class="text-[#A78BFA]">.</span>
+          </h2>
+          <p class="h-reveal h-reveal-delay-2 text-[#666666] mb-10 max-w-md mx-auto leading-relaxed">
+            [No friction. Free? No credit card? Instant? Say it and give them the button.]
+          </p>
+          <div class="h-reveal h-reveal-delay-3">
+            <button class="violet-btn text-lg py-4 px-10">Get started — free</button>
+          </div>
+        </div>
+        <span class="section-num">05</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Post-horizontal: FAQ Section (normal vertical flow) -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <span class="mono text-xs text-[#666666] block mb-4 text-center">QUESTIONS</span>
+      <h2 class="text-3xl md:text-4xl text-center mb-12" style="letter-spacing: -0.03em;">Things people ask</h2>
+
+      <div class="space-y-4">
+        <div class="reveal" style="background: #161616; border: 1px solid #2A2A2A; border-radius: 1rem; padding: 1.5rem 2rem;">
+          <div class="flex items-center justify-between">
+            <h3 class="font-medium text-[#EDEDED]">[Is it really free to start?]</h3>
+            <span class="text-[#A78BFA]">+</span>
+          </div>
+          <p class="text-sm text-[#666666] mt-3 leading-relaxed">
+            [Direct answer. Yes/no, then specifics about limits.]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-1" style="background: #161616; border: 1px solid #2A2A2A; border-radius: 1rem; padding: 1.5rem 2rem;">
+          <div class="flex items-center justify-between">
+            <h3 class="font-medium text-[#EDEDED]">[How does it integrate with X?]</h3>
+            <span class="text-[#A78BFA]">+</span>
+          </div>
+          <p class="text-sm text-[#666666] mt-3 leading-relaxed">
+            [Concrete integration details. API? SDK? Webhook?]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-2" style="background: #161616; border: 1px solid #2A2A2A; border-radius: 1rem; padding: 1.5rem 2rem;">
+          <div class="flex items-center justify-between">
+            <h3 class="font-medium text-[#EDEDED]">[What about my data?]</h3>
+            <span class="text-[#A78BFA]">+</span>
+          </div>
+          <p class="text-sm text-[#666666] mt-3 leading-relaxed">
+            [Security and privacy answer. Be transparent.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA (vertical) -->
+  <section class="py-28 px-6">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="reveal text-4xl md:text-5xl mb-6" style="letter-spacing: -0.03em;">
+        Start moving<span class="text-[#A78BFA]">.</span>
+      </h2>
+      <p class="reveal reveal-delay-1 text-[#666666] mb-10 max-w-md mx-auto leading-relaxed">
+        [No credit card. No setup. No waiting. Just go.]
+      </p>
+      <div class="reveal reveal-delay-2 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <button class="violet-btn text-lg py-4 px-10">Get started free</button>
+        <a href="#" class="mono text-sm text-[#666666] hover:text-[#A78BFA] transition-colors duration-300">
+          Read the docs →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Bar -->
+  <section class="py-12 px-6 border-t border-[#2A2A2A]">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="mono text-xs text-[#666666] mb-6 uppercase tracking-widest">Trusted by builders at</p>
+      <div class="flex flex-wrap justify-center gap-10 items-center opacity-30">
+        <span class="text-lg font-medium text-[#EDEDED]">[Company 1]</span>
+        <span class="text-lg font-medium text-[#EDEDED]">[Company 2]</span>
+        <span class="text-lg font-medium text-[#EDEDED]">[Company 3]</span>
+        <span class="text-lg font-medium text-[#EDEDED]">[Company 4]</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (normal vertical flow, after horizontal section) -->
+  <footer class="py-12 px-6 border-t border-[#2A2A2A]">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded-md bg-[#A78BFA] flex items-center justify-center">
+          <svg class="w-3 h-3 text-[#0C0C0C]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+        </div>
+        <span class="text-sm text-[#666666]">[Product]</span>
+      </div>
+      <div class="flex gap-6 mono text-xs text-[#666666]">
+        <a href="#" class="hover:text-[#A78BFA] transition-colors duration-300">Privacy</a>
+        <a href="#" class="hover:text-[#A78BFA] transition-colors duration-300">Terms</a>
+        <a href="#" class="hover:text-[#A78BFA] transition-colors duration-300">Docs</a>
+        <a href="#" class="hover:text-[#A78BFA] transition-colors duration-300">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Horizontal scroll logic (desktop only)
+    const outer = document.getElementById('horizontalOuter');
+    const inner = document.getElementById('horizontalInner');
+    const nav = document.getElementById('mainNav');
+
+    function updateHorizontalScroll() {
+      if (window.innerWidth < 768) return; // Skip on mobile
+
+      const outerRect = outer.getBoundingClientRect();
+      const scrollableWidth = inner.scrollWidth - window.innerWidth;
+      const outerHeight = outer.offsetHeight - window.innerHeight;
+
+      if (outerRect.top <= 0 && outerRect.bottom >= window.innerHeight) {
+        const scrollProgress = Math.abs(outerRect.top) / outerHeight;
+        const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+        inner.style.transform = `translateX(${-clampedProgress * scrollableWidth}px)`;
+
+        // Update progress bar
+        document.getElementById('hProgress').style.width = (clampedProgress * 100) + '%';
+
+        // Nav bg on scroll
+        nav.style.background = clampedProgress > 0.02 ? 'rgba(12, 12, 12, 0.9)' : 'transparent';
+        nav.style.backdropFilter = clampedProgress > 0.02 ? 'blur(12px)' : 'none';
+      }
+    }
+
+    window.addEventListener('scroll', updateHorizontalScroll);
+    window.addEventListener('resize', updateHorizontalScroll);
+
+    // Reveal within horizontal panels
+    const hRevealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+
+    document.querySelectorAll('.h-reveal, .reveal').forEach(el => {
+      hRevealObserver.observe(el);
+    });
+
+    // Trigger reveals based on horizontal position too
+    function checkHorizontalReveals() {
+      document.querySelectorAll('.h-reveal').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.left < window.innerWidth * 0.85 && rect.right > 0) {
+          el.classList.add('visible');
+        } else {
+          el.classList.remove('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkHorizontalReveals);
+  </script>
+
+</body>
+</html>
