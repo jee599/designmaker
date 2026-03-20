@@ -1,10 +1,39 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import type { Reference } from "@/app/data/references";
 
+function IframePreview({ src, title }: { src: string; title: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.25);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setScale(el.offsetWidth / 1440);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative h-52 w-full overflow-hidden border-b border-zinc-800 bg-zinc-900">
+      <iframe
+        src={src}
+        className="pointer-events-none absolute left-0 top-0 border-0"
+        style={{ width: "1440px", height: "900px", transform: `scale(${scale})`, transformOrigin: "top left" }}
+        title={title}
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin"
+      />
+    </div>
+  );
+}
+
 type Filter = "all" | "light" | "dark" | "verified";
+type Sort = "views" | "downloads" | "newest";
 
 function StatusBadge({ status }: { status: Reference["status"] }) {
   if (status === "verified") {
@@ -26,25 +55,16 @@ function ReferenceCard({ reference: r }: { reference: Reference }) {
     <Link href={`/reference/${r.id}`} className="group block">
       <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 transition-all duration-200 group-hover:-translate-y-1 group-hover:border-blue-500/50 group-hover:shadow-lg group-hover:shadow-blue-500/10">
         {/* Preview section */}
-        <div className="relative h-48 w-full overflow-hidden border-b border-zinc-800 bg-zinc-900">
-          {r.sampleFile ? (
-            <iframe
-              src={`/samples/${r.sampleFile}`}
-              className="pointer-events-none h-[900px] w-[1440px] origin-top-left"
-              style={{ transform: "scale(0.22)", transformOrigin: "top left" }}
-              title={r.name}
-              loading="lazy"
-              sandbox="allow-same-origin"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center">
-              <div className="text-center">
-                <div className="mb-2 text-2xl">🎨</div>
-                <span className="text-sm text-zinc-500">Coming Soon</span>
-              </div>
+        {r.sampleFile ? (
+          <IframePreview src={`/samples/${r.sampleFile}`} title={r.name} />
+        ) : (
+          <div className="flex h-52 w-full items-center justify-center border-b border-zinc-800 bg-zinc-900">
+            <div className="text-center">
+              <div className="mb-2 text-2xl">🎨</div>
+              <span className="text-sm text-zinc-500">Coming Soon</span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Card body */}
         <div className="p-4">
@@ -75,13 +95,20 @@ function ReferenceCard({ reference: r }: { reference: Reference }) {
             {r.description}
           </p>
 
-          {/* Inspired by */}
-          <p className="mb-3 text-xs text-zinc-600">
-            Inspired by {r.inspired.join(", ")}
-          </p>
-
-          {/* Status */}
-          <StatusBadge status={r.status} />
+          {/* Stats + Status */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 text-xs text-zinc-500">
+              <span className="flex items-center gap-1">
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                {r.views}
+              </span>
+              <span className="flex items-center gap-1">
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                {r.downloads}
+              </span>
+            </div>
+            <StatusBadge status={r.status} />
+          </div>
         </div>
 
         {/* Accent color bar */}
@@ -104,10 +131,11 @@ export default function GalleryClient({
   references: Reference[];
 }) {
   const [filter, setFilter] = useState<Filter>("all");
+  const [sort, setSort] = useState<Sort>("views");
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
-    let result = references;
+    let result = [...references];
 
     if (filter === "light") result = result.filter((r) => r.tone === "light");
     else if (filter === "dark") result = result.filter((r) => r.tone === "dark");
@@ -124,8 +152,11 @@ export default function GalleryClient({
       );
     }
 
+    if (sort === "views") result.sort((a, b) => b.views - a.views);
+    else if (sort === "downloads") result.sort((a, b) => b.downloads - a.downloads);
+
     return result;
-  }, [references, filter, search]);
+  }, [references, filter, sort, search]);
 
   return (
     <div>
@@ -146,13 +177,24 @@ export default function GalleryClient({
             </button>
           ))}
         </div>
-        <input
-          type="text"
-          placeholder="Search references..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm text-zinc-50 placeholder-zinc-600 outline-none transition-colors focus:border-blue-500 sm:w-64"
-        />
+        <div className="flex items-center gap-2">
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as Sort)}
+            className="rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-400 outline-none transition-colors focus:border-blue-500"
+          >
+            <option value="views">조회수순</option>
+            <option value="downloads">다운로드순</option>
+            <option value="newest">최신순</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm text-zinc-50 placeholder-zinc-600 outline-none transition-colors focus:border-blue-500 sm:w-48"
+          />
+        </div>
       </div>
 
       {/* Grid */}
