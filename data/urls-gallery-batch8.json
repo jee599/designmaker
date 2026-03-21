@@ -1,0 +1,922 @@
+{
+  "urls": [
+    {
+      "url": "https://stitch.google.com",
+      "category": "design-tool",
+      "source": "producthunt-2025",
+      "style_note": "Google vibe design tool for production-ready UI"
+    },
+    {
+      "url": "https://chronicle.ai",
+      "category": "ai-saas",
+      "source": "producthunt-2025",
+      "style_note": "AI presentations without slop, clean minimal design"
+    },
+    {
+      "url": "https://vozo.ai",
+      "category": "ai-saas",
+      "source": "producthunt-2025",
+      "style_note": "Visual translate tool, dark modern interface"
+    },
+    {
+      "url": "https://mulerun.com",
+      "category": "ai-saas",
+      "source": "producthunt-2025",
+      "style_note": "AI workflow assistant that learns your patterns"
+    },
+    {
+      "url": "https://insforge.com",
+      "category": "dev-tool",
+      "source": "producthunt-2025",
+      "style_note": "Agent tooling for fullstack apps"
+    },
+    {
+      "url": "https://productbridge.io",
+      "category": "saas",
+      "source": "producthunt-2025",
+      "style_note": "Multi-platform feedback collection dashboard"
+    },
+    {
+      "url": "https://testsprite.com",
+      "category": "dev-tool",
+      "source": "producthunt-2025",
+      "style_note": "Agentic testing for AI-native teams"
+    },
+    {
+      "url": "https://hunted.space",
+      "category": "data-tool",
+      "source": "producthunt-analytics",
+      "style_note": "Product Hunt analytics and launch history tracker"
+    },
+    {
+      "url": "https://userjot.com",
+      "category": "saas",
+      "source": "saasframe-2026",
+      "style_note": "Animated story-driven hero section SaaS"
+    },
+    {
+      "url": "https://peec.ai",
+      "category": "ai-saas",
+      "source": "saasframe-2026",
+      "style_note": "AI tool with micro-animation hover effects"
+    },
+    {
+      "url": "https://forestadmin.com",
+      "category": "dev-tool",
+      "source": "saasframe-2026",
+      "style_note": "Admin panel builder with product demo hero"
+    },
+    {
+      "url": "https://decipad.com",
+      "category": "saas",
+      "source": "saasframe-2026",
+      "style_note": "Collaborative workspace with split-screen comparisons"
+    },
+    {
+      "url": "https://withcoherence.com",
+      "category": "dev-tool",
+      "source": "saasframe-2026",
+      "style_note": "Developer code development and testing tool"
+    },
+    {
+      "url": "https://guideflow.com",
+      "category": "saas",
+      "source": "saasframe-2026",
+      "style_note": "Product demo creation tool with interactive guides"
+    },
+    {
+      "url": "https://pixelcut.ai",
+      "category": "ai-tool",
+      "source": "evilmartians-devtools",
+      "style_note": "Image editing with live demo in hero section"
+    },
+    {
+      "url": "https://playai.com",
+      "category": "ai-saas",
+      "source": "evilmartians-devtools",
+      "style_note": "AI tool with feature cards and banner announcements"
+    },
+    {
+      "url": "https://deel.com",
+      "category": "saas",
+      "source": "startup-landing-2025",
+      "style_note": "Global hiring platform with confident headlines and social proof"
+    },
+    {
+      "url": "https://sienfilmfestival.it",
+      "category": "culture",
+      "source": "awwwards-march-2025",
+      "style_note": "Siena Film Foundation immersive storytelling by Niccolo Miranda"
+    },
+    {
+      "url": "https://thebluedesert.it",
+      "category": "interactive-experience",
+      "source": "awwwards-march-2025",
+      "style_note": "Adoratorio Studio immersive blue desert narrative"
+    },
+    {
+      "url": "https://alnf.com",
+      "category": "brand",
+      "source": "awwwards-march-2025",
+      "style_note": "Nightjar studio, refined typography and layout"
+    },
+    {
+      "url": "https://j-vers.com",
+      "category": "creative",
+      "source": "awwwards-march-2025",
+      "style_note": "Boys Agency experimental interactive design"
+    },
+    {
+      "url": "https://incognita.co",
+      "category": "interactive-experience",
+      "source": "awwwards-march-2025",
+      "style_note": "Aristide Benoist immersive scroll experience"
+    },
+    {
+      "url": "https://navigate.resn.co.nz",
+      "category": "interactive-experience",
+      "source": "awwwards-april-2025",
+      "style_note": "Resn Navigate interactive WebGL experience"
+    },
+    {
+      "url": "https://exat.typeface.com",
+      "category": "typography",
+      "source": "awwwards-april-2025",
+      "style_note": "Studio Size typeface showcase with bold layout"
+    },
+    {
+      "url": "https://niteriot.com",
+      "category": "creative",
+      "source": "awwwards-april-2025",
+      "style_note": "BL/S and V&M experimental visual design"
+    },
+    {
+      "url": "https://composites.archi",
+      "category": "architecture",
+      "source": "awwwards-april-2025",
+      "style_note": "Sparkk architecture studio with bold grid layouts"
+    },
+    {
+      "url": "https://julenrenau.com",
+      "category": "portfolio",
+      "source": "awwwards-april-2025",
+      "style_note": "Designer portfolio with fluid animations"
+    },
+    {
+      "url": "https://evanfasquelle.com",
+      "category": "portfolio",
+      "source": "awwwards-april-2025",
+      "style_note": "Developer portfolio with creative interactions"
+    },
+    {
+      "url": "https://madewithgsap.com",
+      "category": "showcase",
+      "source": "awwwards-april-2025",
+      "style_note": "GSAP animation showcase by Michael Garcia"
+    },
+    {
+      "url": "https://dgrees.studio",
+      "category": "creative-agency",
+      "source": "awwwards-april-2025",
+      "style_note": "Studio portfolio with clean experimental design"
+    },
+    {
+      "url": "https://charlesleclerc.com",
+      "category": "personal-brand",
+      "source": "awwwards-april-2025",
+      "style_note": "F1 driver portfolio by Apart and Uprising studios"
+    },
+    {
+      "url": "https://goodisthenewcool.org",
+      "category": "culture",
+      "source": "awwwards-april-2025",
+      "style_note": "Social impact platform with bold typography"
+    },
+    {
+      "url": "https://intheair.earth",
+      "category": "interactive-experience",
+      "source": "awwwards-april-2025",
+      "style_note": "Environmental interactive storytelling"
+    },
+    {
+      "url": "https://storiesfromtheocean.com",
+      "category": "interactive-experience",
+      "source": "awwwards-april-2025",
+      "style_note": "Ocean narrative with scroll-driven storytelling"
+    },
+    {
+      "url": "https://museumofdigitalinfluence.com",
+      "category": "culture",
+      "source": "awwwards-april-2025",
+      "style_note": "Digital culture museum with immersive design"
+    },
+    {
+      "url": "https://houseofblanks.com",
+      "category": "ecommerce",
+      "source": "awwwards-april-2025",
+      "style_note": "Fashion brand with clean grid and bold type"
+    },
+    {
+      "url": "https://stateofai2025.com",
+      "category": "data-viz",
+      "source": "awwwards-april-2025",
+      "style_note": "AI industry report with data visualization"
+    },
+    {
+      "url": "https://spatzek.com",
+      "category": "portfolio",
+      "source": "interactive-2025",
+      "style_note": "Horizontal scrolling with glitch effects and magnetic cursor"
+    },
+    {
+      "url": "https://nomint.com",
+      "category": "creative-agency",
+      "source": "interactive-2025",
+      "style_note": "Animation studio with cinematic video-driven portfolio"
+    },
+    {
+      "url": "https://nomadictribe.com",
+      "category": "interactive-experience",
+      "source": "interactive-2025",
+      "style_note": "Cinematic scroll narrative with synchronized music"
+    },
+    {
+      "url": "https://insideabbeyroad.withgoogle.com",
+      "category": "interactive-experience",
+      "source": "interactive-2025",
+      "style_note": "Google 360° studio tour with multimedia hotspots"
+    },
+    {
+      "url": "https://thecoolclub.co",
+      "category": "ecommerce",
+      "source": "interactive-2025",
+      "style_note": "Card-based product showcase with micro-animations"
+    },
+    {
+      "url": "https://nurturedigital.com",
+      "category": "creative-agency",
+      "source": "interactive-2025",
+      "style_note": "Full-screen visuals with bold aesthetic transitions"
+    },
+    {
+      "url": "https://sbs.com.au/theboat",
+      "category": "interactive-storytelling",
+      "source": "interactive-2025",
+      "style_note": "Scrollytelling graphic novel for refugee narrative"
+    },
+    {
+      "url": "https://inside.chanel.com",
+      "category": "luxury-brand",
+      "source": "interactive-2025",
+      "style_note": "Cinematic journey with interactive timelines"
+    },
+    {
+      "url": "https://species-in-pieces.com",
+      "category": "interactive-art",
+      "source": "interactive-2025",
+      "style_note": "CSS-only animations highlighting endangered species"
+    },
+    {
+      "url": "https://moxy.studio",
+      "category": "creative-agency",
+      "source": "interactive-2025",
+      "style_note": "Hyper-fluid scroll with layered transitions"
+    },
+    {
+      "url": "https://clig.dev",
+      "category": "dev-resource",
+      "source": "cli-design-2025",
+      "style_note": "Command Line Interface Guidelines reference site"
+    },
+    {
+      "url": "https://bun.sh",
+      "category": "dev-tool",
+      "source": "evilmartians-devtools",
+      "style_note": "JavaScript runtime with step-by-step layout and speed focus"
+    },
+    {
+      "url": "https://directus.io",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Data platform with API-driven design and modern dashboard UI"
+    },
+    {
+      "url": "https://typesense.org",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Fast search engine with typo tolerance, clean dev docs"
+    },
+    {
+      "url": "https://nodered.org",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Flow-based IoT automation with distinctive visual identity"
+    },
+    {
+      "url": "https://saleor.io",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "GraphQL commerce platform with modern dashboard design"
+    },
+    {
+      "url": "https://pocketbase.io",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Lightweight BaaS with minimal clean landing page"
+    },
+    {
+      "url": "https://windmill.dev",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Automation platform with code-centric UI design"
+    },
+    {
+      "url": "https://redash.io",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Data viz dashboards with clean developer-focused design"
+    },
+    {
+      "url": "https://mattermost.com",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Self-hosted messaging with enterprise-grade landing"
+    },
+    {
+      "url": "https://postman.com",
+      "category": "dev-tool",
+      "source": "open-source-2025",
+      "style_note": "API platform with comprehensive developer portal design"
+    },
+    {
+      "url": "https://appflowy.io",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Open-source Notion alternative with AI workspace"
+    },
+    {
+      "url": "https://docusaurus.io",
+      "category": "open-source",
+      "source": "open-source-2025",
+      "style_note": "Facebook docs site builder with clean component design"
+    },
+    {
+      "url": "https://mercury.com",
+      "category": "fintech",
+      "source": "startup-landing-2025",
+      "style_note": "Startup banking with straightforward messaging and fast CTAs"
+    },
+    {
+      "url": "https://readwise.io",
+      "category": "productivity",
+      "source": "startup-landing-2025",
+      "style_note": "Reading retention with structured feature walkthroughs"
+    },
+    {
+      "url": "https://arc.net",
+      "category": "browser",
+      "source": "startup-landing-2025",
+      "style_note": "Browser Company with clear value positioning"
+    },
+    {
+      "url": "https://almanac.io",
+      "category": "productivity",
+      "source": "startup-landing-2025",
+      "style_note": "Team docs with outcome-focused headlines"
+    },
+    {
+      "url": "https://taskade.com",
+      "category": "ai-productivity",
+      "source": "startup-landing-2025",
+      "style_note": "AI collaboration with agent automation showcase"
+    },
+    {
+      "url": "https://pika.art",
+      "category": "ai-creative",
+      "source": "startup-landing-2025",
+      "style_note": "AI video generation with description-driven design"
+    },
+    {
+      "url": "https://adaline.ai",
+      "category": "ai-saas",
+      "source": "saas-2025",
+      "style_note": "AI platform for LLM applications with modern dark UI"
+    },
+    {
+      "url": "https://cofounder.co",
+      "category": "ai-saas",
+      "source": "saas-2025",
+      "style_note": "NLP automation platform with clean landing"
+    },
+    {
+      "url": "https://assembly.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Service business management with client portal design"
+    },
+    {
+      "url": "https://experiencewelcome.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Virtual event platform for marketers"
+    },
+    {
+      "url": "https://butter.us",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Meeting facilitation with playful interactive design"
+    },
+    {
+      "url": "https://withjuno.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Employee benefits platform with warm design"
+    },
+    {
+      "url": "https://tranch.com",
+      "category": "fintech",
+      "source": "saas-2025",
+      "style_note": "Expense financing with clean fintech landing"
+    },
+    {
+      "url": "https://pipe.com",
+      "category": "fintech",
+      "source": "saas-2025",
+      "style_note": "Startup financing with modern bold design"
+    },
+    {
+      "url": "https://homerun.co",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Recruitment platform with friendly approachable design"
+    },
+    {
+      "url": "https://methodfi.com",
+      "category": "fintech",
+      "source": "saas-2025",
+      "style_note": "Debt payment fintech with modern interface"
+    },
+    {
+      "url": "https://softstart.app",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Employee onboarding platform with clean UI"
+    },
+    {
+      "url": "https://attentivemobile.com",
+      "category": "marketing",
+      "source": "saas-2025",
+      "style_note": "SMS marketing platform with bold brand identity"
+    },
+    {
+      "url": "https://thenewcompany.com",
+      "category": "agency",
+      "source": "siteinspire-march-2025",
+      "style_note": "Design and art direction agency featured on SiteInspire"
+    },
+    {
+      "url": "https://dopplepress.com",
+      "category": "digital-platform",
+      "source": "siteinspire-2025",
+      "style_note": "Typography-focused layouts with smooth page transitions"
+    },
+    {
+      "url": "https://supimacotton.com",
+      "category": "ecommerce",
+      "source": "siteinspire-2025",
+      "style_note": "Premium cotton ecommerce with elegant parallax scrolling"
+    },
+    {
+      "url": "https://foundry.com",
+      "category": "design-resource",
+      "source": "siteinspire-2025",
+      "style_note": "Magazine-like layouts with creative cursor effects"
+    },
+    {
+      "url": "https://okalpha.co",
+      "category": "agency",
+      "source": "siteinspire-2025",
+      "style_note": "Vibrant minimalist design with streamlined UX"
+    },
+    {
+      "url": "https://und-ny.com",
+      "category": "food-beverage",
+      "source": "siteinspire-2025",
+      "style_note": "Retro aesthetics with neon palettes and nostalgic photography"
+    },
+    {
+      "url": "https://brutalistwebsites.com",
+      "category": "design-gallery",
+      "source": "siteinspire-2025",
+      "style_note": "Raw stripped-down web design gallery"
+    },
+    {
+      "url": "https://superhuman.com",
+      "category": "ai-email",
+      "source": "framer-2025",
+      "style_note": "Gradient-rich AI email platform built on Framer"
+    },
+    {
+      "url": "https://discodungeon.com",
+      "category": "gaming",
+      "source": "framer-2025",
+      "style_note": "Interactive game-like puzzle RPG site on Framer"
+    },
+    {
+      "url": "https://monolune.com",
+      "category": "creative",
+      "source": "framer-2025",
+      "style_note": "Deep black with neon yellow Framer award design"
+    },
+    {
+      "url": "https://tjatt.com",
+      "category": "creative",
+      "source": "framer-2025",
+      "style_note": "Dark background with vibrant magenta accents"
+    },
+    {
+      "url": "https://nicelydone.club",
+      "category": "design-resource",
+      "source": "onboarding-2025",
+      "style_note": "Onboarding design examples from web apps"
+    },
+    {
+      "url": "https://useronboard.com",
+      "category": "design-resource",
+      "source": "onboarding-2025",
+      "style_note": "Compendium of web app first-run experiences"
+    },
+    {
+      "url": "https://alche.studio",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative studio portfolio"
+    },
+    {
+      "url": "https://cappen.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Designer portfolio"
+    },
+    {
+      "url": "https://brandappart.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Brand design portfolio"
+    },
+    {
+      "url": "https://bychudy.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative designer portfolio"
+    },
+    {
+      "url": "https://wearestokt.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative team portfolio"
+    },
+    {
+      "url": "https://lisovskiy.work",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Designer portfolio"
+    },
+    {
+      "url": "https://orage.studio",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Design studio portfolio"
+    },
+    {
+      "url": "https://generalcondition.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative portfolio"
+    },
+    {
+      "url": "https://twicetwice.tv",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Video production portfolio"
+    },
+    {
+      "url": "https://samsy.ninja",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative developer portfolio"
+    },
+    {
+      "url": "https://olhalazarieva.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Designer portfolio"
+    },
+    {
+      "url": "https://grit.pictures",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Photography portfolio"
+    },
+    {
+      "url": "https://letude.group",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Design group portfolio"
+    },
+    {
+      "url": "https://t-ko.space",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative space portfolio"
+    },
+    {
+      "url": "https://laxspace.co",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Design studio portfolio"
+    },
+    {
+      "url": "https://karocrafts.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Craft design portfolio"
+    },
+    {
+      "url": "https://geex-arts.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative arts portfolio"
+    },
+    {
+      "url": "https://chipsa.design",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Design agency portfolio"
+    },
+    {
+      "url": "https://supersolid.agency",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Agency portfolio"
+    },
+    {
+      "url": "https://doubleplay.studio",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative studio"
+    },
+    {
+      "url": "https://cyphr.studio",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Design studio"
+    },
+    {
+      "url": "https://clayboan.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Designer portfolio"
+    },
+    {
+      "url": "https://bindery.co",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative portfolio"
+    },
+    {
+      "url": "https://firstframe.fr",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "French design studio"
+    },
+    {
+      "url": "https://weareexample.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative team portfolio"
+    },
+    {
+      "url": "https://madebynull.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Developer portfolio"
+    },
+    {
+      "url": "https://joseph-san.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative portfolio"
+    },
+    {
+      "url": "https://raggededge.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Brand studio portfolio"
+    },
+    {
+      "url": "https://thingyandthingy.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Creative studio"
+    },
+    {
+      "url": "https://portalone.studio",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Studio portfolio"
+    },
+    {
+      "url": "https://studioherrstrom.com",
+      "category": "portfolio",
+      "source": "muzli-portfolios-2025",
+      "style_note": "Design studio"
+    },
+    {
+      "url": "https://close.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "CRM with communication tool integration emphasis"
+    },
+    {
+      "url": "https://instantly.ai",
+      "category": "ai-saas",
+      "source": "saas-2025",
+      "style_note": "Vibrant visuals conveying speed and effectiveness"
+    },
+    {
+      "url": "https://fyno.io",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Enterprise client logos with isometric illustrations"
+    },
+    {
+      "url": "https://sumoquote.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Before/after comparisons with time-saving animations"
+    },
+    {
+      "url": "https://helpscout.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Customer-first with clean visuals and embedded video"
+    },
+    {
+      "url": "https://matomo.org",
+      "category": "open-source",
+      "source": "saas-2025",
+      "style_note": "Privacy-focused analytics with minimalist design"
+    },
+    {
+      "url": "https://gusto.com",
+      "category": "saas",
+      "source": "saas-2025",
+      "style_note": "Interactive questionnaire with transparent pricing"
+    },
+    {
+      "url": "https://cash.app",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Personal finance with fluorescent colors and 3D holographic elements"
+    },
+    {
+      "url": "https://marqeta.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Card issuing platform with striking isometric illustrations"
+    },
+    {
+      "url": "https://sofi.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Online banking with dynamic hero and soothing palette"
+    },
+    {
+      "url": "https://revolut.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Personal finance with interactive testimonials"
+    },
+    {
+      "url": "https://meow.co",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "High-interest banking with pastel gradients"
+    },
+    {
+      "url": "https://justworks.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Payroll platform with modular design system"
+    },
+    {
+      "url": "https://betterment.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Digital investing optimized for mobile"
+    },
+    {
+      "url": "https://wealthfront.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Automated investing with vibrant gradients"
+    },
+    {
+      "url": "https://agicap.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Cashflow management showcasing product interface"
+    },
+    {
+      "url": "https://seon.io",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Fraud detection with soft greens and data viz cards"
+    },
+    {
+      "url": "https://fingerprint.com",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "Visitor identification with bold orange/black"
+    },
+    {
+      "url": "https://sardine.ai",
+      "category": "fintech",
+      "source": "fintech-2025",
+      "style_note": "ATO protection with ocean-inspired visuals"
+    },
+    {
+      "url": "https://clearcover.com",
+      "category": "insurtech",
+      "source": "fintech-2025",
+      "style_note": "Car insurance with immersive scrolling"
+    },
+    {
+      "url": "https://nextinsurance.com",
+      "category": "insurtech",
+      "source": "fintech-2025",
+      "style_note": "SMB insurance with comic-like illustrations"
+    },
+    {
+      "url": "https://lemonade.com",
+      "category": "insurtech",
+      "source": "fintech-2025",
+      "style_note": "Modern insurance with trust signals and doodles"
+    },
+    {
+      "url": "https://drata.com",
+      "category": "regtech",
+      "source": "fintech-2025",
+      "style_note": "Compliance automation with dark mode"
+    },
+    {
+      "url": "https://hummingbird.co",
+      "category": "regtech",
+      "source": "fintech-2025",
+      "style_note": "AML software with unique illustration style"
+    },
+    {
+      "url": "https://sift.com",
+      "category": "regtech",
+      "source": "fintech-2025",
+      "style_note": "Digital trust platform with consistent shapes"
+    },
+    {
+      "url": "https://consensys.io",
+      "category": "web3",
+      "source": "fintech-2025",
+      "style_note": "Ethereum ecosystem with neon color scheme"
+    },
+    {
+      "url": "https://helloklean.com",
+      "category": "ecommerce",
+      "source": "ecommerce-2025",
+      "style_note": "Sleek tech product design with educational content"
+    },
+    {
+      "url": "https://fredhome.com",
+      "category": "ecommerce",
+      "source": "ecommerce-2025",
+      "style_note": "Artistic home decor with oversized imagery"
+    },
+    {
+      "url": "https://arturel.com",
+      "category": "ecommerce",
+      "source": "ecommerce-2025",
+      "style_note": "High-fashion with grayscale palettes and refined animations"
+    },
+    {
+      "url": "https://studiofew.co",
+      "category": "ecommerce",
+      "source": "ecommerce-2025",
+      "style_note": "Asymmetric layouts with creative transitions"
+    },
+    {
+      "url": "https://ecomdesignawards.com",
+      "category": "design-gallery",
+      "source": "ecommerce-2025",
+      "style_note": "E-commerce design awards celebrating best online stores"
+    }
+  ]
+}

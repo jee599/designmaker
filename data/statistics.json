@@ -1,301 +1,253 @@
 {
   "meta": {
-    "total_sites": 149,
+    "total_sites": 136,
     "visual_sites": 0,
-    "generated_at": "2026-03-21T09:08:31.497Z"
+    "generated_at": "2026-03-21T11:16:20.244Z"
   },
   "typography": {
     "h1_font_size": {
-      "count": 149,
-      "median": 57,
-      "p25": 40,
-      "p75": 72,
-      "mode": 80,
-      "min": 8,
-      "max": 238.392,
-      "mean": 59.71,
-      "tailwind_median": "~text-6xl (57px)",
-      "tailwind_p25": "~text-4xl (40px)",
-      "tailwind_p75": "text-7xl"
+      "count": 133,
+      "median": 53.3333,
+      "p25": 32,
+      "p75": 65,
+      "mode": 32,
+      "min": 10,
+      "max": 864,
+      "mean": 67.84,
+      "tailwind_median": "~text-5xl (53.3333px)",
+      "tailwind_p25": "~text-3xl (32px)",
+      "tailwind_p75": "~text-6xl (65px)"
     },
     "h2_font_size": {
-      "count": 123,
-      "median": 36,
+      "count": 106,
+      "median": 40,
       "p25": 24,
       "p75": 48,
-      "mode": 36,
-      "min": 12,
-      "max": 105,
-      "mean": 38.48,
-      "tailwind_median": "text-4xl",
+      "mode": 24,
+      "min": 11,
+      "max": 441.6,
+      "mean": 47.04,
+      "tailwind_median": "~text-4xl (40px)",
       "tailwind_p25": "text-2xl",
       "tailwind_p75": "text-5xl"
     },
     "body_font_size": {
-      "count": 149,
+      "count": 136,
       "median": 16,
-      "p25": 16,
+      "p25": 14.5,
       "p75": 16,
       "mode": 16,
-      "min": 8,
-      "max": 28.5,
-      "mean": 15.97,
+      "min": 0.750001,
+      "max": 43.2,
+      "mean": 15.55,
       "tailwind_median": "text-base",
-      "tailwind_p25": "text-base",
+      "tailwind_p25": "~text-sm (14.5px)",
       "tailwind_p75": "text-base"
     },
     "h1_line_height": {
-      "count": 142,
-      "median": 65,
-      "p25": 46.8,
-      "p75": 80,
-      "mode": 72,
-      "min": 8,
-      "max": 243.159,
-      "mean": 66.03,
-      "tailwind_median": "~16 (65px)",
-      "tailwind_p25": "~12 (46.8px)",
-      "tailwind_p75": "20"
+      "count": 123,
+      "median": 61.44,
+      "p25": 40,
+      "p75": 74.2,
+      "mode": 60,
+      "min": 0,
+      "max": 864,
+      "mean": 72.39,
+      "tailwind_median": "~16 (61.44px)",
+      "tailwind_p25": "10",
+      "tailwind_p75": "~18 (74.2px)"
     },
     "body_line_height": {
-      "count": 123,
+      "count": 107,
       "median": 24,
-      "p25": 22.4,
+      "p25": 20,
       "p75": 24,
       "mode": 24,
-      "min": 12,
-      "max": 42.24,
-      "mean": 23.91,
+      "min": 9,
+      "max": 43.2,
+      "mean": 22.65,
       "tailwind_median": "6",
-      "tailwind_p25": "~5 (22.4px)",
+      "tailwind_p25": "5",
       "tailwind_p75": "6"
     },
     "nav_link_font_size": {
-      "count": 97,
+      "count": 87,
       "median": 16,
       "p25": 14,
-      "p75": 16,
+      "p75": 17.9998,
       "mode": 16,
-      "min": 0,
-      "max": 38,
-      "mean": 15.89,
+      "min": 10,
+      "max": 127.866,
+      "mean": 18.81,
       "tailwind_median": "text-base",
       "tailwind_p25": "text-sm",
-      "tailwind_p75": "text-base"
+      "tailwind_p75": "text-lg"
     },
     "h1_font_weight": {
-      "240": {
-        "count": 1,
-        "percentage": 0.7
-      },
       "300": {
-        "count": 1,
-        "percentage": 0.7
+        "count": 3,
+        "percentage": 2.3
       },
       "400": {
-        "count": 43,
-        "percentage": 28.9
+        "count": 44,
+        "percentage": 33.1
+      },
+      "480": {
+        "count": 1,
+        "percentage": 0.8
       },
       "500": {
-        "count": 19,
-        "percentage": 12.8
+        "count": 26,
+        "percentage": 19.5
+      },
+      "550": {
+        "count": 1,
+        "percentage": 0.8
       },
       "600": {
-        "count": 24,
-        "percentage": 16.1
+        "count": 19,
+        "percentage": 14.3
       },
       "700": {
-        "count": 45,
-        "percentage": 30.2
+        "count": 28,
+        "percentage": 21.1
       },
       "800": {
-        "count": 8,
-        "percentage": 5.4
+        "count": 6,
+        "percentage": 4.5
       },
       "900": {
-        "count": 7,
-        "percentage": 4.7
-      },
-      "1000": {
-        "count": 1,
-        "percentage": 0.7
+        "count": 5,
+        "percentage": 3.8
       }
     },
     "h2_font_weight": {
-      "100": {
+      "200": {
         "count": 1,
-        "percentage": 0.8
+        "percentage": 0.9
       },
       "300": {
-        "count": 6,
-        "percentage": 4.9
+        "count": 1,
+        "percentage": 0.9
       },
       "400": {
-        "count": 37,
-        "percentage": 30.1
+        "count": 40,
+        "percentage": 37.7
+      },
+      "480": {
+        "count": 1,
+        "percentage": 0.9
       },
       "500": {
         "count": 20,
-        "percentage": 16.3
+        "percentage": 18.9
+      },
+      "550": {
+        "count": 2,
+        "percentage": 1.9
       },
       "600": {
-        "count": 20,
-        "percentage": 16.3
+        "count": 18,
+        "percentage": 17
       },
       "700": {
-        "count": 27,
-        "percentage": 22
+        "count": 16,
+        "percentage": 15.1
       },
       "800": {
-        "count": 7,
-        "percentage": 5.7
+        "count": 5,
+        "percentage": 4.7
       },
       "900": {
-        "count": 4,
-        "percentage": 3.3
-      },
-      "1000": {
-        "count": 1,
-        "percentage": 0.8
+        "count": 2,
+        "percentage": 1.9
       }
     },
     "nav_link_font_weight": {
       "300": {
         "count": 2,
-        "percentage": 2.1
+        "percentage": 2.3
       },
       "400": {
-        "count": 58,
-        "percentage": 59.8
+        "count": 59,
+        "percentage": 67.8
       },
       "500": {
-        "count": 15,
-        "percentage": 15.5
+        "count": 18,
+        "percentage": 20.7
+      },
+      "550": {
+        "count": 1,
+        "percentage": 1.1
       },
       "600": {
-        "count": 8,
-        "percentage": 8.2
+        "count": 4,
+        "percentage": 4.6
       },
       "700": {
-        "count": 14,
-        "percentage": 14.4
+        "count": 2,
+        "percentage": 2.3
+      },
+      "800": {
+        "count": 1,
+        "percentage": 1.1
       }
     },
     "top_font_families": [
       {
         "family": "Inter",
-        "count": 14,
-        "percentage": 9.4
-      },
-      {
-        "family": "system-ui",
-        "count": 6,
-        "percentage": 4
+        "count": 5,
+        "percentage": 3.7
       },
       {
         "family": "Times",
-        "count": 4,
-        "percentage": 2.7
+        "count": 5,
+        "percentage": 3.7
       },
       {
-        "family": "Geist",
+        "family": "system-ui",
+        "count": 5,
+        "percentage": 3.7
+      },
+      {
+        "family": "noto-sans",
         "count": 4,
-        "percentage": 2.7
+        "percentage": 2.9
+      },
+      {
+        "family": "Instrument Serif",
+        "count": 4,
+        "percentage": 2.9
+      },
+      {
+        "family": "sans-serif",
+        "count": 3,
+        "percentage": 2.2
+      },
+      {
+        "family": "Source Sans Pro",
+        "count": 2,
+        "percentage": 1.5
       },
       {
         "family": "Roboto",
-        "count": 4,
-        "percentage": 2.7
-      },
-      {
-        "family": "Montserrat",
-        "count": 4,
-        "percentage": 2.7
-      },
-      {
-        "family": "ui-sans-serif",
-        "count": 3,
-        "percentage": 2
+        "count": 2,
+        "percentage": 1.5
       },
       {
         "family": "Poppins",
-        "count": 3,
-        "percentage": 2
-      },
-      {
-        "family": "Satoshi",
         "count": 2,
-        "percentage": 1.3
+        "percentage": 1.5
       },
       {
-        "family": "-apple-system",
+        "family": "PPMori",
         "count": 2,
-        "percentage": 1.3
+        "percentage": 1.5
       },
       {
-        "family": "Roobert",
+        "family": "Aeonik Pro",
         "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Plus Jakarta Sans",
-        "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Open Sans",
-        "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Rubik",
-        "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Work Sans",
-        "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Red Hat Display",
-        "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Neue Montreal",
-        "count": 2,
-        "percentage": 1.3
-      },
-      {
-        "family": "Plain",
-        "count": 1,
-        "percentage": 0.7
-      },
-      {
-        "family": "Suisse Intl",
-        "count": 1,
-        "percentage": 0.7
-      },
-      {
-        "family": "Antonia",
-        "count": 1,
-        "percentage": 0.7
-      },
-      {
-        "family": "TT Interphases Pro",
-        "count": 1,
-        "percentage": 0.7
-      },
-      {
-        "family": "Untitled Sans",
-        "count": 1,
-        "percentage": 0.7
-      },
-      {
-        "family": "sf pro text",
-        "count": 1,
-        "percentage": 0.7
+        "percentage": 1.5
       },
       {
         "family": "GB Proxima Nova",
@@ -303,190 +255,230 @@
         "percentage": 0.7
       },
       {
-        "family": "__neueHaas_fdb5c9",
+        "family": "Mulish",
         "count": 1,
         "percentage": 0.7
       },
       {
-        "family": "EuropaGroNr2SH",
+        "family": "Inter Variable",
         "count": 1,
         "percentage": 0.7
       },
       {
-        "family": "DM Sans",
+        "family": "Albert Sans",
         "count": 1,
         "percentage": 0.7
       },
       {
-        "family": "Relative Faux",
+        "family": "IBM Plex Mono",
         "count": 1,
         "percentage": 0.7
       },
       {
-        "family": "helvetica-w01-roman",
+        "family": "__DM_Sans_0401d6",
         "count": 1,
         "percentage": 0.7
       },
       {
-        "family": "Plusjakartasans",
+        "family": "Recoleta Regular",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Geist Variable",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Suisseintl-2",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "BagossCondensedFont",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Carvico Display",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "gdsherpa",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "tasa-orbiter",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Times New Roman",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Pastiche Grotesque",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "LayGrotesk",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Helvetica Neue",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "LeclercSans-Regular",
+        "count": 1,
+        "percentage": 0.7
+      },
+      {
+        "family": "Antarctican Mono",
         "count": 1,
         "percentage": 0.7
       }
     ],
-    "font_is_default_rate": 8.1,
+    "font_is_default_rate": 11,
     "unique_fontsize_count": {
-      "count": 149,
+      "count": 136,
       "median": 9,
       "p25": 5,
       "p75": 11,
-      "mode": 3,
+      "mode": 11,
       "min": 1,
       "max": 25,
-      "mean": 8.91
+      "mean": 8.46
     }
   },
   "colors": {
-    "is_dark_theme_rate": 45,
-    "dark_section_exists_rate": 83.9,
+    "is_dark_theme_rate": 43.4,
+    "dark_section_exists_rate": 81.6,
     "unique_color_count": {
-      "count": 149,
+      "count": 136,
       "median": 10,
-      "p25": 6,
-      "p75": 16,
+      "p25": 5,
+      "p75": 15,
       "mode": 10,
       "min": 1,
-      "max": 168,
-      "mean": 13.14
+      "max": 59,
+      "mean": 11.24
     },
     "top_cta_bg_colors": [
       {
         "color": "#000000",
-        "count": 78
+        "count": 55
       },
       {
         "color": "#FFFFFF",
-        "count": 4
+        "count": 3
       },
       {
         "color": "#394EFF",
         "count": 1
       },
       {
-        "color": "#2F74F9",
+        "color": "#111111",
         "count": 1
       },
       {
-        "color": "#17171C",
+        "color": "#353FD7",
         "count": 1
       },
       {
-        "color": "#0C513F",
+        "color": "#2196F3",
         "count": 1
       },
       {
-        "color": "#BABABA",
+        "color": "#DBEAFE",
         "count": 1
       },
       {
-        "color": "#222834",
+        "color": "#25C19F",
         "count": 1
       },
       {
-        "color": "#252525",
+        "color": "#E0531F",
         "count": 1
       },
       {
-        "color": "#E9E9E9",
+        "color": "#5266EB",
         "count": 1
       },
       {
-        "color": "#111827",
+        "color": "#478CD0",
         "count": 1
       },
       {
-        "color": "#050608",
+        "color": "#1F1F1F",
         "count": 1
       },
       {
-        "color": "#151538",
+        "color": "#8087BD",
         "count": 1
       },
       {
-        "color": "#080B11",
+        "color": "#E2572C",
         "count": 1
       },
       {
-        "color": "#E5E5E5",
+        "color": "#4F75FE",
         "count": 1
       },
       {
-        "color": "#3898EC",
+        "color": "#2545FF",
         "count": 1
       },
       {
-        "color": "#5C33FF",
+        "color": "#FFF382",
         "count": 1
       },
       {
-        "color": "#3B82F6",
+        "color": "#FCB434",
         "count": 1
       },
       {
-        "color": "#27AE60",
+        "color": "#D4C7FF",
         "count": 1
       },
       {
-        "color": "#FFA8FC",
+        "color": "#11FF00",
         "count": 1
       }
     ],
     "top_body_bg_colors": [
       {
         "color": "#FFFFFF",
-        "count": 55
+        "count": 49
       },
       {
         "color": "#000000",
-        "count": 51
+        "count": 47
       },
       {
-        "color": "#FAFAFA",
-        "count": 3
-      },
-      {
-        "color": "#18181B",
+        "color": "#F7F7F7",
         "count": 2
       },
       {
-        "color": "#151515",
+        "color": "#0F0F0F",
+        "count": 2
+      },
+      {
+        "color": "#EEEEEE",
+        "count": 2
+      },
+      {
+        "color": "#F5FAF2",
         "count": 1
       },
       {
-        "color": "#F2F2F2",
-        "count": 1
-      },
-      {
-        "color": "#1D1D1E",
-        "count": 1
-      },
-      {
-        "color": "#040404",
-        "count": 1
-      },
-      {
-        "color": "#F1F0EE",
-        "count": 1
-      },
-      {
-        "color": "#0B0F14",
-        "count": 1
-      },
-      {
-        "color": "#080808",
-        "count": 1
-      },
-      {
-        "color": "#EFEFEF",
+        "color": "#003A6F",
         "count": 1
       },
       {
@@ -494,448 +486,480 @@
         "count": 1
       },
       {
-        "color": "#0F0F14",
+        "color": "#28282A",
         "count": 1
       },
       {
-        "color": "#F8F5F0",
+        "color": "#F1F1F1",
+        "count": 1
+      },
+      {
+        "color": "#F2F2F2",
+        "count": 1
+      },
+      {
+        "color": "#101C36",
+        "count": 1
+      },
+      {
+        "color": "#14151A",
+        "count": 1
+      },
+      {
+        "color": "#1E325C",
+        "count": 1
+      },
+      {
+        "color": "#FFFCEC",
         "count": 1
       }
     ]
   },
   "spacing": {
     "container_max_width": {
-      "count": 116,
-      "median": 1300,
-      "p25": 1200,
-      "p75": 1440,
-      "mode": 1280,
+      "count": 92,
+      "median": 1350,
+      "p25": 1170,
+      "p75": 1496,
+      "mode": 1440,
       "min": 100,
       "max": 33554400,
-      "mean": 290531.5,
-      "tailwind_median": "~96 (1300px)",
-      "tailwind_p25": "~96 (1200px)",
-      "tailwind_p75": "~96 (1440px)"
+      "mean": 365975.88,
+      "tailwind_median": "~96 (1350px)",
+      "tailwind_p25": "~96 (1170px)",
+      "tailwind_p75": "~96 (1496px)"
     },
     "nav_height": {
-      "count": 101,
-      "median": 46,
-      "p25": 32,
-      "p75": 65,
+      "count": 91,
+      "median": 55,
+      "p25": 26.015625,
+      "p75": 78,
       "mode": 0,
       "min": 0,
-      "max": 839,
-      "mean": 61.07,
-      "tailwind_median": "~11 (46px)",
-      "tailwind_p25": "8",
-      "tailwind_p75": "~16 (65px)"
+      "max": 49491.953125,
+      "mean": 643.37,
+      "tailwind_median": "~14 (55px)",
+      "tailwind_p25": "~6 (26.015625px)",
+      "tailwind_p75": "~20 (78px)"
     },
     "hero_padding_top": {
-      "count": 98,
+      "count": 90,
       "median": 0,
       "p25": 0,
-      "p75": 50,
+      "p75": 0,
       "mode": 0,
       "min": 0,
-      "max": 224,
-      "mean": 31.93,
+      "max": 250,
+      "mean": 18.11,
       "tailwind_median": "0",
       "tailwind_p25": "0",
-      "tailwind_p75": "~12 (50px)"
+      "tailwind_p75": "0"
     },
     "hero_padding_bottom": {
-      "count": 98,
+      "count": 90,
       "median": 0,
       "p25": 0,
-      "p75": 20,
+      "p75": 0,
       "mode": 0,
       "min": 0,
-      "max": 800,
-      "mean": 30.43,
+      "max": 192,
+      "mean": 12.64,
       "tailwind_median": "0",
       "tailwind_p25": "0",
-      "tailwind_p75": "5"
+      "tailwind_p75": "0"
     },
     "card_padding": {
-      "count": 60,
+      "count": 55,
       "median": 0,
       "p25": 0,
       "p75": 16,
       "mode": 0,
       "min": 0,
-      "max": 511.219,
-      "mean": 18.98,
+      "max": 80,
+      "mean": 8.04,
       "tailwind_median": "0",
       "tailwind_p25": "0",
       "tailwind_p75": "4"
     },
     "card_border_radius": {
-      "count": 60,
+      "count": 55,
+      "median": 0,
+      "p25": 0,
+      "p75": 6,
+      "mode": 0,
+      "min": 0,
+      "max": 40,
+      "mean": 4.12,
+      "tailwind_median": "rounded-none",
+      "tailwind_p25": "rounded-none",
+      "tailwind_p75": "rounded-md"
+    },
+    "button_padding_left": {
+      "count": 111,
       "median": 0,
       "p25": 0,
       "p75": 12,
       "mode": 0,
       "min": 0,
-      "max": 1000,
-      "mean": 23.09,
-      "tailwind_median": "rounded-none",
-      "tailwind_p25": "rounded-none",
-      "tailwind_p75": "rounded-xl"
-    },
-    "button_padding_left": {
-      "count": 136,
-      "median": 0,
-      "p25": 0,
-      "p75": 15,
-      "mode": 0,
-      "min": 0,
-      "max": 62,
-      "mean": 8.08,
+      "max": 50,
+      "mean": 6.62,
       "tailwind_median": "0",
       "tailwind_p25": "0",
-      "tailwind_p75": "~3.5 (15px)"
+      "tailwind_p75": "3"
     },
     "button_padding_top": {
-      "count": 136,
+      "count": 111,
       "median": 0,
       "p25": 0,
       "p75": 8,
       "mode": 0,
       "min": 0,
-      "max": 32,
-      "mean": 3.98,
+      "max": 25,
+      "mean": 3.62,
       "tailwind_median": "0",
       "tailwind_p25": "0",
       "tailwind_p75": "2"
     },
     "button_border_radius": {
-      "count": 136,
+      "count": 111,
       "median": 0,
       "p25": 0,
-      "p75": 8,
+      "p75": 6,
       "mode": 0,
       "min": 0,
       "max": 33554400,
-      "mean": 493903.78,
+      "mean": 302401.76,
       "tailwind_median": "rounded-none",
       "tailwind_p25": "rounded-none",
-      "tailwind_p75": "rounded-lg"
+      "tailwind_p75": "rounded-md"
     },
-    "card_has_shadow_rate": 8.1,
-    "card_has_border_rate": 7.4
+    "card_has_shadow_rate": 2.9,
+    "card_has_border_rate": 8.1
   },
   "layout": {
     "hero_type": {
       "fullscreen": {
-        "count": 63,
-        "percentage": 42.3
+        "count": 55,
+        "percentage": 40.4
       },
       "minimal": {
-        "count": 53,
-        "percentage": 35.6
+        "count": 49,
+        "percentage": 36
       },
       "split": {
-        "count": 28,
-        "percentage": 18.8
+        "count": 26,
+        "percentage": 19.1
       },
       "center": {
-        "count": 5,
-        "percentage": 3.4
+        "count": 6,
+        "percentage": 4.4
       }
     },
     "nav_position": {
       "static": {
-        "count": 55,
-        "percentage": 54.5
+        "count": 53,
+        "percentage": 58.2
       },
       "relative": {
-        "count": 22,
-        "percentage": 21.8
-      },
-      "fixed": {
-        "count": 15,
-        "percentage": 14.9
+        "count": 20,
+        "percentage": 22
       },
       "absolute": {
-        "count": 8,
-        "percentage": 7.9
+        "count": 9,
+        "percentage": 9.9
+      },
+      "fixed": {
+        "count": 6,
+        "percentage": 6.6
       },
       "sticky": {
-        "count": 1,
-        "percentage": 1
+        "count": 3,
+        "percentage": 3.3
       }
     },
-    "nav_has_cta_rate": 34.2,
-    "hero_has_badge_rate": 15.4,
-    "hero_has_image_rate": 66.4,
-    "hero_has_video_rate": 21.5,
+    "nav_has_cta_rate": 31.6,
+    "hero_has_badge_rate": 8.8,
+    "hero_has_image_rate": 64.7,
+    "hero_has_video_rate": 21.3,
     "hero_cta_count": {
-      "count": 149,
-      "median": 1,
+      "count": 136,
+      "median": 0,
       "p25": 0,
-      "p75": 3,
+      "p75": 2,
       "mode": 0,
       "min": 0,
       "max": 10,
-      "mean": 2.21
+      "mean": 1.76
     },
     "total_section_count": {
-      "count": 149,
-      "median": 9,
+      "count": 136,
+      "median": 8,
       "p25": 2,
-      "p75": 16,
+      "p75": 17,
       "mode": 0,
       "min": 0,
-      "max": 132,
-      "mean": 14.83
+      "max": 127,
+      "mean": 15.12
     },
     "footer_column_count": {
-      "count": 82,
+      "count": 76,
       "median": 2,
       "p25": 2,
       "p75": 3,
       "mode": 2,
       "min": 1,
       "max": 11,
-      "mean": 2.72
+      "mean": 2.91
     },
-    "has_social_proof_logos_rate": 32.9,
-    "has_pricing_section_rate": 47,
-    "has_testimonials_rate": 45,
-    "has_faq_rate": 20.1
+    "has_social_proof_logos_rate": 27.2,
+    "has_pricing_section_rate": 31.6,
+    "has_testimonials_rate": 34.6,
+    "has_faq_rate": 9.6
   },
   "visual_effects": {
-    "has_animation_rate": 81.9,
-    "has_gradient_text_rate": 2.7,
-    "has_backdrop_blur_rate": 30.2,
-    "has_illustration_svg_rate": 68.5,
-    "has_product_screenshot_rate": 28.2,
-    "has_real_photo_rate": 22.1
+    "has_animation_rate": 77.2,
+    "has_gradient_text_rate": 2.2,
+    "has_backdrop_blur_rate": 22.1,
+    "has_illustration_svg_rate": 65.4,
+    "has_product_screenshot_rate": 18.4,
+    "has_real_photo_rate": 16.9
   },
   "ratios": {
     "h1_body_ratio": {
-      "count": 149,
-      "median": 3.56,
-      "p25": 2.38,
-      "p75": 4.57,
-      "mode": 4.5,
-      "min": 0.67,
-      "max": 17.03,
-      "mean": 3.8
+      "count": 133,
+      "median": 3.39,
+      "p25": 2,
+      "p75": 4.5,
+      "mode": 2,
+      "min": 0.8,
+      "max": 48,
+      "mean": 4.46
     },
     "h2_h1_ratio": {
-      "count": 123,
-      "median": 0.63,
-      "p25": 0.45,
-      "p75": 0.93,
+      "count": 106,
+      "median": 0.73,
+      "p25": 0.5,
+      "p75": 1,
       "mode": 1,
-      "min": 0.14,
-      "max": 5.63,
-      "mean": 0.78
+      "min": 0.09,
+      "max": 7.2,
+      "mean": 0.88
     },
     "hero_viewport_ratio": {
-      "count": 149,
-      "median": 0.21,
-      "p25": 0.16,
-      "p75": 0.3,
-      "mode": 0.21,
-      "min": 0.03,
-      "max": 1.28,
+      "count": 136,
+      "median": 0.19,
+      "p25": 0.11,
+      "p75": 0.28,
+      "mode": 0.16,
+      "min": 0,
+      "max": 2.88,
       "mean": 0.24
     },
     "section_padding_variance": {
-      "count": 74,
-      "median": 0.27,
-      "p25": 0.1,
-      "p75": 0.45,
+      "count": 69,
+      "median": 0.31,
+      "p25": 0.13,
+      "p75": 0.44,
       "mode": 0,
       "min": 0,
-      "max": 2.13,
-      "mean": 0.37,
+      "max": 6.03,
+      "mean": 0.5,
       "tailwind_median": "0",
       "tailwind_p25": "0",
       "tailwind_p75": "0"
     },
     "container_viewport_ratio": {
-      "count": 116,
-      "median": 0.9,
-      "p25": 0.83,
-      "p75": 1,
-      "mode": 0.89,
+      "count": 92,
+      "median": 0.94,
+      "p25": 0.81,
+      "p75": 1.04,
+      "mode": 1,
       "min": 0.07,
       "max": 23301.67,
-      "mean": 201.76
+      "mean": 254.15
     },
     "button_height_body_ratio": {
-      "count": 48,
-      "median": 2.25,
-      "p25": 2,
-      "p75": 2.88,
+      "count": 41,
+      "median": 2,
+      "p25": 1.8,
+      "p75": 2.33,
       "mode": 2,
-      "min": 1.13,
-      "max": 4.2,
-      "mean": 2.42,
+      "min": 1.25,
+      "max": 5,
+      "mean": 2.26,
       "tailwind_median": "0.5",
       "tailwind_p25": "0.5",
-      "tailwind_p75": "~0.5 (2.88px)"
+      "tailwind_p75": "0.5"
     },
     "neutral_color_ratio": {
-      "count": 149,
-      "median": 0.74,
-      "p25": 0.58,
-      "p75": 0.89,
+      "count": 136,
+      "median": 0.75,
+      "p25": 0.6,
+      "p75": 0.88,
       "mode": 1,
-      "min": 0.21,
+      "min": 0.3,
       "max": 1,
-      "mean": 0.73
+      "mean": 0.74
     }
   },
   "by_category": {
-    "creative-agency": {
-      "count": 40,
+    "ai-saas": {
+      "count": 8,
       "h1_font_size": {
-        "count": 40,
-        "median": 60,
-        "p25": 35,
-        "p75": 80,
-        "mode": 64,
-        "min": 16,
-        "max": 180,
-        "mean": 59.11,
-        "tailwind_median": "text-6xl",
-        "tailwind_p25": "~text-4xl (35px)",
-        "tailwind_p75": "~text-7xl (80px)"
+        "count": 8,
+        "median": 48,
+        "p25": 32,
+        "p75": 66,
+        "mode": 18,
+        "min": 18,
+        "max": 72,
+        "mean": 51.25,
+        "tailwind_median": "text-5xl",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-6xl (66px)"
       },
       "body_font_size": {
-        "count": 40,
+        "count": 8,
         "median": 16,
-        "p25": 16,
-        "p75": 17.6,
+        "p25": 12,
+        "p75": 16,
         "mode": 16,
-        "min": 10,
-        "max": 25.6,
-        "mean": 16.56,
+        "min": 12,
+        "max": 18,
+        "mean": 15.25,
         "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-lg"
+        "tailwind_p25": "text-xs",
+        "tailwind_p75": "text-base"
       },
-      "is_dark_theme_rate": 42.5,
-      "has_animation_rate": 80,
+      "is_dark_theme_rate": 37.5,
+      "has_animation_rate": 75,
       "hero_type": {
-        "fullscreen": {
-          "count": 23,
-          "percentage": 57.5
+        "minimal": {
+          "count": 4,
+          "percentage": 50
         },
         "split": {
-          "count": 9,
-          "percentage": 22.5
+          "count": 2,
+          "percentage": 25
+        },
+        "fullscreen": {
+          "count": 1,
+          "percentage": 12.5
+        },
+        "center": {
+          "count": 1,
+          "percentage": 12.5
+        }
+      }
+    },
+    "saas": {
+      "count": 14,
+      "h1_font_size": {
+        "count": 14,
+        "median": 60,
+        "p25": 48.8,
+        "p75": 64,
+        "mode": 64,
+        "min": 30,
+        "max": 72,
+        "mean": 57.52,
+        "tailwind_median": "text-6xl",
+        "tailwind_p25": "~text-5xl (48.8px)",
+        "tailwind_p75": "~text-6xl (64px)"
+      },
+      "body_font_size": {
+        "count": 14,
+        "median": 16,
+        "p25": 15.7392,
+        "p75": 16,
+        "mode": 16,
+        "min": 12,
+        "max": 16.8,
+        "mean": 15.54,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 14.3,
+      "has_animation_rate": 92.9,
+      "hero_type": {
+        "fullscreen": {
+          "count": 7,
+          "percentage": 50
+        },
+        "split": {
+          "count": 5,
+          "percentage": 35.7
         },
         "minimal": {
-          "count": 8,
+          "count": 2,
+          "percentage": 14.3
+        }
+      }
+    },
+    "dev-tool": {
+      "count": 5,
+      "h1_font_size": {
+        "count": 5,
+        "median": 48,
+        "p25": 48,
+        "p75": 53.3333,
+        "mode": 48,
+        "min": 14,
+        "max": 55,
+        "mean": 43.67,
+        "tailwind_median": "text-5xl",
+        "tailwind_p25": "text-5xl",
+        "tailwind_p75": "~text-5xl (53.3333px)"
+      },
+      "body_font_size": {
+        "count": 5,
+        "median": 16,
+        "p25": 12,
+        "p75": 16,
+        "mode": 12,
+        "min": 12,
+        "max": 17,
+        "mean": 14.6,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-xs",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 40,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 2,
+          "percentage": 40
+        },
+        "center": {
+          "count": 1,
+          "percentage": 20
+        },
+        "minimal": {
+          "count": 1,
+          "percentage": 20
+        },
+        "split": {
+          "count": 1,
           "percentage": 20
         }
       }
     },
-    "ai-saas": {
-      "count": 7,
-      "h1_font_size": {
-        "count": 7,
-        "median": 68,
-        "p25": 55.2381,
-        "p75": 72,
-        "mode": 36,
-        "min": 36,
-        "max": 80,
-        "mean": 63.39,
-        "tailwind_median": "~text-7xl (68px)",
-        "tailwind_p25": "~text-6xl (55.2381px)",
-        "tailwind_p75": "text-7xl"
-      },
-      "body_font_size": {
-        "count": 7,
-        "median": 14,
-        "p25": 9.52381,
-        "p75": 16,
-        "mode": 16,
-        "min": 8,
-        "max": 16,
-        "mean": 13.36,
-        "tailwind_median": "text-sm",
-        "tailwind_p25": "~text-xs (9.52381px)",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 57.1,
-      "has_animation_rate": 100,
-      "hero_type": {
-        "fullscreen": {
-          "count": 5,
-          "percentage": 71.4
-        },
-        "split": {
-          "count": 2,
-          "percentage": 28.6
-        }
-      }
-    },
-    "ai-product": {
-      "count": 11,
-      "h1_font_size": {
-        "count": 11,
-        "median": 60,
-        "p25": 40,
-        "p75": 80,
-        "mode": 40,
-        "min": 8,
-        "max": 120,
-        "mean": 60.8,
-        "tailwind_median": "text-6xl",
-        "tailwind_p25": "~text-4xl (40px)",
-        "tailwind_p75": "~text-7xl (80px)"
-      },
-      "body_font_size": {
-        "count": 11,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 12,
-        "max": 16,
-        "mean": 15.45,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 45.5,
-      "has_animation_rate": 81.8,
-      "hero_type": {
-        "minimal": {
-          "count": 8,
-          "percentage": 72.7
-        },
-        "center": {
-          "count": 2,
-          "percentage": 18.2
-        },
-        "fullscreen": {
-          "count": 1,
-          "percentage": 9.1
-        }
-      }
-    },
-    "hospitality": {
+    "data-tool": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
-        "median": 72,
-        "p25": 72,
-        "p75": 72,
-        "mode": 72,
-        "min": 72,
-        "max": 72,
-        "mean": 72,
-        "tailwind_median": "text-7xl",
-        "tailwind_p25": "text-7xl",
-        "tailwind_p75": "text-7xl"
+        "median": 20,
+        "p25": 20,
+        "p75": 20,
+        "mode": 20,
+        "min": 20,
+        "max": 20,
+        "mean": 20,
+        "tailwind_median": "text-xl",
+        "tailwind_p25": "text-xl",
+        "tailwind_p75": "text-xl"
       },
       "body_font_size": {
         "count": 1,
@@ -953,279 +977,29 @@
       "is_dark_theme_rate": 100,
       "has_animation_rate": 100,
       "hero_type": {
-        "split": {
+        "fullscreen": {
           "count": 1,
           "percentage": 100
         }
       }
     },
-    "creative-studio": {
+    "ai-tool": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
-        "median": 128,
-        "p25": 128,
-        "p75": 128,
-        "mode": 128,
-        "min": 128,
-        "max": 128,
-        "mean": 128,
-        "tailwind_median": "text-9xl",
-        "tailwind_p25": "text-9xl",
-        "tailwind_p75": "text-9xl"
-      },
-      "body_font_size": {
-        "count": 1,
-        "median": 18,
-        "p25": 18,
-        "p75": 18,
-        "mode": 18,
-        "min": 18,
-        "max": 18,
-        "mean": 18,
-        "tailwind_median": "text-lg",
-        "tailwind_p25": "text-lg",
-        "tailwind_p75": "text-lg"
-      },
-      "is_dark_theme_rate": 0,
-      "has_animation_rate": 100,
-      "hero_type": {
-        "fullscreen": {
-          "count": 1,
-          "percentage": 100
-        }
-      }
-    },
-    "saas": {
-      "count": 3,
-      "h1_font_size": {
-        "count": 3,
-        "median": 64,
-        "p25": 32,
-        "p75": 80,
-        "mode": 32,
-        "min": 32,
-        "max": 80,
-        "mean": 58.67,
-        "tailwind_median": "~text-6xl (64px)",
-        "tailwind_p25": "~text-3xl (32px)",
-        "tailwind_p75": "~text-7xl (80px)"
-      },
-      "body_font_size": {
-        "count": 3,
-        "median": 16,
-        "p25": 16,
-        "p75": 18,
-        "mode": 16,
-        "min": 16,
-        "max": 18,
-        "mean": 16.67,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-lg"
-      },
-      "is_dark_theme_rate": 66.7,
-      "has_animation_rate": 66.7,
-      "hero_type": {
-        "minimal": {
-          "count": 2,
-          "percentage": 66.7
-        },
-        "fullscreen": {
-          "count": 1,
-          "percentage": 33.3
-        }
-      }
-    },
-    "fashion": {
-      "count": 1,
-      "h1_font_size": {
-        "count": 1,
-        "median": 238.392,
-        "p25": 238.392,
-        "p75": 238.392,
-        "mode": 238.392,
-        "min": 238.392,
-        "max": 238.392,
-        "mean": 238.39,
-        "tailwind_median": "~text-9xl (238.392px)",
-        "tailwind_p25": "~text-9xl (238.392px)",
-        "tailwind_p75": "~text-9xl (238.392px)"
-      },
-      "body_font_size": {
-        "count": 1,
-        "median": 14,
-        "p25": 14,
-        "p75": 14,
-        "mode": 14,
-        "min": 14,
-        "max": 14,
-        "mean": 14,
-        "tailwind_median": "text-sm",
-        "tailwind_p25": "text-sm",
-        "tailwind_p75": "text-sm"
-      },
-      "is_dark_theme_rate": 0,
-      "has_animation_rate": 100,
-      "hero_type": {
-        "fullscreen": {
-          "count": 1,
-          "percentage": 100
-        }
-      }
-    },
-    "ai-devtools": {
-      "count": 10,
-      "h1_font_size": {
-        "count": 10,
-        "median": 72,
-        "p25": 50,
-        "p75": 80,
-        "mode": 72,
-        "min": 20,
-        "max": 88,
-        "mean": 64.6,
-        "tailwind_median": "text-7xl",
-        "tailwind_p25": "~text-5xl (50px)",
-        "tailwind_p75": "~text-7xl (80px)"
-      },
-      "body_font_size": {
-        "count": 10,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 12,
-        "max": 20,
-        "mean": 16,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 30,
-      "has_animation_rate": 90,
-      "hero_type": {
-        "fullscreen": {
-          "count": 6,
-          "percentage": 60
-        },
-        "minimal": {
-          "count": 3,
-          "percentage": 30
-        },
-        "center": {
-          "count": 1,
-          "percentage": 10
-        }
-      }
-    },
-    "devtools": {
-      "count": 6,
-      "h1_font_size": {
-        "count": 6,
-        "median": 56,
-        "p25": 48,
-        "p75": 82,
-        "mode": 38,
-        "min": 38,
-        "max": 100,
-        "mean": 65.47,
-        "tailwind_median": "~text-6xl (56px)",
-        "tailwind_p25": "text-5xl",
-        "tailwind_p75": "~text-7xl (82px)"
-      },
-      "body_font_size": {
-        "count": 6,
-        "median": 16,
-        "p25": 12,
-        "p75": 16,
-        "mode": 16,
-        "min": 12,
-        "max": 22,
-        "mean": 15.67,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-xs",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 33.3,
-      "has_animation_rate": 66.7,
-      "hero_type": {
-        "fullscreen": {
-          "count": 3,
-          "percentage": 50
-        },
-        "minimal": {
-          "count": 2,
-          "percentage": 33.3
-        },
-        "split": {
-          "count": 1,
-          "percentage": 16.7
-        }
-      }
-    },
-    "design-gallery": {
-      "count": 31,
-      "h1_font_size": {
-        "count": 31,
-        "median": 44,
-        "p25": 24,
-        "p75": 62.8864,
-        "mode": 16,
-        "min": 16,
-        "max": 140,
-        "mean": 46.02,
-        "tailwind_median": "~text-5xl (44px)",
-        "tailwind_p25": "text-2xl",
-        "tailwind_p75": "~text-6xl (62.8864px)"
-      },
-      "body_font_size": {
-        "count": 31,
-        "median": 16,
-        "p25": 14,
-        "p75": 16,
-        "mode": 16,
-        "min": 10,
-        "max": 19,
-        "mean": 15.31,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-sm",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 51.6,
-      "has_animation_rate": 80.6,
-      "hero_type": {
-        "minimal": {
-          "count": 16,
-          "percentage": 51.6
-        },
-        "fullscreen": {
-          "count": 8,
-          "percentage": 25.8
-        },
-        "split": {
-          "count": 7,
-          "percentage": 22.6
-        }
-      }
-    },
-    "website-builder": {
-      "count": 4,
-      "h1_font_size": {
-        "count": 4,
         "median": 56,
         "p25": 56,
-        "p75": 88,
+        "p75": 56,
         "mode": 56,
         "min": 56,
-        "max": 96,
-        "mean": 74,
+        "max": 56,
+        "mean": 56,
         "tailwind_median": "~text-6xl (56px)",
         "tailwind_p25": "~text-6xl (56px)",
-        "tailwind_p75": "~text-8xl (88px)"
+        "tailwind_p75": "~text-6xl (56px)"
       },
       "body_font_size": {
-        "count": 4,
+        "count": 1,
         "median": 16,
         "p25": 16,
         "p75": 16,
@@ -1237,8 +1011,82 @@
         "tailwind_p25": "text-base",
         "tailwind_p75": "text-base"
       },
-      "is_dark_theme_rate": 75,
-      "has_animation_rate": 75,
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "interactive-experience": {
+      "count": 2,
+      "h1_font_size": {
+        "count": 1,
+        "median": 23,
+        "p25": 23,
+        "p75": 23,
+        "mode": 23,
+        "min": 23,
+        "max": 23,
+        "mean": 23,
+        "tailwind_median": "~text-2xl (23px)",
+        "tailwind_p25": "~text-2xl (23px)",
+        "tailwind_p75": "~text-2xl (23px)"
+      },
+      "body_font_size": {
+        "count": 2,
+        "median": 14,
+        "p25": 14,
+        "p75": 15,
+        "mode": 14,
+        "min": 14,
+        "max": 15,
+        "mean": 14.5,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "text-sm",
+        "tailwind_p75": "~text-sm (15px)"
+      },
+      "is_dark_theme_rate": 50,
+      "has_animation_rate": 0,
+      "hero_type": {
+        "minimal": {
+          "count": 2,
+          "percentage": 100
+        }
+      }
+    },
+    "creative": {
+      "count": 4,
+      "h1_font_size": {
+        "count": 4,
+        "median": 24,
+        "p25": 16,
+        "p75": 32,
+        "mode": 16,
+        "min": 16,
+        "max": 48,
+        "mean": 30,
+        "tailwind_median": "text-2xl",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "~text-3xl (32px)"
+      },
+      "body_font_size": {
+        "count": 4,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 16,
+        "max": 17,
+        "mean": 16.25,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 50,
+      "has_animation_rate": 50,
       "hero_type": {
         "minimal": {
           "count": 3,
@@ -1250,65 +1098,20 @@
         }
       }
     },
-    "design-tool": {
-      "count": 6,
-      "h1_font_size": {
-        "count": 6,
-        "median": 56,
-        "p25": 55,
-        "p75": 70,
-        "mode": 40,
-        "min": 40,
-        "max": 80,
-        "mean": 61,
-        "tailwind_median": "~text-6xl (56px)",
-        "tailwind_p25": "~text-6xl (55px)",
-        "tailwind_p75": "~text-7xl (70px)"
-      },
-      "body_font_size": {
-        "count": 6,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 15.75,
-        "max": 16,
-        "mean": 15.96,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 33.3,
-      "has_animation_rate": 83.3,
-      "hero_type": {
-        "minimal": {
-          "count": 3,
-          "percentage": 50
-        },
-        "fullscreen": {
-          "count": 2,
-          "percentage": 33.3
-        },
-        "split": {
-          "count": 1,
-          "percentage": 16.7
-        }
-      }
-    },
-    "security": {
+    "brand": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
-        "median": 52,
-        "p25": 52,
-        "p75": 52,
-        "mode": 52,
-        "min": 52,
-        "max": 52,
-        "mean": 52,
-        "tailwind_median": "~text-5xl (52px)",
-        "tailwind_p25": "~text-5xl (52px)",
-        "tailwind_p75": "~text-5xl (52px)"
+        "median": 32,
+        "p25": 32,
+        "p75": 32,
+        "mode": 32,
+        "min": 32,
+        "max": 32,
+        "mean": 32,
+        "tailwind_median": "~text-3xl (32px)",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-3xl (32px)"
       },
       "body_font_size": {
         "count": 1,
@@ -1324,7 +1127,7 @@
         "tailwind_p75": "text-base"
       },
       "is_dark_theme_rate": 0,
-      "has_animation_rate": 100,
+      "has_animation_rate": 0,
       "hero_type": {
         "minimal": {
           "count": 1,
@@ -1332,282 +1135,138 @@
         }
       }
     },
-    "food-tech": {
+    "architecture": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
-        "median": 112,
-        "p25": 112,
-        "p75": 112,
-        "mode": 112,
-        "min": 112,
-        "max": 112,
-        "mean": 112,
-        "tailwind_median": "~text-8xl (112px)",
-        "tailwind_p25": "~text-8xl (112px)",
-        "tailwind_p75": "~text-8xl (112px)"
+        "median": 71.82,
+        "p25": 71.82,
+        "p75": 71.82,
+        "mode": 71.82,
+        "min": 71.82,
+        "max": 71.82,
+        "mean": 71.82,
+        "tailwind_median": "text-7xl",
+        "tailwind_p25": "text-7xl",
+        "tailwind_p75": "text-7xl"
       },
       "body_font_size": {
         "count": 1,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 16,
-        "max": 16,
-        "mean": 16,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
+        "median": 15.12,
+        "p25": 15.12,
+        "p75": 15.12,
+        "mode": 15.12,
+        "min": 15.12,
+        "max": 15.12,
+        "mean": 15.12,
+        "tailwind_median": "~text-sm (15.12px)",
+        "tailwind_p25": "~text-sm (15.12px)",
+        "tailwind_p75": "~text-sm (15.12px)"
       },
       "is_dark_theme_rate": 100,
       "has_animation_rate": 100,
       "hero_type": {
-        "fullscreen": {
-          "count": 1,
-          "percentage": 100
-        }
-      }
-    },
-    "beauty": {
-      "count": 1,
-      "h1_font_size": {
-        "count": 1,
-        "median": 40,
-        "p25": 40,
-        "p75": 40,
-        "mode": 40,
-        "min": 40,
-        "max": 40,
-        "mean": 40,
-        "tailwind_median": "~text-4xl (40px)",
-        "tailwind_p25": "~text-4xl (40px)",
-        "tailwind_p75": "~text-4xl (40px)"
-      },
-      "body_font_size": {
-        "count": 1,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 16,
-        "max": 16,
-        "mean": 16,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 100,
-      "has_animation_rate": 100,
-      "hero_type": {
-        "split": {
+        "minimal": {
           "count": 1,
           "percentage": 100
         }
       }
     },
     "portfolio": {
-      "count": 3,
+      "count": 33,
       "h1_font_size": {
-        "count": 3,
-        "median": 80,
-        "p25": 72,
-        "p75": 80,
-        "mode": 80,
-        "min": 72,
-        "max": 80,
-        "mean": 77.33,
-        "tailwind_median": "~text-7xl (80px)",
-        "tailwind_p25": "text-7xl",
-        "tailwind_p75": "~text-7xl (80px)"
+        "count": 31,
+        "median": 48,
+        "p25": 20,
+        "p75": 120,
+        "mode": 32,
+        "min": 10,
+        "max": 864,
+        "mean": 96.42,
+        "tailwind_median": "text-5xl",
+        "tailwind_p25": "text-xl",
+        "tailwind_p75": "~text-9xl (120px)"
       },
       "body_font_size": {
-        "count": 3,
+        "count": 33,
         "median": 16,
-        "p25": 16,
-        "p75": 17,
+        "p25": 12.6,
+        "p75": 16,
         "mode": 16,
-        "min": 16,
-        "max": 17,
-        "mean": 16.33,
+        "min": 0.750001,
+        "max": 43.2,
+        "mean": 15.56,
         "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "~text-base (17px)"
+        "tailwind_p25": "~text-xs (12.6px)",
+        "tailwind_p75": "text-base"
       },
-      "is_dark_theme_rate": 0,
-      "has_animation_rate": 100,
+      "is_dark_theme_rate": 51.5,
+      "has_animation_rate": 81.8,
+      "hero_type": {
+        "fullscreen": {
+          "count": 15,
+          "percentage": 45.5
+        },
+        "minimal": {
+          "count": 14,
+          "percentage": 42.4
+        },
+        "split": {
+          "count": 3,
+          "percentage": 9.1
+        },
+        "center": {
+          "count": 1,
+          "percentage": 3
+        }
+      }
+    },
+    "creative-agency": {
+      "count": 4,
+      "h1_font_size": {
+        "count": 4,
+        "median": 52,
+        "p25": 38,
+        "p75": 100,
+        "mode": 38,
+        "min": 38,
+        "max": 101.995,
+        "mean": 73,
+        "tailwind_median": "~text-5xl (52px)",
+        "tailwind_p25": "~text-4xl (38px)",
+        "tailwind_p75": "~text-8xl (100px)"
+      },
+      "body_font_size": {
+        "count": 4,
+        "median": 14,
+        "p25": 9,
+        "p75": 16,
+        "mode": 16,
+        "min": 9,
+        "max": 16,
+        "mean": 13.75,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "~text-xs (9px)",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 25,
+      "has_animation_rate": 75,
       "hero_type": {
         "fullscreen": {
           "count": 2,
-          "percentage": 66.7
+          "percentage": 50
         },
         "minimal": {
           "count": 1,
-          "percentage": 33.3
-        }
-      }
-    },
-    "hardware": {
-      "count": 1,
-      "h1_font_size": {
-        "count": 1,
-        "median": 57,
-        "p25": 57,
-        "p75": 57,
-        "mode": 57,
-        "min": 57,
-        "max": 57,
-        "mean": 57,
-        "tailwind_median": "~text-6xl (57px)",
-        "tailwind_p25": "~text-6xl (57px)",
-        "tailwind_p75": "~text-6xl (57px)"
-      },
-      "body_font_size": {
-        "count": 1,
-        "median": 28.5,
-        "p25": 28.5,
-        "p75": 28.5,
-        "mode": 28.5,
-        "min": 28.5,
-        "max": 28.5,
-        "mean": 28.5,
-        "tailwind_median": "~text-3xl (28.5px)",
-        "tailwind_p25": "~text-3xl (28.5px)",
-        "tailwind_p75": "~text-3xl (28.5px)"
-      },
-      "is_dark_theme_rate": 0,
-      "has_animation_rate": 0,
-      "hero_type": {
-        "fullscreen": {
-          "count": 1,
-          "percentage": 100
-        }
-      }
-    },
-    "freelance": {
-      "count": 1,
-      "h1_font_size": {
-        "count": 1,
-        "median": 58,
-        "p25": 58,
-        "p75": 58,
-        "mode": 58,
-        "min": 58,
-        "max": 58,
-        "mean": 58,
-        "tailwind_median": "~text-6xl (58px)",
-        "tailwind_p25": "~text-6xl (58px)",
-        "tailwind_p75": "~text-6xl (58px)"
-      },
-      "body_font_size": {
-        "count": 1,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 16,
-        "max": 16,
-        "mean": 16,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 0,
-      "has_animation_rate": 100,
-      "hero_type": {
-        "center": {
-          "count": 1,
-          "percentage": 100
-        }
-      }
-    },
-    "analytics": {
-      "count": 1,
-      "h1_font_size": {
-        "count": 1,
-        "median": 48,
-        "p25": 48,
-        "p75": 48,
-        "mode": 48,
-        "min": 48,
-        "max": 48,
-        "mean": 48,
-        "tailwind_median": "text-5xl",
-        "tailwind_p25": "text-5xl",
-        "tailwind_p75": "text-5xl"
-      },
-      "body_font_size": {
-        "count": 1,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 16,
-        "max": 16,
-        "mean": 16,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 100,
-      "has_animation_rate": 100,
-      "hero_type": {
-        "split": {
-          "count": 1,
-          "percentage": 100
-        }
-      }
-    },
-    "design-resource": {
-      "count": 13,
-      "h1_font_size": {
-        "count": 13,
-        "median": 56,
-        "p25": 40,
-        "p75": 92.1949,
-        "mode": 96,
-        "min": 16,
-        "max": 96,
-        "mean": 60.01,
-        "tailwind_median": "~text-6xl (56px)",
-        "tailwind_p25": "~text-4xl (40px)",
-        "tailwind_p75": "~text-8xl (92.1949px)"
-      },
-      "body_font_size": {
-        "count": 13,
-        "median": 16,
-        "p25": 16,
-        "p75": 16,
-        "mode": 16,
-        "min": 12,
-        "max": 20.759,
-        "mean": 16.37,
-        "tailwind_median": "text-base",
-        "tailwind_p25": "text-base",
-        "tailwind_p75": "text-base"
-      },
-      "is_dark_theme_rate": 46.2,
-      "has_animation_rate": 84.6,
-      "hero_type": {
-        "minimal": {
-          "count": 6,
-          "percentage": 46.2
-        },
-        "fullscreen": {
-          "count": 5,
-          "percentage": 38.5
-        },
-        "center": {
-          "count": 1,
-          "percentage": 7.7
+          "percentage": 25
         },
         "split": {
           "count": 1,
-          "percentage": 7.7
+          "percentage": 25
         }
       }
     },
-    "hosting": {
+    "showcase": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
@@ -1624,18 +1283,18 @@
       },
       "body_font_size": {
         "count": 1,
-        "median": 18,
-        "p25": 18,
-        "p75": 18,
-        "mode": 18,
-        "min": 18,
-        "max": 18,
-        "mean": 18,
-        "tailwind_median": "text-lg",
-        "tailwind_p25": "text-lg",
-        "tailwind_p75": "text-lg"
+        "median": 22,
+        "p25": 22,
+        "p75": 22,
+        "mode": 22,
+        "min": 22,
+        "max": 22,
+        "mean": 22,
+        "tailwind_median": "~text-xl (22px)",
+        "tailwind_p25": "~text-xl (22px)",
+        "tailwind_p75": "~text-xl (22px)"
       },
-      "is_dark_theme_rate": 100,
+      "is_dark_theme_rate": 0,
       "has_animation_rate": 100,
       "hero_type": {
         "split": {
@@ -1644,38 +1303,617 @@
         }
       }
     },
-    "marketing": {
-      "count": 2,
+    "culture": {
+      "count": 1,
       "h1_font_size": {
-        "count": 2,
-        "median": 40,
-        "p25": 40,
-        "p75": 48.75,
-        "mode": 40,
-        "min": 40,
-        "max": 48.75,
-        "mean": 44.38,
-        "tailwind_median": "~text-4xl (40px)",
-        "tailwind_p25": "~text-4xl (40px)",
-        "tailwind_p75": "~text-5xl (48.75px)"
+        "count": 1,
+        "median": 65,
+        "p25": 65,
+        "p75": 65,
+        "mode": 65,
+        "min": 65,
+        "max": 65,
+        "mean": 65,
+        "tailwind_median": "~text-6xl (65px)",
+        "tailwind_p25": "~text-6xl (65px)",
+        "tailwind_p75": "~text-6xl (65px)"
       },
       "body_font_size": {
-        "count": 2,
-        "median": 15,
-        "p25": 15,
+        "count": 1,
+        "median": 17,
+        "p25": 17,
+        "p75": 17,
+        "mode": 17,
+        "min": 17,
+        "max": 17,
+        "mean": 17,
+        "tailwind_median": "~text-base (17px)",
+        "tailwind_p25": "~text-base (17px)",
+        "tailwind_p75": "~text-base (17px)"
+      },
+      "is_dark_theme_rate": 0,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "split": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "personal-brand": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 448,
+        "p25": 448,
+        "p75": 448,
+        "mode": 448,
+        "min": 448,
+        "max": 448,
+        "mean": 448,
+        "tailwind_median": "~text-9xl (448px)",
+        "tailwind_p25": "~text-9xl (448px)",
+        "tailwind_p75": "~text-9xl (448px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 10,
+        "p25": 10,
+        "p75": 10,
+        "mode": 10,
+        "min": 10,
+        "max": 10,
+        "mean": 10,
+        "tailwind_median": "~text-xs (10px)",
+        "tailwind_p25": "~text-xs (10px)",
+        "tailwind_p75": "~text-xs (10px)"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "minimal": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "ecommerce": {
+      "count": 5,
+      "h1_font_size": {
+        "count": 5,
+        "median": 33,
+        "p25": 28.8,
+        "p75": 48,
+        "mode": 16,
+        "min": 16,
+        "max": 72,
+        "mean": 39.56,
+        "tailwind_median": "~text-3xl (33px)",
+        "tailwind_p25": "~text-3xl (28.8px)",
+        "tailwind_p75": "text-5xl"
+      },
+      "body_font_size": {
+        "count": 5,
+        "median": 16,
+        "p25": 16,
+        "p75": 17,
+        "mode": 16,
+        "min": 12.6,
+        "max": 18,
+        "mean": 15.92,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "~text-base (17px)"
+      },
+      "is_dark_theme_rate": 40,
+      "has_animation_rate": 80,
+      "hero_type": {
+        "center": {
+          "count": 2,
+          "percentage": 40
+        },
+        "fullscreen": {
+          "count": 2,
+          "percentage": 40
+        },
+        "split": {
+          "count": 1,
+          "percentage": 20
+        }
+      }
+    },
+    "data-viz": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 32,
+        "p25": 32,
+        "p75": 32,
+        "mode": 32,
+        "min": 32,
+        "max": 32,
+        "mean": 32,
+        "tailwind_median": "~text-3xl (32px)",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-3xl (32px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 16,
+        "p25": 16,
         "p75": 16,
-        "mode": 15,
-        "min": 15,
+        "mode": 16,
+        "min": 16,
         "max": 16,
-        "mean": 15.5,
-        "tailwind_median": "~text-sm (15px)",
-        "tailwind_p25": "~text-sm (15px)",
+        "mean": 16,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 0,
+      "hero_type": {
+        "minimal": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "luxury-brand": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 32,
+        "p25": 32,
+        "p75": 32,
+        "mode": 32,
+        "min": 32,
+        "max": 32,
+        "mean": 32,
+        "tailwind_median": "~text-3xl (32px)",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-3xl (32px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 16,
+        "max": 16,
+        "mean": 16,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 0,
+      "hero_type": {
+        "minimal": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "interactive-storytelling": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 12,
+        "p25": 12,
+        "p75": 12,
+        "mode": 12,
+        "min": 12,
+        "max": 12,
+        "mean": 12,
+        "tailwind_median": "text-xs",
+        "tailwind_p25": "text-xs",
+        "tailwind_p75": "text-xs"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 12,
+        "p25": 12,
+        "p75": 12,
+        "mode": 12,
+        "min": 12,
+        "max": 12,
+        "mean": 12,
+        "tailwind_median": "text-xs",
+        "tailwind_p25": "text-xs",
+        "tailwind_p75": "text-xs"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 0,
+      "hero_type": {
+        "minimal": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "dev-resource": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 180,
+        "p25": 180,
+        "p75": 180,
+        "mode": 180,
+        "min": 180,
+        "max": 180,
+        "mean": 180,
+        "tailwind_median": "~text-9xl (180px)",
+        "tailwind_p25": "~text-9xl (180px)",
+        "tailwind_p75": "~text-9xl (180px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 17,
+        "p25": 17,
+        "p75": 17,
+        "mode": 17,
+        "min": 17,
+        "max": 17,
+        "mean": 17,
+        "tailwind_median": "~text-base (17px)",
+        "tailwind_p25": "~text-base (17px)",
+        "tailwind_p75": "~text-base (17px)"
+      },
+      "is_dark_theme_rate": 0,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "open-source": {
+      "count": 11,
+      "h1_font_size": {
+        "count": 11,
+        "median": 56,
+        "p25": 44,
+        "p75": 60,
+        "mode": 60,
+        "min": 36,
+        "max": 74,
+        "mean": 54.51,
+        "tailwind_median": "~text-6xl (56px)",
+        "tailwind_p25": "~text-5xl (44px)",
+        "tailwind_p75": "text-6xl"
+      },
+      "body_font_size": {
+        "count": 11,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 14,
+        "max": 18,
+        "mean": 15.86,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 54.5,
+      "has_animation_rate": 72.7,
+      "hero_type": {
+        "split": {
+          "count": 4,
+          "percentage": 36.4
+        },
+        "minimal": {
+          "count": 4,
+          "percentage": 36.4
+        },
+        "fullscreen": {
+          "count": 3,
+          "percentage": 27.3
+        }
+      }
+    },
+    "browser": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 32,
+        "p25": 32,
+        "p75": 32,
+        "mode": 32,
+        "min": 32,
+        "max": 32,
+        "mean": 32,
+        "tailwind_median": "~text-3xl (32px)",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-3xl (32px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 16,
+        "max": 16,
+        "mean": 16,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
         "tailwind_p75": "text-base"
       },
       "is_dark_theme_rate": 0,
-      "has_animation_rate": 50,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "split": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "fintech": {
+      "count": 16,
+      "h1_font_size": {
+        "count": 16,
+        "median": 56,
+        "p25": 49.3472,
+        "p75": 62,
+        "mode": 60,
+        "min": 32,
+        "max": 89.216,
+        "mean": 57.91,
+        "tailwind_median": "~text-6xl (56px)",
+        "tailwind_p25": "~text-5xl (49.3472px)",
+        "tailwind_p75": "~text-6xl (62px)"
+      },
+      "body_font_size": {
+        "count": 16,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 12,
+        "max": 18,
+        "mean": 16.13,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 43.8,
+      "has_animation_rate": 93.8,
       "hero_type": {
         "fullscreen": {
+          "count": 8,
+          "percentage": 50
+        },
+        "minimal": {
+          "count": 4,
+          "percentage": 25
+        },
+        "split": {
+          "count": 4,
+          "percentage": 25
+        }
+      }
+    },
+    "productivity": {
+      "count": 2,
+      "h1_font_size": {
+        "count": 2,
+        "median": 50,
+        "p25": 50,
+        "p75": 64,
+        "mode": 50,
+        "min": 50,
+        "max": 64,
+        "mean": 57,
+        "tailwind_median": "~text-5xl (50px)",
+        "tailwind_p25": "~text-5xl (50px)",
+        "tailwind_p75": "~text-6xl (64px)"
+      },
+      "body_font_size": {
+        "count": 2,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 16,
+        "max": 16,
+        "mean": 16,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 50,
+      "has_animation_rate": 0,
+      "hero_type": {
+        "minimal": {
+          "count": 2,
+          "percentage": 100
+        }
+      }
+    },
+    "ai-productivity": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 14,
+        "p25": 14,
+        "p75": 14,
+        "mode": 14,
+        "min": 14,
+        "max": 14,
+        "mean": 14,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "text-sm",
+        "tailwind_p75": "text-sm"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 14,
+        "p25": 14,
+        "p75": 14,
+        "mode": 14,
+        "min": 14,
+        "max": 14,
+        "mean": 14,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "text-sm",
+        "tailwind_p75": "text-sm"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "center": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "ai-creative": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 32,
+        "p25": 32,
+        "p75": 32,
+        "mode": 32,
+        "min": 32,
+        "max": 32,
+        "mean": 32,
+        "tailwind_median": "~text-3xl (32px)",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-3xl (32px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 14,
+        "p25": 14,
+        "p75": 14,
+        "mode": 14,
+        "min": 14,
+        "max": 14,
+        "mean": 14,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "text-sm",
+        "tailwind_p75": "text-sm"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "marketing": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 65,
+        "p25": 65,
+        "p75": 65,
+        "mode": 65,
+        "min": 65,
+        "max": 65,
+        "mean": 65,
+        "tailwind_median": "~text-6xl (65px)",
+        "tailwind_p25": "~text-6xl (65px)",
+        "tailwind_p75": "~text-6xl (65px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 16,
+        "max": 16,
+        "mean": 16,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 0,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "digital-platform": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 92.5714,
+        "p25": 92.5714,
+        "p75": 92.5714,
+        "mode": 92.5714,
+        "min": 92.5714,
+        "max": 92.5714,
+        "mean": 92.57,
+        "tailwind_median": "~text-8xl (92.5714px)",
+        "tailwind_p25": "~text-8xl (92.5714px)",
+        "tailwind_p75": "~text-8xl (92.5714px)"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 10,
+        "p25": 10,
+        "p75": 10,
+        "mode": 10,
+        "min": 10,
+        "max": 10,
+        "mean": 10,
+        "tailwind_median": "~text-xs (10px)",
+        "tailwind_p25": "~text-xs (10px)",
+        "tailwind_p75": "~text-xs (10px)"
+      },
+      "is_dark_theme_rate": 100,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "agency": {
+      "count": 2,
+      "h1_font_size": {
+        "count": 2,
+        "median": 36,
+        "p25": 36,
+        "p75": 140,
+        "mode": 36,
+        "min": 36,
+        "max": 140,
+        "mean": 88,
+        "tailwind_median": "text-4xl",
+        "tailwind_p25": "text-4xl",
+        "tailwind_p75": "~text-9xl (140px)"
+      },
+      "body_font_size": {
+        "count": 2,
+        "median": 14,
+        "p25": 14,
+        "p75": 16,
+        "mode": 14,
+        "min": 14,
+        "max": 16,
+        "mean": 15,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "text-sm",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 50,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "minimal": {
           "count": 1,
           "percentage": 50
         },
@@ -1685,20 +1923,20 @@
         }
       }
     },
-    "design-marketplace": {
+    "food-beverage": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
-        "median": 80,
-        "p25": 80,
-        "p75": 80,
-        "mode": 80,
-        "min": 80,
-        "max": 80,
-        "mean": 80,
-        "tailwind_median": "~text-7xl (80px)",
-        "tailwind_p25": "~text-7xl (80px)",
-        "tailwind_p75": "~text-7xl (80px)"
+        "median": 16,
+        "p25": 16,
+        "p75": 16,
+        "mode": 16,
+        "min": 16,
+        "max": 16,
+        "mean": 16,
+        "tailwind_median": "text-base",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-base"
       },
       "body_font_size": {
         "count": 1,
@@ -1714,31 +1952,31 @@
         "tailwind_p75": "text-base"
       },
       "is_dark_theme_rate": 100,
-      "has_animation_rate": 100,
+      "has_animation_rate": 0,
       "hero_type": {
-        "split": {
+        "fullscreen": {
           "count": 1,
           "percentage": 100
         }
       }
     },
-    "design": {
-      "count": 1,
+    "design-resource": {
+      "count": 3,
       "h1_font_size": {
-        "count": 1,
-        "median": 38,
-        "p25": 38,
-        "p75": 38,
-        "mode": 38,
-        "min": 38,
-        "max": 38,
-        "mean": 38,
-        "tailwind_median": "~text-4xl (38px)",
-        "tailwind_p25": "~text-4xl (38px)",
-        "tailwind_p75": "~text-4xl (38px)"
+        "count": 3,
+        "median": 52.8,
+        "p25": 36,
+        "p75": 84,
+        "mode": 36,
+        "min": 36,
+        "max": 84,
+        "mean": 57.6,
+        "tailwind_median": "~text-5xl (52.8px)",
+        "tailwind_p25": "text-4xl",
+        "tailwind_p75": "~text-7xl (84px)"
       },
       "body_font_size": {
-        "count": 1,
+        "count": 3,
         "median": 16,
         "p25": 16,
         "p75": 16,
@@ -1750,29 +1988,70 @@
         "tailwind_p25": "text-base",
         "tailwind_p75": "text-base"
       },
-      "is_dark_theme_rate": 100,
-      "has_animation_rate": 100,
+      "is_dark_theme_rate": 33.3,
+      "has_animation_rate": 66.7,
       "hero_type": {
-        "split": {
+        "minimal": {
+          "count": 2,
+          "percentage": 66.7
+        },
+        "fullscreen": {
           "count": 1,
+          "percentage": 33.3
+        }
+      }
+    },
+    "design-gallery": {
+      "count": 2,
+      "h1_font_size": {
+        "count": 2,
+        "median": 13,
+        "p25": 13,
+        "p75": 144,
+        "mode": 13,
+        "min": 13,
+        "max": 144,
+        "mean": 78.5,
+        "tailwind_median": "~text-xs (13px)",
+        "tailwind_p25": "~text-xs (13px)",
+        "tailwind_p75": "~text-9xl (144px)"
+      },
+      "body_font_size": {
+        "count": 2,
+        "median": 13,
+        "p25": 13,
+        "p75": 13,
+        "mode": 13,
+        "min": 13,
+        "max": 13,
+        "mean": 13,
+        "tailwind_median": "~text-xs (13px)",
+        "tailwind_p25": "~text-xs (13px)",
+        "tailwind_p75": "~text-xs (13px)"
+      },
+      "is_dark_theme_rate": 0,
+      "has_animation_rate": 0,
+      "hero_type": {
+        "minimal": {
+          "count": 2,
           "percentage": 100
         }
       }
     },
-    "ecommerce": {
+    "ai-email": {
       "count": 1,
       "h1_font_size": {
         "count": 1,
-        "median": 48,
-        "p25": 48,
-        "p75": 48,
-        "mode": 48,
-        "min": 48,
-        "max": 48,
-        "mean": 48,
-        "tailwind_median": "text-5xl",
-        "tailwind_p25": "text-5xl",
-        "tailwind_p75": "text-5xl"
+        "median": 64,
+        "p25": 64,
+        "p75": 64,
+        "mode": 64,
+        "min": 64,
+        "max": 64,
+        "mean": 64,
+        "tailwind_median": "~text-6xl (64px)",
+        "tailwind_p25": "~text-6xl (64px)",
+        "tailwind_p75": "~text-6xl (64px)"
       },
       "body_font_size": {
         "count": 1,
@@ -1788,7 +2067,126 @@
         "tailwind_p75": "text-base"
       },
       "is_dark_theme_rate": 0,
-      "has_animation_rate": 0,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 1,
+          "percentage": 100
+        }
+      }
+    },
+    "insurtech": {
+      "count": 3,
+      "h1_font_size": {
+        "count": 3,
+        "median": 48,
+        "p25": 32,
+        "p75": 55,
+        "mode": 32,
+        "min": 32,
+        "max": 55,
+        "mean": 45,
+        "tailwind_median": "text-5xl",
+        "tailwind_p25": "~text-3xl (32px)",
+        "tailwind_p75": "~text-6xl (55px)"
+      },
+      "body_font_size": {
+        "count": 3,
+        "median": 14,
+        "p25": 10,
+        "p75": 16,
+        "mode": 10,
+        "min": 10,
+        "max": 16,
+        "mean": 13.33,
+        "tailwind_median": "text-sm",
+        "tailwind_p25": "~text-xs (10px)",
+        "tailwind_p75": "text-base"
+      },
+      "is_dark_theme_rate": 33.3,
+      "has_animation_rate": 33.3,
+      "hero_type": {
+        "minimal": {
+          "count": 1,
+          "percentage": 33.3
+        },
+        "split": {
+          "count": 1,
+          "percentage": 33.3
+        },
+        "fullscreen": {
+          "count": 1,
+          "percentage": 33.3
+        }
+      }
+    },
+    "regtech": {
+      "count": 3,
+      "h1_font_size": {
+        "count": 3,
+        "median": 72,
+        "p25": 48,
+        "p75": 129.6,
+        "mode": 48,
+        "min": 48,
+        "max": 129.6,
+        "mean": 83.2,
+        "tailwind_median": "text-7xl",
+        "tailwind_p25": "text-5xl",
+        "tailwind_p75": "~text-9xl (129.6px)"
+      },
+      "body_font_size": {
+        "count": 3,
+        "median": 18,
+        "p25": 16,
+        "p75": 18,
+        "mode": 18,
+        "min": 16,
+        "max": 18,
+        "mean": 17.33,
+        "tailwind_median": "text-lg",
+        "tailwind_p25": "text-base",
+        "tailwind_p75": "text-lg"
+      },
+      "is_dark_theme_rate": 33.3,
+      "has_animation_rate": 100,
+      "hero_type": {
+        "fullscreen": {
+          "count": 3,
+          "percentage": 100
+        }
+      }
+    },
+    "web3": {
+      "count": 1,
+      "h1_font_size": {
+        "count": 1,
+        "median": 128,
+        "p25": 128,
+        "p75": 128,
+        "mode": 128,
+        "min": 128,
+        "max": 128,
+        "mean": 128,
+        "tailwind_median": "text-9xl",
+        "tailwind_p25": "text-9xl",
+        "tailwind_p75": "text-9xl"
+      },
+      "body_font_size": {
+        "count": 1,
+        "median": 24,
+        "p25": 24,
+        "p75": 24,
+        "mode": 24,
+        "min": 24,
+        "max": 24,
+        "mean": 24,
+        "tailwind_median": "text-2xl",
+        "tailwind_p25": "text-2xl",
+        "tailwind_p75": "text-2xl"
+      },
+      "is_dark_theme_rate": 0,
+      "has_animation_rate": 100,
       "hero_type": {
         "fullscreen": {
           "count": 1,

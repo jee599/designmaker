@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>027-v2 — Gradient Everything</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family:'DM Sans',sans-serif; background:#ffffff; color:#1a1a2e; overflow-x:hidden; }
+    h1,h2,h3,h4 { font-family:'Space Grotesk',sans-serif; font-weight:700; }
+
+    /* Full section bg gradients (soft) */
+    .bg-grad-hero { background:linear-gradient(135deg,#fff5f7 0%,#fef3c7 30%,#fce7f3 60%,#ede9fe 100%); }
+    .bg-grad-features { background:linear-gradient(180deg,#faf5ff 0%,#fdf2f8 50%,#fff7ed 100%); }
+    .bg-grad-social { background:linear-gradient(135deg,#fef9c3 0%,#fce7f3 50%,#ede9fe 100%); }
+    .bg-grad-steps { background:linear-gradient(180deg,#ffffff 0%,#f0fdf4 30%,#eff6ff 60%,#faf5ff 100%); }
+    .bg-grad-cta { background:linear-gradient(135deg,#fdf2f8 0%,#ede9fe 50%,#eff6ff 100%); }
+
+    /* Gradient text */
+    .gradient-text { background:linear-gradient(135deg,#ec4899,#f97316); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .gradient-text-cool { background:linear-gradient(135deg,#8b5cf6,#3b82f6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* Gradient borders */
+    .gradient-border-card {
+      position:relative; background:#fff; border-radius:1rem; overflow:hidden;
+    }
+    .gradient-border-card::before {
+      content:''; position:absolute; inset:0; border-radius:1rem; padding:2px;
+      background:linear-gradient(135deg,#ec4899,#f97316,#eab308);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none;
+    }
+
+    /* Gradient shadows */
+    .gradient-shadow { box-shadow:0 8px 30px rgba(236,72,153,0.15),0 4px 15px rgba(249,115,22,0.1); }
+    .gradient-shadow-lg { box-shadow:0 20px 60px rgba(236,72,153,0.2),0 8px 30px rgba(249,115,22,0.15); }
+
+    /* Gradient button */
+    .btn-gradient { background:linear-gradient(135deg,#ec4899,#f97316); color:white; padding:0.875rem 2rem; border-radius:0.75rem; font-weight:600; transition:transform 0.3s,box-shadow 0.3s; box-shadow:0 4px 20px rgba(236,72,153,0.25); }
+    .btn-gradient:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(236,72,153,0.35); }
+    .btn-secondary { border:2px solid transparent; background-image:linear-gradient(white,white),linear-gradient(135deg,#ec4899,#f97316); background-origin:border-box; background-clip:padding-box,border-box; color:#374151; padding:0.875rem 2rem; border-radius:0.75rem; font-weight:500; transition:all 0.3s; }
+    .btn-secondary:hover { box-shadow:0 4px 15px rgba(236,72,153,0.15); }
+
+    /* Gradient nav */
+    .nav-gradient { background:rgba(255,255,255,0.85); backdrop-filter:blur(16px); border-bottom:1px solid rgba(236,72,153,0.08); }
+
+    /* Pill badge with gradient bg */
+    .pill-badge { background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(249,115,22,0.1)); color:#ec4899; font-size:0.75rem; padding:0.375rem 1rem; border-radius:9999px; font-weight:500; }
+
+    /* Feature card with gradient top border */
+    .feature-card { background:#fff; border-radius:1rem; transition:transform 0.4s,box-shadow 0.4s; border:1px solid rgba(236,72,153,0.08); }
+    .feature-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(236,72,153,0.12); }
+
+    /* Gradient check icon */
+    .check-icon { width:1.25rem; height:1.25rem; border-radius:50%; background:linear-gradient(135deg,#ec4899,#f97316); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    /* Mockup card */
+    .mockup-card { background:#ffffff; border:2px solid transparent; border-radius:0.75rem; box-shadow:0 8px 30px rgba(0,0,0,0.06); background-image:linear-gradient(white,white),linear-gradient(135deg,rgba(236,72,153,0.2),rgba(249,115,22,0.2)); background-origin:border-box; background-clip:padding-box,border-box; }
+
+    /* Floating animation */
+    @keyframes floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .float-1 { animation:floatUp 4s ease-in-out infinite; }
+    .float-2 { animation:floatUp 4s ease-in-out infinite 1s; }
+
+    /* Bento card with gradient visual */
+    .bento-card { background:#fff; border-radius:1rem; overflow:hidden; transition:transform 0.4s,box-shadow 0.4s; }
+    .bento-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(236,72,153,0.12); }
+    .bento-visual { padding:1.25rem; min-height:10rem; position:relative; overflow:hidden; }
+    .bento-meta { padding:1rem 1.25rem; }
+
+    /* Gradient progress bar */
+    .gradient-progress { background:linear-gradient(135deg,#ec4899,#f97316); transition:width 1s ease; }
+
+    /* Typing dots */
+    @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+    .typing-dot { width:5px; height:5px; border-radius:50%; background:linear-gradient(135deg,#ec4899,#f97316); display:inline-block; }
+    .bento-card:hover .typing-dot:nth-child(1){animation:blink 1.4s infinite 0s}
+    .bento-card:hover .typing-dot:nth-child(2){animation:blink 1.4s infinite 0.2s}
+    .bento-card:hover .typing-dot:nth-child(3){animation:blink 1.4s infinite 0.4s}
+
+    /* Chart bar */
+    .chart-bar { transition:height 0.6s ease 0.1s; }
+    .bento-card:hover .chart-bar { height:var(--hover-h) !important; }
+
+    /* Reveal */
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s,transform 0.6s; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-delay-1{transition-delay:0.15s} .reveal-delay-2{transition-delay:0.3s}
+
+    /* Logo placeholder with gradient border */
+    .logo-placeholder { width:3rem; height:3rem; border-radius:0.75rem; display:flex; align-items:center; justify-content:center; font-size:0.625rem; font-weight:600; color:#9ca3af; border:2px solid transparent; background-image:linear-gradient(#f9fafb,#f9fafb),linear-gradient(135deg,rgba(236,72,153,0.3),rgba(249,115,22,0.3)); background-origin:border-box; background-clip:padding-box,border-box; transition:transform 0.3s; }
+    .logo-placeholder:hover { transform:translateY(-2px); }
+  </style>
+  <script>
+    tailwind.config = { theme:{ extend:{ colors:{ saas:{ pink:'#ec4899', orange:'#f97316', dark:'#1a1a2e', muted:'#6b7280' } } } } }
+  </script>
+</head>
+<body>
+
+  <!-- Navigation with subtle gradient bottom -->
+  <nav class="nav-gradient fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="text-xl font-bold text-saas-dark"><span class="gradient-text">super</span>flow</a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Features</a>
+          <a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Pricing</a>
+          <a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Docs</a>
+          <a href="#" class="btn-gradient text-sm" style="padding:0.5rem 1.25rem;">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero — full gradient bg section -->
+  <section class="bg-grad-hero pt-32 pb-20 md:pt-44 md:pb-32 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="reveal mb-6"><span class="pill-badge inline-block">Now in beta — join [N] teams</span></div>
+      <h1 class="reveal text-5xl md:text-6xl lg:text-7xl text-saas-dark mb-6 leading-tight" style="letter-spacing:-0.03em;">
+        Work moves <span class="gradient-text">faster</span><br>when tools talk
+      </h1>
+      <p class="reveal text-lg text-saas-muted max-w-xl mx-auto mb-10 leading-relaxed">
+        One workspace that connects your tasks, docs, and conversations. Stop switching between [N] different apps.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="btn-gradient">Start for Free</a>
+        <a href="#" class="btn-secondary">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Mockup — gradient borders everywhere -->
+  <section class="pb-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="reveal relative">
+        <div class="mockup-card p-6 md:p-8 gradient-shadow-lg">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+            <span class="text-xs text-gray-400 ml-2">superflow — workspace</span>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="col-span-1 rounded-lg p-4" style="background:linear-gradient(135deg,#fdf2f8,#fef9c3);">
+              <p class="text-xs font-semibold text-saas-dark mb-3">Projects</p>
+              <div class="space-y-2">
+                <div class="bg-white rounded-md p-2 text-xs text-gray-600 gradient-shadow">Q1 Launch</div>
+                <div class="bg-white rounded-md p-2 text-xs font-medium gradient-shadow" style="color:#ec4899; border:1px solid rgba(236,72,153,0.2);">Design Sprint</div>
+                <div class="bg-white rounded-md p-2 text-xs text-gray-600 gradient-shadow">API v2</div>
+              </div>
+            </div>
+            <div class="col-span-2 rounded-lg p-4" style="background:linear-gradient(135deg,#ede9fe,#eff6ff);">
+              <p class="text-xs font-semibold text-saas-dark mb-3">Design Sprint — Tasks</p>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 bg-white rounded-md p-2 gradient-shadow">
+                  <div class="check-icon"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                  <span class="text-xs text-gray-500 line-through">User research synthesis</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white rounded-md p-2 gradient-shadow">
+                  <div class="w-5 h-5 rounded-full" style="border:2px solid transparent; background-image:linear-gradient(white,white),linear-gradient(135deg,#ec4899,#f97316); background-origin:border-box; background-clip:padding-box,border-box;"></div>
+                  <span class="text-xs text-saas-dark">Wireframe review with eng</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white rounded-md p-2 gradient-shadow">
+                  <div class="w-5 h-5 rounded-full border-2 border-gray-200"></div>
+                  <span class="text-xs text-saas-dark">Prototype handoff</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating cards with gradient borders -->
+        <div class="absolute -right-4 top-8 float-1 hidden lg:block">
+          <div class="gradient-border-card p-3 w-48 gradient-shadow">
+            <p class="text-xs text-gray-400 mb-1">Notification</p>
+            <p class="text-xs text-saas-dark font-medium">3 comments on Wireframe</p>
+          </div>
+        </div>
+        <div class="absolute -left-4 bottom-12 float-2 hidden lg:block">
+          <div class="gradient-border-card p-3 w-44 gradient-shadow">
+            <p class="text-xs text-gray-400 mb-1">Status</p>
+            <p class="text-xs font-medium gradient-text">Sprint: Day 3 of 5</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Bento Grid — all cards have gradient visuals -->
+  <section class="bg-grad-features py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-4xl md:text-5xl text-saas-dark mb-4" style="letter-spacing:-0.02em;">Everything <span class="gradient-text">connects</span></h2>
+        <p class="reveal text-base text-saas-muted max-w-lg mx-auto">Tasks, docs, and conversations in one place.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Task list card -->
+        <div class="reveal bento-card md:col-span-2 gradient-border-card">
+          <div class="bento-visual" style="background:linear-gradient(135deg,#fdf2f8,#fef9c3);">
+            <div class="space-y-2.5">
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 gradient-shadow">
+                <div class="check-icon" style="width:18px;height:18px;"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                <span class="text-xs text-gray-400 line-through flex-1">User research synthesis</span>
+                <span class="text-xs px-2 py-0.5 rounded-full text-green-600 font-medium" style="background:linear-gradient(135deg,#d1fae5,#ecfdf5);">Done</span>
+              </div>
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 gradient-shadow" style="border:1px solid rgba(236,72,153,0.15);">
+                <div class="w-4.5 h-4.5 rounded-full flex-shrink-0" style="width:18px;height:18px;border:2px solid transparent;background-image:linear-gradient(white,white),linear-gradient(135deg,#ec4899,#f97316);background-origin:border-box;background-clip:padding-box,border-box;"></div>
+                <span class="text-xs text-saas-dark font-medium flex-1">Wireframe review</span>
+                <span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:linear-gradient(135deg,#fce7f3,#fef3c7);color:#ec4899;">In progress</span>
+              </div>
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 gradient-shadow">
+                <div class="w-4.5 h-4.5 rounded-full border-2 border-gray-200 flex-shrink-0" style="width:18px;height:18px;"></div>
+                <span class="text-xs text-saas-dark flex-1">Prototype handoff</span>
+              </div>
+            </div>
+            <div class="mt-4 flex items-center gap-2">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div class="gradient-progress h-full rounded-full" style="width:35%;"></div>
+              </div>
+              <span class="text-xs text-gray-400">1/3</span>
+            </div>
+          </div>
+          <div class="bento-meta"><p class="text-sm font-semibold text-saas-dark">Unified Tasks</p><p class="text-xs text-saas-muted mt-0.5">Drag, assign, and track from one list</p></div>
+        </div>
+
+        <!-- Chat card -->
+        <div class="reveal reveal-delay-1 bento-card gradient-border-card">
+          <div class="bento-visual" style="min-height:11rem;background:linear-gradient(135deg,#ede9fe,#eff6ff);">
+            <div class="space-y-3">
+              <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full flex-shrink-0 mt-0.5" style="background:linear-gradient(135deg,#f9a8d4,#fdba74);"></div>
+                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 gradient-shadow max-w-[85%]"><p class="text-xs text-saas-dark">Updated the hero section.</p></div>
+              </div>
+              <div class="flex items-start gap-2 justify-end">
+                <div class="rounded-lg rounded-tr-none px-3 py-2 gradient-shadow max-w-[85%]" style="background:linear-gradient(135deg,#fdf2f8,#fff7ed);"><p class="text-xs text-saas-dark">Looks good! Ship it.</p></div>
+                <div class="w-6 h-6 rounded-full flex-shrink-0 mt-0.5" style="background:linear-gradient(135deg,#93c5fd,#a78bfa);"></div>
+              </div>
+              <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full flex-shrink-0 mt-0.5" style="background:linear-gradient(135deg,#6ee7b7,#5eead4);"></div>
+                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2.5 gradient-shadow">
+                  <div class="flex gap-1"><span class="typing-dot" style="opacity:0.3"></span><span class="typing-dot" style="opacity:0.3"></span><span class="typing-dot" style="opacity:0.3"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta"><p class="text-sm font-semibold text-saas-dark">Smart Threads</p><p class="text-xs text-saas-muted mt-0.5">Context-linked conversations</p></div>
+        </div>
+
+        <!-- Analytics card -->
+        <div class="reveal bento-card gradient-border-card">
+          <div class="bento-visual flex flex-col justify-end" style="min-height:11rem;background:linear-gradient(135deg,#fef9c3,#fce7f3);">
+            <p class="text-xs text-gray-400 mb-1">Weekly active users</p>
+            <p class="text-2xl font-bold gradient-text">↑ 23%</p>
+            <div class="flex items-end gap-1.5 mt-4 h-16">
+              <div class="chart-bar flex-1 rounded-sm" style="height:30%;--hover-h:40%;background:linear-gradient(to top,#fce7f3,#fdf2f8);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:55%;--hover-h:65%;background:linear-gradient(to top,#fbcfe8,#fce7f3);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:50%;--hover-h:70%;background:linear-gradient(to top,#f9a8d4,#fbcfe8);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:80%;--hover-h:90%;background:linear-gradient(135deg,#ec4899,#f97316);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:75%;--hover-h:85%;background:linear-gradient(135deg,#ec4899,#f97316);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:95%;--hover-h:100%;background:linear-gradient(135deg,#ec4899,#f97316);"></div>
+            </div>
+          </div>
+          <div class="bento-meta"><p class="text-sm font-semibold text-saas-dark">Live Analytics</p><p class="text-xs text-saas-muted mt-0.5">Real-time metrics</p></div>
+        </div>
+
+        <!-- Kanban card -->
+        <div class="reveal reveal-delay-1 bento-card md:col-span-2 gradient-border-card">
+          <div class="bento-visual" style="background:linear-gradient(135deg,#ede9fe,#fdf2f8);">
+            <div class="grid grid-cols-3 gap-3">
+              <div><p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2.5">To Do</p>
+                <div class="space-y-2">
+                  <div class="bg-white rounded-lg p-2.5 gradient-shadow"><p class="text-xs text-saas-dark font-medium">API endpoint design</p></div>
+                  <div class="bg-white rounded-lg p-2.5 gradient-shadow"><p class="text-xs text-saas-dark font-medium">Write test cases</p></div>
+                </div>
+              </div>
+              <div><p class="text-xs font-semibold uppercase tracking-wider mb-2.5 gradient-text">In Progress</p>
+                <div class="space-y-2">
+                  <div class="bg-white rounded-lg p-2.5 gradient-shadow" style="border:1px solid rgba(236,72,153,0.15);"><p class="text-xs text-saas-dark font-medium">Dashboard redesign</p></div>
+                </div>
+              </div>
+              <div><p class="text-xs font-semibold text-green-500 uppercase tracking-wider mb-2.5">Done</p>
+                <div class="space-y-2">
+                  <div class="bg-white rounded-lg p-2.5 gradient-shadow opacity-60"><p class="text-xs text-gray-400 line-through font-medium">Auth flow</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta"><p class="text-sm font-semibold text-saas-dark">Board View</p><p class="text-xs text-saas-muted mt-0.5">Kanban that syncs with your tasks</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Logos with gradient borders -->
+  <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="reveal text-xs tracking-widest uppercase text-saas-muted mb-8">Works with the tools you already use</p>
+      <div class="reveal flex flex-wrap justify-center gap-4">
+        <div class="logo-placeholder">Slack</div><div class="logo-placeholder">GH</div><div class="logo-placeholder">Fig</div><div class="logo-placeholder">GCal</div><div class="logo-placeholder">Lin</div><div class="logo-placeholder">Not</div><div class="logo-placeholder">Jira</div><div class="logo-placeholder">+[N]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof — gradient bg section -->
+  <section class="bg-grad-social py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="reveal text-3xl md:text-4xl text-saas-dark text-center mb-16" style="letter-spacing:-0.02em;">Teams that <span class="gradient-text">shipped</span> with us</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="reveal gradient-border-card p-8 gradient-shadow">
+          <p class="text-sm text-saas-dark leading-relaxed mb-6">"We had tasks in Asana, docs in Notion, and chat in Slack. Every meeting started with 'wait, where is that link?' We moved to Superflow and that question just stopped being asked."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full" style="background:linear-gradient(135deg,#f9a8d4,#fdba74);"></div>
+            <div><p class="text-sm font-medium text-saas-dark">[Your customer]</p><p class="text-xs text-saas-muted">[Role], [Company]</p></div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 gradient-border-card p-8 gradient-shadow">
+          <p class="text-sm text-saas-dark leading-relaxed mb-6">"I was skeptical of another productivity tool. But the threaded docs changed how our remote team works — decisions happen in context now, not in a random DM."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full" style="background:linear-gradient(135deg,#fdba74,#fda4af);"></div>
+            <div><p class="text-sm font-medium text-saas-dark">[Your customer]</p><p class="text-xs text-saas-muted">[Role], [Company]</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works — gradient bg section -->
+  <section class="bg-grad-steps py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14">
+        <h2 class="reveal text-4xl md:text-5xl text-saas-dark mb-4" style="letter-spacing:-0.02em;">Up and running in <span class="gradient-text">minutes</span></h2>
+        <p class="reveal text-base text-saas-muted max-w-md mx-auto">No migration headache. Import from your existing tools or start fresh.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="reveal text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(249,115,22,0.1));">
+            <span class="gradient-text text-lg font-bold">1</span>
+          </div>
+          <h3 class="text-lg text-saas-dark mb-2">Connect your tools</h3>
+          <p class="text-sm text-saas-muted leading-relaxed">One-click integrations with Slack, GitHub, Google Calendar, and [N] more.</p>
+        </div>
+        <div class="reveal reveal-delay-1 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(249,115,22,0.1));">
+            <span class="gradient-text text-lg font-bold">2</span>
+          </div>
+          <h3 class="text-lg text-saas-dark mb-2">Set up your workspace</h3>
+          <p class="text-sm text-saas-muted leading-relaxed">Create projects, invite teammates, and organize by team or initiative.</p>
+        </div>
+        <div class="reveal reveal-delay-2 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(249,115,22,0.1));">
+            <span class="gradient-text text-lg font-bold">3</span>
+          </div>
+          <h3 class="text-lg text-saas-dark mb-2">Ship together</h3>
+          <p class="text-sm text-saas-muted leading-relaxed">Discuss in threads, track in boards, write in docs — all in the same window.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA — gradient bg -->
+  <section class="bg-grad-cta py-28 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="reveal text-4xl md:text-5xl text-saas-dark mb-4" style="letter-spacing:-0.02em;">Start free. Scale when ready.</h2>
+      <p class="reveal text-base text-saas-muted mb-10 max-w-md mx-auto leading-relaxed">Free for teams up to [N]. No credit card required.</p>
+      <div class="reveal flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="btn-gradient">Get Started Free</a>
+        <a href="#" class="btn-secondary">Compare Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6" style="border-top:2px solid transparent;background-image:linear-gradient(white,white),linear-gradient(90deg,#ec4899,#f97316,#eab308);background-origin:border-box;background-clip:padding-box,border-box;">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div><p class="text-lg font-bold text-saas-dark mb-4"><span class="gradient-text">super</span>flow</p><p class="text-sm text-saas-muted">Work, connected.</p></div>
+        <div><p class="text-xs font-semibold text-saas-dark uppercase tracking-wider mb-4">Product</p><ul class="space-y-2"><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Features</a></li><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Pricing</a></li><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Changelog</a></li></ul></div>
+        <div><p class="text-xs font-semibold text-saas-dark uppercase tracking-wider mb-4">Resources</p><ul class="space-y-2"><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Documentation</a></li><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">API Reference</a></li></ul></div>
+        <div><p class="text-xs font-semibold text-saas-dark uppercase tracking-wider mb-4">Company</p><ul class="space-y-2"><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">About</a></li><li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Careers</a></li></ul></div>
+      </div>
+      <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4" style="border-top:1px solid rgba(236,72,153,0.1);">
+        <p class="text-xs text-saas-muted">Design reference 027-v2 — Gradient Everything</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observerOptions={threshold:0.1,rootMargin:'0px 0px -40px 0px'};
+    const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');}else{entry.target.classList.remove('visible');}});},observerOptions);
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>
