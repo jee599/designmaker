@@ -19,9 +19,15 @@ const SKILL_PATH = join(
   "SKILL.md"
 );
 
+const MODEL_MAP: Record<string, string> = {
+  haiku: "claude-haiku-4-5-20251001",
+  sonnet: "claude-sonnet-4-6-20250627",
+};
+
 interface ImproveRequest {
   url?: string;
   code?: string;
+  model?: "haiku" | "sonnet";
 }
 
 async function loadAllReferenceSummaries(): Promise<string> {
@@ -43,7 +49,8 @@ async function loadAllReferenceSummaries(): Promise<string> {
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as ImproveRequest;
-    const { url, code } = body;
+    const { url, code, model: modelChoice } = body;
+    const modelId = MODEL_MAP[modelChoice ?? "sonnet"] ?? MODEL_MAP.sonnet;
 
     if (!url && !code) {
       return Response.json(
@@ -110,7 +117,7 @@ ${skillContent}`;
       async start(controller) {
         try {
           const messageStream = client.messages.stream({
-            model: "claude-haiku-4-5-20251001",
+            model: modelId,
             max_tokens: 8192,
             system: systemPrompt,
             messages: [

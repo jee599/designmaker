@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { type ModelChoice, getStoredModel, MODEL_CHANGE_EVENT } from "../components/ModelSwitcher";
 
 type InputTab = "url" | "code";
 
@@ -104,6 +105,14 @@ export default function ImprovePage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [showImproved, setShowImproved] = useState(false);
+  const [model, setModel] = useState<ModelChoice>("sonnet");
+
+  useEffect(() => {
+    setModel(getStoredModel());
+    const handler = (e: Event) => setModel((e as CustomEvent).detail as ModelChoice);
+    window.addEventListener(MODEL_CHANGE_EVENT, handler);
+    return () => window.removeEventListener(MODEL_CHANGE_EVENT, handler);
+  }, []);
 
   const handleAnalyze = async () => {
     const input = tab === "url" ? url.trim() : code.trim();
@@ -121,7 +130,7 @@ export default function ImprovePage() {
       const response = await fetch("/api/improve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(tab === "url" ? { url: input } : { code: input }),
+        body: JSON.stringify(tab === "url" ? { url: input, model } : { code: input, model }),
       });
 
       if (!response.ok) {
@@ -225,7 +234,7 @@ export default function ImprovePage() {
                 disabled={loading}
                 className="shrink-0 rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               >
-                {loading ? "analyzing..." : "$ analyze"}
+                {loading ? "analyzing..." : `$ analyze --model ${model}`}
               </button>
             </div>
           )}
@@ -245,7 +254,7 @@ export default function ImprovePage() {
                 disabled={loading}
                 className="rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               >
-                {loading ? "analyzing..." : "$ analyze"}
+                {loading ? "analyzing..." : `$ analyze --model ${model}`}
               </button>
             </div>
           )}

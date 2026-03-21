@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { type ModelChoice, getStoredModel, MODEL_CHANGE_EVENT } from "../components/ModelSwitcher";
 
 const REFERENCES = [
   { id: "001-clean-minimal", name: "Clean Minimal", accent: "#000000", tone: "light" },
@@ -94,7 +95,15 @@ function GeneratePageInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [outputTab, setOutputTab] = useState<"code" | "preview">("preview");
+  const [model, setModel] = useState<ModelChoice>("sonnet");
   const outputRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setModel(getStoredModel());
+    const handler = (e: Event) => setModel((e as CustomEvent).detail as ModelChoice);
+    window.addEventListener(MODEL_CHANGE_EVENT, handler);
+    return () => window.removeEventListener(MODEL_CHANGE_EVENT, handler);
+  }, []);
 
   useEffect(() => {
     const ref = searchParams.get("ref");
@@ -132,6 +141,7 @@ function GeneratePageInner() {
           description: description.trim(),
           brandColor,
           format,
+          model,
         }),
       });
 
@@ -307,7 +317,7 @@ function GeneratePageInner() {
                 generating...
               </span>
             ) : (
-              "$ generate"
+              `$ generate --model ${model}`
             )}
           </button>
         </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
+import ModelSwitcher from "./components/ModelSwitcher";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -45,6 +46,7 @@ export default function RootLayout({
               <span className="text-emerald-500 animate-cursor-blink">_</span>
             </Link>
             <div className="flex items-center gap-6 font-[family-name:var(--font-jetbrains-mono)] text-sm">
+              <ModelSwitcher />
               <Link
                 href="/"
                 className="text-zinc-400 transition-colors hover:text-emerald-400"
