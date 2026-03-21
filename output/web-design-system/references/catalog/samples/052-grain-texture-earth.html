@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>052 — Grain Texture Earth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: #F5F0EB;
+      color: #2C2418;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: 'Fraunces', serif; }
+
+    /* Grain overlay */
+    .grain-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+    }
+
+    /* Wavy divider */
+    .wavy-divider {
+      width: 100%;
+      height: 40px;
+      overflow: hidden;
+    }
+    .wavy-divider svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* CTA pill */
+    .btn-sage {
+      background: #5E7A5E;
+      color: #FFFFFF;
+      padding: 14px 36px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+      display: inline-block;
+    }
+    .btn-sage:hover { background: #4A664A; }
+    .btn-sage-outline {
+      background: transparent;
+      color: #5E7A5E;
+      padding: 14px 36px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 2px solid #5E7A5E;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    .btn-sage-outline:hover { background: #5E7A5E; color: #FFFFFF; }
+
+    /* Feature card */
+    .earth-card {
+      background: #EDE7DF;
+      border: 1px solid #D4C9BC;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .earth-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(44,36,24,0.08);
+    }
+
+    /* Image placeholder */
+    .img-earth {
+      background: #EDE7DF;
+      border: 1px solid #D4C9BC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      border-radius: 8px;
+    }
+
+    /* Botanical SVG */
+    .botanical-line {
+      stroke: #C4B8A8;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    /* Ingredient pill */
+    .ingredient-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 9999px;
+      border: 1px solid #D4C9BC;
+      font-size: 0.875rem;
+      color: #6B5E4F;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Grain SVG filter overlay -->
+  <svg class="grain-overlay">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"/>
+  </svg>
+
+  <!-- Nav -->
+  <nav style="border-bottom: 1px solid #D4C9BC;">
+    <div class="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+      <span class="text-xl" style="font-family: 'Fraunces', serif; font-weight: 600;">Terraverde</span>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#" class="text-sm" style="color: #6B5E4F;">Philosophy</a>
+        <a href="#" class="text-sm" style="color: #6B5E4F;">Products</a>
+        <a href="#" class="text-sm" style="color: #6B5E4F;">Journal</a>
+      </div>
+      <a href="#" class="btn-sage text-sm py-2 px-5">Shop Now</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="py-28">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <h1 class="text-5xl md:text-7xl mb-6" style="font-weight: 600; letter-spacing: -0.02em; line-height: 1.1;">
+            Rooted in<br>what matters
+          </h1>
+          <p class="text-lg mb-8" style="color: #6B5E4F; line-height: 1.8;">
+            Skincare that starts with soil, not a lab. Every ingredient traced back to its source, every formula tested on real skin over real time.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="btn-sage">Explore collection</a>
+            <a href="#" class="btn-sage-outline">Our story</a>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <svg viewBox="0 0 400 400" class="w-full max-w-sm mx-auto">
+            <path class="botanical-line" d="M200 380 C200 280 160 220 200 160 C240 100 200 40 200 20" stroke-dasharray="4 4"/>
+            <path class="botanical-line" d="M200 260 C160 240 120 260 100 240"/>
+            <path class="botanical-line" d="M200 200 C240 180 280 200 300 180"/>
+            <path class="botanical-line" d="M200 140 C170 120 140 140 120 120"/>
+            <path class="botanical-line" d="M200 300 C230 280 260 300 280 280"/>
+            <circle cx="200" cy="100" r="30" stroke="#C4B8A8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+            <circle cx="200" cy="100" r="8" fill="#5E7A5E" opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wavy Divider -->
+  <div class="wavy-divider">
+    <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+      <path d="M0 20 Q150 0 300 20 T600 20 T900 20 T1200 20 V40 H0 Z" fill="none" stroke="#D4C9BC" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <!-- Philosophy -->
+  <section class="py-20">
+    <div class="max-w-2xl mx-auto px-6 text-center reveal">
+      <p class="text-sm uppercase tracking-widest mb-6" style="color: #5E7A5E; font-weight: 600;">Our Philosophy</p>
+      <blockquote class="text-2xl md:text-3xl mb-6" style="font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; line-height: 1.5; color: #2C2418;">
+        "We don't formulate for trends. We formulate for the person who reads ingredient lists before product names."
+      </blockquote>
+      <p class="text-base" style="color: #6B5E4F; line-height: 1.7;">
+        Every Terraverde product uses fewer than 9 ingredients. Not because minimalism sells — because complexity hides what doesn't work.
+      </p>
+    </div>
+  </section>
+
+  <!-- Wavy Divider -->
+  <div class="wavy-divider">
+    <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+      <path d="M0 20 Q150 40 300 20 T600 20 T900 20 T1200 20 V40 H0 Z" fill="none" stroke="#D4C9BC" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <!-- Feature Alternating -->
+  <section class="py-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <!-- Row 1: image left, text right -->
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
+        <div class="img-earth" style="min-height: 300px;">
+          <span class="text-sm" style="color: #C4B8A8;">[Product Image]</span>
+        </div>
+        <div>
+          <h2 class="text-3xl md:text-4xl mb-4" style="font-weight: 600; letter-spacing: -0.01em;">Morning Serum</h2>
+          <p style="color: #6B5E4F; line-height: 1.8;">
+            7 ingredients. Jojoba from Sonoran farms, vitamin C from acerola cherry, hyaluronic from bio-fermentation. Absorbs in 11 seconds — we timed it across 200+ testers, not rounded up.
+          </p>
+        </div>
+      </div>
+      <!-- Row 2: text left, image right -->
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-20 reveal">
+        <div class="md:order-2">
+          <div class="img-earth" style="min-height: 260px;">
+            <span class="text-sm" style="color: #C4B8A8;">[Product Image]</span>
+          </div>
+        </div>
+        <div class="md:order-1">
+          <h2 class="text-3xl md:text-4xl mb-4" style="font-weight: 600; letter-spacing: -0.01em;">Night Recovery</h2>
+          <p style="color: #6B5E4F; line-height: 1.8;">
+            5 ingredients. Shea from Burkina Faso cooperatives, bakuchiol instead of retinol — gentler, same result over 8 weeks (we have the before/afters to prove it).
+          </p>
+        </div>
+      </div>
+      <!-- Row 3: image left, text right -->
+      <div class="grid md:grid-cols-2 gap-12 items-center reveal">
+        <div class="img-earth" style="min-height: 280px;">
+          <span class="text-sm" style="color: #C4B8A8;">[Product Image]</span>
+        </div>
+        <div>
+          <h2 class="text-3xl md:text-4xl mb-4" style="font-weight: 600; letter-spacing: -0.01em;">Barrier Balm</h2>
+          <p style="color: #6B5E4F; line-height: 1.8;">
+            6 ingredients. For the days your skin gives up — wind, cold, too much screen light. Ceramide-3 from yeast fermentation, beeswax from a single apiary in Devon.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ingredients Bar -->
+  <section class="py-16 overflow-x-auto">
+    <div class="max-w-4xl mx-auto px-6">
+      <p class="text-sm uppercase tracking-widest mb-6 text-center reveal" style="color: #5E7A5E; font-weight: 600;">Key Ingredients</p>
+      <div class="flex gap-4 justify-center flex-wrap reveal reveal-delay-1">
+        <span class="ingredient-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E7A5E" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M12 6v12"/><path d="M8 10c2-2 4-2 4 0s2 2 4 0"/></svg>
+          Jojoba
+        </span>
+        <span class="ingredient-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E7A5E" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/></svg>
+          Vitamin C
+        </span>
+        <span class="ingredient-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E7A5E" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+          Ceramide-3
+        </span>
+        <span class="ingredient-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E7A5E" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 12s1.5 2 4 2 4-2 4-2"/></svg>
+          Bakuchiol
+        </span>
+        <span class="ingredient-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E7A5E" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Shea Butter
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="py-20">
+    <div class="max-w-2xl mx-auto px-6">
+      <div class="earth-card rounded-lg p-8 reveal" style="border-left: 4px solid #5E7A5E;">
+        <p class="text-lg mb-6" style="line-height: 1.8;">
+          "I've been using the morning serum for 14 weeks. My dermatologist literally asked what I changed — she thought I'd done a peel. I hadn't. Also the bottle lasted way longer than expected, I'm still on the first one and I use it daily."
+        </p>
+        <div>
+          <p class="font-semibold text-sm" style="font-family: 'Fraunces', serif;">S. Andersson</p>
+          <p class="text-xs" style="color: #6B5E4F;">Sensitive skin, Stockholm. Customer since Aug 2024.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section (dark inversion) -->
+  <section class="py-28" style="background: #2C2418;">
+    <div class="max-w-2xl mx-auto px-6 text-center reveal">
+      <h2 class="text-3xl md:text-4xl mb-6" style="font-family: 'Fraunces', serif; font-weight: 600; color: #F5F0EB; letter-spacing: -0.01em;">
+        Start with what your skin actually needs
+      </h2>
+      <p class="text-base mb-8" style="color: #D4C9BC; line-height: 1.7;">
+        Take the 2-minute skin quiz. We'll recommend the 1–2 products that make sense for you — not 12.
+      </p>
+      <a href="#" class="btn-sage text-lg px-10 py-4">Take the skin quiz</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12" style="background: #2C2418; border-top: 1px solid #3D3226;">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <span class="text-lg" style="font-family: 'Fraunces', serif; font-weight: 600; color: #F5F0EB;">Terraverde</span>
+          <p class="text-sm mt-2" style="color: #D4C9BC;">Rooted in what matters.</p>
+        </div>
+        <div>
+          <p class="text-sm font-semibold mb-3" style="color: #F5F0EB;">Shop</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm" style="color: #D4C9BC;">All Products</a></li>
+            <li><a href="#" class="text-sm" style="color: #D4C9BC;">Sets</a></li>
+            <li><a href="#" class="text-sm" style="color: #D4C9BC;">Refills</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold mb-3" style="color: #F5F0EB;">About</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm" style="color: #D4C9BC;">Our Story</a></li>
+            <li><a href="#" class="text-sm" style="color: #D4C9BC;">Ingredients</a></li>
+            <li><a href="#" class="text-sm" style="color: #D4C9BC;">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8" style="border-top: 1px solid #3D3226;">
+        <p class="text-sm text-center" style="color: #6B5E4F;">&copy; 2025 Terraverde. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

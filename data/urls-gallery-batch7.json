@@ -1,0 +1,934 @@
+{
+  "urls": [
+    {
+      "url": "https://obys.agency",
+      "category": "creative-agency",
+      "source": "godly+awwwards",
+      "style_note": "Dark portfolio with bold typography and parallax scroll"
+    },
+    {
+      "url": "https://niccolomirandacom.com",
+      "category": "portfolio",
+      "source": "awwwards-sotm",
+      "style_note": "Siena Film Foundation designer, immersive storytelling"
+    },
+    {
+      "url": "https://adeltcreative.com",
+      "category": "creative-agency",
+      "source": "awwwards-sotm",
+      "style_note": "SAAPRO waste management with experimental layout"
+    },
+    {
+      "url": "https://nightjar.co",
+      "category": "creative-agency",
+      "source": "awwwards-sotm",
+      "style_note": "ALNF nominee with dark immersive design"
+    },
+    {
+      "url": "https://boysagency.com",
+      "category": "creative-agency",
+      "source": "awwwards-sotm",
+      "style_note": "J-Vers by Boys Agency, creative motion design"
+    },
+    {
+      "url": "https://flotorch.ai",
+      "category": "ai-saas",
+      "source": "saaspo+pixeto",
+      "style_note": "Dark theme with color gradients, strong visual hierarchy"
+    },
+    {
+      "url": "https://nuraform.com",
+      "category": "ai-saas",
+      "source": "pixeto",
+      "style_note": "Bold gradients, minimalist layouts, motion transitions"
+    },
+    {
+      "url": "https://opal.so",
+      "category": "ai-saas",
+      "source": "pixeto",
+      "style_note": "Agency automation with responsive gradient design"
+    },
+    {
+      "url": "https://retellai.com",
+      "category": "ai-product",
+      "source": "branx",
+      "style_note": "Dark mode with illuminated CTAs, light motion graphics"
+    },
+    {
+      "url": "https://formless.ai",
+      "category": "ai-product",
+      "source": "branx",
+      "style_note": "Minimalist full-screen canvas with bold center CTA"
+    },
+    {
+      "url": "https://anydistance.co",
+      "category": "mobile-app",
+      "source": "glassmorphism",
+      "style_note": "Glassmorphic frosted containers for interactive elements"
+    },
+    {
+      "url": "https://rfrsh.io",
+      "category": "creative-agency",
+      "source": "godly",
+      "style_note": "Bold dark portfolio with animated transitions"
+    },
+    {
+      "url": "https://basement.studio",
+      "category": "creative-agency",
+      "source": "awwwards+framer",
+      "style_note": "3D animated sphere with scroll-driven transitions"
+    },
+    {
+      "url": "https://hellohello.is",
+      "category": "creative-studio",
+      "source": "awwwards",
+      "style_note": "Sound legacy brand with immersive dark design"
+    },
+    {
+      "url": "https://aha.one",
+      "category": "hospitality",
+      "source": "awwwards",
+      "style_note": "Asset management redefining hospitality across Asia"
+    },
+    {
+      "url": "https://rains.com",
+      "category": "fashion",
+      "source": "glassmorphism",
+      "style_note": "Muted neutral palette with glassmorphic nav and buttons"
+    },
+    {
+      "url": "https://gravitates.io",
+      "category": "ai-saas",
+      "source": "bento-grid",
+      "style_note": "Clean bento grid highlighting AI summary features"
+    },
+    {
+      "url": "https://nucleum.com",
+      "category": "saas",
+      "source": "bento-grid",
+      "style_note": "Strong whitespace bento layout with clean organization"
+    },
+    {
+      "url": "https://decodable.co",
+      "category": "devtools",
+      "source": "saaspo",
+      "style_note": "Serverless data platform with clean dark mode"
+    },
+    {
+      "url": "https://relume.io",
+      "category": "ai-devtools",
+      "source": "producthunt",
+      "style_note": "AI website builder with structured grid layout"
+    },
+    {
+      "url": "https://readdy.ai",
+      "category": "ai-devtools",
+      "source": "producthunt",
+      "style_note": "AI website builder with prompt-to-site workflow"
+    },
+    {
+      "url": "https://typedream.com",
+      "category": "website-builder",
+      "source": "producthunt",
+      "style_note": "AI website builder with clean light design"
+    },
+    {
+      "url": "https://siteofsites.co",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Best web design inspiration gallery 2026"
+    },
+    {
+      "url": "https://darkmodedesign.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated dark mode website inspiration"
+    },
+    {
+      "url": "https://dark.design",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Dark themed web design inspiration"
+    },
+    {
+      "url": "https://bentogrids.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated bento grid design inspiration"
+    },
+    {
+      "url": "https://saaspo.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Best SaaS website design gallery"
+    },
+    {
+      "url": "https://meshgradient.com",
+      "category": "design-tool",
+      "source": "search",
+      "style_note": "Beautiful mesh gradient generator"
+    },
+    {
+      "url": "https://motion.dev",
+      "category": "devtools",
+      "source": "framer",
+      "style_note": "JavaScript & React animation library with clean dark design"
+    },
+    {
+      "url": "https://cohere.ai",
+      "category": "ai-product",
+      "source": "tabnav",
+      "style_note": "AI platform with bold dark gradient hero"
+    },
+    {
+      "url": "https://wiz.io",
+      "category": "security",
+      "source": "tabnav",
+      "style_note": "Cloud security with bold colorful gradient design"
+    },
+    {
+      "url": "https://chowdeck.com",
+      "category": "food-tech",
+      "source": "awwwards",
+      "style_note": "Black Friday campaign with bold visual storytelling"
+    },
+    {
+      "url": "https://lush.com",
+      "category": "beauty",
+      "source": "design-trends",
+      "style_note": "Earth tones with high-contrast CTAs"
+    },
+    {
+      "url": "https://kota.co.uk",
+      "category": "creative-agency",
+      "source": "godly",
+      "style_note": "Creative agency with bold interactive design"
+    },
+    {
+      "url": "https://metalab.co",
+      "category": "creative-agency",
+      "source": "rimbo",
+      "style_note": "Connected design feel, everything cohesive"
+    },
+    {
+      "url": "https://messengerdemo.com",
+      "category": "social",
+      "source": "awwwards-soty",
+      "style_note": "2025 Site of the Year winner"
+    },
+    {
+      "url": "https://stan.vision",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "SaaS website design journal with modern aesthetic"
+    },
+    {
+      "url": "https://azurodigital.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Best SaaS website designs showcase"
+    },
+    {
+      "url": "https://pageone.ai",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "Cursor for visual communication beyond slides"
+    },
+    {
+      "url": "https://play.date",
+      "category": "hardware",
+      "source": "producthunt",
+      "style_note": "Playful gaming device with quirky design language"
+    },
+    {
+      "url": "https://dorpascal.com",
+      "category": "portfolio",
+      "source": "aurora",
+      "style_note": "Aurora-inspired design with deep blue and teal palette"
+    },
+    {
+      "url": "https://minna-tea.com",
+      "category": "ecommerce",
+      "source": "sitebuilder",
+      "style_note": "Organic tea brand with earthy warm design"
+    },
+    {
+      "url": "https://contra.com",
+      "category": "freelance",
+      "source": "search",
+      "style_note": "Freelancer platform with clean modern design"
+    },
+    {
+      "url": "https://elementor.com",
+      "category": "website-builder",
+      "source": "search",
+      "style_note": "Web design trends 2026 with gradient hero"
+    },
+    {
+      "url": "https://saasframe.io",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "SaaS design framework with dark mode focus"
+    },
+    {
+      "url": "https://landingsite.ai",
+      "category": "ai-devtools",
+      "source": "producthunt",
+      "style_note": "AI professional website generator in minutes"
+    },
+    {
+      "url": "https://landing-page.io",
+      "category": "ai-devtools",
+      "source": "producthunt",
+      "style_note": "AI landing page builder with free tier"
+    },
+    {
+      "url": "https://glance.fyi",
+      "category": "design-gallery",
+      "source": "glassmorphism",
+      "style_note": "Glassmorphism website examples gallery"
+    },
+    {
+      "url": "https://onepagelove.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "46+ mesh gradient and bento grid website curations"
+    },
+    {
+      "url": "https://lapa.ninja",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "7300+ landing page design examples since 2015"
+    },
+    {
+      "url": "https://landingfolio.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "341+ SaaS landing page design inspiration"
+    },
+    {
+      "url": "https://thebranx.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Best tech startup websites analysis 2025"
+    },
+    {
+      "url": "https://webstacks.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "12 best startup website design examples"
+    },
+    {
+      "url": "https://saaslandingpage.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "40+ best dark landing page examples"
+    },
+    {
+      "url": "https://designrush.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Best website designs of 2026 showcase"
+    },
+    {
+      "url": "https://cssdesignawards.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "CSS design awards with best web design inspiration"
+    },
+    {
+      "url": "https://webdesignawards.io",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Top 100 websites of 2025 ranked by design"
+    },
+    {
+      "url": "https://wiseweb.com.au",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Best animated website designs 2025"
+    },
+    {
+      "url": "https://chilledsites.com",
+      "category": "website-builder",
+      "source": "search",
+      "style_note": "Lovable alternative AI website builder"
+    },
+    {
+      "url": "https://kittl.com",
+      "category": "design-tool",
+      "source": "search",
+      "style_note": "Gradient design trend with bold visual style"
+    },
+    {
+      "url": "https://orpetron.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Web design awards with framer motion showcases"
+    },
+    {
+      "url": "https://victorflow.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Best animation framer templates 2025"
+    },
+    {
+      "url": "https://createtoday.io",
+      "category": "ai-devtools",
+      "source": "search",
+      "style_note": "101+ best Lovable websites showcase"
+    },
+    {
+      "url": "https://almcorp.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "47 best SaaS websites driving 300%+ conversions"
+    },
+    {
+      "url": "https://cccreative.design",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "UI trends: neumorphism vs glassmorphism vs neubrutalism"
+    },
+    {
+      "url": "https://aufaitux.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Top 25 web design trends 2025 stunning styles"
+    },
+    {
+      "url": "https://damienkloot.com",
+      "category": "portfolio",
+      "source": "search",
+      "style_note": "Web design trends 2025 AI immersive 3D"
+    },
+    {
+      "url": "https://theedigital.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "20 top web design trends 2026"
+    },
+    {
+      "url": "https://gezar.dk",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "11 best web design trends 2026"
+    },
+    {
+      "url": "https://onyx8agency.com",
+      "category": "creative-agency",
+      "source": "glassmorphism",
+      "style_note": "10 mind-blowing glassmorphism examples 2026"
+    },
+    {
+      "url": "https://mycodelesswebsite.com",
+      "category": "creative-agency",
+      "source": "glassmorphism",
+      "style_note": "18 best glassmorphism websites 2026"
+    },
+    {
+      "url": "https://codedesign.ai",
+      "category": "ai-devtools",
+      "source": "glassmorphism",
+      "style_note": "Glassmorphism website examples with AI builder"
+    },
+    {
+      "url": "https://uxpilot.ai",
+      "category": "ai-devtools",
+      "source": "search",
+      "style_note": "14 web design trends 2026 with AI UX"
+    },
+    {
+      "url": "https://bluecompass.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "20 web design trends for 2026 inspiration"
+    },
+    {
+      "url": "https://samwebstudio.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Top 7 website design trends 2026"
+    },
+    {
+      "url": "https://superside.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "15 SaaS web design examples for 2026"
+    },
+    {
+      "url": "https://tabnav.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "60 best website design examples 2026"
+    },
+    {
+      "url": "https://contentsquare.com",
+      "category": "analytics",
+      "source": "search",
+      "style_note": "12 brilliant web design examples 2026"
+    },
+    {
+      "url": "https://designmodo.com",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "Top web design trends for 2026"
+    },
+    {
+      "url": "https://noboringdesign.com",
+      "category": "creative-agency",
+      "source": "micro-interaction",
+      "style_note": "10 inspiring micro-interaction examples"
+    },
+    {
+      "url": "https://vev.design",
+      "category": "design-tool",
+      "source": "micro-interaction",
+      "style_note": "10 micro-interaction examples for UX boost"
+    },
+    {
+      "url": "https://justinmind.com",
+      "category": "design-tool",
+      "source": "micro-interaction",
+      "style_note": "Best web micro-interaction guidelines 2025"
+    },
+    {
+      "url": "https://hostadvice.com",
+      "category": "hosting",
+      "source": "search",
+      "style_note": "17 best micro-interaction examples 2025"
+    },
+    {
+      "url": "https://graphicdesignjunction.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "50 best new websites for design inspiration 2025"
+    },
+    {
+      "url": "https://bragdeal.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "30 best website designs 2025"
+    },
+    {
+      "url": "https://spinxdigital.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Best website designs 2025 trends"
+    },
+    {
+      "url": "https://colorlib.com",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "21 best startup websites 2026"
+    },
+    {
+      "url": "https://webfx.com",
+      "category": "creative-agency",
+      "source": "earth-tones",
+      "style_note": "30 beautiful earth-toned website designs"
+    },
+    {
+      "url": "https://simplified.com",
+      "category": "design-tool",
+      "source": "gradient",
+      "style_note": "10 best mesh gradient generators 2025"
+    },
+    {
+      "url": "https://learnui.design",
+      "category": "design-resource",
+      "source": "gradient",
+      "style_note": "Mesh gradients UI technique deep dive"
+    },
+    {
+      "url": "https://simplythebestdigital.com",
+      "category": "creative-agency",
+      "source": "gradient",
+      "style_note": "12 beautiful gradient website examples"
+    },
+    {
+      "url": "https://magier.com",
+      "category": "design-tool",
+      "source": "gradient",
+      "style_note": "Best 12 gradient tools for designers 2026"
+    },
+    {
+      "url": "https://webtechneeq.com",
+      "category": "design-resource",
+      "source": "bento",
+      "style_note": "Bento grid web design guide 2025"
+    },
+    {
+      "url": "https://mukeshkdesigns.com",
+      "category": "design-resource",
+      "source": "bento",
+      "style_note": "40+ bento grid design examples 2025"
+    },
+    {
+      "url": "https://ecommercewebdesign.agency",
+      "category": "creative-agency",
+      "source": "bento",
+      "style_note": "Master bento grid layouts for websites 2025"
+    },
+    {
+      "url": "https://nixar.io",
+      "category": "creative-agency",
+      "source": "dark-mode",
+      "style_note": "Best dark-themed website designs for software companies"
+    },
+    {
+      "url": "https://arounda.agency",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "50 best landing page examples for SaaS 2025"
+    },
+    {
+      "url": "https://wearetenet.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "20 SaaS landing page examples benchmark"
+    },
+    {
+      "url": "https://glorywebs.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "SaaS landing page best practices guide"
+    },
+    {
+      "url": "https://marketermilk.com",
+      "category": "marketing",
+      "source": "search",
+      "style_note": "30 best SaaS landing page examples"
+    },
+    {
+      "url": "https://klientboost.com",
+      "category": "marketing",
+      "source": "search",
+      "style_note": "51 high-converting SaaS landing pages 2025"
+    },
+    {
+      "url": "https://blendb2b.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "10 best modern website examples 2026"
+    },
+    {
+      "url": "https://rimbodesigns.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Top 50 best websites 2025 inspiration"
+    },
+    {
+      "url": "https://houseinkstudio.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Top 25 best website designs 2025 masterpieces"
+    },
+    {
+      "url": "https://tbhcreative.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Top web design trends 2025 analysis"
+    },
+    {
+      "url": "https://framerbite.com",
+      "category": "design-resource",
+      "source": "framer",
+      "style_note": "20+ dark mode website design inspiration"
+    },
+    {
+      "url": "https://bryntaylor.co.uk",
+      "category": "portfolio",
+      "source": "framer",
+      "style_note": "Best dark mode Framer templates 2025"
+    },
+    {
+      "url": "https://webbyawards.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "The Webby Awards prestigious web recognition"
+    },
+    {
+      "url": "https://99designs.com",
+      "category": "design-marketplace",
+      "source": "search",
+      "style_note": "67+ best startup web design ideas 2026"
+    },
+    {
+      "url": "https://weblium.com",
+      "category": "website-builder",
+      "source": "search",
+      "style_note": "8 best startup website design examples 2025"
+    },
+    {
+      "url": "https://snaplama.com",
+      "category": "ai-devtools",
+      "source": "search",
+      "style_note": "Lovable website creation step by step guide"
+    },
+    {
+      "url": "https://nexiontiles.com",
+      "category": "design",
+      "source": "earth-tones",
+      "style_note": "Earth tones defining design color trends 2025"
+    },
+    {
+      "url": "https://thewebfactory.us",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "30 best web design trends 2025 modern styles"
+    },
+    {
+      "url": "https://superdevresources.com",
+      "category": "design-resource",
+      "source": "glassmorphism",
+      "style_note": "16 glassmorphism UI design inspirations"
+    },
+    {
+      "url": "https://zefi.ai",
+      "category": "ai-saas",
+      "source": "search",
+      "style_note": "Best tools for inspiration and benchmarking 2025"
+    },
+    {
+      "url": "https://relace.ai",
+      "category": "ai-devtools",
+      "source": "lapa",
+      "style_note": "AI models for coding agents, ultra-fast code retrieval"
+    },
+    {
+      "url": "https://webspidersolutions.com",
+      "category": "creative-agency",
+      "source": "dark-mode",
+      "style_note": "Dark mode web design for better SaaS UX"
+    },
+    {
+      "url": "https://designindc.com",
+      "category": "creative-agency",
+      "source": "dark-mode",
+      "style_note": "Dark mode web design SEO & UX trends 2025"
+    },
+    {
+      "url": "https://thinknewgroup.com",
+      "category": "creative-agency",
+      "source": "search",
+      "style_note": "Creative digital agency with bold design approach"
+    },
+    {
+      "url": "https://piccalil.li",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "Modern CSS and front-end web design resource"
+    },
+    {
+      "url": "https://refero.design",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Real-world website design reference library"
+    },
+    {
+      "url": "https://screenlane.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Mobile and web UI design inspiration"
+    },
+    {
+      "url": "https://uigarage.net",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "UI design inspiration with pattern library"
+    },
+    {
+      "url": "https://collectui.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Daily UI design inspiration from Dribbble"
+    },
+    {
+      "url": "https://bestwebsite.gallery",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated gallery of best website designs"
+    },
+    {
+      "url": "https://httpster.net",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated web design inspiration gallery"
+    },
+    {
+      "url": "https://thefwa.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "FWA cutting-edge digital design awards"
+    },
+    {
+      "url": "https://siteinspire.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated web design inspiration showcase"
+    },
+    {
+      "url": "https://minimalissimo.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Minimalism in design, architecture, and lifestyle"
+    },
+    {
+      "url": "https://siiimple.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated gallery of minimalist website designs"
+    },
+    {
+      "url": "https://calltoinspiration.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "UI/UX design patterns and inspiration"
+    },
+    {
+      "url": "https://pagecollective.com",
+      "category": "design-gallery",
+      "source": "search",
+      "style_note": "Curated landing page design inspiration"
+    },
+    {
+      "url": "https://pitch.io",
+      "category": "saas",
+      "source": "godly",
+      "style_note": "Presentation software with bold gradient hero"
+    },
+    {
+      "url": "https://wope.com",
+      "category": "ai-saas",
+      "source": "producthunt",
+      "style_note": "AI-powered SEO tool with dark gradient design"
+    },
+    {
+      "url": "https://magicui.design",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "Beautiful UI components with animated showcases"
+    },
+    {
+      "url": "https://aceternity.com",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "UI library with stunning animated components"
+    },
+    {
+      "url": "https://animata.design",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "Hand-crafted animation components for React"
+    },
+    {
+      "url": "https://catalyst.tailwindui.com",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "Tailwind UI application toolkit with modern patterns"
+    },
+    {
+      "url": "https://hyperui.dev",
+      "category": "design-resource",
+      "source": "search",
+      "style_note": "Free Tailwind CSS components collection"
+    },
+    {
+      "url": "https://tldv.io",
+      "category": "ai-saas",
+      "source": "producthunt",
+      "style_note": "AI meeting recorder with clean purple accent design"
+    },
+    {
+      "url": "https://granola.ai",
+      "category": "ai-saas",
+      "source": "producthunt",
+      "style_note": "AI notepad for meetings with warm earthy design"
+    },
+    {
+      "url": "https://pieces.app",
+      "category": "devtools",
+      "source": "producthunt",
+      "style_note": "AI code snippet manager with dark gradient theme"
+    },
+    {
+      "url": "https://gamma.app",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "AI presentation maker with gradient mesh hero"
+    },
+    {
+      "url": "https://napkin.ai",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "Text-to-visual AI with clean light design"
+    },
+    {
+      "url": "https://tiptap.dev",
+      "category": "devtools",
+      "source": "search",
+      "style_note": "Rich text editor with developer-focused dark design"
+    },
+    {
+      "url": "https://canny.io",
+      "category": "saas",
+      "source": "search",
+      "style_note": "Feature request tool with clean colorful design"
+    },
+    {
+      "url": "https://marblism.com",
+      "category": "ai-devtools",
+      "source": "producthunt",
+      "style_note": "AI SaaS boilerplate generator with dark theme"
+    },
+    {
+      "url": "https://thingtesting.com",
+      "category": "ecommerce",
+      "source": "search",
+      "style_note": "DTC brand reviews with editorial grid layout"
+    },
+    {
+      "url": "https://suno.com",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "AI music generator with dark immersive audio UI"
+    },
+    {
+      "url": "https://udio.com",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "AI music creation with gradient dark theme"
+    },
+    {
+      "url": "https://ideogram.ai",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "AI image generation with clean gallery layout"
+    },
+    {
+      "url": "https://fal.ai",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "AI inference platform with developer dark theme"
+    },
+    {
+      "url": "https://dify.ai",
+      "category": "ai-product",
+      "source": "producthunt",
+      "style_note": "LLM app development platform with clean purple design"
+    },
+    {
+      "url": "https://stack.convex.dev",
+      "category": "devtools",
+      "source": "search",
+      "style_note": "Full-stack framework with modern dark documentation"
+    },
+    {
+      "url": "https://unkey.dev",
+      "category": "devtools",
+      "source": "search",
+      "style_note": "API key management with clean dark developer UI"
+    }
+  ]
+}
