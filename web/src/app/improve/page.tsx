@@ -30,9 +30,9 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+      className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-emerald-400 transition-all duration-200 hover:bg-emerald-500/20 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
     >
-      {copied ? "복사됨" : "복사"}
+      {copied ? "copied!" : "copy"}
     </button>
   );
 }
@@ -42,7 +42,7 @@ function ScoreRing({ score }: { score: number }) {
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 10) * circumference;
   const color =
-    score >= 7 ? "#22c55e" : score >= 4 ? "#eab308" : "#ef4444";
+    score >= 7 ? "#10b981" : score >= 4 ? "#eab308" : "#ef4444";
 
   return (
     <div className="relative inline-flex items-center justify-center">
@@ -69,10 +69,10 @@ function ScoreRing({ score }: { score: number }) {
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-2xl font-bold" style={{ color }}>
+        <span className="font-[family-name:var(--font-jetbrains-mono)] text-2xl font-bold" style={{ color }}>
           {score}
         </span>
-        <span className="text-[10px] text-zinc-500">/10</span>
+        <span className="font-[family-name:var(--font-jetbrains-mono)] text-[10px] text-zinc-500">/10</span>
       </div>
     </div>
   );
@@ -85,11 +85,11 @@ function SeverityBadge({ severity }: { severity: AnalysisIssue["severity"] }) {
     low: "border-zinc-700 bg-zinc-800 text-zinc-400",
   };
 
-  const labels = { high: "심각", medium: "보통", low: "낮음" };
+  const labels = { high: "high", medium: "med", low: "low" };
 
   return (
     <span
-      className={`inline-flex rounded-md border px-1.5 py-0.5 text-[10px] font-medium ${styles[severity]}`}
+      className={`inline-flex rounded-md border px-1.5 py-0.5 font-[family-name:var(--font-jetbrains-mono)] text-[10px] font-medium ${styles[severity]}`}
     >
       {labels[severity]}
     </span>
@@ -176,48 +176,56 @@ export default function ImprovePage() {
       {/* Input Section */}
       <div className="border-b border-zinc-800">
         <div className="mx-auto max-w-4xl px-6 py-8">
-          <h1 className="mb-8 text-2xl font-bold tracking-tight">디자인 고도화</h1>
+          <h1 className="mb-2 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold tracking-tight">
+            디자인 고도화
+          </h1>
+          <p className="mb-8 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
+            <span className="text-emerald-500">$</span> improve --analyze --suggest
+          </p>
 
           {/* Tabs */}
           <div className="mb-6 flex rounded-lg border border-zinc-800 bg-zinc-900 p-1 w-fit">
             <button
               onClick={() => setTab("url")}
-              className={`rounded-md px-6 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`rounded-md px-6 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                 tab === "url"
-                  ? "bg-zinc-700 text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-300"
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                  : "text-zinc-500 hover:text-zinc-300 border border-transparent"
               }`}
             >
-              URL
+              url
             </button>
             <button
               onClick={() => setTab("code")}
-              className={`rounded-md px-6 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              className={`rounded-md px-6 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                 tab === "code"
-                  ? "bg-zinc-700 text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-300"
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                  : "text-zinc-500 hover:text-zinc-300 border border-transparent"
               }`}
             >
-              Code
+              code
             </button>
           </div>
 
           {/* URL Input */}
           {tab === "url" && (
             <div className="flex gap-3">
-              <input
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-              />
+              <div className="relative flex-1">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-emerald-500/70">$</span>
+                <input
+                  type="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="w-full rounded-lg border border-zinc-800 bg-zinc-900 py-3 pl-7 pr-4 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                />
+              </div>
               <button
                 onClick={handleAnalyze}
                 disabled={loading}
-                className="shrink-0 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                className="shrink-0 rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               >
-                {loading ? "분석 중..." : "분석하기"}
+                {loading ? "analyzing..." : "$ analyze"}
               </button>
             </div>
           )}
@@ -230,22 +238,22 @@ export default function ImprovePage() {
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="HTML 코드를 붙여넣으세요..."
                 rows={12}
-                className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 font-mono text-xs text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 resize-none"
+                className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 resize-none"
               />
               <button
                 onClick={handleAnalyze}
                 disabled={loading}
-                className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                className="rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               >
-                {loading ? "분석 중..." : "분석하기"}
+                {loading ? "analyzing..." : "$ analyze"}
               </button>
             </div>
           )}
 
           {/* Error */}
           {error && (
-            <div className="mt-4 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3 text-sm text-red-400">
-              {error}
+            <div className="mt-4 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm text-red-400">
+              <span className="text-red-500">[ERR]</span> {error}
             </div>
           )}
         </div>
@@ -275,14 +283,14 @@ export default function ImprovePage() {
       {result && !loading && (
         <div className="mx-auto max-w-4xl px-6 py-8">
           {/* Score + Summary */}
-          <div className="mb-8 flex items-start gap-6 rounded-lg border border-zinc-800 bg-zinc-900 p-6">
+          <div className="mb-8 flex items-start gap-6 rounded-lg border border-zinc-800 bg-zinc-900/50 p-6">
             <ScoreRing score={result.score} />
             <div className="flex-1">
-              <h2 className="mb-1 text-lg font-semibold">현재 디자인 점수</h2>
+              <h2 className="mb-1 font-[family-name:var(--font-space-grotesk)] text-lg font-semibold">현재 디자인 점수</h2>
               <p className="mb-3 text-sm text-zinc-400">{result.summary}</p>
-              <div className="flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-zinc-400 w-fit">
-                <span className="text-zinc-500">가장 가까운 래퍼런스:</span>
-                <span className="font-medium text-zinc-200">
+              <div className="flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-400 w-fit">
+                <span className="text-zinc-600">closest_ref:</span>
+                <span className="font-medium text-emerald-400">
                   #{result.closestReference.id} {result.closestReference.name}
                 </span>
               </div>
@@ -291,16 +299,16 @@ export default function ImprovePage() {
 
           {/* Issues List */}
           <div className="mb-8">
-            <h2 className="mb-4 text-lg font-semibold">개선 필요 항목</h2>
+            <h2 className="mb-4 font-[family-name:var(--font-space-grotesk)] text-lg font-semibold">개선 필요 항목</h2>
             <div className="space-y-2">
               {result.issues.map((issue) => (
                 <div
                   key={issue.id}
-                  className="flex items-start gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3"
+                  className="flex items-start gap-3 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3"
                 >
                   <input
                     type="checkbox"
-                    className="mt-0.5 h-4 w-4 rounded border-zinc-700 bg-zinc-800 accent-blue-500"
+                    className="mt-0.5 h-4 w-4 rounded border-zinc-700 bg-zinc-800 accent-emerald-500"
                     readOnly
                   />
                   <span className="flex-1 text-sm text-zinc-300">
@@ -316,9 +324,9 @@ export default function ImprovePage() {
           {!showImproved && result.improvedCode && (
             <button
               onClick={() => setShowImproved(true)}
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-500 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+              className="w-full rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
             >
-              고도화 결과 보기
+              $ show --improved-code
             </button>
           )}
 
@@ -326,20 +334,29 @@ export default function ImprovePage() {
           {showImproved && result.improvedCode && (
             <div className="mt-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold">고도화된 코드</h2>
+                <h2 className="font-[family-name:var(--font-space-grotesk)] text-lg font-semibold">고도화된 코드</h2>
                 <div className="flex items-center gap-2">
                   <CopyButton text={result.improvedCode} />
                   <button
                     onClick={handleDownloadImproved}
-                    className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                    className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                   >
-                    다운로드
+                    download
                   </button>
                 </div>
               </div>
-              <pre className="max-h-[600px] overflow-auto rounded-lg border border-zinc-800 bg-zinc-900 p-6 text-xs leading-relaxed text-zinc-300">
-                <code>{result.improvedCode}</code>
-              </pre>
+              <div className="overflow-hidden rounded-lg border border-zinc-800">
+                {/* Terminal title bar */}
+                <div className="flex items-center gap-1.5 border-b border-zinc-800 bg-zinc-900 px-4 py-2">
+                  <span className="h-3 w-3 rounded-full bg-red-500/80" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+                  <span className="ml-2 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">improved-design.html</span>
+                </div>
+                <pre className="max-h-[600px] overflow-auto bg-[#0c0c0e] p-6 font-[family-name:var(--font-jetbrains-mono)] text-xs leading-relaxed text-zinc-300">
+                  <code>{result.improvedCode}</code>
+                </pre>
+              </div>
             </div>
           )}
         </div>

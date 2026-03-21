@@ -6,7 +6,9 @@
   --subtle: #18181b;
   --border: #27272a;
   --muted: #a1a1aa;
-  --accent: #3b82f6;
+  --accent: #10b981;
+  --accent-dim: rgba(16, 185, 129, 0.08);
+  --accent-glow: rgba(16, 185, 129, 0.15);
 }
 
 @theme inline {
@@ -20,4 +22,26 @@
 body {
   background: var(--bg);
   color: var(--text);
+  background-image: radial-gradient(rgba(16, 185, 129, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Terminal cursor blink */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 1.2s step-end infinite;
+}
+
+/* Pulse dot for status indicators */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
 }

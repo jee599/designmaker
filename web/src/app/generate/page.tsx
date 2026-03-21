@@ -35,9 +35,9 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-emerald-400 transition-all duration-200 hover:bg-emerald-500/20 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
     >
-      {copied ? "복사됨" : "복사"}
+      {copied ? "copied!" : "copy"}
     </button>
   );
 }
@@ -63,7 +63,7 @@ function simpleMarkdownToHtml(md: string): string {
     .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold text-zinc-50 mt-8 mb-3">$1</h2>')
     .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold text-zinc-50 mt-8 mb-4">$1</h1>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/`(.+?)`/g, '<code class="rounded bg-zinc-800 px-1.5 py-0.5 text-sm text-blue-400">$1</code>')
+    .replace(/`(.+?)`/g, '<code class="rounded bg-zinc-800 px-1.5 py-0.5 text-sm text-emerald-400">$1</code>')
     .replace(/^- (.+)$/gm, '<li class="ml-4 list-disc text-zinc-300">$1</li>')
     .replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4 list-decimal text-zinc-300">$2</li>');
 
@@ -77,7 +77,7 @@ function simpleMarkdownToHtml(md: string): string {
 
 export default function GeneratePage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-zinc-950 text-zinc-500">로딩 중...</div>}>
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-zinc-950 font-[family-name:var(--font-jetbrains-mono)] text-zinc-500">loading...</div>}>
       <GeneratePageInner />
     </Suspense>
   );
@@ -177,11 +177,16 @@ function GeneratePageInner() {
       {/* Left Panel - Configuration */}
       <div className="w-1/2 border-r border-zinc-800 overflow-y-auto">
         <div className="p-8">
-          <h1 className="text-2xl font-bold tracking-tight mb-8">디자인 생성</h1>
+          <h1 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold tracking-tight mb-2">
+            디자인 생성
+          </h1>
+          <p className="mb-8 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
+            <span className="text-emerald-500">$</span> generate --mode interactive
+          </p>
 
           {/* Reference Selector */}
           <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-zinc-300">
+            <label className="mb-2 block font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium uppercase tracking-wider text-zinc-500">
               래퍼런스 선택
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -189,9 +194,9 @@ function GeneratePageInner() {
                 <button
                   key={ref.id}
                   onClick={() => handleRefChange(ref.id)}
-                  className={`group flex items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${
+                  className={`group flex items-center gap-2 rounded-lg border px-3 py-2 text-left font-[family-name:var(--font-jetbrains-mono)] text-xs transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${
                     selectedRef === ref.id
-                      ? "border-blue-500 bg-blue-500/10 text-blue-400"
+                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
                       : "border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
                   }`}
                 >
@@ -209,9 +214,9 @@ function GeneratePageInner() {
           <div className="mb-6">
             <label
               htmlFor="description"
-              className="mb-2 block text-sm font-medium text-zinc-300"
+              className="mb-2 block font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium uppercase tracking-wider text-zinc-500"
             >
-              어떤 사이트를 만들고 싶은지 설명해주세요
+              사이트 설명
             </label>
             <textarea
               id="description"
@@ -219,13 +224,13 @@ function GeneratePageInner() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="AI 기반 프로젝트 관리 도구의 랜딩 페이지"
               rows={4}
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 resize-none"
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 resize-none"
             />
           </div>
 
           {/* Brand Color */}
           <div className="mb-6">
-            <label className="mb-2 block text-sm font-medium text-zinc-300">
+            <label className="mb-2 block font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium uppercase tracking-wider text-zinc-500">
               브랜드 색상
             </label>
             <div className="flex items-center gap-3">
@@ -240,11 +245,11 @@ function GeneratePageInner() {
                 value={brandColor}
                 onChange={(e) => setBrandColor(e.target.value)}
                 maxLength={7}
-                className="w-28 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm font-mono text-zinc-100 uppercase transition-all duration-200 focus:border-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                className="w-28 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 uppercase transition-all duration-200 focus:border-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               />
               {currentRef && (
-                <span className="text-xs text-zinc-500">
-                  기본: {currentRef.accent}
+                <span className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
+                  default: {currentRef.accent}
                 </span>
               )}
             </div>
@@ -252,37 +257,37 @@ function GeneratePageInner() {
 
           {/* Output Format Toggle */}
           <div className="mb-8">
-            <label className="mb-2 block text-sm font-medium text-zinc-300">
+            <label className="mb-2 block font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium uppercase tracking-wider text-zinc-500">
               출력 형식
             </label>
             <div className="flex rounded-lg border border-zinc-800 bg-zinc-900 p-1">
               <button
                 onClick={() => setFormat("code")}
-                className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                   format === "code"
-                    ? "bg-zinc-700 text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-300"
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                    : "text-zinc-500 hover:text-zinc-300 border border-transparent"
                 }`}
               >
-                Code (HTML)
+                code (HTML)
               </button>
               <button
                 onClick={() => setFormat("markdown")}
-                className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                   format === "markdown"
-                    ? "bg-zinc-700 text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-300"
+                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                    : "text-zinc-500 hover:text-zinc-300 border border-transparent"
                 }`}
               >
-                Markdown (설계서)
+                markdown
               </button>
             </div>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-4 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3 text-sm text-red-400">
-              {error}
+            <div className="mb-4 rounded-lg border border-red-800 bg-red-900/20 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm text-red-400">
+              <span className="text-red-500">[ERR]</span> {error}
             </div>
           )}
 
@@ -290,7 +295,7 @@ function GeneratePageInner() {
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+            className="w-full rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -298,10 +303,10 @@ function GeneratePageInner() {
                   <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
                   <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor" className="opacity-75" />
                 </svg>
-                생성 중...
+                generating...
               </span>
             ) : (
-              "생성하기"
+              "$ generate"
             )}
           </button>
         </div>
@@ -310,42 +315,48 @@ function GeneratePageInner() {
       {/* Right Panel - Output */}
       <div className="w-1/2 flex flex-col overflow-hidden">
         <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
-          <h2 className="text-sm font-medium text-zinc-400">
-            {format === "code" ? "HTML 출력" : "Markdown 설계서"}
-          </h2>
+          {/* Terminal title bar */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="h-3 w-3 rounded-full bg-red-500/80" />
+              <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
+              <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+            </div>
+            <span className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-500">
+              {format === "code" ? "output.html" : "output.md"}
+            </span>
+          </div>
           {output && (
             <div className="flex items-center gap-2">
               <CopyButton text={output} />
               <button
                 onClick={handleDownload}
-                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700 cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                className="rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               >
-                다운로드
+                download
               </button>
             </div>
           )}
         </div>
 
-        <div ref={outputRef} className="flex-1 overflow-y-auto">
+        <div ref={outputRef} className="flex-1 overflow-y-auto bg-[#0c0c0e]">
           {loading && !output && <SkeletonLoader />}
 
           {!loading && !output && (
             <div className="flex h-full items-center justify-center p-8">
               <div className="text-center">
-                <div className="mb-3 text-4xl text-zinc-700">
-                  <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-                  </svg>
+                <div className="mb-3 font-[family-name:var(--font-jetbrains-mono)] text-4xl text-zinc-800">
+                  &gt;_
                 </div>
-                <p className="text-sm text-zinc-500">
-                  래퍼런스를 선택하고 설명을 입력한 후<br />생성하기를 클릭하세요
+                <p className="font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-600">
+                  Awaiting input...<br />Select a reference and run generate.
                 </p>
               </div>
             </div>
           )}
 
           {output && format === "code" && (
-            <pre className="p-6 text-xs leading-relaxed text-zinc-300 overflow-x-auto">
+            <pre className="p-6 font-[family-name:var(--font-jetbrains-mono)] text-xs leading-relaxed text-zinc-300 overflow-x-auto">
               <code>{output}</code>
             </pre>
           )}

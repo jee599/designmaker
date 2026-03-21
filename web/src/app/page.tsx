@@ -8,8 +8,8 @@ export default function Home() {
         <h1 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-bold tracking-tight">
           Design References
         </h1>
-        <p className="mt-2 text-zinc-400">
-          {references.length} curated landing page patterns. Click any card to explore.
+        <p className="mt-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-500">
+          <span className="text-emerald-500">[SYS]</span> {references.length} references loaded. Ready.
         </p>
       </div>
       <GalleryClient references={references} />

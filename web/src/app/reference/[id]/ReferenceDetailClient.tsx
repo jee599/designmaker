@@ -22,14 +22,14 @@ function CopyableSwatch({
   return (
     <button
       onClick={handleCopy}
-      className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-left transition-colors hover:border-zinc-700"
+      className="group flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/50 px-3 py-2 text-left transition-colors hover:border-emerald-500/30"
     >
       <span
         className="h-8 w-8 rounded-md border border-zinc-700"
         style={{ backgroundColor: color }}
       />
       <div>
-        <div className="text-xs text-zinc-500">{label}</div>
+        <div className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600 uppercase tracking-wider">{label}</div>
         <div className="font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-300">
           {copied ? "Copied!" : color}
         </div>
@@ -57,7 +57,7 @@ export default function ReferenceDetailClient({
       {/* Left: Preview */}
       <div className="flex-1 border-b border-zinc-800 p-4 lg:border-b-0 lg:border-r lg:p-6" style={{ minHeight: "70vh" }}>
         {sampleExists && samplePath ? (
-          <div className="h-full overflow-hidden rounded-xl border border-zinc-800 bg-white">
+          <div className="h-full overflow-hidden rounded-lg border border-zinc-800 bg-white">
             <iframe
               src={samplePath}
               className="h-full w-full"
@@ -66,14 +66,14 @@ export default function ReferenceDetailClient({
             />
           </div>
         ) : (
-          <div className="flex h-full min-h-[60vh] items-center justify-center rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50">
+          <div className="flex h-full min-h-[60vh] items-center justify-center rounded-lg border border-dashed border-zinc-800 bg-zinc-900/50">
             <div className="text-center">
-              <div className="mb-2 text-4xl">🎨</div>
-              <p className="text-lg font-medium text-zinc-400">
+              <div className="mb-2 font-[family-name:var(--font-jetbrains-mono)] text-4xl text-zinc-700">&gt;_</div>
+              <p className="font-[family-name:var(--font-jetbrains-mono)] text-lg font-medium text-zinc-500">
                 Sample not yet generated
               </p>
-              <p className="mt-1 text-sm text-zinc-600">
-                Use the Generate page to create an HTML sample for this reference.
+              <p className="mt-1 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-600">
+                Run ./generate to create an HTML sample.
               </p>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function ReferenceDetailClient({
             <h1 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold">
               {r.name}
             </h1>
-            <span className="rounded bg-zinc-800 px-2 py-0.5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-500">
+            <span className="rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-500">
               {r.id}
             </span>
           </div>
@@ -98,34 +98,36 @@ export default function ReferenceDetailClient({
         {/* Status */}
         <div>
           {r.status === "verified" ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-950 px-3 py-1 text-sm text-emerald-400">
-              ✅ Verified
+            <span className="inline-flex items-center gap-1.5 rounded border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 font-[family-name:var(--font-jetbrains-mono)] text-sm text-emerald-400">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse-dot" />
+              verified
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-zinc-800 px-3 py-1 text-sm text-zinc-400">
-              📝 Draft
+            <span className="inline-flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-800 px-3 py-1 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-500">
+              <span className="h-2 w-2 rounded-full bg-zinc-600" />
+              draft
             </span>
           )}
         </div>
 
         {/* Palette */}
         <div>
-          <h2 className="mb-3 font-[family-name:var(--font-space-grotesk)] text-sm font-semibold uppercase tracking-wider text-zinc-500">
-            Palette
+          <h2 className="mb-3 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
+            // palette
           </h2>
           <div className="grid grid-cols-2 gap-2">
-            <CopyableSwatch color={r.bg} label="Background" />
-            <CopyableSwatch color={textColor} label="Text" />
-            <CopyableSwatch color={r.accent} label="Accent" />
-            <CopyableSwatch color={subtleColor} label="Subtle" />
-            <CopyableSwatch color={mutedColor} label="Muted" />
+            <CopyableSwatch color={r.bg} label="bg" />
+            <CopyableSwatch color={textColor} label="text" />
+            <CopyableSwatch color={r.accent} label="accent" />
+            <CopyableSwatch color={subtleColor} label="subtle" />
+            <CopyableSwatch color={mutedColor} label="muted" />
           </div>
         </div>
 
         {/* Typography */}
         <div>
-          <h2 className="mb-2 font-[family-name:var(--font-space-grotesk)] text-sm font-semibold uppercase tracking-wider text-zinc-500">
-            Typography
+          <h2 className="mb-2 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
+            // typography
           </h2>
           <p className="text-sm text-zinc-400">
             {r.tone === "dark" ? "Dark theme" : "Light theme"} — optimized for {r.tags.includes("serif") ? "serif" : "sans-serif"} typography with high contrast.
@@ -134,14 +136,14 @@ export default function ReferenceDetailClient({
 
         {/* Tags */}
         <div>
-          <h2 className="mb-2 font-[family-name:var(--font-space-grotesk)] text-sm font-semibold uppercase tracking-wider text-zinc-500">
-            Tags
+          <h2 className="mb-2 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
+            // tags
           </h2>
           <div className="flex flex-wrap gap-2">
             {r.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-zinc-800 px-3 py-1 text-sm text-zinc-400"
+                className="rounded border border-zinc-700 bg-zinc-800/50 px-3 py-1 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-500"
               >
                 {tag}
               </span>
@@ -151,8 +153,8 @@ export default function ReferenceDetailClient({
 
         {/* Inspired by */}
         <div>
-          <h2 className="mb-2 font-[family-name:var(--font-space-grotesk)] text-sm font-semibold uppercase tracking-wider text-zinc-500">
-            Inspired By
+          <h2 className="mb-2 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
+            // inspired_by
           </h2>
           <div className="flex flex-wrap gap-2">
             {r.inspired.map((site) => (
@@ -161,7 +163,7 @@ export default function ReferenceDetailClient({
                 href={`https://${site}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:border-zinc-700 hover:text-zinc-200"
+                className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-500 transition-colors hover:border-emerald-500/30 hover:text-emerald-400"
               >
                 {site}
               </a>
@@ -173,18 +175,18 @@ export default function ReferenceDetailClient({
         <div className="flex flex-col gap-3 pt-2">
           <a
             href={`/generate?ref=${r.id}`}
-            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
+            className="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-zinc-950 transition-colors hover:bg-emerald-400"
           >
-            Use This Reference
+            $ use --ref {r.id.split("-")[0]}
           </a>
           {sampleExists && samplePath && (
             <a
               href={samplePath}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-700 hover:text-zinc-100"
+              className="inline-flex items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"
             >
-              Open Full Preview
+              $ open --preview
             </a>
           )}
         </div>

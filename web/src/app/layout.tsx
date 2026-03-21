@@ -34,32 +34,34 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-zinc-950 text-zinc-50 font-[family-name:var(--font-inter)]">
-        <nav className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-md">
+        <nav className="sticky top-0 z-50 border-b border-emerald-500/20 bg-zinc-950/85 backdrop-blur-xl">
           <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <Link
               href="/"
-              className="font-[family-name:var(--font-space-grotesk)] text-lg font-bold tracking-tight"
+              className="font-[family-name:var(--font-jetbrains-mono)] text-lg font-bold tracking-tight flex items-center gap-1"
             >
-              DesignMaker
+              <span className="text-emerald-500">&gt;</span>
+              <span className="text-zinc-50">designmaker</span>
+              <span className="text-emerald-500 animate-cursor-blink">_</span>
             </Link>
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center gap-6 font-[family-name:var(--font-jetbrains-mono)] text-sm">
               <Link
                 href="/"
-                className="text-zinc-400 transition-colors hover:text-zinc-50"
+                className="text-zinc-400 transition-colors hover:text-emerald-400"
               >
-                Gallery
+                ./gallery
               </Link>
               <Link
                 href="/generate"
-                className="text-zinc-400 transition-colors hover:text-zinc-50"
+                className="text-zinc-400 transition-colors hover:text-emerald-400"
               >
-                Generate
+                ./generate
               </Link>
               <Link
                 href="/improve"
-                className="text-zinc-400 transition-colors hover:text-zinc-50"
+                className="text-zinc-400 transition-colors hover:text-emerald-400"
               >
-                Improve
+                ./improve
               </Link>
             </div>
           </div>
