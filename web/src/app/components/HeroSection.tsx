@@ -42,10 +42,10 @@ function useTypingAnimation(
 
   useEffect(() => {
     if (!shouldStart) {
-      setDisplayedLines([]);
-      setCurrentLine(0);
-      setCurrentChar(0);
-      setDone(false);
+      setDisplayedLines((prev) => prev.length === 0 ? prev : []);
+      setCurrentLine((prev) => prev === 0 ? prev : 0);
+      setCurrentChar((prev) => prev === 0 ? prev : 0);
+      setDone((prev) => prev === false ? prev : false);
       return;
     }
 
