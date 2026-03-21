@@ -103,7 +103,7 @@ For improvedCode:
 === SKILL.md ===
 ${skillContent}`;
 
-    const client = new Anthropic();
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream({

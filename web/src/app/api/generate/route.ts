@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
-import { readFile } from "fs/promises";
+import { readFile, readdir } from "fs/promises";
 import { join } from "path";
 
 const CATALOG_DIR = join(
@@ -38,13 +38,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const refFileName = `${referenceId}.md`;
     let referenceContent: string;
     try {
-      referenceContent = await readFile(
-        join(CATALOG_DIR, refFileName),
-        "utf-8"
-      );
+      const files = await readdir(CATALOG_DIR);
+      const refFile = files.find((f) => f.startsWith(referenceId) && f.endsWith(".md"));
+      if (!refFile) throw new Error("not found");
+      referenceContent = await readFile(join(CATALOG_DIR, refFile), "utf-8");
     } catch {
       return Response.json(
         { error: `래퍼런스 ${referenceId}를 찾을 수 없습니다.` },
