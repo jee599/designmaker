@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier Nova — Brand Strategy & Design</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400;1,9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --subtle-bg: #f8f8f8;
+      --border: #e0e0e0;
+      --muted: #999999;
+      --gold: #c9a96e;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Typography ──────────────────────────────────── */
+    .font-heading { font-family: 'DM Sans', sans-serif; }
+    .font-mono { font-family: 'DM Mono', monospace; }
+
+    h1, h2, h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    em.accent {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    /* ── Gold details ────────────────────────────────── */
+    .gold { color: var(--gold); }
+
+    .gold-stroke {
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      vertical-align: middle;
+    }
+
+    .gold-bar {
+      width: 2px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── Section label ───────────────────────────────── */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Two-column asymmetric grid ─────────────────── */
+    .asym-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0 48px;
+      align-items: start;
+    }
+
+    .asym-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: 6px;
+    }
+
+    @media (max-width: 767px) {
+      .asym-grid {
+        grid-template-columns: 1fr;
+        gap: 8px 0;
+      }
+    }
+
+    /* ── Scroll-triggered animations ────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ── Project number ──────────────────────────────── */
+    .project-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    /* ── Nav ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover { color: var(--text); }
+
+    .nav-cta {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 1px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nav-cta:hover { color: var(--gold); }
+
+    /* ── Divider ─────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Project card ────────────────────────────────── */
+    .project-card {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      transition: background 0.3s ease;
+      cursor: pointer;
+    }
+
+    .project-card:last-child { border-bottom: 1px solid var(--border); }
+
+    .project-card:hover .project-arrow {
+      transform: translateX(6px);
+    }
+
+    .project-arrow {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      color: var(--gold);
+    }
+
+    .project-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      display: inline-block;
+    }
+
+    /* ── Gold foil image placeholder ─────────────────── */
+    .foil-frame {
+      position: relative;
+      background: #f0ece4;
+      overflow: hidden;
+    }
+
+    .foil-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        transparent 30%,
+        rgba(201, 169, 110, 0.18) 45%,
+        rgba(201, 169, 110, 0.35) 50%,
+        rgba(201, 169, 110, 0.18) 55%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    /* ── Service list ─────────────────────────────────── */
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      transition: gap 0.3s ease;
+    }
+
+    .service-item:first-child { border-top: 1px solid var(--border); }
+
+    .service-item:hover { gap: 24px; }
+
+    .service-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── Award row ────────────────────────────────────── */
+    .award-row {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 0 32px;
+      align-items: baseline;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .award-row:first-child { border-top: 1px solid var(--border); }
+
+    .award-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Blog card ───────────────────────────────────── */
+    .blog-card {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+    }
+
+    .blog-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .blog-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Contact form ─────────────────────────────────── */
+    .form-field {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-field::placeholder { color: var(--muted); }
+    .form-field:focus { border-color: var(--gold); }
+
+    .form-submit {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 16px 40px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .form-submit:hover {
+      background: var(--gold);
+      color: #fff;
+    }
+
+    .form-submit:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    /* ── Animated gold line ───────────────────────────── */
+    .gold-line-animate {
+      position: relative;
+      height: 1px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .gold-line-animate::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation: sweep 5s ease-in-out infinite;
+    }
+
+    @keyframes sweep {
+      0% { left: -60%; }
+      100% { left: 100%; }
+    }
+
+    /* ── Marquee ──────────────────────────────────────── */
+    .marquee-track {
+      display: flex;
+      gap: 64px;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-item {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .marquee-item::after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────── -->
+  <nav>
+    <div class="max-w-6xl mx-auto px-6 md:px-10 flex items-center justify-between h-16">
+      <a href="#" class="flex items-center gap-3" style="text-decoration: none;">
+        <!-- Wordmark with gold accent stroke -->
+        <span style="font-size:13px; font-weight:600; letter-spacing:-0.01em; color:var(--text);">
+          Atelier<span class="gold">.</span>Nova
+        </span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-10">
+        <a href="#work" class="nav-link">Work</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#studio" class="nav-link">Studio</a>
+        <a href="#journal" class="nav-link">Journal</a>
+      </div>
+
+      <a href="#contact" class="nav-cta">Start a project</a>
+    </div>
+  </nav>
+
+
+  <!-- ── Hero ───────────────────────────────────────── -->
+  <section style="background: var(--bg); padding: 128px 0 160px;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <!-- Small label row -->
+      <div class="reveal flex items-center gap-4 mb-16">
+        <span class="gold-stroke"></span>
+        <span class="section-label">Brand Strategy & Design — Est. 2014</span>
+      </div>
+
+      <!-- Hero headline -->
+      <h1 class="reveal reveal-delay-1"
+          style="font-size: clamp(48px, 9vw, 112px); line-height: 1.0; letter-spacing: -0.025em; font-weight: 600; margin: 0 0 48px; max-width: 14ch;">
+        We shape brands that feel&nbsp;<em class="accent">inevitable</em>
+      </h1>
+
+      <!-- Asymmetric sub-row -->
+      <div class="reveal reveal-delay-2 asym-grid" style="margin-top: 64px;">
+        <div class="asym-label">What we do</div>
+        <div>
+          <p style="font-size: 18px; line-height: 1.6; color: #333; max-width: 56ch; margin: 0 0 32px;">
+            Atelier Nova is a brand strategy and design studio for companies that refuse to be forgettable. We work with founders building category-defining products.
+          </p>
+          <div class="flex items-center gap-8">
+            <a href="#work" style="font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text); text-decoration:none; border-bottom:1px solid var(--text); padding-bottom:2px; transition: border-color 0.2s ease;"
+               onmouseover="this.style.borderColor='var(--gold)'; this.style.color='var(--gold)';"
+               onmouseout="this.style.borderColor='var(--text)'; this.style.color='var(--text)';">
+              View selected work
+            </a>
+            <span style="color: var(--border);">—</span>
+            <span style="font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:0.06em;">12 projects in 2024</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gold animated divider -->
+      <div class="gold-line-animate reveal reveal-delay-3" style="margin-top: 80px;"></div>
+    </div>
+  </section>
+
+
+  <!-- ── Marquee strip ───────────────────────────────── -->
+  <div style="background: var(--subtle-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 16px 0; overflow: hidden;">
+    <div class="marquee-track">
+      <!-- doubled for seamless loop -->
+      <span class="marquee-item">Brand Identity</span>
+      <span class="marquee-item">Visual Systems</span>
+      <span class="marquee-item">Strategy</span>
+      <span class="marquee-item">Motion Design</span>
+      <span class="marquee-item">Editorial</span>
+      <span class="marquee-item">Packaging</span>
+      <span class="marquee-item">Digital</span>
+      <span class="marquee-item">Brand Identity</span>
+      <span class="marquee-item">Visual Systems</span>
+      <span class="marquee-item">Strategy</span>
+      <span class="marquee-item">Motion Design</span>
+      <span class="marquee-item">Editorial</span>
+      <span class="marquee-item">Packaging</span>
+      <span class="marquee-item">Digital</span>
+    </div>
+  </div>
+
+
+  <!-- ── Featured Projects ───────────────────────────── -->
+  <section id="work" style="background: var(--subtle-bg); padding: 96px 0;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <!-- Section header — asymmetric -->
+      <div class="asym-grid reveal" style="margin-bottom: 64px;">
+        <div class="asym-label">Selected Work</div>
+        <div>
+          <h2 style="font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 0;">
+            Projects that <em class="accent">matter</em>
+          </h2>
+        </div>
+      </div>
+
+      <!-- Project list -->
+      <div>
+
+        <!-- 01 -->
+        <div class="project-card reveal">
+          <div class="asym-grid">
+            <div style="padding-top: 0;">
+              <span class="project-number">01</span>
+              <span class="project-tag">Identity</span>
+            </div>
+            <div>
+              <div class="flex items-start justify-between gap-8">
+                <div style="flex: 1;">
+                  <h3 style="font-size: clamp(22px, 3vw, 34px); line-height: 1.15; margin: 0 0 16px;">
+                    Verdant — Farm-to-Table Platform
+                  </h3>
+                  <p style="font-size:14px; line-height:1.7; color:var(--muted); max-width:52ch; margin: 0 0 24px;">
+                    Complete brand overhaul for a sustainable food marketplace. Identity system, packaging, and digital product design across 14 touchpoints.
+                  </p>
+                  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <span class="project-tag">Brand Identity</span>
+                    <span class="project-tag">Packaging</span>
+                    <span class="project-tag">Web</span>
+                  </div>
+                </div>
+
+                <!-- Gold foil image -->
+                <div class="foil-frame" style="width:200px; height:140px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="20" stroke="#c9a96e" stroke-width="1"/>
+                    <path d="M24 12 L24 36 M12 24 L36 24" stroke="#c9a96e" stroke-width="0.5"/>
+                    <circle cx="24" cy="24" r="6" fill="none" stroke="#c9a96e" stroke-width="1"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between" style="margin-top: 24px;">
+                <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; color:var(--muted); text-transform:uppercase;">2024 — Berlin</span>
+                <span class="project-arrow" style="font-size:20px;">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 -->
+        <div class="project-card reveal reveal-delay-1">
+          <div class="asym-grid">
+            <div>
+              <span class="project-number">02</span>
+              <span class="project-tag">Strategy</span>
+            </div>
+            <div>
+              <div class="flex items-start justify-between gap-8">
+                <div style="flex: 1;">
+                  <h3 style="font-size: clamp(22px, 3vw, 34px); line-height: 1.15; margin: 0 0 16px;">
+                    Cove — Private Banking Redefined
+                  </h3>
+                  <p style="font-size:14px; line-height:1.7; color:var(--muted); max-width:52ch; margin: 0 0 24px;">
+                    Positioning strategy and visual identity for a boutique wealth management firm entering competitive European markets.
+                  </p>
+                  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <span class="project-tag">Strategy</span>
+                    <span class="project-tag">Identity</span>
+                    <span class="project-tag">Print</span>
+                  </div>
+                </div>
+
+                <div class="foil-frame" style="width:200px; height:140px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <rect x="8" y="8" width="32" height="32" stroke="#c9a96e" stroke-width="1"/>
+                    <rect x="16" y="16" width="16" height="16" fill="none" stroke="#c9a96e" stroke-width="0.5"/>
+                    <path d="M8 8 L40 40" stroke="#c9a96e" stroke-width="0.5"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between" style="margin-top: 24px;">
+                <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; color:var(--muted); text-transform:uppercase;">2024 — Zurich</span>
+                <span class="project-arrow" style="font-size:20px;">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03 -->
+        <div class="project-card reveal reveal-delay-2">
+          <div class="asym-grid">
+            <div>
+              <span class="project-number">03</span>
+              <span class="project-tag">Digital</span>
+            </div>
+            <div>
+              <div class="flex items-start justify-between gap-8">
+                <div style="flex: 1;">
+                  <h3 style="font-size: clamp(22px, 3vw, 34px); line-height: 1.15; margin: 0 0 16px;">
+                    Forma — Architectural Software
+                  </h3>
+                  <p style="font-size:14px; line-height:1.7; color:var(--muted); max-width:52ch; margin: 0 0 24px;">
+                    Brand system and product design language for a generative architecture tool used by 3,400+ studios worldwide.
+                  </p>
+                  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <span class="project-tag">Brand System</span>
+                    <span class="project-tag">Product Design</span>
+                    <span class="project-tag">Motion</span>
+                  </div>
+                </div>
+
+                <div class="foil-frame" style="width:200px; height:140px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <polygon points="24,6 42,38 6,38" stroke="#c9a96e" stroke-width="1" fill="none"/>
+                    <polygon points="24,16 34,34 14,34" stroke="#c9a96e" stroke-width="0.5" fill="none"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between" style="margin-top: 24px;">
+                <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; color:var(--muted); text-transform:uppercase;">2023 — Amsterdam</span>
+                <span class="project-arrow" style="font-size:20px;">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 -->
+        <div class="project-card reveal reveal-delay-3">
+          <div class="asym-grid">
+            <div>
+              <span class="project-number">04</span>
+              <span class="project-tag">Identity</span>
+            </div>
+            <div>
+              <div class="flex items-start justify-between gap-8">
+                <div style="flex: 1;">
+                  <h3 style="font-size: clamp(22px, 3vw, 34px); line-height: 1.15; margin: 0 0 16px;">
+                    Lumen — Luxury Skincare
+                  </h3>
+                  <p style="font-size:14px; line-height:1.7; color:var(--muted); max-width:52ch; margin: 0 0 24px;">
+                    Complete brand creation from naming to packaging for a dermatologist-founded skincare line targeting the $180B prestige beauty segment.
+                  </p>
+                  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <span class="project-tag">Naming</span>
+                    <span class="project-tag">Packaging</span>
+                    <span class="project-tag">Retail</span>
+                  </div>
+                </div>
+
+                <div class="foil-frame" style="width:200px; height:140px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <ellipse cx="24" cy="24" rx="18" ry="10" stroke="#c9a96e" stroke-width="1" fill="none"/>
+                    <ellipse cx="24" cy="24" rx="10" ry="18" stroke="#c9a96e" stroke-width="0.5" fill="none"/>
+                    <circle cx="24" cy="24" r="2" fill="#c9a96e"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between" style="margin-top: 24px;">
+                <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; color:var(--muted); text-transform:uppercase;">2023 — Paris</span>
+                <span class="project-arrow" style="font-size:20px;">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /project list -->
+
+    </div>
+  </section>
+
+
+  <!-- ── Services ────────────────────────────────────── -->
+  <section id="services" style="background: var(--bg); padding: 80px 0;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <div class="asym-grid reveal" style="margin-bottom: 64px;">
+        <div class="asym-label">What we offer</div>
+        <div>
+          <h2 style="font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 0;">
+            <em class="accent">Considered</em> work,<br>not rushed output
+          </h2>
+        </div>
+      </div>
+
+      <div class="asym-grid">
+        <div></div><!-- empty label column -->
+        <div>
+
+          <div class="service-item reveal">
+            <div class="service-dot"></div>
+            <div style="flex:1;">
+              <div class="flex items-baseline justify-between">
+                <span style="font-size:17px; font-weight:600; letter-spacing:-0.01em;">Brand Strategy</span>
+                <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">01</span>
+              </div>
+              <p style="font-size:13px; line-height:1.65; color:var(--muted); margin: 8px 0 0; max-width:54ch;">
+                Positioning, competitive mapping, narrative architecture, messaging hierarchy. The foundation before any visual work begins.
+              </p>
+            </div>
+          </div>
+
+          <div class="service-item reveal reveal-delay-1">
+            <div class="service-dot"></div>
+            <div style="flex:1;">
+              <div class="flex items-baseline justify-between">
+                <span style="font-size:17px; font-weight:600; letter-spacing:-0.01em;">Visual Identity</span>
+                <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">02</span>
+              </div>
+              <p style="font-size:13px; line-height:1.65; color:var(--muted); margin: 8px 0 0; max-width:54ch;">
+                Logo systems, color, typography, grid — built to scale across every surface from app icon to billboard.
+              </p>
+            </div>
+          </div>
+
+          <div class="service-item reveal reveal-delay-2">
+            <div class="service-dot"></div>
+            <div style="flex:1;">
+              <div class="flex items-baseline justify-between">
+                <span style="font-size:17px; font-weight:600; letter-spacing:-0.01em;">Editorial & Print</span>
+                <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">03</span>
+              </div>
+              <p style="font-size:13px; line-height:1.65; color:var(--muted); margin: 8px 0 0; max-width:54ch;">
+                Annual reports, brand books, packaging, printed ephemera. We obsess over paper stock, print finishing, and tactile detail.
+              </p>
+            </div>
+          </div>
+
+          <div class="service-item reveal reveal-delay-3">
+            <div class="service-dot"></div>
+            <div style="flex:1;">
+              <div class="flex items-baseline justify-between">
+                <span style="font-size:17px; font-weight:600; letter-spacing:-0.01em;">Digital Experience</span>
+                <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">04</span>
+              </div>
+              <p style="font-size:13px; line-height:1.65; color:var(--muted); margin: 8px 0 0; max-width:54ch;">
+                Marketing sites, product design systems, motion and interaction design. Fully handed off or built in partnership with your team.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── Awards ─────────────────────────────────────── -->
+  <section style="background: var(--subtle-bg); padding: 64px 0;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <div class="asym-grid reveal" style="margin-bottom: 48px;">
+        <div class="asym-label">Recognition</div>
+        <div>
+          <h2 style="font-size: clamp(24px, 3vw, 36px); line-height: 1.1; margin: 0;">
+            Awards & <em class="accent">press</em>
+          </h2>
+        </div>
+      </div>
+
+      <div class="asym-grid">
+        <div></div>
+        <div>
+
+          <div class="award-row reveal">
+            <span class="award-year">2024</span>
+            <span style="font-size:14px; font-weight:500;">D&AD — Wood Pencil, Brand Identity</span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">Verdant</span>
+          </div>
+
+          <div class="award-row reveal reveal-delay-1">
+            <span class="award-year">2024</span>
+            <span style="font-size:14px; font-weight:500;">Cannes Lions — Bronze, Design</span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">Cove</span>
+          </div>
+
+          <div class="award-row reveal reveal-delay-2">
+            <span class="award-year">2023</span>
+            <span style="font-size:14px; font-weight:500;">Red Dot — Best of Best, Brand Design</span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">Forma</span>
+          </div>
+
+          <div class="award-row reveal reveal-delay-3">
+            <span class="award-year">2023</span>
+            <span style="font-size:14px; font-weight:500;">Brand New Awards — Identity of the Year</span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">Lumen</span>
+          </div>
+
+          <div class="award-row reveal reveal-delay-4">
+            <span class="award-year">2022</span>
+            <span style="font-size:14px; font-weight:500;">Awwwards — Site of the Year</span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">Studio</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Journal ─────────────────────────────────────── -->
+  <section id="journal" style="background: var(--bg); padding: 80px 0;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <div class="asym-grid reveal" style="margin-bottom: 56px;">
+        <div class="asym-label">Journal</div>
+        <div>
+          <h2 style="font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 0;">
+            Thinking <em class="accent">aloud</em>
+          </h2>
+        </div>
+      </div>
+
+      <div class="asym-grid">
+        <div></div>
+        <div class="grid md:grid-cols-3 gap-0">
+
+          <div class="blog-card reveal" style="padding-right: 40px;">
+            <span class="blog-date">Mar 2025</span>
+            <h3 style="font-size:17px; line-height:1.3; margin:12px 0 10px; font-weight:600;">
+              Why most brand guidelines fail before they're used
+            </h3>
+            <p style="font-size:13px; line-height:1.65; color:var(--muted); margin:0;">
+              The document is never the problem. The problem is the conversation that didn't happen before it was written.
+            </p>
+            <a href="#" style="display:inline-block; margin-top:20px; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid var(--gold); padding-bottom:1px;">
+              Read more
+            </a>
+          </div>
+
+          <div class="blog-card reveal reveal-delay-1" style="padding-right: 40px;">
+            <span class="blog-date">Jan 2025</span>
+            <h3 style="font-size:17px; line-height:1.3; margin:12px 0 10px; font-weight:600;">
+              The return of craft in a world of AI-generated everything
+            </h3>
+            <p style="font-size:13px; line-height:1.65; color:var(--muted); margin:0;">
+              Automation flattens. Taste differentiates. What happens to design studios when generation is free?
+            </p>
+            <a href="#" style="display:inline-block; margin-top:20px; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid var(--gold); padding-bottom:1px;">
+              Read more
+            </a>
+          </div>
+
+          <div class="blog-card reveal reveal-delay-2">
+            <span class="blog-date">Nov 2024</span>
+            <h3 style="font-size:17px; line-height:1.3; margin:12px 0 10px; font-weight:600;">
+              Gold as a design material — not a decoration
+            </h3>
+            <p style="font-size:13px; line-height:1.65; color:var(--muted); margin:0;">
+              Used carelessly, gold is kitsch. Used with restraint, it signals permanence. Notes from three years of working with precious metals in print.
+            </p>
+            <a href="#" style="display:inline-block; margin-top:20px; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid var(--gold); padding-bottom:1px;">
+              Read more
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Contact ─────────────────────────────────────── -->
+  <section id="contact" style="background: var(--subtle-bg); padding: 96px 0;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <div class="asym-grid reveal" style="margin-bottom: 64px;">
+        <div class="asym-label">New work</div>
+        <div>
+          <h2 style="font-size: clamp(32px, 5vw, 60px); line-height: 1.05; margin: 0;">
+            Let's build something <em class="accent">lasting</em>
+          </h2>
+          <p style="font-size:15px; line-height:1.7; color:var(--muted); margin:24px 0 0; max-width:48ch;">
+            We take on four to six projects per year. If you're building something that deserves careful attention, we'd like to hear about it.
+          </p>
+        </div>
+      </div>
+
+      <div class="asym-grid">
+        <div></div>
+        <div class="reveal reveal-delay-1" style="max-width: 560px;">
+          <form onsubmit="return false;">
+            <div style="margin-bottom: 8px;">
+              <input type="text" placeholder="Your name" class="form-field"
+                     aria-label="Your name" autocomplete="name" />
+            </div>
+            <div style="margin-bottom: 8px;">
+              <input type="email" placeholder="Email address" class="form-field"
+                     aria-label="Email address" autocomplete="email" />
+            </div>
+            <div style="margin-bottom: 8px;">
+              <input type="text" placeholder="Company or project" class="form-field"
+                     aria-label="Company or project" />
+            </div>
+            <div style="margin-bottom: 40px;">
+              <textarea placeholder="Tell us what you're working on" class="form-field"
+                        aria-label="Project description" rows="4"
+                        style="resize: none;"></textarea>
+            </div>
+            <button type="submit" class="form-submit"
+                    aria-label="Send enquiry">
+              Send enquiry
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Footer ─────────────────────────────────────── -->
+  <footer style="background: #000000; padding: 64px 0;">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-10">
+
+        <!-- Left -->
+        <div>
+          <div style="font-size:28px; font-weight:600; letter-spacing:-0.02em; color:#ffffff; margin-bottom:16px;">
+            Atelier<span style="color:var(--gold);">.</span>Nova
+          </div>
+          <p style="font-size:13px; line-height:1.65; color:#666; max-width:36ch; margin:0;">
+            Brand Strategy & Design<br>
+            Amsterdam · Berlin · Paris
+          </p>
+        </div>
+
+        <!-- Right links -->
+        <div class="flex flex-col md:items-end gap-6">
+          <div class="flex gap-8">
+            <a href="#" style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#666; text-decoration:none; transition:color 0.2s ease;"
+               onmouseover="this.style.color='var(--gold)';"
+               onmouseout="this.style.color='#666';">Instagram</a>
+            <a href="#" style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#666; text-decoration:none; transition:color 0.2s ease;"
+               onmouseover="this.style.color='var(--gold)';"
+               onmouseout="this.style.color='#666';">LinkedIn</a>
+            <a href="#" style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#666; text-decoration:none; transition:color 0.2s ease;"
+               onmouseover="this.style.color='var(--gold)';"
+               onmouseout="this.style.color='#666';">Are.na</a>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="gold-stroke" style="opacity:0.4;"></span>
+            <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; color:#444; text-transform:uppercase;">
+              © 2025 Atelier Nova. All work reserved.
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ── Scroll observer ────────────────────────────── -->
+  <script>
+    (function () {
+      const els = document.querySelectorAll('.reveal');
+
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(el => el.classList.add('visible'));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // do NOT unobserve — allows re-animation on scroll back
+          } else {
+            // Optional: comment out the next line to keep elements visible once revealed
+            // entry.target.classList.remove('visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      els.forEach(el => observer.observe(el));
+    })();
+  </script>
+
+</body>
+</html>

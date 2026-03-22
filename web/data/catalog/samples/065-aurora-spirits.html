@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Noir — Artisan Fragrance House</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --subtle-bg: #0a0a0a;
+      --border: #1a1a1a;
+      --muted: #888888;
+      --accent: #2d6b4a;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-serif { font-family: 'Instrument Serif', Georgia, serif; }
+
+    /* ── Clip-path + skew text reveal (signature animation) ── */
+    .reveal-line {
+      display: block;
+      overflow: hidden;
+    }
+    .reveal-inner {
+      display: block;
+      clip-path: inset(0 100% 0 0);
+      transform: skewX(12deg);
+      transition:
+        clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-inner.revealed {
+      clip-path: inset(0 0% 0 0);
+      transform: skewX(0deg);
+    }
+
+    /* ── Staggered word reveal ── */
+    .word-reveal {
+      display: block;
+      overflow: hidden;
+    }
+    .word-inner {
+      display: block;
+      transform: translateY(110%);
+      opacity: 0;
+      transition:
+        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.5s ease;
+    }
+    .word-inner.revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ── Fade-in for general elements ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Hero film ── */
+    .hero-film {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* Emerald glass bottle — CSS art */
+    .bottle-wrap {
+      position: absolute;
+      right: 10%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 220px;
+      height: 480px;
+    }
+    @media (max-width: 768px) {
+      .bottle-wrap {
+        right: 50%;
+        transform: translate(50%, -50%);
+        opacity: 0.25;
+        width: 160px;
+        height: 340px;
+      }
+    }
+
+    .bottle-body {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 340px;
+      background: linear-gradient(135deg,
+        #0f3d28 0%,
+        #1a5c3b 20%,
+        #2d6b4a 40%,
+        #1f4d37 60%,
+        #0a2d1c 80%,
+        #071f13 100%
+      );
+      border-radius: 8px 8px 24px 24px;
+      box-shadow:
+        inset 4px 0 12px rgba(255,255,255,0.08),
+        inset -4px 0 8px rgba(0,0,0,0.5),
+        0 0 60px rgba(45, 107, 74, 0.3),
+        0 0 120px rgba(45, 107, 74, 0.12);
+    }
+
+    /* Frost / ripple texture on bottle */
+    .bottle-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        repeating-linear-gradient(
+          transparent,
+          transparent 18px,
+          rgba(255,255,255,0.025) 18px,
+          rgba(255,255,255,0.025) 19px
+        );
+    }
+    .bottle-body::after {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      width: 30%;
+      height: 50%;
+      background: linear-gradient(
+        160deg,
+        rgba(255,255,255,0.18) 0%,
+        rgba(255,255,255,0.04) 50%,
+        transparent 100%
+      );
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+
+    .bottle-neck {
+      position: absolute;
+      bottom: 340px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 100px;
+      background: linear-gradient(135deg,
+        #0f3d28 0%, #1a5c3b 40%, #0a2d1c 100%
+      );
+      border-radius: 4px 4px 0 0;
+      box-shadow:
+        inset 2px 0 6px rgba(255,255,255,0.07),
+        0 0 30px rgba(45, 107, 74, 0.2);
+    }
+
+    .bottle-cap {
+      position: absolute;
+      bottom: 440px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 36px;
+      background: linear-gradient(180deg, #2a2a2a 0%, #111 100%);
+      border-radius: 4px 4px 0 0;
+      border: 1px solid #333;
+    }
+
+    /* Ripple rings */
+    .ripple-ring {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 1px solid rgba(45, 107, 74, 0.4);
+      animation: ripple-out 3s ease-out infinite;
+    }
+    .ripple-ring:nth-child(2) { animation-delay: 1s; }
+    .ripple-ring:nth-child(3) { animation-delay: 2s; }
+
+    @keyframes ripple-out {
+      0%   { transform: translateX(-50%) scale(1); opacity: 0.5; }
+      100% { transform: translateX(-50%) scale(3.5); opacity: 0; }
+    }
+
+    /* Glass texture overlay on hero */
+    .glass-texture {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(45,107,74,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(45,107,74,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Pill button ── */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+      text-decoration: none;
+    }
+    .btn-pill:hover {
+      border-color: var(--accent);
+      background: rgba(45, 107, 74, 0.12);
+      color: #fff;
+    }
+    .btn-pill:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent), 0 0 0 4px rgba(45,107,74,0.2);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn-accent:hover {
+      background: #3a8660;
+      border-color: #3a8660;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── Product card ── */
+    .product-card {
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      transition: border-color 0.4s ease, transform 0.4s ease;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      border-color: rgba(45, 107, 74, 0.5);
+      transform: translateY(-4px);
+    }
+    .product-card:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    /* ── Animated border line ── */
+    .border-line {
+      position: relative;
+      height: 1px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .border-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(45,107,74,0.6), transparent);
+      animation: scan-line 4s ease-in-out infinite;
+    }
+    @keyframes scan-line {
+      0%   { left: -60%; }
+      100% { left: 100%; }
+    }
+
+    /* ── Floating particle field ── */
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(45, 107, 74, 0.5);
+      border-radius: 50%;
+      animation: drift 12s ease-in-out infinite;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      20%       { opacity: 0.8; }
+      80%       { opacity: 0.4; }
+      100%      { transform: translateY(-120px) translateX(40px); opacity: 0; }
+    }
+
+    /* ── Stagger delay utilities ── */
+    .delay-50  { transition-delay: 50ms !important; }
+    .delay-100 { transition-delay: 100ms !important; }
+    .delay-150 { transition-delay: 150ms !important; }
+    .delay-200 { transition-delay: 200ms !important; }
+    .delay-250 { transition-delay: 250ms !important; }
+    .delay-300 { transition-delay: 300ms !important; }
+
+    /* ── Horizontal rule ── */
+    hr.dim { border: none; border-top: 1px solid var(--border); }
+
+    /* ── Community card hover ── */
+    .community-card {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      transition: border-color 0.35s ease, background 0.35s ease;
+    }
+    .community-card:hover {
+      border-color: rgba(45,107,74,0.4);
+      background: rgba(45,107,74,0.04);
+    }
+
+    /* ── Bottle mini (product card artwork) ── */
+    .mini-bottle {
+      width: 60px;
+      height: 130px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .mini-bottle-body {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 90px;
+      border-radius: 3px 3px 8px 8px;
+      box-shadow:
+        inset 2px 0 6px rgba(255,255,255,0.08),
+        0 0 20px rgba(45,107,74,0.2);
+    }
+    .mini-bottle-neck {
+      position: absolute;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 28px;
+      border-radius: 2px 2px 0 0;
+    }
+    .mini-bottle-cap {
+      position: absolute;
+      bottom: 118px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 12px;
+      background: #222;
+      border-radius: 2px 2px 0 0;
+      border: 1px solid #333;
+    }
+
+    .var-a .mini-bottle-body,
+    .var-a .mini-bottle-neck {
+      background: linear-gradient(135deg, #0f3d28 0%, #2d6b4a 50%, #071f13 100%);
+    }
+    .var-b .mini-bottle-body,
+    .var-b .mini-bottle-neck {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .var-c .mini-bottle-body,
+    .var-c .mini-bottle-neck {
+      background: linear-gradient(135deg, #2d1b0e 0%, #5c3015 50%, #1a0d06 100%);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav aria-label="Main navigation">
+  <a href="#" class="font-serif text-lg tracking-tight text-white" style="text-decoration:none;">Maison Noir</a>
+  <div style="display:flex;align-items:center;gap:2rem;">
+    <div style="display:flex;gap:1.5rem;" class="hidden md:flex">
+      <a href="#story" style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Maison</a>
+      <a href="#products" style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Collection</a>
+      <a href="#community" style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Atelier</a>
+    </div>
+    <a href="#products" class="btn-pill btn-accent" style="font-size:11px;">Explore</a>
+  </div>
+</nav>
+
+<!-- ── HERO FILM ── -->
+<section class="hero-film" aria-label="Hero">
+  <!-- Glass texture overlay -->
+  <div class="glass-texture"></div>
+
+  <!-- Floating particles -->
+  <div class="particle" style="left:15%;top:70%;animation-delay:0s;"></div>
+  <div class="particle" style="left:25%;top:60%;animation-delay:2s;"></div>
+  <div class="particle" style="left:18%;top:50%;animation-delay:4s;"></div>
+  <div class="particle" style="left:8%;top:80%;animation-delay:6s;"></div>
+  <div class="particle" style="left:32%;top:75%;animation-delay:1.5s;"></div>
+  <div class="particle" style="left:42%;top:65%;animation-delay:3.5s;"></div>
+
+  <!-- Bottle sculpture -->
+  <div class="bottle-wrap" aria-hidden="true">
+    <div class="bottle-cap"></div>
+    <div class="bottle-neck"></div>
+    <div class="bottle-body">
+      <div class="ripple-ring"></div>
+      <div class="ripple-ring"></div>
+      <div class="ripple-ring"></div>
+    </div>
+  </div>
+
+  <!-- Hero text -->
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 2rem;max-width:1152px;margin:0 auto;left:0;right:0;">
+    <div style="max-width:600px;">
+      <div class="section-label fade-up" style="margin-bottom:2rem;" id="hero-label">
+        Est. 2019 &nbsp;·&nbsp; Paris
+      </div>
+
+      <h1 class="font-serif" style="font-size:clamp(3rem,8vw,5.5rem);font-weight:500;letter-spacing:-0.01em;line-height:1.08;margin:0 0 1.5rem;">
+        <span class="reveal-line"><span class="reveal-inner" id="h1-line1">Born from</span></span>
+        <span class="reveal-line"><span class="reveal-inner" id="h1-line2" style="color:var(--accent);">Northern</span></span>
+        <span class="reveal-line"><span class="reveal-inner" id="h1-line3">Darkness.</span></span>
+      </h1>
+
+      <p class="fade-up delay-200" style="font-size:1rem;line-height:1.7;color:var(--muted);max-width:400px;margin:0 0 2.5rem;">
+        Each bottle holds a season distilled — the frost of boreal forests, the mineral silence of permafrost, the first green push of Arctic spring.
+      </p>
+
+      <div class="fade-up delay-300" style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="#products" class="btn-pill btn-accent">Discover Collection</a>
+        <a href="#story" class="btn-pill">Our Maison</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom fade -->
+  <div style="position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent,#000);pointer-events:none;"></div>
+</section>
+
+<!-- ── BRAND STORY ── -->
+<section id="story" style="background:var(--subtle-bg);padding:6rem 2rem;" aria-label="Brand story">
+  <div style="max-width:1152px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;" class="story-grid">
+
+      <div class="fade-up">
+        <div class="section-label" style="margin-bottom:1.5rem;">The Maison</div>
+        <h2 class="font-serif" style="font-size:clamp(2rem,4vw,3rem);font-weight:500;letter-spacing:-0.01em;line-height:1.15;margin:0 0 1.5rem;">
+          <span class="reveal-line"><span class="reveal-inner" data-stagger="0">Craft distilled</span></span>
+          <span class="reveal-line"><span class="reveal-inner" data-stagger="1">to its essence.</span></span>
+        </h2>
+        <p style="color:var(--muted);line-height:1.8;margin:0 0 1.5rem;font-size:0.95rem;">
+          Founded by master distiller Elena Kors in a converted greenhouse outside Oslo, Maison Noir began as a single experiment: what happens when you freeze fermentation at its most volatile moment?
+        </p>
+        <p style="color:var(--muted);line-height:1.8;margin:0 0 2rem;font-size:0.95rem;">
+          Twelve years and four hundred iterations later, the answer lives in every bottle we release. Frost on emerald glass. A spirit that remembers winter.
+        </p>
+        <div style="display:flex;gap:2rem;border-top:1px solid var(--border);padding-top:2rem;">
+          <div>
+            <div class="font-serif" style="font-size:2rem;font-weight:500;">12</div>
+            <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;">Years craft</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div>
+            <div class="font-serif" style="font-size:2rem;font-weight:500;">400+</div>
+            <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;">Iterations</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div>
+            <div class="font-serif" style="font-size:2rem;font-weight:500;">3</div>
+            <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;">Nordic seasons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decorative panel -->
+      <div class="fade-up delay-150" style="position:relative;">
+        <div style="aspect-ratio:3/4;background:linear-gradient(160deg,#0d1f16 0%,#071311 100%);border:1px solid var(--border);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+          <!-- Frost circle ornament -->
+          <div style="position:relative;width:200px;height:200px;">
+            <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(45,107,74,0.3);"></div>
+            <div style="position:absolute;inset:16px;border-radius:50%;border:1px solid rgba(45,107,74,0.15);"></div>
+            <div style="position:absolute;inset:32px;border-radius:50%;border:1px solid rgba(45,107,74,0.08);"></div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+              <span class="font-serif" style="font-size:3.5rem;color:rgba(45,107,74,0.6);">✦</span>
+            </div>
+          </div>
+          <!-- Corner labels -->
+          <div style="position:absolute;top:1.5rem;left:1.5rem;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);">Oslo, 2019</div>
+          <div style="position:absolute;bottom:1.5rem;right:1.5rem;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);">Batch No. 001</div>
+        </div>
+        <!-- Accent line -->
+        <div style="position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="border-line"></div>
+
+<!-- ── PRODUCTS GRID ── -->
+<section id="products" style="background:var(--bg);padding:6rem 2rem;" aria-label="Collection">
+  <div style="max-width:1152px;margin:0 auto;">
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;">
+      <div class="fade-up">
+        <div class="section-label" style="margin-bottom:1.5rem;">The Collection</div>
+        <h2 class="font-serif" style="font-size:clamp(2rem,4vw,3rem);font-weight:500;letter-spacing:-0.01em;margin:0;">
+          <span class="reveal-line"><span class="reveal-inner" data-stagger="0">Three seasons.</span></span>
+          <span class="reveal-line"><span class="reveal-inner" data-stagger="1">One terroir.</span></span>
+        </h2>
+      </div>
+      <a href="#" class="btn-pill fade-up delay-200" style="white-space:nowrap;">All expressions</a>
+    </div>
+
+    <!-- Product grid — first card col-span-2 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto;gap:1px;background:var(--border);">
+
+      <!-- Card 1 — featured -->
+      <div class="product-card" tabindex="0" style="grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;min-height:360px;">
+        <div style="padding:2.5rem;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div class="section-label" style="margin-bottom:1.5rem;">No. 01</div>
+            <h3 class="font-serif reveal-line" style="font-size:1.5rem;font-weight:400;margin:0 0 1rem;">
+              <span class="reveal-inner" data-stagger="0">Aurora Borealis</span>
+            </h3>
+            <p style="font-size:0.875rem;color:var(--muted);line-height:1.7;margin:0 0 2rem;">
+              The original expression. Forty-eight hour freeze distillation beneath the Northern Lights. Notes of pine frost, white mineral, and a finish that lingers like an exhaled breath in cold air.
+            </p>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div class="font-serif" style="font-size:1.5rem;">€ 148</div>
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);">700ml · 40% ABV</div>
+            </div>
+            <button class="btn-pill btn-accent" style="font-size:11px;" aria-label="Add Aurora Borealis to cart">Add to cart</button>
+          </div>
+        </div>
+        <div class="var-a" style="background:linear-gradient(160deg,#071a10 0%,#0d2e1c 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <!-- Ripple texture -->
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%, rgba(45,107,74,0.3) 0%, transparent 70%);"></div>
+          <div class="mini-bottle">
+            <div class="mini-bottle-cap"></div>
+            <div class="mini-bottle-neck"></div>
+            <div class="mini-bottle-body"></div>
+          </div>
+          <div style="position:absolute;bottom:1.5rem;left:0;right:0;text-align:center;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(45,107,74,0.6);">Signature</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="product-card var-b" tabindex="0" style="display:flex;flex-direction:column;min-height:360px;">
+        <div style="flex:1;background:linear-gradient(160deg,#080814 0%,#101028 100%);display:flex;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 90%, rgba(30,40,100,0.3) 0%, transparent 70%);"></div>
+          <div class="mini-bottle var-b">
+            <div class="mini-bottle-cap"></div>
+            <div class="mini-bottle-neck"></div>
+            <div class="mini-bottle-body"></div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;border-top:1px solid var(--border);">
+          <div class="section-label" style="margin-bottom:0.75rem;">No. 02</div>
+          <h3 class="font-serif" style="font-size:1.1rem;font-weight:400;margin:0 0 0.5rem;">Polar Night</h3>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6;margin:0 0 1rem;">Deep winter. Rye mash aged in charred Finnish oak under three months of darkness.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div class="font-serif" style="font-size:1.2rem;">€ 176</div>
+            <button class="btn-pill" style="font-size:10px;padding:7px 14px;" aria-label="Add Polar Night to cart">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="product-card var-c" tabindex="0" style="display:flex;flex-direction:column;min-height:240px;">
+        <div style="flex:1;background:linear-gradient(160deg,#180c05 0%,#2a1609 100%);display:flex;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 90%, rgba(80,40,10,0.3) 0%, transparent 70%);"></div>
+          <div class="mini-bottle var-c">
+            <div class="mini-bottle-cap"></div>
+            <div class="mini-bottle-neck"></div>
+            <div class="mini-bottle-body"></div>
+          </div>
+        </div>
+        <div style="padding:1.5rem;border-top:1px solid var(--border);">
+          <div class="section-label" style="margin-bottom:0.75rem;">No. 03</div>
+          <h3 class="font-serif" style="font-size:1.1rem;font-weight:400;margin:0 0 0.5rem;">Equinox Amber</h3>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div class="font-serif" style="font-size:1.2rem;">€ 195</div>
+            <button class="btn-pill" style="font-size:10px;padding:7px 14px;" aria-label="Add Equinox Amber to cart">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 — limited edition -->
+      <div class="product-card" tabindex="0" style="grid-column:span 2;padding:2rem;display:flex;gap:2rem;align-items:center;min-height:180px;">
+        <div style="width:3px;height:80px;background:linear-gradient(to bottom,var(--accent),transparent);flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div class="section-label" style="margin-bottom:0.75rem;">Limited · Batch 24</div>
+          <h3 class="font-serif" style="font-size:1.25rem;font-weight:400;margin:0 0 0.5rem;">Solstice Reserve — Single Cask</h3>
+          <p style="font-size:0.85rem;color:var(--muted);margin:0;">Unfiltered. Cask strength 58.4%. Only 240 bottles numbered by hand. The longest night, bottled.</p>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div class="font-serif" style="font-size:1.5rem;margin-bottom:0.5rem;">€ 420</div>
+          <button class="btn-pill btn-accent" style="font-size:11px;" aria-label="Reserve Solstice batch">Reserve</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="border-line"></div>
+
+<!-- ── COMMUNITY / ATELIER ── -->
+<section id="community" style="background:var(--subtle-bg);padding:5rem 2rem;" aria-label="Atelier">
+  <div style="max-width:1152px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:3rem;">
+      <div class="section-label" style="justify-content:center;margin-bottom:1.5rem;">The Atelier</div>
+      <h2 class="font-serif" style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:500;letter-spacing:-0.01em;margin:0 0 1rem;">
+        <span class="reveal-line" style="display:inline-block;"><span class="reveal-inner" data-stagger="0">An invitation to the craft.</span></span>
+      </h2>
+      <p style="color:var(--muted);max-width:480px;margin:0 auto;font-size:0.95rem;line-height:1.7;">Join our small-batch release program, distillery visits, and the members-only tasting notes journal.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);">
+      <div class="community-card fade-up" style="background:var(--subtle-bg);">
+        <div style="width:36px;height:36px;border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d6b4a" stroke-width="1.5" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="font-serif" style="font-size:1.1rem;font-weight:400;margin:0 0 0.75rem;">First Release Access</h3>
+        <p style="font-size:0.875rem;color:var(--muted);line-height:1.7;margin:0;">Members receive allocation notifications 48 hours before public release. Single cask batches and special editions — always first.</p>
+      </div>
+
+      <div class="community-card fade-up delay-100" style="background:var(--subtle-bg);">
+        <div style="width:36px;height:36px;border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d6b4a" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <h3 class="font-serif" style="font-size:1.1rem;font-weight:400;margin:0 0 0.75rem;">Distillery Visits</h3>
+        <p style="font-size:0.875rem;color:var(--muted);line-height:1.7;margin:0;">Twice a year we open the greenhouse outside Oslo. Two days, twelve guests, one unfinished barrel to taste directly from the cask.</p>
+      </div>
+
+      <div class="community-card fade-up delay-200" style="background:var(--subtle-bg);">
+        <div style="width:36px;height:36px;border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d6b4a" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3 class="font-serif" style="font-size:1.1rem;font-weight:400;margin:0 0 0.75rem;">Tasting Journal</h3>
+        <p style="font-size:0.875rem;color:var(--muted);line-height:1.7;margin:0;">Quarterly notes on each batch — mash bill, distillation temperature log, weather conditions that day. The full story, not just the flavor wheel.</p>
+      </div>
+    </div>
+
+    <!-- Join CTA -->
+    <div class="fade-up" style="text-align:center;margin-top:3rem;">
+      <button class="btn-pill btn-accent" style="font-size:13px;padding:14px 36px;">Join the Atelier</button>
+      <p style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:1rem;">24 memberships remaining in 2026</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer style="background:var(--bg);padding:4rem 2rem;border-top:1px solid var(--border);" aria-label="Footer">
+  <div style="max-width:1152px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;">
+      <div>
+        <div class="font-serif" style="font-size:1.5rem;margin-bottom:1rem;">Maison Noir</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.7;max-width:280px;margin:0 0 1.5rem;">Artisan distillery. Oslo, Norway. Every bottle a season preserved. Drink responsibly.</p>
+        <div style="display:flex;gap:0.75rem;">
+          <a href="#" aria-label="Instagram" style="width:32px;height:32px;border:1px solid var(--border);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s;color:var(--muted);" onmouseover="this.style.borderColor='var(--accent)';this.style.background='rgba(45,107,74,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          </a>
+          <a href="#" aria-label="X / Twitter" style="width:32px;height:32px;border:1px solid var(--border);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s;color:var(--muted);" onmouseover="this.style.borderColor='var(--accent)';this.style.background='rgba(45,107,74,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.261 5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem;">Collection</div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;">
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Aurora Borealis</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Polar Night</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Equinox Amber</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Solstice Reserve</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem;">Maison</div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;">
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Our Story</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Atelier</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Press</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem;">Stockists</div>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;">
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Find a store</a></li>
+          <li><a href="#" style="font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Wholesale</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="dim" style="margin-bottom:1.5rem;" />
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;">© 2026 Maison Noir Distillery AS. All rights reserved.</div>
+      <div style="font-size:11px;color:var(--muted);">Must be 18+ to purchase. Drink responsibly.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Intersection Observer for all reveal animations ──
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+
+      const el = entry.target;
+
+      // fade-up
+      if (el.classList.contains('fade-up')) {
+        el.classList.add('visible');
+        io.unobserve(el);
+        return;
+      }
+
+      // Section with staggered reveal-inner children
+      if (el.dataset.revealGroup !== undefined) {
+        const lines = el.querySelectorAll('.reveal-inner[data-stagger]');
+        lines.forEach((line, i) => {
+          setTimeout(() => {
+            line.classList.add('revealed');
+          }, i * 50); // 50ms stagger per line
+        });
+        io.unobserve(el);
+        return;
+      }
+    });
+  }, { threshold: 0.15 });
+
+  // Observe all fade-up elements
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  // ── Hero lines: trigger immediately on load ──
+  const heroLines = ['h1-line1', 'h1-line2', 'h1-line3'];
+  heroLines.forEach((id, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('revealed');
+    }, 400 + i * 50); // 50ms stagger, after 400ms page settle
+  });
+
+  // Hero label fade
+  setTimeout(() => {
+    const label = document.getElementById('hero-label');
+    if (label) label.classList.add('visible');
+  }, 200);
+
+  // ── Staggered reveal for all section headings ──
+  // Group reveal-inner[data-stagger] by their closest section/div parent
+  const staggerGroups = new Map();
+  document.querySelectorAll('.reveal-inner[data-stagger]').forEach(inner => {
+    const parent = inner.closest('section, div[class*="fade-up"], div[style*="max-width"]');
+    if (!parent) return;
+    if (!staggerGroups.has(parent)) staggerGroups.set(parent, []);
+    staggerGroups.get(parent).push(inner);
+  });
+
+  const staggerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const lines = staggerGroups.get(el) || [];
+      lines.forEach((line, i) => {
+        setTimeout(() => line.classList.add('revealed'), i * 50);
+      });
+      staggerObserver.unobserve(el);
+    });
+  }, { threshold: 0.2 });
+
+  staggerGroups.forEach((lines, parent) => {
+    staggerObserver.observe(parent);
+  });
+
+  // ── Nav scroll opacity ──
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY > 40;
+    nav.style.background = scrolled
+      ? 'rgba(0,0,0,0.92)'
+      : 'rgba(0,0,0,0.7)';
+  }, { passive: true });
+
+  // ── Responsive grid collapse ──
+  function applyResponsive() {
+    const w = window.innerWidth;
+    const storyGrid = document.querySelector('.story-grid');
+    if (storyGrid) {
+      storyGrid.style.gridTemplateColumns = w < 768 ? '1fr' : '1fr 1fr';
+    }
+  }
+  applyResponsive();
+  window.addEventListener('resize', applyResponsive, { passive: true });
+</script>
+</body>
+</html>
