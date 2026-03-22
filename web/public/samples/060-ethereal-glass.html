@@ -231,14 +231,7 @@
   .delay-7 { animation-delay: 0.7s; }
   .delay-8 { animation-delay: 0.8s; }
 
-  /* Z-axis glass panels */
-  .z-panel {
-    position: absolute;
-    border-radius: 1.25rem;
-    border: 1px solid rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
+  .z-panel { display: none; }
 
   /* Scroll reveal */
   .reveal {
@@ -315,9 +308,6 @@
   <div class="gradient-mesh" style="background:#6d28d9;bottom:5%;right:-10%;width:500px;height:500px;"></div>
 
   <!-- Z-axis glass panels -->
-  <div class="z-panel fade-in delay-3" style="width:280px;height:200px;background:rgba(255,255,255,0.02);top:18%;left:8%;transform:rotate(-6deg);"></div>
-  <div class="z-panel fade-in delay-5" style="width:220px;height:160px;background:rgba(167,139,250,0.03);top:25%;right:10%;transform:rotate(4deg);"></div>
-  <div class="z-panel fade-in delay-7" style="width:320px;height:220px;background:rgba(255,255,255,0.015);bottom:15%;left:15%;transform:rotate(3deg);"></div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
     <!-- Badge -->
