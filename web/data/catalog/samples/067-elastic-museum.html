@@ -11,14 +11,20 @@
 
   <style>
     :root {
-      --bg: #ffffff;
-      --text: #1a1a1a;
-      --subtle-bg: #f5f5f5;
-      --border: #e5e5e5;
-      --muted: #666666;
+      --bg: #0a0a0a;
+      --bg-card: #141414;
+      --bg-elevated: #1a1a1a;
+      --text: #f5f5f5;
+      --text-secondary: #a3a3a3;
+      --border: #2a2a2a;
+      --muted: #737373;
       --accent: #22c55e;
       --accent-dark: #16a34a;
+      --accent-glow: rgba(34, 197, 94, 0.15);
+      --pink: #f472b6;
       --elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --elastic-out: cubic-bezier(0.22, 1.2, 0.36, 1);
+      --ease-color: cubic-bezier(0.216, 0.62, 0.356, 1);
       --elastic-linear: linear(0, 0.5737 7.6%, 0.8382 11.87%, 0.9463 14.19%,
         1.0292 16.54%, 1.0886 18.97%, 1.1258 21.53%, 1.137 22.97%,
         1.1424 24.48%, 1.1423 26.1%, 1.1366 27.86%, 1.1165 31.01%,
@@ -33,19 +39,20 @@
       }
     }
 
-    /* Scrollbar hiding */
     html { scrollbar-width: none; -ms-overflow-style: none; }
     html::-webkit-scrollbar { display: none; }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::selection { background: var(--accent); color: var(--bg); }
 
     body {
       font-family: 'Space Grotesk', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      margin: 0;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .font-mono { font-family: 'DM Mono', monospace; }
@@ -53,139 +60,213 @@
     h1, h2, h3 {
       font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.0;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
     }
 
-    /* ── Elastic transitions ──────────────────────────── */
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Elastic transition helpers ──────────────────── */
     .elastic { transition: all 300ms var(--elastic); }
     .elastic-fast { transition: all 200ms var(--elastic); }
     .elastic-slow { transition: all 500ms var(--elastic); }
 
-    /* ── Button with bounce physics ───────────────────── */
-    .btn-bounce {
+    /* ── Primary CTA Button (3D flip with divider) ──── */
+    .btn-main {
       position: relative;
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      align-items: stretch;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 999px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.45s var(--elastic),
-                  background-color 0.2s cubic-bezier(0.216, 0.62, 0.356, 1),
-                  box-shadow 0.2s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      transition: transform 0.75s var(--elastic-linear),
+                  background-color 0.2s var(--ease-color),
+                  box-shadow 0.3s ease;
     }
 
-    .btn-bounce:hover { transform: scale(1.04); }
-    .btn-bounce:active { transform: scaleX(0.955) scaleY(0.954); }
+    .btn-main:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
 
-    .btn-bounce:focus-visible {
+    .btn-main:active {
+      transform: scaleX(0.955) scaleY(0.954);
+    }
+
+    .btn-main:focus-visible {
       outline: 2px solid var(--accent);
-      outline-offset: 2px;
+      outline-offset: 3px;
     }
 
-    /* Button 3D flip label effect */
-    .btn-flip-wrap {
+    .btn-main__label {
       position: relative;
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 8px;
+      padding: 12px 20px;
       overflow: hidden;
-      height: 1.4em;
+      height: 100%;
     }
 
-    .btn-flip-front,
-    .btn-flip-back {
-      transition: transform 0.45s var(--elastic), opacity 0.15s ease-out;
+    .btn-main__divider {
+      width: 1px;
+      background: rgba(0,0,0,0.2);
+      align-self: stretch;
     }
 
-    .btn-flip-back {
-      position: absolute;
-      inset: 0;
+    .btn-main__icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: translateY(100%);
-      opacity: 0;
+      padding: 12px 16px;
     }
 
-    .btn-bounce:hover .btn-flip-front {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    .btn-bounce:hover .btn-flip-back {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* ── 3D Flip Card ─────────────────────────────────── */
-    .flip-card { perspective: 900px; }
-
-    .flip-card-inner {
+    /* 3D flip text inside button */
+    .flip-text {
       position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 0.5s var(--elastic);
+      display: block;
+      overflow: hidden;
+      height: 1.3em;
+      line-height: 1.3em;
     }
 
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(12deg) rotateX(-4deg) scale(1.03);
+    .flip-text__front,
+    .flip-text__back {
+      display: block;
+      transition: transform 0.75s var(--elastic-linear);
+      will-change: transform;
     }
 
-    .flip-card-face {
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+    .flip-text__back {
+      position: absolute;
+      inset: 0;
+      transform: translateY(120%) rotateX(-85deg);
+      transform-origin: bottom center;
     }
 
-    /* ── Exhibit card with elastic hover ──────────────── */
+    .btn-main:hover .flip-text__front {
+      transform: translateY(-120%) rotateX(85deg);
+      transform-origin: top center;
+    }
+
+    .btn-main:hover .flip-text__back {
+      transform: translateY(0) rotateX(0deg);
+    }
+
+    /* ── Secondary/outline button ───────────────────── */
+    .btn-secondary {
+      display: inline-flex;
+      align-items: stretch;
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 0.75s var(--elastic-linear),
+                  border-color 0.2s var(--ease-color);
+    }
+
+    .btn-secondary:hover {
+      transform: scale(1.04);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-secondary:active {
+      transform: scaleX(0.955) scaleY(0.954);
+    }
+
+    .btn-secondary__label {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-secondary__divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+      transition: background 0.2s ease;
+    }
+
+    .btn-secondary:hover .btn-secondary__divider {
+      background: var(--accent);
+    }
+
+    .btn-secondary__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+    }
+
+    /* ── Exhibit card ────────────────────────────────── */
     .exhibit-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       overflow: hidden;
-      transition: transform 0.45s var(--elastic),
-                  box-shadow 0.3s ease;
+      transition: transform 0.5s var(--elastic),
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
       cursor: pointer;
     }
 
     .exhibit-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border-color: #3a3a3a;
     }
 
     .exhibit-card:active {
       transform: translateY(-2px) scale(0.98);
     }
 
-    .exhibit-card img {
+    .exhibit-card__img {
       transition: transform 500ms ease;
     }
 
-    .exhibit-card:hover img {
+    .exhibit-card:hover .exhibit-card__img {
       transform: scale(1.1);
     }
 
-    /* ── Article card ─────────────────────────────────── */
+    /* ── Article card ────────────────────────────────── */
     .article-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
       transition: transform 500ms var(--elastic),
-                  box-shadow 300ms ease;
+                  box-shadow 300ms ease,
+                  border-color 300ms ease;
       cursor: pointer;
     }
 
     .article-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+      border-color: #3a3a3a;
     }
 
-    .article-card .article-img {
+    .article-card__img {
       transition: transform 500ms ease;
     }
 
-    .article-card:hover .article-img {
+    .article-card:hover .article-card__img {
       transform: scale(1.08);
     }
 
-    /* ── Interactive grid canvas ──────────────────────── */
+    /* ── Interactive grid canvas ─────────────────────── */
     #grid-canvas {
       position: fixed;
       top: 0;
@@ -194,14 +275,14 @@
       height: 100%;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.5;
+      opacity: 0.6;
     }
 
-    /* ── Gallery slider ──────────────────────────────── */
+    /* ── Gallery continuous scroll ───────────────────── */
     .gallery-track {
       display: flex;
       gap: 16px;
-      animation: gallery-scroll 30s linear infinite;
+      animation: gallery-scroll 40s linear infinite;
     }
 
     @keyframes gallery-scroll {
@@ -213,32 +294,40 @@
 
     .gallery-item {
       flex-shrink: 0;
-      width: 320px;
-      height: 220px;
-      border-radius: 12px;
+      width: 340px;
+      height: 240px;
+      border-radius: 14px;
       overflow: hidden;
-      transition: transform 0.45s var(--elastic);
+      border: 1px solid var(--border);
+      transition: transform 0.45s var(--elastic),
+                  border-color 0.3s ease;
     }
 
-    .gallery-item:hover { transform: scale(1.06); }
+    .gallery-item:hover {
+      transform: scale(1.06);
+      border-color: var(--accent);
+    }
 
-    /* ── Nav ──────────────────────────────────────────── */
+    /* ── Navigation ──────────────────────────────────── */
     nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-bar {
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
 
     .nav-link {
       font-size: 14px;
       font-weight: 500;
-      color: var(--muted);
+      color: var(--text-secondary);
       text-decoration: none;
       transition: color 0.2s ease, transform 0.3s var(--elastic);
       display: inline-block;
@@ -249,10 +338,10 @@
       transform: translateY(-1px);
     }
 
-    /* ── Scroll-triggered animation ──────────────────── */
+    /* ── Scroll-triggered reveal ─────────────────────── */
     .reveal {
       opacity: 0;
-      transform: translateY(28px);
+      transform: translateY(24px);
       transition: opacity 0.6s ease-out, transform 0.6s var(--elastic);
     }
 
@@ -265,16 +354,15 @@
     .reveal-delay-2 { transition-delay: 0.16s; }
     .reveal-delay-3 { transition-delay: 0.24s; }
     .reveal-delay-4 { transition-delay: 0.32s; }
-    .reveal-delay-5 { transition-delay: 0.4s; }
 
-    /* ── Promo banner bounce ─────────────────────────── */
+    /* ── Promo banner ────────────────────────────────── */
     .promo-banner {
-      animation: banner-bounce 2s var(--elastic) infinite;
+      animation: banner-pulse 3s ease-in-out infinite;
     }
 
-    @keyframes banner-bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
+    @keyframes banner-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
     }
 
     /* ── Pill tag ─────────────────────────────────────── */
@@ -287,35 +375,23 @@
       border: 1px solid var(--border);
       border-radius: 999px;
       padding: 4px 14px;
+      color: var(--text-secondary);
       display: inline-block;
       transition: all 0.3s var(--elastic);
     }
 
     .pill:hover {
       background: var(--accent);
-      color: white;
+      color: #000;
       border-color: var(--accent);
       transform: scale(1.08);
     }
 
-    /* ── Ticket CTA ──────────────────────────────────── */
-    .ticket-btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 999px;
-      padding: 12px 28px;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-    }
-
-    /* ── Stat counter bounce ─────────────────────────── */
+    /* ── Stat number bounce ──────────────────────────── */
     .stat-number {
       display: inline-block;
       transition: transform 0.45s var(--elastic);
+      cursor: default;
     }
 
     .stat-number:hover {
@@ -323,113 +399,202 @@
       color: var(--accent);
     }
 
-    /* ── Footer ──────────────────────────────────────── */
+    /* ── Footer links ────────────────────────────────── */
     .footer-link {
-      color: #999;
-      text-decoration: none;
+      color: var(--muted);
       font-size: 14px;
       transition: color 0.2s ease, transform 0.3s var(--elastic);
       display: inline-block;
     }
 
     .footer-link:hover {
-      color: white;
+      color: var(--text);
       transform: translateX(4px);
+    }
+
+    /* ── Game section ────────────────────────────────── */
+    .game-area {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Cart badge ───────────────────────────────────── */
+    .cart-btn {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s var(--elastic);
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .cart-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #000;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 767px) {
+      .desktop-only { display: none !important; }
+      .grid-3 { grid-template-columns: 1fr !important; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+      .span-2 { grid-column: span 1 !important; }
+      .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── Color Trail Grid Canvas ─────────────────────── -->
+  <!-- ── Color Trail Grid Canvas ──────────────────── -->
   <canvas id="grid-canvas"></canvas>
 
-  <!-- ── Navigation ──────────────────────────────────── -->
+  <!-- ── Navigation ───────────────────────────────── -->
   <nav>
     <!-- Promo banner -->
-    <div style="background: var(--accent); color: white; text-align: center; padding: 8px 16px; font-size: 13px; font-weight: 500;">
+    <div style="background: var(--accent); color: #000; text-align: center; padding: 7px 16px; font-size: 13px; font-weight: 600;">
       <span class="promo-banner" style="display: inline-block;">
         <span class="font-mono" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;">
-          Last day — 50% off all tickets
+          Last day — 50% off all tickets this weekend
         </span>
-        <span style="margin-left: 8px; text-decoration: underline; cursor: pointer;">Get yours →</span>
+        <span style="margin-left: 10px; text-decoration: underline; cursor: pointer; font-weight: 500;">Grab yours</span>
       </span>
     </div>
 
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px;">
-      <a href="#" style="text-decoration: none; display: flex; align-items: center; gap: 6px;">
-        <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.03em; color: var(--text);">
-          Currency<span style="color: var(--accent);">Lab</span>
-        </span>
-        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>
-      </a>
+    <div class="nav-bar">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px;">
+        <!-- Logo -->
+        <a href="#" style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.04em; color: var(--text);">
+            Currency<span style="color: var(--accent);">Lab</span>
+          </span>
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block;"></span>
+        </a>
 
-      <div style="display: flex; align-items: center; gap: 32px;" class="hidden md:flex">
-        <a href="#exhibits" class="nav-link">Exhibits</a>
-        <a href="#articles" class="nav-link">Money Talks</a>
-        <a href="#gallery" class="nav-link">Gallery</a>
-        <a href="#visit" class="nav-link">Visit</a>
+        <!-- Nav links -->
+        <div style="display: flex; align-items: center; gap: 28px;" class="desktop-only">
+          <a href="#exhibits" class="nav-link">Exhibits</a>
+          <a href="#gallery" class="nav-link">Gallery</a>
+          <a href="#articles" class="nav-link">Money Talks</a>
+          <a href="#visit" class="nav-link">Visit</a>
+        </div>
+
+        <!-- Right actions -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="cart-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="m1 1 4 2 3 12h13l3-8H7"/></svg>
+            <span class="cart-badge">0</span>
+          </button>
+          <button class="btn-main">
+            <span class="btn-main__label">
+              <span class="flip-text">
+                <span class="flip-text__front">Book Tickets</span>
+                <span class="flip-text__back">Let's Go!</span>
+              </span>
+            </span>
+            <span class="btn-main__divider"></span>
+            <span class="btn-main__icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M17 7H7M17 7v10"/></svg>
+            </span>
+          </button>
+        </div>
       </div>
-
-      <button class="ticket-btn btn-bounce" style="display: flex; align-items: center; gap: 6px;">
-        <span class="btn-flip-wrap">
-          <span class="btn-flip-front">Book Tickets</span>
-          <span class="btn-flip-back">Let's Go! ↗</span>
-        </span>
-      </button>
     </div>
   </nav>
 
 
-  <!-- ── Hero Section ────────────────────────────────── -->
-  <section style="background: var(--bg); padding-top: 140px; position: relative; z-index: 1;">
-    <!-- Full-viewport video area -->
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px;">
+  <!-- ── Hero Section ─────────────────────────────── -->
+  <section style="padding-top: 130px; position: relative; z-index: 1;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+
       <div class="reveal" style="margin-bottom: 20px;">
         <span class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">
-          New York City's Most Interactive Museum
+          The city's most interactive museum
         </span>
       </div>
 
-      <h1 class="reveal reveal-delay-1" style="font-size: clamp(52px, 10vw, 128px); margin: 0 0 32px; max-width: 14ch;">
+      <h1 class="reveal reveal-delay-1" style="font-size: clamp(56px, 11vw, 140px); margin: 0 0 28px; max-width: 12ch; line-height: 0.9;">
         WE PUT<br><span style="color: var(--accent);">FUN</span> IN FUND
       </h1>
 
-      <p class="reveal reveal-delay-2" style="font-size: 18px; line-height: 1.6; color: var(--muted); max-width: 48ch; margin: 0 0 40px;">
-        Explore the wild, weird, wonderful world of money through hands-on exhibits, interactive games, and mind-bending installations.
+      <p class="reveal reveal-delay-2" style="font-size: 17px; line-height: 1.65; color: var(--text-secondary); max-width: 46ch; margin: 0 0 36px;">
+        Crack the laser maze, snap unreal photos, and discover the city's most playful money experience. 40,000 sq ft of hands-on financial fun.
       </p>
 
-      <div class="reveal reveal-delay-3" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
-        <button class="ticket-btn btn-bounce" style="font-size: 16px; padding: 16px 36px;">
-          <span class="btn-flip-wrap">
-            <span class="btn-flip-front">Get Tickets — $24</span>
-            <span class="btn-flip-back">Book Now ↗</span>
+      <!-- CTA buttons with 3D flip dividers -->
+      <div class="reveal reveal-delay-3" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+        <button class="btn-main" style="font-size: 15px;">
+          <span class="btn-main__label" style="padding: 14px 24px;">
+            <span class="flip-text">
+              <span class="flip-text__front">Get Tickets — $24</span>
+              <span class="flip-text__back">Book Now</span>
+            </span>
+          </span>
+          <span class="btn-main__divider"></span>
+          <span class="btn-main__icon" style="padding: 14px 18px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M17 7H7M17 7v10"/></svg>
           </span>
         </button>
-        <button class="btn-bounce" style="background: transparent; color: var(--text); border: 2px solid var(--border); border-radius: 999px; padding: 14px 32px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer;">
-          Watch Trailer ▶
+
+        <button class="btn-secondary" style="font-size: 15px;">
+          <span class="btn-secondary__label" style="padding: 14px 24px;">
+            <span class="flip-text">
+              <span class="flip-text__front">Watch Trailer</span>
+              <span class="flip-text__back">Play Video</span>
+            </span>
+          </span>
+          <span class="btn-secondary__divider"></span>
+          <span class="btn-secondary__icon" style="padding: 14px 18px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 20,12 8,19"/></svg>
+          </span>
         </button>
       </div>
     </div>
 
-    <!-- Video placeholder -->
-    <div class="reveal reveal-delay-4" style="max-width: 1152px; margin: 56px auto 0; padding: 0 24px;">
-      <div style="width: 100%; aspect-ratio: 16/9; background: var(--subtle-bg); border-radius: 20px; overflow: hidden; position: relative;">
+    <!-- Hero video placeholder -->
+    <div class="reveal reveal-delay-4" style="max-width: 1200px; margin: 48px auto 0; padding: 0 24px;">
+      <div style="width: 100%; aspect-ratio: 16/9; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: relative;">
         <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
-          <div class="btn-bounce" style="width: 80px; height: 80px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="8,5 20,12 8,19"/></svg>
+          <div class="elastic" style="width: 80px; height: 80px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 40px var(--accent-glow);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#000"><polygon points="9,5 20,12 9,19"/></svg>
           </div>
           <span class="font-mono" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">Museum Experience — 2:34</span>
         </div>
-        <!-- Decorative grid overlay -->
-        <div style="position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.3;"></div>
+        <!-- Subtle grid overlay -->
+        <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 48px 48px;"></div>
       </div>
     </div>
   </section>
 
 
-  <!-- ── Exhibits Section ────────────────────────────── -->
-  <section id="exhibits" style="background: var(--subtle-bg); padding: 80px 0; position: relative; z-index: 1;">
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px;">
+  <!-- ── Exhibits Section ─────────────────────────── -->
+  <section id="exhibits" style="padding: 96px 0; position: relative; z-index: 1;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
 
       <div class="reveal" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 16px;">
         <div>
@@ -443,279 +608,328 @@
         </div>
       </div>
 
-      <!-- Exhibit grid: first card spans 2 cols -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" class="reveal reveal-delay-1">
+      <!-- Exhibit grid -->
+      <div class="grid-3 reveal reveal-delay-1" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
 
-        <!-- Featured exhibit — 2 col span -->
-        <div class="exhibit-card flip-card" style="grid-column: span 2; grid-row: span 2;">
-          <div class="flip-card-inner" style="min-height: 420px;">
-            <div class="flip-card-face" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; border-radius: 16px;">
-              <!-- Decorative coin pattern -->
-              <div style="position: absolute; top: 32px; right: 32px; display: flex; gap: 8px;">
-                <div class="elastic" style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent); opacity: 0.2;"></div>
-                <div class="elastic" style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent); opacity: 0.35;"></div>
-                <div class="elastic" style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent); opacity: 0.5;"></div>
-              </div>
-              <span class="font-mono" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-dark); margin-bottom: 12px;">Featured</span>
-              <h3 style="font-size: 32px; margin: 0 0 12px; font-weight: 700;">Dex Diamondhands</h3>
-              <p style="font-size: 15px; line-height: 1.6; color: var(--muted); max-width: 40ch; margin: 0 0 20px;">
-                Test your nerve in a live simulated trading floor. Hold or fold — your call.
-              </p>
-              <div style="display: flex; gap: 8px;">
-                <span class="pill" style="font-size: 10px;">Trading</span>
-                <span class="pill" style="font-size: 10px;">Simulation</span>
-              </div>
+        <!-- Featured exhibit — spans 2 cols + 2 rows -->
+        <div class="exhibit-card span-2" style="grid-column: span 2; grid-row: span 2;">
+          <div style="position: relative; min-height: 440px; padding: 36px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(160deg, #0d2818 0%, #0a1f14 40%, var(--bg-card) 100%);">
+            <!-- Floating accent circles -->
+            <div style="position: absolute; top: 28px; right: 28px; display: flex; gap: 6px;">
+              <div class="elastic" style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); opacity: 0.12;"></div>
+              <div class="elastic" style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); opacity: 0.2;"></div>
+              <div class="elastic" style="width: 44px; height: 44px; border-radius: 50%; background: var(--accent); opacity: 0.35;"></div>
+            </div>
+            <!-- Featured badge -->
+            <div style="position: absolute; top: 28px; left: 28px;">
+              <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #000; background: var(--accent); padding: 4px 12px; border-radius: 999px; font-weight: 600;">Featured</span>
+            </div>
+            <h3 style="font-size: 30px; margin: 0 0 10px;">Dex Diamondhands</h3>
+            <p style="font-size: 15px; line-height: 1.6; color: var(--text-secondary); max-width: 40ch; margin: 0 0 20px;">
+              Test your nerve in a live simulated trading floor. Hold or fold — your call.
+            </p>
+            <div style="display: flex; gap: 8px;">
+              <span class="pill" style="font-size: 10px;">Trading</span>
+              <span class="pill" style="font-size: 10px;">Simulation</span>
             </div>
           </div>
         </div>
 
         <!-- Exhibit 2 -->
-        <div class="exhibit-card" style="background: var(--bg); padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 200px;">
-          <div style="width: 40px; height: 40px; border-radius: 12px; background: #fef3c7; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px;">🎨</div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Currency Designer</h3>
-          <p style="font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5;">Design your own banknote with professional tools.</p>
+        <div class="exhibit-card">
+          <div style="padding: 28px; min-height: 210px; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(254, 243, 199, 0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px; border: 1px solid rgba(254, 243, 199, 0.2);">&#x1f3a8;</div>
+            <h3 style="font-size: 19px; margin: 0 0 6px; letter-spacing: -0.02em;">Currency Designer</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Design your own banknote with pro tools.</p>
+          </div>
         </div>
 
         <!-- Exhibit 3 -->
-        <div class="exhibit-card" style="background: var(--bg); padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 200px;">
-          <div style="width: 40px; height: 40px; border-radius: 12px; background: #fee2e2; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px;">🔔</div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Bull vs Bear Bell Bash</h3>
-          <p style="font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5;">Ring the opening bell in a frenzy of market chaos.</p>
+        <div class="exhibit-card">
+          <div style="padding: 28px; min-height: 210px; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(254, 226, 226, 0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px; border: 1px solid rgba(254, 226, 226, 0.2);">&#x1f514;</div>
+            <h3 style="font-size: 19px; margin: 0 0 6px; letter-spacing: -0.02em;">Bull vs Bear Bell Bash</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Ring the opening bell in a frenzy of market chaos.</p>
+          </div>
         </div>
 
         <!-- Exhibit 4 -->
-        <div class="exhibit-card" style="background: var(--bg); padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 180px;">
-          <div style="width: 40px; height: 40px; border-radius: 12px; background: #ede9fe; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px;">💡</div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Penny Thinkers</h3>
-          <p style="font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5;">Philosophy meets finance. Big ideas, small change.</p>
+        <div class="exhibit-card">
+          <div style="padding: 28px; min-height: 180px; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(237, 233, 254, 0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px; border: 1px solid rgba(237, 233, 254, 0.2);">&#x1f4a1;</div>
+            <h3 style="font-size: 19px; margin: 0 0 6px; letter-spacing: -0.02em;">Penny Thinkers</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Philosophy meets finance. Big ideas, small change.</p>
+          </div>
         </div>
 
         <!-- Exhibit 5 -->
-        <div class="exhibit-card" style="background: var(--bg); padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 180px;">
-          <div style="width: 40px; height: 40px; border-radius: 12px; background: #dbeafe; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px;">💰</div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Cash Shower Splash</h3>
-          <p style="font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5;">Step into a tornado of flying bills. Grab what you can.</p>
+        <div class="exhibit-card">
+          <div style="padding: 28px; min-height: 180px; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(219, 234, 254, 0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px; border: 1px solid rgba(219, 234, 254, 0.2);">&#x1f4b0;</div>
+            <h3 style="font-size: 19px; margin: 0 0 6px; letter-spacing: -0.02em;">Cash Shower Splash</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Step into a tornado of flying bills. Grab what you can.</p>
+          </div>
         </div>
 
         <!-- Exhibit 6 -->
-        <div class="exhibit-card" style="background: var(--bg); padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 180px;">
-          <div style="width: 40px; height: 40px; border-radius: 12px; background: #f0fdf4; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px;">🤖</div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Ask MoAI</h3>
-          <p style="font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5;">Chat with our AI about anything money. It knows things.</p>
+        <div class="exhibit-card">
+          <div style="padding: 28px; min-height: 180px; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--accent-glow); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px; border: 1px solid rgba(34, 197, 94, 0.2);">&#x1f916;</div>
+            <h3 style="font-size: 19px; margin: 0 0 6px; letter-spacing: -0.02em;">Ask MoAI</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Chat with our AI about anything money. It knows things.</p>
+          </div>
         </div>
       </div>
-
-      <!-- Responsive: collapse to 1 col on mobile -->
-      <style>
-        @media (max-width: 767px) {
-          #exhibits div[style*="grid-template-columns: repeat(3"] {
-            grid-template-columns: 1fr !important;
-          }
-          #exhibits div[style*="grid-column: span 2"] {
-            grid-column: span 1 !important;
-          }
-        }
-      </style>
     </div>
   </section>
 
 
-  <!-- ── Articles / Money Talks ──────────────────────── -->
-  <section id="articles" style="background: var(--bg); padding: 64px 0; position: relative; z-index: 1;">
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px;">
+  <!-- ── Gallery Slider ───────────────────────────── -->
+  <section id="gallery" style="padding: 80px 0; position: relative; z-index: 1; overflow: hidden;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px 40px;">
+      <div class="reveal" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">Once Upon a Dime</span>
+          <h2 style="font-size: clamp(32px, 5vw, 56px); margin: 8px 0 0;">Gallery</h2>
+        </div>
+        <span class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;">Hover to pause</span>
+      </div>
+    </div>
+
+    <div style="overflow: hidden;" class="reveal reveal-delay-1">
+      <div class="gallery-track">
+        <div class="gallery-item" style="background: linear-gradient(135deg, #0d2818, #1a3a2a);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f3db;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #2a1f0a, #3d2e14);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1fa99;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #0a1a2e, #142a44);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f48e;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #1a0a2e, #2a1444);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f3a8;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #2e0a0a, #441414);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f514;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #0a2e14, #14441e);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f4b0;</div></div>
+        <!-- Duplicates for seamless loop -->
+        <div class="gallery-item" style="background: linear-gradient(135deg, #0d2818, #1a3a2a);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f3db;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #2a1f0a, #3d2e14);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1fa99;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #0a1a2e, #142a44);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f48e;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #1a0a2e, #2a1444);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f3a8;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #2e0a0a, #441414);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f514;</div></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, #0a2e14, #14441e);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:0.25;">&#x1f4b0;</div></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── Cash Cascade Game Section ─────────────────── -->
+  <section style="padding: 0 0 96px; position: relative; z-index: 1;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+      <div class="reveal">
+        <div class="game-area" style="padding: 48px; display: flex; align-items: center; gap: 48px; flex-wrap: wrap;">
+          <!-- Game preview -->
+          <div style="flex: 1; min-width: 280px;">
+            <div style="width: 100%; aspect-ratio: 4/3; background: linear-gradient(160deg, #0d2818, var(--bg-card)); border-radius: 14px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; position: relative; overflow: hidden;">
+              <!-- Game placeholder coins -->
+              <div style="position: absolute; top: 20%; left: 20%; width: 32px; height: 32px; border-radius: 50%; background: #fbbf24; opacity: 0.6; animation: float 3s ease-in-out infinite;"></div>
+              <div style="position: absolute; top: 35%; right: 25%; width: 24px; height: 24px; border-radius: 50%; background: #fbbf24; opacity: 0.4; animation: float 3s ease-in-out 0.5s infinite;"></div>
+              <div style="position: absolute; bottom: 30%; left: 35%; width: 28px; height: 28px; border-radius: 50%; background: #fbbf24; opacity: 0.5; animation: float 3s ease-in-out 1s infinite;"></div>
+              <span style="font-size: 56px; opacity: 0.3; position: relative; z-index: 1;">&#x1f416;</span>
+              <span class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; position: relative; z-index: 1;">Tap to Play</span>
+            </div>
+          </div>
+
+          <style>
+            @keyframes float {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-12px); }
+            }
+          </style>
+
+          <!-- Game info -->
+          <div style="flex: 1; min-width: 280px;">
+            <span class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 12px;">Play Now</span>
+            <h2 style="font-size: clamp(28px, 4vw, 44px); margin: 0 0 16px;">Cash Cascade</h2>
+            <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 12px;">
+              Catch falling coins, dodge the debts, beat the high score. Our most addictive exhibit — now playable online.
+            </p>
+            <div style="display: flex; gap: 24px; margin-bottom: 24px;">
+              <div>
+                <span class="stat-number" style="font-size: 28px; font-weight: 700;">2.1M</span>
+                <p class="font-mono" style="font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px;">Games Played</p>
+              </div>
+              <div>
+                <span class="stat-number" style="font-size: 28px; font-weight: 700;">847K</span>
+                <p class="font-mono" style="font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px;">High Score</p>
+              </div>
+            </div>
+            <button class="btn-main">
+              <span class="btn-main__label">
+                <span class="flip-text">
+                  <span class="flip-text__front">Play Cash Cascade</span>
+                  <span class="flip-text__back">Start Game</span>
+                </span>
+              </span>
+              <span class="btn-main__divider"></span>
+              <span class="btn-main__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 20,12 8,19"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── Articles / Money Talks ───────────────────── -->
+  <section id="articles" style="padding: 80px 0; position: relative; z-index: 1; border-top: 1px solid var(--border);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
 
       <div class="reveal" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
         <div>
           <span class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">Blog</span>
           <h2 style="font-size: clamp(32px, 5vw, 56px); margin: 8px 0 0;">Money Talks</h2>
         </div>
-        <a href="#" class="nav-link" style="font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: none;">
-          View all posts →
-        </a>
+        <a href="#" class="nav-link" style="font-weight: 600; color: var(--accent);">View all posts &#x2192;</a>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
 
-        <!-- Article 1 — featured (larger) -->
-        <div class="article-card reveal reveal-delay-1" style="grid-column: span 2; background: var(--subtle-bg); border-radius: 12px;">
-          <div style="overflow: hidden; border-radius: 12px 12px 0 0;">
-            <div class="article-img" style="width: 100%; height: 240px; background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 50%, #ecfdf5 100%); display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 64px; opacity: 0.4;">📰</span>
+        <!-- Article 1 — featured -->
+        <div class="article-card span-2 reveal reveal-delay-1" style="grid-column: span 2;">
+          <div style="overflow: hidden;">
+            <div class="article-card__img" style="width: 100%; height: 220px; background: linear-gradient(135deg, #0d2818, #1a3a2a); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 56px; opacity: 0.2;">&#x1f4f0;</span>
             </div>
           </div>
           <div style="padding: 24px 28px 28px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
               <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);">Story</span>
-              <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; color: var(--muted);">3.15.26</span>
+              <span class="font-mono" style="font-size: 10px; color: var(--muted);">3.15.26</span>
             </div>
-            <h3 style="font-size: 22px; margin: 0 0 8px; font-weight: 700;">Why We Built a Museum That Doesn't Take Itself Seriously</h3>
-            <p style="font-size: 14px; color: var(--muted); margin: 0; line-height: 1.6;">The origin story of CurrencyLab — from a napkin sketch at a diner to a 40,000 sq ft playground for the financially curious.</p>
+            <h3 style="font-size: 21px; margin: 0 0 8px; font-weight: 700; letter-spacing: -0.02em;">Why We Built a Museum That Doesn't Take Itself Seriously</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin: 0; line-height: 1.6;">The origin story of CurrencyLab — from a napkin sketch at a diner to a 40,000 sq ft playground for the financially curious.</p>
           </div>
         </div>
 
         <!-- Article 2 -->
-        <div class="article-card reveal reveal-delay-2" style="background: var(--subtle-bg); border-radius: 12px;">
-          <div style="overflow: hidden; border-radius: 12px 12px 0 0;">
-            <div class="article-img" style="width: 100%; height: 160px; background: linear-gradient(135deg, #fef3c7, #fef9c3); display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 48px; opacity: 0.4;">🪙</span>
+        <div class="article-card reveal reveal-delay-2">
+          <div style="overflow: hidden;">
+            <div class="article-card__img" style="width: 100%; height: 150px; background: linear-gradient(135deg, #2a1f0a, #3d2e14); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 40px; opacity: 0.2;">&#x1fa99;</span>
             </div>
           </div>
           <div style="padding: 20px 24px 24px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
               <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);">History</span>
               <span class="font-mono" style="font-size: 10px; color: var(--muted);">2.28.26</span>
             </div>
-            <h3 style="font-size: 18px; margin: 0 0 6px; font-weight: 700;">The World's Weirdest Currencies</h3>
-            <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">From giant stone discs to parmesan cheese.</p>
+            <h3 style="font-size: 17px; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.02em;">The World's Weirdest Currencies</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">From giant stone discs to parmesan cheese.</p>
           </div>
         </div>
 
         <!-- Article 3 -->
-        <div class="article-card reveal reveal-delay-3" style="background: var(--subtle-bg); border-radius: 12px;">
-          <div style="overflow: hidden; border-radius: 12px 12px 0 0;">
-            <div class="article-img" style="width: 100%; height: 160px; background: linear-gradient(135deg, #dbeafe, #ede9fe); display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 48px; opacity: 0.4;">🎮</span>
+        <div class="article-card reveal reveal-delay-3">
+          <div style="overflow: hidden;">
+            <div class="article-card__img" style="width: 100%; height: 150px; background: linear-gradient(135deg, #0a1a2e, #142a44); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 40px; opacity: 0.2;">&#x1f3ae;</span>
             </div>
           </div>
           <div style="padding: 20px 24px 24px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
               <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);">Behind the Scenes</span>
               <span class="font-mono" style="font-size: 10px; color: var(--muted);">2.14.26</span>
             </div>
-            <h3 style="font-size: 18px; margin: 0 0 6px; font-weight: 700;">How We Built Cash Cascade</h3>
-            <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">The physics engine behind our most addictive game.</p>
+            <h3 style="font-size: 17px; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.02em;">How We Built Cash Cascade</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">The physics engine behind our most addictive game.</p>
           </div>
         </div>
 
         <!-- Article 4 -->
-        <div class="article-card reveal reveal-delay-4" style="background: var(--subtle-bg); border-radius: 12px;">
-          <div style="overflow: hidden; border-radius: 12px 12px 0 0;">
-            <div class="article-img" style="width: 100%; height: 160px; background: linear-gradient(135deg, #fee2e2, #fecaca); display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 48px; opacity: 0.4;">📊</span>
+        <div class="article-card reveal reveal-delay-3">
+          <div style="overflow: hidden;">
+            <div class="article-card__img" style="width: 100%; height: 150px; background: linear-gradient(135deg, #2e0a14, #441420); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 40px; opacity: 0.2;">&#x1f4ca;</span>
             </div>
           </div>
           <div style="padding: 20px 24px 24px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
               <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);">Education</span>
               <span class="font-mono" style="font-size: 10px; color: var(--muted);">1.28.26</span>
             </div>
-            <h3 style="font-size: 18px; margin: 0 0 6px; font-weight: 700;">Teaching Kids About Money (Without Boring Them)</h3>
-            <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">Our school program reaches 12,000 students annually.</p>
+            <h3 style="font-size: 17px; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.02em;">Teaching Kids About Money (Without Boring Them)</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Our school program reaches 12,000 students annually.</p>
           </div>
         </div>
 
         <!-- Article 5 -->
-        <div class="article-card reveal reveal-delay-5" style="background: var(--subtle-bg); border-radius: 12px;">
-          <div style="overflow: hidden; border-radius: 12px 12px 0 0;">
-            <div class="article-img" style="width: 100%; height: 160px; background: linear-gradient(135deg, #f0fdf4, #dcfce7); display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 48px; opacity: 0.4;">🏛️</span>
+        <div class="article-card reveal reveal-delay-4">
+          <div style="overflow: hidden;">
+            <div class="article-card__img" style="width: 100%; height: 150px; background: linear-gradient(135deg, #0a2e14, #14441e); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 40px; opacity: 0.2;">&#x1f3db;</span>
             </div>
           </div>
           <div style="padding: 20px 24px 24px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
               <span class="font-mono" style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);">Exhibit</span>
               <span class="font-mono" style="font-size: 10px; color: var(--muted);">1.10.26</span>
             </div>
-            <h3 style="font-size: 18px; margin: 0 0 6px; font-weight: 700;">New: Hoard of Gold Opens March 2026</h3>
-            <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">Touch real gold bars in our most Instagrammable room yet.</p>
+            <h3 style="font-size: 17px; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.02em;">New: Hoard of Gold Opens March 2026</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">Touch real gold bars in our most Instagrammable room yet.</p>
           </div>
         </div>
       </div>
-
-      <style>
-        @media (max-width: 767px) {
-          #articles div[style*="grid-template-columns: repeat(3"] {
-            grid-template-columns: 1fr !important;
-          }
-          #articles .article-card[style*="grid-column: span 2"] {
-            grid-column: span 1 !important;
-          }
-        }
-      </style>
     </div>
   </section>
 
 
-  <!-- ── Gallery Slider ──────────────────────────────── -->
-  <section id="gallery" style="background: var(--subtle-bg); padding: 64px 0; position: relative; z-index: 1; overflow: hidden;">
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px 40px;">
-      <div class="reveal">
-        <span class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">Inside the Museum</span>
-        <h2 style="font-size: clamp(32px, 5vw, 56px); margin: 8px 0 0;">Gallery</h2>
-      </div>
-    </div>
-
-    <div style="overflow: hidden;" class="reveal reveal-delay-1">
-      <div class="gallery-track">
-        <div class="gallery-item" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🏛️</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #fef3c7, #fde68a);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🪙</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">💎</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #ede9fe, #ddd6fe);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🎨</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #fee2e2, #fecaca);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🔔</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">💰</div></div>
-        <!-- Duplicates for seamless loop -->
-        <div class="gallery-item" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🏛️</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #fef3c7, #fde68a);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🪙</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">💎</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #ede9fe, #ddd6fe);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🎨</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #fee2e2, #fecaca);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">🔔</div></div>
-        <div class="gallery-item" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7);"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;opacity:0.3;">💰</div></div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ── Visit Info ──────────────────────────────────── -->
-  <section id="visit" style="background: var(--bg); padding: 80px 0; position: relative; z-index: 1;">
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px;">
+  <!-- ── Visit Info ───────────────────────────────── -->
+  <section id="visit" style="padding: 96px 0; position: relative; z-index: 1; border-top: 1px solid var(--border);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
 
       <div class="reveal" style="text-align: center; margin-bottom: 56px;">
         <span class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">Plan Your Visit</span>
         <h2 style="font-size: clamp(36px, 6vw, 64px); margin: 8px 0 0;">Come Play With Money</h2>
       </div>
 
-      <!-- Stats row with bouncy numbers -->
-      <div class="reveal reveal-delay-1" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 56px; text-align: center;">
+      <!-- Stats row -->
+      <div class="grid-4 reveal reveal-delay-1" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 56px; text-align: center;">
         <div>
-          <span class="stat-number" style="font-size: 48px; font-weight: 700; color: var(--text); cursor: default;">40K</span>
-          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 0 0;">Sq Ft</p>
+          <span class="stat-number" style="font-size: 48px; font-weight: 700;">40K</span>
+          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 8px;">Sq Ft</p>
         </div>
         <div>
-          <span class="stat-number" style="font-size: 48px; font-weight: 700; color: var(--text); cursor: default;">22</span>
-          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 0 0;">Exhibits</p>
+          <span class="stat-number" style="font-size: 48px; font-weight: 700;">22</span>
+          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 8px;">Exhibits</p>
         </div>
         <div>
-          <span class="stat-number" style="font-size: 48px; font-weight: 700; color: var(--text); cursor: default;">4.8</span>
-          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 0 0;">Rating</p>
+          <span class="stat-number" style="font-size: 48px; font-weight: 700;">4.8</span>
+          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 8px;">Rating</p>
         </div>
         <div>
-          <span class="stat-number" style="font-size: 48px; font-weight: 700; color: var(--text); cursor: default;">500K+</span>
-          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 0 0;">Annual Visitors</p>
+          <span class="stat-number" style="font-size: 48px; font-weight: 700;">500K+</span>
+          <p class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 8px;">Visitors / Year</p>
         </div>
       </div>
 
-      <!-- Info grid -->
-      <div class="reveal reveal-delay-2" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      <!-- Info cards -->
+      <div class="grid-3 reveal reveal-delay-2" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
 
         <!-- Location -->
-        <div class="exhibit-card" style="background: var(--subtle-bg); padding: 32px; border-radius: 16px;">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="exhibit-card" style="padding: 32px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Find Us</h3>
-          <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 16px;">
+          <h3 style="font-size: 19px; margin: 0 0 8px; letter-spacing: -0.02em;">Find Us</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 16px;">
             86 Chambers Street<br>New York, NY 10007
           </p>
-          <a href="#" class="font-mono" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none;">Get Directions →</a>
+          <a href="#" class="font-mono" style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);">Get Directions &#x2192;</a>
         </div>
 
         <!-- Hours -->
-        <div class="exhibit-card" style="background: var(--subtle-bg); padding: 32px; border-radius: 16px;">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="exhibit-card" style="padding: 32px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Hours</h3>
-          <p style="font-size: 14px; color: var(--muted); line-height: 1.8; margin: 0;">
+          <h3 style="font-size: 19px; margin: 0 0 8px; letter-spacing: -0.02em;">Hours</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin: 0;">
             Mon — Thu: 10am — 8pm<br>
             Fri — Sat: 10am — 9pm<br>
             Sunday: 10am — 7pm
@@ -723,63 +937,58 @@
         </div>
 
         <!-- Tickets -->
-        <div class="exhibit-card" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); padding: 32px; border-radius: 16px;">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <div class="exhibit-card" style="padding: 32px; background: linear-gradient(160deg, #0d2818, var(--bg-card)); border-color: rgba(34, 197, 94, 0.2);">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
           </div>
-          <h3 style="font-size: 20px; margin: 0 0 8px;">Tickets</h3>
-          <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 20px;">
+          <h3 style="font-size: 19px; margin: 0 0 8px; letter-spacing: -0.02em;">Tickets</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 20px;">
             Adults: $24 | Kids (5–12): $16<br>
             Under 5: Free
           </p>
-          <button class="ticket-btn btn-bounce" style="width: 100%;">
-            <span class="btn-flip-wrap" style="justify-content: center; width: 100%;">
-              <span class="btn-flip-front">Book Now</span>
-              <span class="btn-flip-back">Let's Go!</span>
+          <button class="btn-main" style="width: 100%;">
+            <span class="btn-main__label" style="flex: 1; justify-content: center;">
+              <span class="flip-text">
+                <span class="flip-text__front">Book Now</span>
+                <span class="flip-text__back">Let's Go!</span>
+              </span>
+            </span>
+            <span class="btn-main__divider"></span>
+            <span class="btn-main__icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M17 7H7M17 7v10"/></svg>
             </span>
           </button>
         </div>
       </div>
-
-      <style>
-        @media (max-width: 767px) {
-          #visit div[style*="grid-template-columns: repeat(4"] {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          #visit div[style*="grid-template-columns: repeat(3"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      </style>
     </div>
   </section>
 
 
-  <!-- ── Footer ──────────────────────────────────────── -->
-  <footer style="background: #1a1a1a; color: white; padding: 64px 0 32px; position: relative; z-index: 1;">
-    <div style="max-width: 1152px; margin: 0 auto; padding: 0 24px;">
+  <!-- ── Footer ───────────────────────────────────── -->
+  <footer style="border-top: 1px solid var(--border); padding: 64px 0 32px; position: relative; z-index: 1;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
 
-      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 48px; margin-bottom: 56px;">
+      <div class="footer-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 48px; margin-bottom: 56px;">
 
-        <!-- Brand column -->
+        <!-- Brand -->
         <div>
-          <span style="font-size: 24px; font-weight: 700; letter-spacing: -0.03em; display: block; margin-bottom: 16px;">
+          <span style="font-size: 22px; font-weight: 700; letter-spacing: -0.04em; display: block; margin-bottom: 16px;">
             Currency<span style="color: var(--accent);">Lab</span>
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-left: 2px;"></span>
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; margin-left: 2px;"></span>
           </span>
-          <p style="font-size: 14px; color: #999; line-height: 1.6; max-width: 32ch; margin: 0 0 24px;">
-            New York City's most interactive money museum. 40,000 sq ft of hands-on financial fun for all ages.
+          <p style="font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 30ch; margin: 0 0 24px;">
+            The city's most interactive money museum. 40,000 sq ft of hands-on financial fun for all ages.
           </p>
-          <!-- Social icons -->
-          <div style="display: flex; gap: 12px;">
-            <a href="#" class="btn-bounce" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 14px;">f</a>
-            <a href="#" class="btn-bounce" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 14px;">ig</a>
-            <a href="#" class="btn-bounce" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 14px;">yt</a>
-            <a href="#" class="btn-bounce" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 14px;">tk</a>
+          <!-- Social -->
+          <div style="display: flex; gap: 10px;">
+            <a href="#" class="cart-btn" style="width: 34px; height: 34px; font-size: 13px; font-weight: 600;">f</a>
+            <a href="#" class="cart-btn" style="width: 34px; height: 34px; font-size: 11px; font-weight: 600;">ig</a>
+            <a href="#" class="cart-btn" style="width: 34px; height: 34px; font-size: 11px; font-weight: 600;">yt</a>
+            <a href="#" class="cart-btn" style="width: 34px; height: 34px; font-size: 11px; font-weight: 600;">tk</a>
           </div>
         </div>
 
-        <!-- Quick links -->
+        <!-- Explore -->
         <div>
           <h3 class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 20px; font-weight: 500;">Explore</h3>
           <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -806,44 +1015,35 @@
         <!-- Newsletter -->
         <div>
           <h3 class="font-mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 20px; font-weight: 500;">Stay in the loop</h3>
-          <p style="font-size: 14px; color: #999; line-height: 1.5; margin: 0 0 16px;">Get exhibit updates, event invites, and the occasional money fact.</p>
+          <p style="font-size: 14px; color: var(--muted); line-height: 1.5; margin: 0 0 16px;">Get exhibit updates, event invites, and the occasional money fact.</p>
           <div style="display: flex; gap: 8px;">
             <input type="email" placeholder="your@email.com"
-              style="flex: 1; background: #2a2a2a; border: 1px solid #333; border-radius: 999px; padding: 10px 18px; color: white; font-family: 'Space Grotesk', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s ease;"
+              style="flex: 1; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 999px; padding: 10px 18px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s ease; min-width: 0;"
               onfocus="this.style.borderColor='var(--accent)'"
-              onblur="this.style.borderColor='#333'">
-            <button class="ticket-btn btn-bounce" style="padding: 10px 20px; font-size: 13px;">
-              Join
+              onblur="this.style.borderColor='var(--border)'">
+            <button class="btn-main" style="font-size: 13px; flex-shrink: 0;">
+              <span class="btn-main__label" style="padding: 10px 18px;">Join</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Footer bottom -->
-      <div style="border-top: 1px solid #2a2a2a; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <span class="font-mono" style="font-size: 11px; color: #666; letter-spacing: 0.04em;">
+      <!-- Bottom bar -->
+      <div style="border-top: 1px solid var(--border); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <span class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.04em;">
           &copy; 2026 The Currency Lab. All rights reserved.
         </span>
-        <span class="font-mono" style="font-size: 11px; color: #666; letter-spacing: 0.04em;">
+        <span class="font-mono" style="font-size: 11px; color: var(--muted); letter-spacing: 0.04em;">
           Made with elastic energy in NYC
         </span>
       </div>
-
-      <style>
-        @media (max-width: 767px) {
-          footer div[style*="grid-template-columns: 2fr"] {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-        }
-      </style>
     </div>
   </footer>
 
 
-  <!-- ── Scripts ─────────────────────────────────────── -->
+  <!-- ── Scripts ──────────────────────────────────── -->
   <script>
-    // Color-trail grid canvas (inspired by museumofmoney.com)
+    // Color-trail grid (mouse-tracking green squares)
     (function() {
       const canvas = document.getElementById('grid-canvas');
       const ctx = canvas.getContext('2d');
@@ -854,16 +1054,18 @@
         return;
       }
 
-      const cols = 32;
+      const cols = 36;
       let squareSize, rows;
       const blocks = [];
       const trail = [];
-      const trailMax = 6;
-      const opacities = [0.15, 0.12, 0.10, 0.07, 0.05, 0.03];
+      const trailMax = 8;
+      const opacities = [0.18, 0.14, 0.11, 0.08, 0.06, 0.04, 0.03, 0.02];
+
+      let resizeTimer;
 
       function resize() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.height = document.documentElement.scrollHeight;
         squareSize = canvas.width / cols;
         rows = Math.ceil(canvas.height / squareSize);
 
@@ -876,13 +1078,17 @@
       }
 
       resize();
-      window.addEventListener('resize', resize);
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 200);
+      });
 
-      const accentRGB = { r: 34, g: 197, b: 94 };
+      const accent = { r: 34, g: 197, b: 94 };
 
       document.addEventListener('mousemove', (e) => {
+        const scrollY = window.scrollY || window.pageYOffset;
         const col = Math.floor(e.clientX / squareSize);
-        const row = Math.floor(e.clientY / squareSize);
+        const row = Math.floor((e.clientY + scrollY) / squareSize);
         const key = `${col}-${row}`;
 
         if (trail.length === 0 || trail[trail.length - 1] !== key) {
@@ -890,7 +1096,6 @@
           if (trail.length > trailMax) trail.shift();
         }
 
-        // Set target opacities for trail blocks
         for (let i = 0; i < trail.length; i++) {
           const [tc, tr] = trail[i].split('-').map(Number);
           const block = blocks.find(b => b.col === tc && b.row === tr);
@@ -904,14 +1109,13 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (const b of blocks) {
-          // Lerp alpha toward target
           b.alpha += (b.target - b.alpha) * 0.08;
-          b.target *= 0.995; // Slow decay
-
           if (b.alpha > 0.005) {
-            ctx.fillStyle = `rgba(${accentRGB.r}, ${accentRGB.g}, ${accentRGB.b}, ${b.alpha})`;
-            ctx.fillRect(b.x + 0.5, b.y + 0.5, squareSize - 1, squareSize - 1);
+            ctx.fillStyle = `rgba(${accent.r},${accent.g},${accent.b},${b.alpha})`;
+            ctx.fillRect(b.x + 1, b.y + 1, squareSize - 2, squareSize - 2);
           }
+          // Decay target
+          b.target *= 0.97;
         }
 
         requestAnimationFrame(draw);
@@ -920,18 +1124,20 @@
       draw();
     })();
 
-    // Scroll-triggered reveal animations
+    // Scroll-reveal observer
     (function() {
-      const reveals = document.querySelectorAll('.reveal');
+      const els = document.querySelectorAll('.reveal');
+      if (!els.length) return;
+
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-      reveals.forEach(el => observer.observe(el));
+      els.forEach(el => observer.observe(el));
     })();
   </script>
 
