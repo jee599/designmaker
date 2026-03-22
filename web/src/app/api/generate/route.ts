@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 import { readFile, readdir } from "fs/promises";
 import { join } from "path";
-import { assembleGeneratePrompt } from "@/lib/promptAssembler";
+import { assembleProPrompt } from "@/lib/promptAssembler";
 
 const CATALOG_DIR = join(
   process.cwd(),
@@ -24,9 +24,11 @@ interface GenerateRequest {
   referenceId: string;
   description: string;
   brandColor: string;
-  format: "code" | "markdown" | "prompt";
+  format: "code" | "prompt";
   model?: "haiku" | "sonnet";
 }
+
+type ProFormat = "code";
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,12 +36,21 @@ export async function POST(request: NextRequest) {
     const { referenceId, description, brandColor, format, model: modelChoice } = body;
     const modelId = MODEL_MAP[modelChoice ?? "sonnet"] ?? MODEL_MAP.sonnet;
 
-    if (!referenceId || (format !== "prompt" && !description)) {
+    if (format === "prompt") {
+      return Response.json(
+        { error: "Use client-side assembly for free prompts" },
+        { status: 400 }
+      );
+    }
+
+    if (!referenceId || !description) {
       return Response.json(
         { error: "referenceId and description are required." },
         { status: 400 }
       );
     }
+
+    const proFormat: ProFormat = format;
 
     let referenceContent: string;
     try {
@@ -64,50 +75,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (format === "prompt") {
-      const assembled = assembleGeneratePrompt({
-        skillContent,
-        referenceContent,
-        brandColor,
-        description,
-        outputFormat: "code",
-      });
-      return new Response(assembled, {
-        headers: { "Content-Type": "text/plain; charset=utf-8" },
-      });
-    }
-
-    const systemPrompt =
-      format === "code"
-        ? `You are a senior frontend designer. You generate production-quality HTML code.
-Follow the SKILL.md rules exactly. Use the selected reference's palette, typography, and layout.
-The user's brand color (${brandColor}) replaces the reference's accent color.
-Generate complete, standalone HTML with Tailwind CDN (use <script src="https://cdn.tailwindcss.com"></script>).
-Include Google Fonts links as specified in the reference.
-Output ONLY the HTML code, no explanations.
-
-=== SKILL.md ===
-${skillContent}
-
-=== Selected Reference ===
-${referenceContent}`
-        : `You are a senior frontend designer. You create detailed design specification documents in Markdown.
-Follow the SKILL.md rules exactly. Use the selected reference's palette, typography, and layout.
-The user's brand color (${brandColor}) replaces the reference's accent color.
-Output a comprehensive design plan in Korean (한국어) with:
-- 페이지 구조 (섹션 순서, 배경색, 패딩)
-- 색상 팔레트 (HEX 코드)
-- 타이포그래피 (폰트, 크기, weight)
-- 컴포넌트 명세 (버튼, 카드, 네비게이션)
-- 반응형 브레이크포인트 처리
-- 접근성 체크리스트
-Output ONLY the Markdown, no explanations.
-
-=== SKILL.md ===
-${skillContent}
-
-=== Selected Reference ===
-${referenceContent}`;
+    const systemPrompt = assembleProPrompt({
+      skillContent,
+      referenceContent,
+      brandColor,
+      description,
+      outputFormat: proFormat,
+    });
 
     const client = new Anthropic();
 
@@ -122,7 +96,7 @@ ${referenceContent}`;
             messages: [
               {
                 role: "user",
-                content: `다음 사이트를 만들어주세요:\n\n${description}\n\n브랜드 색상: ${brandColor}\n출력 형식: ${format === "code" ? "HTML 코드" : "Markdown 설계서"}`,
+                content: `다음 사이트를 만들어주세요:\n\n${description}\n\n브랜드 색상: ${brandColor}\n출력 형식: HTML 코드`,
               },
             ],
           });

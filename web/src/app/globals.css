@@ -1,14 +1,121 @@
 @import "tailwindcss";
 
-:root {
+/* ── Palette: Emerald (default) ── */
+:root,
+[data-palette="emerald"] {
   --bg: #09090b;
   --text: #fafafa;
   --subtle: #18181b;
   --border: #27272a;
   --muted: #a1a1aa;
   --accent: #10b981;
+  --accent-light: #34d399;
   --accent-dim: rgba(16, 185, 129, 0.08);
   --accent-glow: rgba(16, 185, 129, 0.15);
+  --accent-5: rgba(16, 185, 129, 0.05);
+  --accent-10: rgba(16, 185, 129, 0.10);
+  --accent-20: rgba(16, 185, 129, 0.20);
+  --accent-30: rgba(16, 185, 129, 0.30);
+  --accent-50: rgba(16, 185, 129, 0.50);
+  --accent-60: rgba(16, 185, 129, 0.60);
+  --accent-70: rgba(16, 185, 129, 0.70);
+  --dot-color: rgba(16, 185, 129, 0.07);
+}
+
+/* ── Palette: Blue ── */
+[data-palette="blue"] {
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --accent-dim: rgba(59, 130, 246, 0.08);
+  --accent-glow: rgba(59, 130, 246, 0.15);
+  --accent-5: rgba(59, 130, 246, 0.05);
+  --accent-10: rgba(59, 130, 246, 0.10);
+  --accent-20: rgba(59, 130, 246, 0.20);
+  --accent-30: rgba(59, 130, 246, 0.30);
+  --accent-50: rgba(59, 130, 246, 0.50);
+  --accent-60: rgba(59, 130, 246, 0.60);
+  --accent-70: rgba(59, 130, 246, 0.70);
+  --dot-color: rgba(59, 130, 246, 0.07);
+}
+
+/* ── Palette: Purple ── */
+[data-palette="purple"] {
+  --accent: #8b5cf6;
+  --accent-light: #a78bfa;
+  --accent-dim: rgba(139, 92, 246, 0.08);
+  --accent-glow: rgba(139, 92, 246, 0.15);
+  --accent-5: rgba(139, 92, 246, 0.05);
+  --accent-10: rgba(139, 92, 246, 0.10);
+  --accent-20: rgba(139, 92, 246, 0.20);
+  --accent-30: rgba(139, 92, 246, 0.30);
+  --accent-50: rgba(139, 92, 246, 0.50);
+  --accent-60: rgba(139, 92, 246, 0.60);
+  --accent-70: rgba(139, 92, 246, 0.70);
+  --dot-color: rgba(139, 92, 246, 0.07);
+}
+
+/* ── Palette: Cyan ── */
+[data-palette="cyan"] {
+  --accent: #06b6d4;
+  --accent-light: #22d3ee;
+  --accent-dim: rgba(6, 182, 212, 0.08);
+  --accent-glow: rgba(6, 182, 212, 0.15);
+  --accent-5: rgba(6, 182, 212, 0.05);
+  --accent-10: rgba(6, 182, 212, 0.10);
+  --accent-20: rgba(6, 182, 212, 0.20);
+  --accent-30: rgba(6, 182, 212, 0.30);
+  --accent-50: rgba(6, 182, 212, 0.50);
+  --accent-60: rgba(6, 182, 212, 0.60);
+  --accent-70: rgba(6, 182, 212, 0.70);
+  --dot-color: rgba(6, 182, 212, 0.07);
+}
+
+/* ── Palette: Rose ── */
+[data-palette="rose"] {
+  --accent: #f43f5e;
+  --accent-light: #fb7185;
+  --accent-dim: rgba(244, 63, 94, 0.08);
+  --accent-glow: rgba(244, 63, 94, 0.15);
+  --accent-5: rgba(244, 63, 94, 0.05);
+  --accent-10: rgba(244, 63, 94, 0.10);
+  --accent-20: rgba(244, 63, 94, 0.20);
+  --accent-30: rgba(244, 63, 94, 0.30);
+  --accent-50: rgba(244, 63, 94, 0.50);
+  --accent-60: rgba(244, 63, 94, 0.60);
+  --accent-70: rgba(244, 63, 94, 0.70);
+  --dot-color: rgba(244, 63, 94, 0.07);
+}
+
+/* ── Palette: Amber ── */
+[data-palette="amber"] {
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --accent-dim: rgba(245, 158, 11, 0.08);
+  --accent-glow: rgba(245, 158, 11, 0.15);
+  --accent-5: rgba(245, 158, 11, 0.05);
+  --accent-10: rgba(245, 158, 11, 0.10);
+  --accent-20: rgba(245, 158, 11, 0.20);
+  --accent-30: rgba(245, 158, 11, 0.30);
+  --accent-50: rgba(245, 158, 11, 0.50);
+  --accent-60: rgba(245, 158, 11, 0.60);
+  --accent-70: rgba(245, 158, 11, 0.70);
+  --dot-color: rgba(245, 158, 11, 0.07);
+}
+
+/* ── Palette: Indigo ── */
+[data-palette="indigo"] {
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --accent-dim: rgba(99, 102, 241, 0.08);
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  --accent-5: rgba(99, 102, 241, 0.05);
+  --accent-10: rgba(99, 102, 241, 0.10);
+  --accent-20: rgba(99, 102, 241, 0.20);
+  --accent-30: rgba(99, 102, 241, 0.30);
+  --accent-50: rgba(99, 102, 241, 0.50);
+  --accent-60: rgba(99, 102, 241, 0.60);
+  --accent-70: rgba(99, 102, 241, 0.70);
+  --dot-color: rgba(99, 102, 241, 0.07);
 }
 
 @theme inline {
@@ -22,9 +129,36 @@
 body {
   background: var(--bg);
   color: var(--text);
-  background-image: radial-gradient(rgba(16, 185, 129, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+/* ── Accent utility classes ── */
+.text-accent { color: var(--accent); }
+.text-accent-light { color: var(--accent-light); }
+.text-accent-50 { color: var(--accent-50); }
+.text-accent-70 { color: var(--accent-70); }
+
+.bg-accent { background-color: var(--accent); }
+.bg-accent-10 { background-color: var(--accent-10); }
+.bg-accent-20 { background-color: var(--accent-20); }
+.bg-accent-60 { background-color: var(--accent-60); }
+
+.border-accent { border-color: var(--accent); }
+.border-accent-20 { border-color: var(--accent-20); }
+.border-accent-30 { border-color: var(--accent-30); }
+.border-accent-50 { border-color: var(--accent-50); }
+
+.shadow-accent-5 { --tw-shadow-color: var(--accent-5); }
+
+.hover\:text-accent-light:hover { color: var(--accent-light); }
+.hover\:border-accent-50:hover { border-color: var(--accent-50); }
+.hover\:border-accent:hover { border-color: var(--accent); }
+.hover\:bg-accent-60:hover { background-color: var(--accent-60); }
+.focus\:border-accent:focus { border-color: var(--accent); }
+.group-hover\:border-accent-50:is(:where(.group):hover *) { border-color: var(--accent-50); }
+.group-hover\:shadow-accent-5:is(:where(.group):hover *) { --tw-shadow-color: var(--accent-5); }
+.group-hover\:bg-accent-60:is(:where(.group):hover *) { background-color: var(--accent-60); }
 
 /* Terminal cursor blink */
 @keyframes cursor-blink {

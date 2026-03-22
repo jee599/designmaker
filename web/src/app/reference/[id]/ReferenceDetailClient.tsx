@@ -345,21 +345,6 @@ export default function ReferenceDetailClient({
                 AI-powered iterative design generation
               </p>
             </button>
-            {/* Pro - redesign */}
-            <button
-              onClick={() => setShowProModal(true)}
-              className="block w-full text-left rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group cursor-pointer"
-            >
-              <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
-                <span className="text-emerald-500">$</span>
-                <span className="text-zinc-400 group-hover:text-zinc-200">refmade improve</span>
-                <span className="text-zinc-600">--redesign</span>
-                <span className="ml-auto rounded border border-amber-800/50 bg-amber-900/10 px-2 py-0.5 text-xs text-amber-500/70">pro</span>
-              </div>
-              <p className="mt-1 ml-5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
-                Redesign an existing site with this reference
-              </p>
-            </button>
           </div>
         </div>
 
@@ -560,13 +545,10 @@ export default function ReferenceDetailClient({
                 <div className="space-y-3">
                   <div className="space-y-2 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-400">
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-400">&#x2713;</span> Generate HTML/Markdown directly
+                      <span className="text-emerald-400">&#x2713;</span> Generate HTML code directly
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-emerald-400">&#x2713;</span> Conversational design iteration
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-emerald-400">&#x2713;</span> Redesign existing sites
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-emerald-400">&#x2713;</span> Custom description &amp; brand
@@ -585,8 +567,15 @@ export default function ReferenceDetailClient({
                         className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-500 focus:outline-none"
                       />
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           if (proEmail.includes("@")) {
+                            try {
+                              await fetch("/api/subscribe", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email: proEmail, source: "reference" }),
+                              });
+                            } catch {}
                             setProEmailSubmitted(true);
                           }
                         }}

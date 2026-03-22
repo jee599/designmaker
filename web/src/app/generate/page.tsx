@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { type ModelChoice, getStoredModel, MODEL_CHANGE_EVENT } from "../components/ModelSwitcher";
+type ModelChoice = "sonnet";
+import { assembleFreePrompt } from "@/lib/promptAssembler";
 
 const REFERENCES = [
   { id: "001-clean-minimal", name: "Clean Minimal", accent: "#000000", tone: "light" },
@@ -22,7 +23,7 @@ const REFERENCES = [
   { id: "015-enterprise-b2b", name: "Enterprise B2B", accent: "#4f46e5", tone: "light" },
 ];
 
-type OutputFormat = "code" | "markdown" | "prompt";
+type OutputFormat = "code" | "prompt";
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -58,24 +59,6 @@ function SkeletonLoader() {
   );
 }
 
-function simpleMarkdownToHtml(md: string): string {
-  let html = md
-    .replace(/^### (.+)$/gm, '<h3 class="text-lg font-semibold text-zinc-100 mt-6 mb-2">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold text-zinc-50 mt-8 mb-3">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold text-zinc-50 mt-8 mb-4">$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/`(.+?)`/g, '<code class="rounded bg-zinc-800 px-1.5 py-0.5 text-sm" style="color: var(--accent-light)">$1</code>')
-    .replace(/^- (.+)$/gm, '<li class="ml-4 list-disc text-zinc-300">$1</li>')
-    .replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4 list-decimal text-zinc-300">$2</li>');
-
-  html = html
-    .replace(/(<li[^>]*>.*<\/li>\n?)+/g, (match) => `<ul class="my-2 space-y-1">${match}</ul>`)
-    .replace(/\n{2,}/g, '<br/><br/>')
-    .replace(/\n/g, "<br/>");
-
-  return html;
-}
-
 export default function GeneratePage() {
   return (
     <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-zinc-950 font-[family-name:var(--font-jetbrains-mono)] text-zinc-500">loading...</div>}>
@@ -100,15 +83,8 @@ function GeneratePageInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [outputTab, setOutputTab] = useState<"code" | "preview">("preview");
-  const [model, setModel] = useState<ModelChoice>("sonnet");
+  const model: ModelChoice = "sonnet";
   const outputRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setModel(getStoredModel());
-    const handler = (e: Event) => setModel((e as CustomEvent).detail as ModelChoice);
-    window.addEventListener(MODEL_CHANGE_EVENT, handler);
-    return () => window.removeEventListener(MODEL_CHANGE_EVENT, handler);
-  }, []);
 
   useEffect(() => {
     const ref = searchParams.get("ref");
@@ -151,6 +127,19 @@ function GeneratePageInner() {
     setOutput("");
 
     try {
+      // Free mode: assemble prompt client-side, no AI API call
+      if (format === "prompt") {
+        const catalogRes = await fetch(`/api/catalog?id=${encodeURIComponent(selectedRef)}`);
+        if (!catalogRes.ok) {
+          throw new Error(`Reference ${selectedRef} not found.`);
+        }
+        const referenceContent = await catalogRes.text();
+        const prompt = assembleFreePrompt({ referenceContent, brandColor });
+        setOutput(prompt);
+        return;
+      }
+
+      // Pro mode: stream from AI API
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -188,8 +177,8 @@ function GeneratePageInner() {
   };
 
   const handleDownload = () => {
-    const ext = format === "code" ? "html" : "md";
-    const mimeType = format === "code" ? "text/html" : "text/markdown";
+    const ext = format === "code" ? "html" : "txt";
+    const mimeType = format === "code" ? "text/html" : "text/plain";
     const blob = new Blob([output], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -324,19 +313,6 @@ function GeneratePageInner() {
                 {isFreeMode && <span className="ml-1.5 rounded border border-amber-800/50 bg-amber-900/10 px-1 py-0.5 text-[10px] text-amber-500/70">pro</span>}
               </button>
               <button
-                onClick={() => isFreeMode ? setShowPaywall(true) : setFormat("markdown")}
-                className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 relative ${
-                  !isFreeMode && format === "markdown"
-                    ? "bg-accent-10 text-accent-light border border-accent-30"
-                    : isFreeMode
-                    ? "text-zinc-600 border border-transparent"
-                    : "text-zinc-500 hover:text-zinc-300 border border-transparent"
-                }`}
-              >
-                markdown
-                {isFreeMode && <span className="ml-1.5 rounded border border-amber-800/50 bg-amber-900/10 px-1 py-0.5 text-[10px] text-amber-500/70">pro</span>}
-              </button>
-              <button
                 onClick={() => setFormat("prompt")}
                 className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                   format === "prompt"
@@ -389,7 +365,7 @@ function GeneratePageInner() {
               <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
             </div>
             <span className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-500">
-              {format === "code" ? "output.html" : format === "markdown" ? "output.md" : "prompt.md"}
+              {format === "code" ? "output.html" : "prompt.md"}
             </span>
           </div>
           {output && (
@@ -474,13 +450,6 @@ function GeneratePageInner() {
             />
           )}
 
-          {output && format === "markdown" && (
-            <div
-              className="prose prose-invert max-w-none p-6 text-sm leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(output) }}
-            />
-          )}
-
           {output && format === "prompt" && (
             <div className="p-6">
               <div className="mb-4 rounded-lg border border-accent-30 bg-accent-10 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-xs text-accent-light">
@@ -519,13 +488,10 @@ function GeneratePageInner() {
                 <div className="space-y-3">
                   <div className="space-y-2 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-400">
                     <div className="flex items-center gap-2">
-                      <span className="text-emerald-400">&#x2713;</span> Generate HTML/Markdown directly
+                      <span className="text-emerald-400">&#x2713;</span> Generate HTML code directly
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-emerald-400">&#x2713;</span> Conversational design iteration
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-emerald-400">&#x2713;</span> Redesign existing sites
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-emerald-400">&#x2713;</span> Custom description &amp; brand
@@ -544,8 +510,15 @@ function GeneratePageInner() {
                         className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-500 focus:outline-none"
                       />
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           if (paywallEmail.includes("@")) {
+                            try {
+                              await fetch("/api/subscribe", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email: paywallEmail, source: "generate" }),
+                              });
+                            } catch {}
                             setEmailSubmitted(true);
                           }
                         }}

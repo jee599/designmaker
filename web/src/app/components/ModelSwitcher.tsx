@@ -31,7 +31,7 @@ export default function ModelSwitcher() {
         onClick={() => handleChange("haiku")}
         className={`px-2 py-1 rounded transition-colors cursor-pointer ${
           model === "haiku"
-            ? "bg-emerald-500/20 text-emerald-400"
+            ? "bg-accent-20 text-accent-light"
             : "text-zinc-500 hover:text-zinc-300"
         }`}
       >
@@ -41,7 +41,7 @@ export default function ModelSwitcher() {
         onClick={() => handleChange("sonnet")}
         className={`px-2 py-1 rounded transition-colors cursor-pointer ${
           model === "sonnet"
-            ? "bg-emerald-500/20 text-emerald-400"
+            ? "bg-accent-20 text-accent-light"
             : "text-zinc-500 hover:text-zinc-300"
         }`}
       >

@@ -1,24 +1,86 @@
-export interface GeneratePromptParams {
+export interface FreePromptParams {
+  referenceContent: string;
+  brandColor: string;
+}
+
+export interface ProPromptParams {
   skillContent: string;
   referenceContent: string;
   brandColor: string;
   description: string;
-  outputFormat: "code" | "markdown";
+  outputFormat: "code";
 }
 
-export interface ImprovePromptParams {
-  skillContent: string;
-  referenceSummaries: string;
-  input: string;
-  inputType: "url" | "code";
+/** hex → r,g,b */
+function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+  const match = hex.replace("#", "").match(/^([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+  if (!match) return null;
+  return { r: parseInt(match[1], 16), g: parseInt(match[2], 16), b: parseInt(match[3], 16) };
 }
 
-export function assembleGeneratePrompt(params: GeneratePromptParams): string {
+/** 레퍼런스 마크다운에서 accent 색상을 유저 팔레트로 치환 */
+export function replaceAccentColor(referenceContent: string, originalAccent: string, newAccent: string): string {
+  let result = referenceContent;
+
+  // hex 치환 (대소문자 무시)
+  const escapedHex = originalAccent.replace("#", "\\#?");
+  result = result.replace(new RegExp(escapedHex, "gi"), newAccent);
+
+  // rgba 치환: 원래 accent의 rgb 값을 새 accent의 rgb로
+  const origRgb = hexToRgb(originalAccent);
+  const newRgb = hexToRgb(newAccent);
+  if (origRgb && newRgb) {
+    const rgbaPattern = new RegExp(
+      `rgba\\(\\s*${origRgb.r}\\s*,\\s*${origRgb.g}\\s*,\\s*${origRgb.b}\\s*,`,
+      "g"
+    );
+    result = result.replace(rgbaPattern, `rgba(${newRgb.r}, ${newRgb.g}, ${newRgb.b},`);
+  }
+
+  return result;
+}
+
+/** 레퍼런스에서 "- Accent: #hex" 라인의 색상값 추출 */
+export function extractAccentColor(referenceContent: string): string | null {
+  const match = referenceContent.match(/^-\s*Accent:\s*(#[0-9a-fA-F]{6})/m);
+  return match ? match[1] : null;
+}
+
+/**
+ * 무료 프롬프트: 레퍼런스 스펙 + 팔레트 치환 → 복붙 프롬프트 1개
+ * API 호출 없이 클라이언트에서 정적 조립
+ */
+export function assembleFreePrompt(params: FreePromptParams): string {
+  const { referenceContent, brandColor } = params;
+
+  const originalAccent = extractAccentColor(referenceContent);
+  const spec = originalAccent
+    ? replaceAccentColor(referenceContent, originalAccent, brandColor)
+    : referenceContent;
+
+  return `Build a complete, single HTML file following the design spec below.
+
+## Rules
+- Use Tailwind CDN: <script src="https://cdn.tailwindcss.com"></script>
+- Include Google Fonts specified in the spec via <link>
+- Follow the spec exactly: colors, fonts, sizes, spacing, layout, and section order
+- Implement responsive design (mobile / tablet / desktop)
+- Include interaction states: hover, transition, focus-visible
+- Do not modify or omit anything from the spec
+- Output ONLY the HTML code, no explanations
+
+## Design Spec
+
+${spec}`;
+}
+
+/**
+ * 유료 프롬프트: SKILL.md + 레퍼런스 + 유저 설명 → Claude API용
+ */
+export function assembleProPrompt(params: ProPromptParams): string {
   const { skillContent, referenceContent, brandColor, description, outputFormat } = params;
 
-  const systemPrompt =
-    outputFormat === "code"
-      ? `You are a senior frontend designer. You generate production-quality HTML code.
+  const systemPrompt = `You are a senior frontend designer. You generate production-quality HTML code.
 Follow the SKILL.md rules exactly. Use the selected reference's palette, typography, and layout.
 The user's brand color (${brandColor}) replaces the reference's accent color.
 Generate complete, standalone HTML with Tailwind CDN (use <script src="https://cdn.tailwindcss.com"></script>).
@@ -29,74 +91,11 @@ Output ONLY the HTML code, no explanations.
 ${skillContent}
 
 === Selected Reference ===
-${referenceContent}`
-      : `You are a senior frontend designer. You create detailed design specification documents in Markdown.
-Follow the SKILL.md rules exactly. Use the selected reference's palette, typography, and layout.
-The user's brand color (${brandColor}) replaces the reference's accent color.
-Output a comprehensive design plan in Korean (한국어) with:
-- 페이지 구조 (섹션 순서, 배경색, 패딩)
-- 색상 팔레트 (HEX 코드)
-- 타이포그래피 (폰트, 크기, weight)
-- 컴포넌트 명세 (버튼, 카드, 네비게이션)
-- 반응형 브레이크포인트 처리
-- 접근성 체크리스트
-Output ONLY the Markdown, no explanations.
-
-=== SKILL.md ===
-${skillContent}
-
-=== Selected Reference ===
 ${referenceContent}`;
 
   const userMessage = description
-    ? `Create this site:\n\n${description}\n\nBrand color: ${brandColor}\nOutput format: ${outputFormat === "code" ? "HTML code" : "Markdown spec"}`
-    : `Generate a landing page using the reference design above.\n\nBrand color: ${brandColor}\nOutput format: ${outputFormat === "code" ? "HTML code" : "Markdown spec"}`;
-
-  return `[System Prompt]\n${systemPrompt}\n\n---\n\n[User Message]\n${userMessage}`;
-}
-
-export function assembleImprovePrompt(params: ImprovePromptParams): string {
-  const { skillContent, referenceSummaries, input, inputType } = params;
-
-  const systemPrompt = `You are a web design expert. Analyze the given code/site against the SKILL.md rules.
-Your response MUST be valid JSON with this exact structure:
-{
-  "score": <number 1-10>,
-  "issues": [
-    { "id": "<unique-id>", "description": "<issue description in Korean>", "severity": "high" | "medium" | "low" }
-  ],
-  "closestReference": { "id": "<NNN>", "name": "<reference name>" },
-  "summary": "<brief summary in Korean>",
-  "improvedCode": "<full improved HTML code with Tailwind CDN>"
-}
-
-Score criteria based on SKILL.md:
-- Anti-pattern violations (each -1 point)
-- Typography scale compliance
-- Section padding variance
-- Card size diversity
-- Interactive element states (hover, transition, focus-visible)
-- Semantic HTML usage
-- Accessibility
-- Responsive design
-
-For the closestReference, match against these references:
-${referenceSummaries}
-
-For improvedCode:
-- Fix all identified issues
-- Apply the closest reference's design language
-- Use Tailwind CDN (<script src="https://cdn.tailwindcss.com"></script>)
-- Include Google Fonts
-- Make it production-quality
-
-=== SKILL.md ===
-${skillContent}`;
-
-  const userMessage =
-    inputType === "url"
-      ? `분석 대상 URL: ${input}\n\n이 URL의 사이트를 SKILL.md 규칙 기준으로 분석해주세요. URL에 직접 접근할 수 없으니, 일반적인 웹사이트 디자인 패턴과 SKILL.md 규칙을 기준으로 개선점을 제시해주세요.`
-      : `분석 대상 HTML 코드:\n\`\`\`html\n${input}\n\`\`\``;
+    ? `Create this site:\n\n${description}\n\nBrand color: ${brandColor}\nOutput format: HTML code`
+    : `Generate a landing page using the reference design above.\n\nBrand color: ${brandColor}\nOutput format: HTML code`;
 
   return `[System Prompt]\n${systemPrompt}\n\n---\n\n[User Message]\n${userMessage}`;
 }
