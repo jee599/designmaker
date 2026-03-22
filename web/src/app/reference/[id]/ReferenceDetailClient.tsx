@@ -54,7 +54,7 @@ function PaletteCard({
   return (
     <button
       onClick={onSelect}
-      className={`group flex flex-col gap-1 rounded-lg border p-2 transition-all duration-200 cursor-pointer shrink-0 w-[80px] ${
+      className={`group flex flex-col gap-1 rounded-lg border p-1.5 transition-all duration-200 cursor-pointer ${
         isActive
           ? "border-accent bg-accent-10"
           : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-600 hover:bg-zinc-900"
@@ -240,29 +240,8 @@ export default function ReferenceDetailClient({
               )}
             </div>
 
-            {/* Palette strip */}
-            <div
-              className="flex gap-2 overflow-x-auto pb-2 cursor-grab active:cursor-grabbing select-none"
-              style={{ scrollbarWidth: 'thin' }}
-              onMouseDown={(e) => {
-                const el = e.currentTarget;
-                const startX = e.pageX - el.offsetLeft;
-                const scrollLeft = el.scrollLeft;
-
-                const onMouseMove = (e: MouseEvent) => {
-                  const x = e.pageX - el.offsetLeft;
-                  el.scrollLeft = scrollLeft - (x - startX);
-                };
-
-                const onMouseUp = () => {
-                  document.removeEventListener('mousemove', onMouseMove);
-                  document.removeEventListener('mouseup', onMouseUp);
-                };
-
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-              }}
-            >
+            {/* Palette grid */}
+            <div className="grid grid-cols-7 gap-1.5">
               {designPalettes.map((p) => (
                 <PaletteCard
                   key={p.id}
