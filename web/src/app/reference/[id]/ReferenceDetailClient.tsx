@@ -77,24 +77,42 @@ function generateHarmonicPalettes(baseAccent: string, baseBg: string, baseText: 
   const palettes: DesignPalette[] = [];
 
   const variations = [
-    { name: "Original", hShift: 0, sShift: 0, lShift: 0 },
-    { name: "Lighter", hShift: 0, sShift: -10, lShift: 15 },
-    { name: "Deeper", hShift: 0, sShift: 10, lShift: -15 },
-    { name: "Analogous 1", hShift: 30, sShift: 0, lShift: 0 },
-    { name: "Analogous 2", hShift: -30, sShift: 0, lShift: 0 },
-    { name: "Complementary", hShift: 180, sShift: 0, lShift: 0 },
-    { name: "Triad 1", hShift: 120, sShift: -5, lShift: 5 },
-    { name: "Triad 2", hShift: 240, sShift: -5, lShift: 5 },
-    { name: "Warm", hShift: -60, sShift: 15, lShift: 0 },
-    { name: "Cool", hShift: 60, sShift: 15, lShift: 0 },
-    { name: "Desaturated", hShift: 0, sShift: -30, lShift: 5 },
-    { name: "Vivid", hShift: 0, sShift: 25, lShift: -5 },
+    // Original
+    { name: "Original", hShift: 0, sShift: 0, lShift: 0, bgMode: "default" as const },
+    // Lighter accent
+    { name: "Lighter", hShift: 0, sShift: -10, lShift: 15, bgMode: "default" as const },
+    // Deeper accent
+    { name: "Deeper", hShift: 0, sShift: 10, lShift: -15, bgMode: "default" as const },
+    // Analogous colors
+    { name: "Analogous 1", hShift: 30, sShift: 0, lShift: 0, bgMode: "default" as const },
+    { name: "Analogous 2", hShift: -30, sShift: 0, lShift: 0, bgMode: "default" as const },
+    // Complementary
+    { name: "Complementary", hShift: 180, sShift: 0, lShift: 0, bgMode: "default" as const },
+    // Triad
+    { name: "Triad 1", hShift: 120, sShift: -5, lShift: 5, bgMode: "default" as const },
+    { name: "Triad 2", hShift: 240, sShift: -5, lShift: 5, bgMode: "default" as const },
+    // Inverted (swap light/dark)
+    { name: "Inverted", hShift: 0, sShift: 0, lShift: 0, bgMode: "invert" as const },
+    // Warm tint
+    { name: "Warm", hShift: -60, sShift: 15, lShift: 0, bgMode: "default" as const },
+    // Cool tint
+    { name: "Cool", hShift: 60, sShift: 15, lShift: 0, bgMode: "default" as const },
+    // Vivid
+    { name: "Vivid", hShift: 0, sShift: 25, lShift: -5, bgMode: "default" as const },
   ];
 
   variations.forEach((v, i) => {
     const accent = hslToHex(baseH + v.hShift, baseS + v.sShift, baseL + v.lShift);
-    const bg = isDark ? "#09090b" : "#ffffff";
-    const text = isDark ? "#fafafa" : "#09090b";
+    let bg: string, text: string;
+
+    if (v.bgMode === "invert") {
+      bg = isDark ? "#ffffff" : "#09090b";
+      text = isDark ? "#09090b" : "#fafafa";
+    } else {
+      bg = isDark ? "#09090b" : "#ffffff";
+      text = isDark ? "#fafafa" : "#09090b";
+    }
+
     palettes.push({
       id: `gen-${i}`,
       name: v.name,
@@ -266,33 +284,51 @@ export default function ReferenceDetailClient({
             <span className="h-2 w-2 rounded-full bg-emerald-500/60" />
             <span className="ml-2 font-[family-name:var(--font-jetbrains-mono)] text-[10px] text-zinc-600">refmade</span>
           </div>
-          <div className="p-3 space-y-1">
+          <div className="p-2 space-y-0.5">
+            {/* Free - primary CTA */}
             <a
               href={`/generate?ref=${r.id}&mode=prompt`}
-              className="flex items-center gap-2 rounded px-2 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-sm transition-colors hover:bg-zinc-800 group"
+              className="block rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-3 transition-all hover:bg-emerald-500/10 hover:border-emerald-500/30 group"
             >
-              <span className="text-emerald-500">$</span>
-              <span className="text-zinc-300 group-hover:text-white">refmade export</span>
-              <span className="text-zinc-600">--prompt</span>
-              <span className="ml-auto rounded border border-emerald-800 bg-emerald-900/20 px-1.5 py-0.5 text-[10px] text-emerald-400">free</span>
+              <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
+                <span className="text-emerald-500">$</span>
+                <span className="text-zinc-200 group-hover:text-white font-medium">refmade export</span>
+                <span className="text-zinc-600">--prompt</span>
+                <span className="ml-auto rounded border border-emerald-700 bg-emerald-900/30 px-2 py-0.5 text-xs text-emerald-400 font-medium">free</span>
+              </div>
+              <p className="mt-1 ml-5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-500">
+                Get the full prompt — paste into any AI to generate
+              </p>
             </a>
+            {/* Pro - conversation */}
             <a
               href={`/generate?ref=${r.id}`}
-              className="flex items-center gap-2 rounded px-2 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-sm transition-colors hover:bg-zinc-800 group"
+              className="block rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group"
             >
-              <span className="text-emerald-500">$</span>
-              <span className="text-zinc-300 group-hover:text-white">refmade generate</span>
-              <span className="text-zinc-600">--conversation</span>
-              <span className="ml-auto rounded border border-amber-800 bg-amber-900/20 px-1.5 py-0.5 text-[10px] text-amber-400">pro</span>
+              <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
+                <span className="text-emerald-500">$</span>
+                <span className="text-zinc-400 group-hover:text-zinc-200">refmade generate</span>
+                <span className="text-zinc-600">--conversation</span>
+                <span className="ml-auto rounded border border-amber-800/50 bg-amber-900/10 px-2 py-0.5 text-xs text-amber-500/70">pro</span>
+              </div>
+              <p className="mt-1 ml-5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
+                AI-powered iterative design generation
+              </p>
             </a>
+            {/* Pro - redesign */}
             <a
               href={`/improve?ref=${r.id}`}
-              className="flex items-center gap-2 rounded px-2 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-sm transition-colors hover:bg-zinc-800 group"
+              className="block rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group"
             >
-              <span className="text-emerald-500">$</span>
-              <span className="text-zinc-300 group-hover:text-white">refmade improve</span>
-              <span className="text-zinc-600">--redesign</span>
-              <span className="ml-auto rounded border border-amber-800 bg-amber-900/20 px-1.5 py-0.5 text-[10px] text-amber-400">pro</span>
+              <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
+                <span className="text-emerald-500">$</span>
+                <span className="text-zinc-400 group-hover:text-zinc-200">refmade improve</span>
+                <span className="text-zinc-600">--redesign</span>
+                <span className="ml-auto rounded border border-amber-800/50 bg-amber-900/10 px-2 py-0.5 text-xs text-amber-500/70">pro</span>
+              </div>
+              <p className="mt-1 ml-5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
+                Redesign an existing site with this reference
+              </p>
             </a>
           </div>
         </div>
@@ -323,7 +359,10 @@ export default function ReferenceDetailClient({
                       ? "border-white ring-2 ring-white/20 scale-110"
                       : "border-zinc-700 hover:border-zinc-500"
                   }`}
-                  style={{ backgroundColor: p.accent }}
+                  style={{
+                    backgroundColor: p.accent,
+                    boxShadow: activePaletteId === p.id ? `0 0 12px ${p.accent}40` : undefined
+                  }}
                   title={p.name}
                 />
               ))}
