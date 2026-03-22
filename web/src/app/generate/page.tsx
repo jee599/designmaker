@@ -22,7 +22,7 @@ const REFERENCES = [
   { id: "015-enterprise-b2b", name: "Enterprise B2B", accent: "#4f46e5", tone: "light" },
 ];
 
-type OutputFormat = "code" | "markdown";
+type OutputFormat = "code" | "markdown" | "prompt";
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -36,7 +36,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-emerald-400 transition-all duration-200 hover:bg-emerald-500/20 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
+      className="rounded-md border border-accent-30 bg-accent-10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-accent-light transition-all duration-200 hover:bg-accent-20 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 cursor-pointer"
     >
       {copied ? "copied!" : "copy"}
     </button>
@@ -64,7 +64,7 @@ function simpleMarkdownToHtml(md: string): string {
     .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold text-zinc-50 mt-8 mb-3">$1</h2>')
     .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold text-zinc-50 mt-8 mb-4">$1</h1>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/`(.+?)`/g, '<code class="rounded bg-zinc-800 px-1.5 py-0.5 text-sm text-emerald-400">$1</code>')
+    .replace(/`(.+?)`/g, '<code class="rounded bg-zinc-800 px-1.5 py-0.5 text-sm" style="color: var(--accent-light)">$1</code>')
     .replace(/^- (.+)$/gm, '<li class="ml-4 list-disc text-zinc-300">$1</li>')
     .replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4 list-decimal text-zinc-300">$2</li>');
 
@@ -192,7 +192,7 @@ function GeneratePageInner() {
             디자인 생성
           </h1>
           <p className="mb-8 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
-            <span className="text-emerald-500">$</span> generate --mode interactive
+            <span className="text-accent">$</span> generate --mode interactive
           </p>
 
           {/* Reference Selector */}
@@ -207,7 +207,7 @@ function GeneratePageInner() {
                   onClick={() => handleRefChange(ref.id)}
                   className={`group flex items-center gap-2 rounded-lg border px-3 py-2 text-left font-[family-name:var(--font-jetbrains-mono)] text-xs transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${
                     selectedRef === ref.id
-                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                      ? "border-accent bg-accent-10 text-accent-light"
                       : "border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
                   }`}
                 >
@@ -235,7 +235,7 @@ function GeneratePageInner() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="AI 기반 프로젝트 관리 도구의 랜딩 페이지"
               rows={4}
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 resize-none"
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 transition-all duration-200 focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 resize-none"
             />
           </div>
 
@@ -256,7 +256,7 @@ function GeneratePageInner() {
                 value={brandColor}
                 onChange={(e) => setBrandColor(e.target.value)}
                 maxLength={7}
-                className="w-28 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 uppercase transition-all duration-200 focus:border-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                className="w-28 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 uppercase transition-all duration-200 focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
               />
               {currentRef && (
                 <span className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
@@ -276,7 +276,7 @@ function GeneratePageInner() {
                 onClick={() => setFormat("code")}
                 className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                   format === "code"
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                    ? "bg-accent-10 text-accent-light border border-accent-30"
                     : "text-zinc-500 hover:text-zinc-300 border border-transparent"
                 }`}
               >
@@ -286,11 +286,21 @@ function GeneratePageInner() {
                 onClick={() => setFormat("markdown")}
                 className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                   format === "markdown"
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                    ? "bg-accent-10 text-accent-light border border-accent-30"
                     : "text-zinc-500 hover:text-zinc-300 border border-transparent"
                 }`}
               >
                 markdown
+              </button>
+              <button
+                onClick={() => setFormat("prompt")}
+                className={`flex-1 rounded-md px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+                  format === "prompt"
+                    ? "bg-accent-10 text-accent-light border border-accent-30"
+                    : "text-zinc-500 hover:text-zinc-300 border border-transparent"
+                }`}
+              >
+                prompt
               </button>
             </div>
           </div>
@@ -306,7 +316,8 @@ function GeneratePageInner() {
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className="w-full rounded-lg bg-emerald-500 px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+            className="w-full rounded-lg px-6 py-3 font-[family-name:var(--font-jetbrains-mono)] text-sm font-semibold text-zinc-950 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 hover:opacity-90"
+            style={{ backgroundColor: "var(--accent)" }}
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -317,7 +328,7 @@ function GeneratePageInner() {
                 generating...
               </span>
             ) : (
-              `$ generate --model ${model}`
+              format === "prompt" ? `$ export --prompt` : `$ generate --model ${model}`
             )}
           </button>
         </div>
@@ -334,7 +345,7 @@ function GeneratePageInner() {
               <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
             </div>
             <span className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-500">
-              {format === "code" ? "output.html" : "output.md"}
+              {format === "code" ? "output.html" : format === "markdown" ? "output.md" : "prompt.md"}
             </span>
           </div>
           {output && (
@@ -345,7 +356,7 @@ function GeneratePageInner() {
                     onClick={() => setOutputTab("code")}
                     className={`rounded px-2.5 py-1 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium transition-all duration-200 cursor-pointer ${
                       outputTab === "code"
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                        ? "bg-accent-10 text-accent-light border border-accent-30"
                         : "text-zinc-500 hover:text-zinc-300 border border-transparent"
                     }`}
                   >
@@ -355,7 +366,7 @@ function GeneratePageInner() {
                     onClick={() => setOutputTab("preview")}
                     className={`rounded px-2.5 py-1 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium transition-all duration-200 cursor-pointer ${
                       outputTab === "preview"
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                        ? "bg-accent-10 text-accent-light border border-accent-30"
                         : "text-zinc-500 hover:text-zinc-300 border border-transparent"
                     }`}
                   >
@@ -379,7 +390,7 @@ function GeneratePageInner() {
                       w.document.close();
                     }
                   }}
-                  className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-emerald-400 transition-all duration-200 hover:bg-emerald-500/20 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+                  className="rounded-md border border-accent-30 bg-accent-10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-accent-light transition-all duration-200 hover:bg-accent-20 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                 >
                   $ open --new-tab
                 </button>
@@ -424,6 +435,17 @@ function GeneratePageInner() {
               className="prose prose-invert max-w-none p-6 text-sm leading-relaxed"
               dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(output) }}
             />
+          )}
+
+          {output && format === "prompt" && (
+            <div className="p-6">
+              <div className="mb-4 rounded-lg border border-accent-30 bg-accent-10 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-xs text-accent-light">
+                이 프롬프트를 Claude, ChatGPT 등 AI에 붙여넣으세요.
+              </div>
+              <pre className="font-[family-name:var(--font-jetbrains-mono)] text-xs leading-relaxed text-zinc-300 whitespace-pre-wrap break-words">
+                {output}
+              </pre>
+            </div>
           )}
         </div>
       </div>
