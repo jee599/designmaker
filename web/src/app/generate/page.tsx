@@ -112,12 +112,16 @@ function GeneratePageInner() {
   useEffect(() => {
     const ref = searchParams.get("ref");
     const mode = searchParams.get("mode");
+    const accent = searchParams.get("accent");
     if (ref) {
       const match = REFERENCES.find((r) => r.id.startsWith(ref));
       if (match) {
         setSelectedRef(match.id);
-        setBrandColor(match.accent);
+        setBrandColor(accent || match.accent);
       }
+    }
+    if (accent) {
+      setBrandColor(accent);
     }
     if (mode === "prompt") {
       setFormat("prompt");

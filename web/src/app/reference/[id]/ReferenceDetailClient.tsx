@@ -297,11 +297,22 @@ export default function ReferenceDetailClient({
             <span className="h-2 w-2 rounded-full bg-yellow-500/60" />
             <span className="h-2 w-2 rounded-full bg-emerald-500/60" />
             <span className="ml-2 font-[family-name:var(--font-jetbrains-mono)] text-[10px] text-zinc-600">refmade</span>
+            {/* Current palette indicator */}
+            {hasCustomChanges && (
+              <div className="ml-auto flex items-center gap-1.5">
+                <span className="font-[family-name:var(--font-jetbrains-mono)] text-[10px] text-zinc-600">palette:</span>
+                <div className="flex gap-0.5">
+                  <span className="h-3 w-3 rounded-sm border border-zinc-700" style={{ backgroundColor: customBg }} />
+                  <span className="h-3 w-3 rounded-sm border border-zinc-700" style={{ backgroundColor: customAccent }} />
+                  <span className="h-3 w-3 rounded-sm border border-zinc-700" style={{ backgroundColor: customText }} />
+                </div>
+              </div>
+            )}
           </div>
           <div className="p-2 space-y-0.5">
             {/* Free - primary CTA */}
             <a
-              href={`/generate?ref=${r.id}&mode=prompt`}
+              href={`/generate?ref=${r.id}&mode=prompt&accent=${encodeURIComponent(customAccent)}&bg=${encodeURIComponent(customBg)}&text=${encodeURIComponent(customText)}`}
               className="block rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-3 transition-all hover:bg-emerald-500/10 hover:border-emerald-500/30 group"
             >
               <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
@@ -316,7 +327,7 @@ export default function ReferenceDetailClient({
             </a>
             {/* Pro - conversation */}
             <a
-              href={`/generate?ref=${r.id}`}
+              href={`/generate?ref=${r.id}&accent=${encodeURIComponent(customAccent)}&bg=${encodeURIComponent(customBg)}&text=${encodeURIComponent(customText)}`}
               className="block rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group"
             >
               <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
@@ -331,7 +342,7 @@ export default function ReferenceDetailClient({
             </a>
             {/* Pro - redesign */}
             <a
-              href={`/improve?ref=${r.id}`}
+              href={`/improve?ref=${r.id}&accent=${encodeURIComponent(customAccent)}`}
               className="block rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group"
             >
               <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
