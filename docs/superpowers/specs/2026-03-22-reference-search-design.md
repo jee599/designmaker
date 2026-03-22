@@ -16,35 +16,64 @@
 
 ```
 사용자: /reference-search 실행
-  ↓
-[자동] 소스 검색 → 10개 URL 수집 → HTML 분석 → 품질 게이트 필터링
-  ↓
-[표시] "7개 후보 중 5개를 보여드립니다" (게이트 통과분만)
-  ┌────────────────────────────────────┐
-  │ 1. [064] Noir Editorial            │
-  │ 2. [065] Swiss Brutalist           │
-  │ 3. [066] Warm Organic              │
-  │ 4. [067] Neon Gradient             │
-  │ 5. [068] Serif Magazine            │
-  └────────────────────────────────────┘
-  ↓
-사용자: "1, 3, 5"  (keep할 번호만 입력)
-  ↓
+
+━━━ Phase 1-2: 검색 + 분석 (자동) ━━━━━━━━━━━━━━━
+
+[자동] Awwwards 검색 → 10개 URL 수집
+[자동] 각 URL WebFetch → HTML 분석 + og:image 분석
+[자동] 품질 게이트 (시그니처 부족/노후/중복 필터링)
+
+━━━ Phase 3: 큐레이션 라운드 1 ━━━━━━━━━━━━━━━━━
+
+[표시] "게이트 통과 8개 중 5개를 보여드립니다"
+  1. [064] Noir Editorial       ⚠️ 011과 유사(0.82)
+  2. [065] Swiss Brutalist
+  3. [066] Warm Organic
+  4. [067] Neon Gradient
+  5. [068] Serif Magazine
+
+사용자: "1, 3, 5"
+
 [자동] taste-profile 중간 저장
-  ↓
-[자동] 다음 소스에서 10개 URL 수집 → 분석 → taste 필터링 → 게이트
-  ↓
+
+━━━ Phase 1-2: 라운드 2 검색 + 분석 (자동) ━━━━━
+
+[자동] 다음 소스에서 10개 URL 수집 → 분석 → 게이트
+[자동] taste-profile 기반 필터링 (dark+editorial 우선)
+
+━━━ Phase 3: 큐레이션 라운드 2 ━━━━━━━━━━━━━━━━━
+
 [표시] 라운드 2 후보 5개
-  ↓
+  1. [069] Dark Typography
+  2. [070] Mono Grid
+  3. [071] Neon Minimal
+  4. [072] Editorial Long
+  5. [073] Ink Scroll
+
 사용자: "2, 4"
-  ↓
-[자동] keep된 전체(1,3,5,2,4 = 5개)에 대해 최종 차별성 검사
-  ↓
-[자동] 통과한 레퍼런스 → catalog MD 생성 + references.ts 업데이트
-  ↓
-[자동] taste-profile 최종 저장 + seen.json 기록
-  ↓
-[표시] "4개 레퍼런스 등록 완료. 다음 사이클?"
+
+━━━ Phase 4: 최종 등록 (자동) ━━━━━━━━━━━━━━━━━━
+
+[자동] keep 5개 서로 간 차별성 검사
+[자동] 통과 4개 → catalog MD 생성 + references.ts 업데이트
+[자동] taste-profile + seen.json 최종 저장
+
+[표시] "4개 레퍼런스 등록 완료. 총 63→67개"
+
+━━━ Phase 5: 회고 & 스킬 진화 ━━━━━━━━━━━━━━━━━
+
+[표시] 사이클 메트릭 (검색 결과, WebFetch 성공률, 게이트 병목 등)
+
+[표시] 스킬 개선 제안 3개:
+  1. 분석 프롬프트 시그니처 강조 추가
+  2. CSSDA 소스 추가 테스트
+  3. 임계값 유지 (변경 불필요)
+
+사용자: "1, 2"
+
+[자동] reference-search.md 수정 + sources.json 수정 + 커밋
+
+[표시] "스킬 업데이트 완료. 다음 사이클?"
 ```
 
 ---
@@ -442,10 +471,120 @@ status 정의:
 스킵: 6개 (delete 4, reject 2)
 taste-profile 업데이트 완료
 총 레퍼런스: 63 → 67개
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Phase 4 완료 후 Phase 5로 자동 진입.
+
+---
+
+## Phase 5 — 회고 & 스킬 진화
+
+매 사이클 끝에 실행. 이번 사이클의 메트릭을 분석하고, 스킬 파일 자체의 개선점을 제안한다.
+
+### Step A: 사이클 메트릭 수집
+
+```
+━━━ 사이클 회고 ━━━━━━━━━━━━━━━━━━━━━━
+
+📊 메트릭
+  검색 결과:  Awwwards 12개 URL
+  WebFetch:   성공 6/10 (60%) — 실패 사유: 403×2, timeout×1, empty×1
+  게이트:     통과 8/10 — reject 사유: 시그니처 부족 ×2
+  큐레이션:   keep 5/10 (50%)
+  최종 등록:  4/5 (차별성 reject ×1)
+
+🔍 패턴
+  keep 공통점: dark tone, editorial/minimal style, sparse density
+  delete 공통점: card-heavy layout, gradient-text, dense
+  게이트 병목: 시그니처 부족이 reject 주요 원인
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Step B: 개선 제안
+
+메트릭 기반으로 스킬 파일(.claude/commands/reference-search.md)과 데이터 파일(sources.json 등)의 수정 사항을 제안한다.
+
+제안 카테고리:
+
+| 카테고리 | 트리거 조건 | 제안 예시 |
+|---------|------------|----------|
+| 검색 쿼리 | 결과 < 5개 or 중복 > 70% | "검색 쿼리 수정" or "새 소스 추가 테스트" |
+| 분석 프롬프트 | 시그니처 부족 reject > 30% | "분석 시 시그니처 추출 프롬프트 강화" |
+| 게이트 임계값 | 유사도 경고 > 50% but 전부 keep | "유사도 임계값 0.8 → 0.85로 완화" |
+| 소스 확장 | Awwwards 결과 포화 (seen > 50%) | "CSSDA 검색 쿼리 테스트 실행" |
+| 카드 형식 | 사용자가 추가 정보 요청 반복 | "큐레이션 카드에 {필드} 추가" |
+| 라운드 수 | keep 비율 > 80% (필터링 불필요) | "라운드 1개로 축소" |
+| 라운드 수 | keep 비율 < 20% (후보 품질 낮음) | "Phase 1 검색 범위 확대 (3개월)" |
+
+제안 형식:
+```
+💡 스킬 개선 제안 (3개)
+
+1. [분석] 시그니처 부족 reject 2/10 (20%)
+   → 분석 프롬프트에 "반드시 시각적 시그니처 3개 이상 추출" 강조 추가
+   영향: reference-search.md Phase 2 Step A 프롬프트 수정
+
+2. [소스] Awwwards 검색 결과 12개 중 seen 비율 0% (첫 사이클)
+   → 다음 사이클 전에 CSSDA 쿼리 유효성 테스트 추천
+   영향: sources.json에 CSSDA 추가
+
+3. [게이트] 유사도 경고 1건, keep됨
+   → 현재 임계값 0.8 유지 (조정 불필요)
+   영향: 없음
+
+반영할 번호를 입력하세요 (예: "1, 2"):
+```
+
+### Step C: 사용자 승인 후 스킬 수정
+
+```
+사용자: "1, 2"
+  ↓
+[자동] .claude/commands/reference-search.md 수정
+  - Phase 2 Step A 분석 프롬프트에 시그니처 강조 문구 추가
+  ↓
+[자동] web/data/sources.json 수정
+  - CSSDA 엔트리 추가 (단, enabled: false로 — 다음 사이클에서 테스트)
+  ↓
+[자동] git commit "refactor: reference-search skill - 시그니처 프롬프트 강화, CSSDA 소스 추가"
+  ↓
+[표시]
+━━━ 스킬 업데이트 완료 ━━━━━━━━━━━━━━━
+
+수정된 파일:
+  .claude/commands/reference-search.md (분석 프롬프트 강화)
+  web/data/sources.json (CSSDA 추가, 비활성)
 
 다음 사이클을 실행하시겠습니까?
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+### 스킬 진화 추적
+
+taste-profile.md에 스킬 변경 이력도 누적한다:
+
+```markdown
+## 스킬 변경 이력
+- 2026-03-22 사이클 1: 분석 프롬프트 시그니처 강조 추가, CSSDA 소스 추가(비활성)
+- 2026-03-25 사이클 2: CSSDA 활성화, 유사도 임계값 0.8→0.85
+- 2026-04-01 사이클 3: 큐레이션 카드에 typography 정보 추가
+```
+
+### 수정 가능 영역 (화이트리스트)
+
+스킬이 자기 자신을 수정할 수 있는 범위를 제한한다:
+
+| 수정 가능 | 수정 불가 |
+|----------|----------|
+| 분석 프롬프트 문구 | Phase 순서/구조 |
+| 검색 쿼리/소스 목록 | 카탈로그 MD 스키마 |
+| 게이트 임계값 (0.6~0.95 범위) | references.ts 타입 정의 |
+| 큐레이션 카드 표시 필드 | seen.json 구조 |
+| 라운드 수 (1~3 범위) | taste-profile EWMA 로직 |
+| 검색 시간 범위 (1~6개월) | 에러 처리 폴백 로직 |
+
+범위 밖 수정이 필요하다고 판단되면 제안만 하고 사용자에게 직접 수정을 권한다.
 
 ---
 
@@ -461,7 +600,7 @@ taste-profile 업데이트 완료
 
 ## 스킬 파일 구조
 
-`.claude/commands/reference-search.md`는 위 Phase 1~4를 Claude Code가 순차 실행하는 프롬프트로 구성한다.
+`.claude/commands/reference-search.md`는 위 Phase 1~5를 Claude Code가 순차 실행하는 프롬프트로 구성한다.
 
 필요한 도구:
 - WebSearch (갤러리 검색)
@@ -469,7 +608,7 @@ taste-profile 업데이트 완료
 - Bash (이미지 다운로드: curl)
 - Read (sources.json, seen.json, taste-profile.md, 기존 카탈로그, 다운로드된 이미지)
 - Write (새 레퍼런스 MD, references.ts, seen.json, taste-profile.md)
-- Edit (references.ts에 엔트리 추가)
+- Edit (references.ts에 엔트리 추가, reference-search.md 자체 수정)
 
 큐레이션 입력은 Claude Code의 자연스러운 대화 흐름 — 후보를 제시하면 사용자가 채팅으로 응답.
 
