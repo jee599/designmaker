@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 import { readFile, readdir } from "fs/promises";
 import { join } from "path";
+import { assembleImprovePrompt } from "@/lib/promptAssembler";
 
 const CATALOG_DIR = join(
   process.cwd(),
@@ -28,6 +29,7 @@ interface ImproveRequest {
   url?: string;
   code?: string;
   model?: "haiku" | "sonnet";
+  format?: "analyze" | "prompt";
 }
 
 async function loadAllReferenceSummaries(): Promise<string> {
@@ -70,6 +72,18 @@ export async function POST(request: NextRequest) {
     }
 
     const referenceSummaries = await loadAllReferenceSummaries();
+
+    if (body.format === "prompt") {
+      const assembled = assembleImprovePrompt({
+        skillContent,
+        referenceSummaries,
+        input: (url || code) as string,
+        inputType: url ? "url" : "code",
+      });
+      return new Response(assembled, {
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      });
+    }
 
     const userInput = url
       ? `분석 대상 URL: ${url}\n\n이 URL의 사이트를 SKILL.md 규칙 기준으로 분석해주세요. URL에 직접 접근할 수 없으니, 일반적인 웹사이트 디자인 패턴과 SKILL.md 규칙을 기준으로 개선점을 제시해주세요.`
