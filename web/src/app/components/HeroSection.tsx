@@ -151,17 +151,17 @@ function TerminalBlock({ isVisible }: { isVisible: boolean }) {
         <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
         <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/60" />
         <span className="h-2.5 w-2.5 rounded-full bg-green-500/60" />
-        <span className={`ml-2 text-xs text-zinc-600 ${MONO}`}>designmaker</span>
+        <span className={`ml-2 text-xs text-zinc-600 ${MONO}`}>refmade</span>
       </div>
       <div className={`space-y-1 p-4 text-xs leading-relaxed ${MONO}`}>
         <div>
-          <span className="text-emerald-500">$</span>{" "}
-          <span className="text-zinc-300">designmaker --scan</span>
-          {step === 0 && <span className="animate-cursor-blink text-emerald-400">_</span>}
+          <span className="text-accent">$</span>{" "}
+          <span className="text-zinc-300">refmade --scan</span>
+          {step === 0 && <span className="text-accent-light animate-cursor-blink">_</span>}
         </div>
         {step >= 1 && (
           <div className="text-zinc-400">
-            {bar1} <span className="text-emerald-400">800</span> sites crawled
+            {bar1} <span className="text-accent-light">800</span> sites crawled
           </div>
         )}
         {step >= 2 && (
@@ -172,13 +172,13 @@ function TerminalBlock({ isVisible }: { isVisible: boolean }) {
           </div>
         )}
         {step >= 3 && (
-          <div className="text-emerald-400">
-            [<span className="text-emerald-300">{"\u2713"}</span>] 20 references generated
+          <div className="text-accent-light">
+            [<span style={{ color: "var(--accent-light)" }}>{"\u2713"}</span>] 20 references generated
           </div>
         )}
         {step >= 4 && (
-          <div className="text-emerald-400">
-            [<span className="text-emerald-300">{"\u2713"}</span>] ready to build
+          <div className="text-accent-light">
+            [<span style={{ color: "var(--accent-light)" }}>{"\u2713"}</span>] ready to build
           </div>
         )}
       </div>
@@ -239,16 +239,16 @@ export default function HeroSection({
               >
                 {displayedLines[0]}
                 {displayedLines.length === 1 && !done && (
-                  <span className="animate-cursor-blink text-emerald-400">|</span>
+                  <span className="text-accent-light animate-cursor-blink">|</span>
                 )}
               </h1>
             )}
             {displayedLines[1] !== undefined && (
               <p className={`mt-3 text-sm text-zinc-500 ${MONO}`}>
-                <span className="text-emerald-500">{displayedLines[1].slice(0, 2)}</span>
+                <span className="text-accent">{displayedLines[1].slice(0, 2)}</span>
                 {displayedLines[1].slice(2)}
                 {done && (
-                  <span className="animate-cursor-blink text-emerald-400">|</span>
+                  <span className="text-accent-light animate-cursor-blink">|</span>
                 )}
               </p>
             )}
@@ -256,7 +256,7 @@ export default function HeroSection({
 
           {/* SYS message */}
           <p className={`mb-6 text-sm text-zinc-500 ${MONO}`}>
-            <span className="text-emerald-500">[SYS]</span> {referenceCount} references
+            <span className="text-accent">[SYS]</span> {referenceCount} references
             loaded. Ready.
           </p>
 
@@ -265,19 +265,19 @@ export default function HeroSection({
             className={`inline-flex flex-wrap gap-x-4 gap-y-1 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-xs text-zinc-500 ${MONO}`}
           >
             <span>
-              <span className="text-emerald-400">800+</span> sites
+              <span className="text-accent-light">800+</span> sites
             </span>
             <span className="text-zinc-700">|</span>
             <span>
-              <span className="text-emerald-400">{referenceCount}</span> references
+              <span className="text-accent-light">{referenceCount}</span> references
             </span>
             <span className="text-zinc-700">|</span>
             <span>
-              <span className="text-emerald-400">27</span> constraints
+              <span className="text-accent-light">27</span> constraints
             </span>
             <span className="text-zinc-700">|</span>
             <span>
-              <span className="text-emerald-400">8</span> batches
+              <span className="text-accent-light">8</span> batches
             </span>
           </div>
         </div>
@@ -291,7 +291,7 @@ export default function HeroSection({
             duration={4}
           >
             <div className="flex gap-1.5">
-              <span className="h-3 w-3 rounded-full bg-emerald-400" />
+              <span className="h-3 w-3 rounded-full" style={{ backgroundColor: "var(--accent)" }} />
               <span className="h-3 w-3 rounded-full bg-blue-400" />
               <span className="h-3 w-3 rounded-full bg-amber-400" />
               <span className="h-3 w-3 rounded-full bg-rose-400" />
@@ -316,7 +316,8 @@ export default function HeroSection({
               {Array.from({ length: 9 }).map((_, i) => (
                 <span
                   key={i}
-                  className={`h-2 w-2 rounded-sm ${i < 4 ? "bg-emerald-500/60" : "bg-zinc-700"}`}
+                  className={`h-2 w-2 rounded-sm ${i < 4 ? "" : "bg-zinc-700"}`}
+                  style={i < 4 ? { backgroundColor: "var(--accent-60)" } : undefined}
                 />
               ))}
             </div>
@@ -327,7 +328,10 @@ export default function HeroSection({
             delay={1.5}
             duration={3.5}
           >
-            <div className="h-4 w-10 rounded-sm bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500" />
+            <div
+              className="h-4 w-10 rounded-sm"
+              style={{ background: "linear-gradient(to right, var(--accent-light), var(--accent), var(--accent-70))" }}
+            />
           </FloatingCard>
 
           {/* Terminal block */}
