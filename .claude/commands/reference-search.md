@@ -35,10 +35,26 @@ Phase 5 (회고)
 
 현재 날짜에서 year, month를 추출한다. 당월과 전월 두 달을 검색 범위로 쓴다.
 
+### taste-profile 기반 동적 키워드 생성
+
+sources.json의 검색 쿼리 외에, taste-profile.md의 Soft Preferences와 Anti-taste를 읽어서 **추가 검색 쿼리를 동적으로 생성**한다:
+
+1. Soft Preferences에서 상위 3개 스타일 추출 (예: luxury, glassmorphism, immersive)
+2. Anti-taste 키워드를 제외어로 설정
+3. 추가 WebSearch 쿼리 생성:
+   - `"best {preference1} {preference2} website design {year}" -{anti1} -{anti2}`
+   - `"award winning {preference1} dark website {year}"`
+   - `"immersive interactive {preference3} website {year}"`
+4. 이 동적 쿼리를 sources.json 쿼리와 병행하여 실행
+
+이를 통해 사이클이 쌓일수록 취향에 맞는 후보가 더 많이 나온다.
+
+### 소스 순회
+
 sources.json에서 `enabled: true`인 소스를 순회한다:
 
 1. 소스의 searchQuery에서 `{year}`, `{month}`를 치환
-2. WebSearch 실행
+2. WebSearch 실행 (동적 키워드 쿼리도 병행)
 3. 결과에서 URL 추출:
    a. 스니펫 텍스트에서 실제 사이트 도메인 추출 시도
    b. 실패 시 → 갤러리 페이지 URL을 WebFetch → HTML에서 외부 링크(href) 추출

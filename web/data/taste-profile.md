@@ -52,3 +52,4 @@ SKILL.md 참조. 사이클 진행하며 필요 시 사용자가 추가.
 ## 스킬 변경 이력
 - 2026-03-23 사이클 1: Godly/Httpster/Minimal Gallery 등 date-based 검색 약한 소스의 쿼리를 카테고리 기반으로 수정
 - 2026-03-23 사이클 2: anti-taste에 typography, saas, neon 추가. 샘플 생성 시 opus 모델 필수 규칙 확인
+- 2026-03-23 사이클 2 회고: 검색 쿼리를 취향 키워드 기반으로 변경 (dark/luxury/immersive/interactive), 비효과적 소스 10개 비활성화, Phase 1에 taste-profile 기반 동적 키워드 생성 로직 추가
