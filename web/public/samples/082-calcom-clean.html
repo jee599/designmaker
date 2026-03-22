@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookly — Open Source Scheduling Infrastructure</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --subtle-bg: #f4f4f4;
+      --border: #e5e7eb;
+      --muted: #898989;
+      --accent: #111111;
+      --feature: #6349ea;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    .font-heading { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'Roboto Mono', monospace; }
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .calendar-day:hover { background: var(--subtle-bg); }
+    .calendar-day.selected { background: var(--accent); color: white; }
+    .calendar-day.available { cursor: pointer; }
+    .calendar-day.available::after {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #19a874;
+      position: absolute;
+      bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md" style="border-bottom: 1px solid var(--border);">
+    <div class="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <span class="font-heading font-bold text-lg">Bookly</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-sm" style="color: var(--muted);">
+          <a href="#features" class="hover:text-black transition-colors duration-200">Features</a>
+          <a href="#integrations" class="hover:text-black transition-colors duration-200">Integrations</a>
+          <a href="#pricing" class="hover:text-black transition-colors duration-200">Pricing</a>
+          <a href="#" class="hover:text-black transition-colors duration-200">Docs</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" class="text-sm hover:text-black transition-colors duration-200" style="color: var(--muted);">Sign in</a>
+        <a href="#" class="rounded-lg px-4 py-2 text-sm font-medium text-white bg-black transition-all duration-200 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black cursor-pointer">Get Started Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-28 md:pt-40 md:pb-36 text-center px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium mb-6" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12l3 3 5-5"/></svg>
+        Open Source · Self-hostable
+      </div>
+      <h1 class="font-heading font-bold text-5xl md:text-7xl leading-[1.05] mb-6" style="letter-spacing: -0.04em;">
+        Scheduling infrastructure for everyone
+      </h1>
+      <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style="color: var(--muted);">
+        The open source scheduling platform. Set your availability, share your link, and let people book time with you. Self-host or use our cloud.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium text-white bg-black transition-all duration-200 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black cursor-pointer">Get Started Free</a>
+        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black cursor-pointer" style="border: 1px solid var(--border); color: var(--text);">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scheduling UI Preview -->
+  <section class="pb-20 px-6">
+    <div class="max-w-3xl mx-auto fade-in">
+      <div class="rounded-xl overflow-hidden shadow-xl" style="border: 1px solid var(--border);">
+        <div class="p-6" style="background: var(--bg);">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-mono text-sm font-semibold">JD</div>
+            <div>
+              <div class="font-medium text-sm">Jane Doe</div>
+              <div class="text-xs" style="color: var(--muted);">30 Minute Meeting</div>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <div class="font-medium text-sm mb-3">March 2026</div>
+              <div class="calendar-grid">
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">Mo</div>
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">Tu</div>
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">We</div>
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">Th</div>
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">Fr</div>
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">Sa</div>
+                <div class="calendar-day text-xs font-medium" style="color: var(--muted);">Su</div>
+                <div class="calendar-day" style="color: var(--muted);">23</div>
+                <div class="calendar-day selected">24</div>
+                <div class="calendar-day">25</div>
+                <div class="calendar-day">26</div>
+                <div class="calendar-day">27</div>
+                <div class="calendar-day" style="color: var(--muted);">28</div>
+                <div class="calendar-day" style="color: var(--muted);">29</div>
+                <div class="calendar-day">30</div>
+                <div class="calendar-day">31</div>
+              </div>
+            </div>
+            <div>
+              <div class="font-medium text-sm mb-3">Available times</div>
+              <div class="space-y-2">
+                <button class="w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-gray-50 cursor-pointer" style="border: 1px solid var(--border);">9:00 AM</button>
+                <button class="w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-white cursor-pointer" style="background: var(--accent);">10:00 AM</button>
+                <button class="w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-gray-50 cursor-pointer" style="border: 1px solid var(--border);">11:30 AM</button>
+                <button class="w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-gray-50 cursor-pointer" style="border: 1px solid var(--border);">2:00 PM</button>
+                <button class="w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-gray-50 cursor-pointer" style="border: 1px solid var(--border);">3:30 PM</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="py-14" style="background: var(--subtle-bg);">
+    <div class="max-w-6xl mx-auto px-6 fade-in">
+      <p class="text-center text-sm mb-8" style="color: var(--muted);">Trusted by 100,000+ organizations worldwide</p>
+      <div class="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-40">
+        <span class="font-heading font-bold text-lg">Vercel</span>
+        <span class="font-heading font-bold text-lg">Supabase</span>
+        <span class="font-heading font-bold text-lg">Railway</span>
+        <span class="font-heading font-bold text-lg">Prisma</span>
+        <span class="font-heading font-bold text-lg">Clerk</span>
+        <span class="font-heading font-bold text-lg">Resend</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-24 px-6" style="background: var(--bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="text-center mb-16">
+        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--feature);">Features</div>
+        <h2 class="font-heading font-bold text-3xl sm:text-4xl" style="letter-spacing: -0.02em;">Everything you need for scheduling</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="sm:col-span-2 rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(99,73,234,0.1);">
+            <svg class="w-5 h-5" fill="none" stroke="#6349ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Smart Availability</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Set your schedule once. Bookly syncs with Google Calendar, Outlook, and iCal to prevent double bookings automatically.</p>
+        </div>
+        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(25,168,116,0.1);">
+            <svg class="w-5 h-5" fill="none" stroke="#19a874" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Team Scheduling</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Round-robin, collective, and managed events for your whole team.</p>
+        </div>
+        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(99,73,234,0.1);">
+            <svg class="w-5 h-5" fill="none" stroke="#6349ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">API & Webhooks</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Full REST API and webhooks to integrate scheduling into your product.</p>
+        </div>
+        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(239,68,68,0.1);">
+            <svg class="w-5 h-5" fill="none" stroke="#ef4444" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Video Conferencing</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Auto-generate Zoom, Google Meet, or Teams links for every booking.</p>
+        </div>
+        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(99,73,234,0.1);">
+            <svg class="w-5 h-5" fill="none" stroke="#6349ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Smart Reminders</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Automated email and SMS reminders to reduce no-shows by 80%.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Screenshot -->
+  <section class="py-20 px-6" style="background: var(--subtle-bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--feature);">Dashboard</div>
+          <h2 class="font-heading font-bold text-3xl mb-6" style="letter-spacing: -0.02em;">Manage your bookings in one place</h2>
+          <p class="leading-relaxed mb-6" style="color: var(--muted);">See all your upcoming meetings, analytics, and team availability at a glance. Filter by event type, team member, or date range.</p>
+          <div class="flex items-center gap-4 text-sm">
+            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span>Available</div>
+            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500"></span>Busy</div>
+            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-yellow-500"></span>Tentative</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden shadow-lg" style="border: 1px solid var(--border);">
+          <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&h=450&fit=crop" alt="Dashboard" class="w-full h-auto" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integrations -->
+  <section id="integrations" class="py-16 px-6" style="background: var(--bg);">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--feature);">Integrations</div>
+      <h2 class="font-heading font-bold text-3xl mb-10" style="letter-spacing: -0.02em;">Works with your favorite tools</h2>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+        <div class="rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-heading font-bold text-xs">GC</div>
+          <span class="text-xs" style="color: var(--muted);">Google Cal</span>
+        </div>
+        <div class="rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-heading font-bold text-xs">OL</div>
+          <span class="text-xs" style="color: var(--muted);">Outlook</span>
+        </div>
+        <div class="rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-heading font-bold text-xs">ZM</div>
+          <span class="text-xs" style="color: var(--muted);">Zoom</span>
+        </div>
+        <div class="rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-heading font-bold text-xs">MT</div>
+          <span class="text-xs" style="color: var(--muted);">Teams</span>
+        </div>
+        <div class="rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-heading font-bold text-xs">SL</div>
+          <span class="text-xs" style="color: var(--muted);">Slack</span>
+        </div>
+        <div class="rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-heading font-bold text-xs">SF</div>
+          <span class="text-xs" style="color: var(--muted);">Salesforce</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section class="py-24 px-6" style="background: var(--subtle-bg);">
+    <div class="max-w-4xl mx-auto fade-in">
+      <div class="text-center mb-12">
+        <h2 class="font-heading font-bold text-3xl mb-3" style="letter-spacing: -0.02em;">Why choose Bookly?</h2>
+        <p class="text-sm" style="color: var(--muted);">See how we compare to the alternatives</p>
+      </div>
+      <div class="rounded-xl overflow-hidden" style="border: 1px solid var(--border); background: var(--bg);">
+        <table class="w-full text-sm">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <th class="text-left p-4 font-medium" style="color: var(--muted);">Feature</th>
+              <th class="text-center p-4 font-semibold">Bookly</th>
+              <th class="text-center p-4 font-medium" style="color: var(--muted);">Calendly</th>
+              <th class="text-center p-4 font-medium" style="color: var(--muted);">Acuity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td class="p-4">Open Source</td>
+              <td class="text-center p-4 text-green-600 font-medium">Yes</td>
+              <td class="text-center p-4" style="color: var(--muted);">No</td>
+              <td class="text-center p-4" style="color: var(--muted);">No</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td class="p-4">Self-host</td>
+              <td class="text-center p-4 text-green-600 font-medium">Yes</td>
+              <td class="text-center p-4" style="color: var(--muted);">No</td>
+              <td class="text-center p-4" style="color: var(--muted);">No</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td class="p-4">Team scheduling</td>
+              <td class="text-center p-4 text-green-600 font-medium">Free</td>
+              <td class="text-center p-4" style="color: var(--muted);">$15/mo</td>
+              <td class="text-center p-4" style="color: var(--muted);">$23/mo</td>
+            </tr>
+            <tr>
+              <td class="p-4">API access</td>
+              <td class="text-center p-4 text-green-600 font-medium">Full</td>
+              <td class="text-center p-4" style="color: var(--muted);">Limited</td>
+              <td class="text-center p-4" style="color: var(--muted);">Limited</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-20 px-6" style="background: var(--bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="text-center mb-12">
+        <h2 class="font-heading font-bold text-3xl" style="letter-spacing: -0.02em;">What people are saying</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <p class="text-sm leading-relaxed mb-4" style="color: var(--muted);">"Switched from Calendly and never looked back. The self-hosting option sealed the deal for us."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-mono text-xs font-semibold">MP</div>
+            <div><div class="text-sm font-medium">Mike Park</div><div class="text-xs" style="color: var(--muted);">CTO, TechCorp</div></div>
+          </div>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 sm:scale-105" style="border: 2px solid var(--accent);">
+          <p class="text-sm leading-relaxed mb-4" style="color: var(--muted);">"The API is phenomenal. We embedded scheduling directly into our product in a single afternoon."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-mono text-xs font-semibold">LS</div>
+            <div><div class="text-sm font-medium">Lisa Santos</div><div class="text-xs" style="color: var(--muted);">Lead Dev, StartupXYZ</div></div>
+          </div>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1" style="border: 1px solid var(--border);">
+          <p class="text-sm leading-relaxed mb-4" style="color: var(--muted);">"Open source is the future. We contribute features upstream and the community benefits."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-mono text-xs font-semibold">AK</div>
+            <div><div class="text-sm font-medium">Alex Kim</div><div class="text-xs" style="color: var(--muted);">Founder, DevStudio</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 px-6" style="background: #111111;">
+    <div class="max-w-3xl mx-auto text-center text-white fade-in">
+      <h2 class="font-heading font-bold text-3xl sm:text-5xl mb-6" style="letter-spacing: -0.03em;">Start scheduling for free</h2>
+      <p class="text-lg mb-10" style="color: #898989;">No credit card required. Open source forever.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium text-black bg-white transition-all duration-200 hover:bg-gray-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer">Get Started Free</a>
+        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer" style="border: 1px solid #333; color: white;">Self-host Guide</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6" style="background: #0a0a0a; color: #898989;">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid sm:grid-cols-4 gap-8 mb-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span class="font-heading font-bold text-white text-sm">Bookly</span>
+          </div>
+          <p class="text-sm">Open source scheduling for everyone.</p>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Product</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Features</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Pricing</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Enterprise</a></li></ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Developers</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">API Reference</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">GitHub</a></li></ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Company</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">About</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Blog</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Careers</a></li></ul>
+        </div>
+      </div>
+      <div class="border-t pt-8 text-xs text-center" style="border-color: #222;">© 2026 Bookly Inc. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

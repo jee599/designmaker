@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prism — The Browser Designed for You</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFCEC;
+      --text: #000000;
+      --subtle-bg: #f5f0e0;
+      --border: rgba(20, 13, 7, 0.08);
+      --muted: rgba(0, 0, 0, 0.5);
+      --accent: #3139FB;
+      --accent-deep: #2702C2;
+      --accent-red: #FB3A4D;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    .font-heading { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .noise-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03; pointer-events: none; z-index: 9999;
+    }
+    .wavy-divider {
+      height: 40px;
+      background: var(--subtle-bg);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0 20 Q150 0 300 20 Q450 40 600 20 Q750 0 900 20 Q1050 40 1200 20 V40 H0Z' fill='black'/%3E%3C/svg%3E");
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0 20 Q150 0 300 20 Q450 40 600 20 Q750 0 900 20 Q1050 40 1200 20 V40 H0Z' fill='black'/%3E%3C/svg%3E");
+      mask-size: 100% 100%;
+    }
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .gradient-text {
+      background: linear-gradient(135deg, #3139FB 0%, #2702C2 50%, #FB3A4D 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body>
+  <div class="noise-overlay"></div>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 backdrop-blur-md" style="background: rgba(255,252,236,0.85);">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full" style="background: var(--accent);"></div>
+        <span class="font-heading font-bold text-lg">Prism</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm" style="color: var(--muted);">
+        <a href="#features" class="hover:text-black transition-colors duration-200">Features</a>
+        <a href="#how" class="hover:text-black transition-colors duration-200">How It Works</a>
+        <a href="#testimonials" class="hover:text-black transition-colors duration-200">Testimonials</a>
+      </div>
+      <a href="#cta" class="rounded-full px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400 cursor-pointer" style="background: var(--accent);">Download Free</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-28 md:pt-40 md:pb-36 text-center px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="font-mono text-xs tracking-widest uppercase mb-6" style="color: var(--muted);">The internet, reimagined</div>
+      <h1 class="font-heading font-extrabold text-5xl md:text-7xl tracking-tight leading-[1.05] mb-6" style="letter-spacing: -0.04em;">
+        A browser built for <span class="gradient-text">the way you work</span>
+      </h1>
+      <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style="color: var(--muted);">
+        Prism replaces your browser, tabs, and bookmarks with a cleaner, more organized way to use the internet. Free for Mac, Windows, and iOS.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#" class="rounded-full px-8 py-3.5 text-base font-semibold text-white transition-all duration-200 hover:scale-105 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400 cursor-pointer" style="background: var(--accent);">Download for Mac</a>
+        <a href="#" class="rounded-full px-8 py-3.5 text-base font-semibold border-2 transition-all duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400 cursor-pointer" style="border-color: var(--text); color: var(--text);">Watch Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browser Screenshot -->
+  <section class="pb-20 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="rounded-2xl overflow-hidden shadow-2xl" style="border: 1px solid var(--border);">
+        <img src="https://images.unsplash.com/photo-1618477388954-7852f32655ec?w=1200&h=700&fit=crop" alt="Browser interface" class="w-full h-auto" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="py-14" style="background: var(--subtle-bg);">
+    <div class="max-w-6xl mx-auto px-6 fade-in">
+      <p class="text-center text-sm font-medium mb-8" style="color: var(--muted);">Trusted by teams at</p>
+      <div class="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-40">
+        <span class="font-heading font-bold text-xl">Stripe</span>
+        <span class="font-heading font-bold text-xl">Vercel</span>
+        <span class="font-heading font-bold text-xl">Notion</span>
+        <span class="font-heading font-bold text-xl">Figma</span>
+        <span class="font-heading font-bold text-xl">Linear</span>
+        <span class="font-heading font-bold text-xl">Raycast</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Bento -->
+  <section id="features" class="py-24 px-6" style="background: var(--bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="text-center mb-16">
+        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--muted);">Features</div>
+        <h2 class="font-heading font-bold text-3xl sm:text-4xl" style="letter-spacing: -0.03em;">Everything you need, nothing you don't</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Feature 1 - Large -->
+        <div class="sm:col-span-2 rounded-2xl p-8 transition-all duration-200 hover:scale-[1.02] cursor-default" style="background: linear-gradient(135deg, #3139FB 0%, #2702C2 100%); border: 1px solid var(--border);">
+          <div class="text-white">
+            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-5">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+            </div>
+            <h3 class="font-heading font-semibold text-xl mb-2">Spaces & Profiles</h3>
+            <p class="text-white/70 leading-relaxed">Organize your online life into Spaces — one for work, one for personal, one for school. Each with its own tabs, bookmarks, and history.</p>
+          </div>
+        </div>
+        <!-- Feature 2 -->
+        <div class="rounded-2xl p-8 transition-all duration-200 hover:scale-[1.02] cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(49,57,251,0.1);">
+            <svg class="w-6 h-6" fill="none" stroke="#3139FB" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-2">Split View</h3>
+          <p style="color: var(--muted);" class="leading-relaxed">Open two sites side by side. Research while you write, compare while you shop.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="rounded-2xl p-8 transition-all duration-200 hover:scale-[1.02] cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(251,58,77,0.1);">
+            <svg class="w-6 h-6" fill="none" stroke="#FB3A4D" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-2">Command Bar</h3>
+          <p style="color: var(--muted);" class="leading-relaxed">Navigate, search, and take action — all from one keyboard shortcut.</p>
+        </div>
+        <!-- Feature 4 -->
+        <div class="rounded-2xl p-8 transition-all duration-200 hover:scale-[1.02] cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(49,57,251,0.1);">
+            <svg class="w-6 h-6" fill="none" stroke="#3139FB" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-2">Themes & Colors</h3>
+          <p style="color: var(--muted);" class="leading-relaxed">Customize your browser with beautiful themes. Match your mood or your brand.</p>
+        </div>
+        <!-- Feature 5 -->
+        <div class="rounded-2xl p-8 transition-all duration-200 hover:scale-[1.02] cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(39,2,194,0.1);">
+            <svg class="w-6 h-6" fill="none" stroke="#2702C2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-2">Built-in Privacy</h3>
+          <p style="color: var(--muted);" class="leading-relaxed">Ad blocking, tracker prevention, and automatic HTTPS — all without extensions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Showcase -->
+  <section class="py-20 px-6" style="background: var(--subtle-bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--muted);">Sidebar reimagined</div>
+          <h2 class="font-heading font-bold text-3xl sm:text-4xl mb-6" style="letter-spacing: -0.03em;">Your tabs, organized automatically</h2>
+          <p class="text-lg leading-relaxed mb-6" style="color: var(--muted);">Pinned tabs stay put. Unpinned tabs auto-archive after 12 hours. No more tab hoarding — just the sites you actually use.</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background: var(--accent);">✓</span><span>Auto-archive after 12 hours</span></li>
+            <li class="flex items-center gap-3"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background: var(--accent);">✓</span><span>Drag to pin favorites</span></li>
+            <li class="flex items-center gap-3"><span class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs" style="background: var(--accent);">✓</span><span>Folder organization</span></li>
+          </ul>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-xl" style="border: 1px solid var(--border);">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=450&fit=crop" alt="Sidebar preview" class="w-full h-auto" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how" class="py-20 px-6" style="background: var(--bg);">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--muted);">How it works</div>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl mb-16" style="letter-spacing: -0.03em;">Up and running in 60 seconds</h2>
+      <div class="grid sm:grid-cols-3 gap-8">
+        <div>
+          <div class="w-14 h-14 rounded-full mx-auto mb-5 flex items-center justify-center font-heading font-bold text-xl text-white" style="background: var(--accent);">1</div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Download</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Available for Mac, Windows, and iOS. Free forever for personal use.</p>
+        </div>
+        <div>
+          <div class="w-14 h-14 rounded-full mx-auto mb-5 flex items-center justify-center font-heading font-bold text-xl text-white" style="background: var(--accent-deep);">2</div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Import</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Bring your bookmarks, history, and extensions from Chrome or Safari in one click.</p>
+        </div>
+        <div>
+          <div class="w-14 h-14 rounded-full mx-auto mb-5 flex items-center justify-center font-heading font-bold text-xl text-white" style="background: var(--accent-red);">3</div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Explore</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Set up your Spaces, customize your theme, and experience the internet differently.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-20 px-6" style="background: var(--subtle-bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="text-center mb-12">
+        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--muted);">Testimonials</div>
+        <h2 class="font-heading font-bold text-3xl sm:text-4xl" style="letter-spacing: -0.03em;">Loved by creators & developers</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="rounded-2xl p-6 transition-all duration-200 hover:scale-[1.02]" style="background: var(--bg); border: 1px solid var(--border);">
+          <p class="leading-relaxed mb-4" style="color: var(--muted);">"Prism changed how I browse. Spaces keep my work and personal stuff completely separate."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full font-mono text-xs font-medium flex items-center justify-center text-white" style="background: var(--accent);">SK</div>
+            <div><div class="text-sm font-medium">Sarah Kim</div><div class="text-xs" style="color: var(--muted);">Product Designer</div></div>
+          </div>
+        </div>
+        <div class="rounded-2xl p-6 transition-all duration-200 hover:scale-[1.02] sm:scale-105" style="background: var(--bg); border: 2px solid var(--accent);">
+          <p class="leading-relaxed mb-4" style="color: var(--muted);">"The command bar is insane. I barely touch my mouse anymore. Best browser switch I've ever made."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full font-mono text-xs font-medium flex items-center justify-center text-white" style="background: var(--accent-deep);">JR</div>
+            <div><div class="text-sm font-medium">James Rivera</div><div class="text-xs" style="color: var(--muted);">Software Engineer</div></div>
+          </div>
+        </div>
+        <div class="rounded-2xl p-6 transition-all duration-200 hover:scale-[1.02]" style="background: var(--bg); border: 1px solid var(--border);">
+          <p class="leading-relaxed mb-4" style="color: var(--muted);">"Finally a browser that feels like it was designed by people who actually use the internet."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full font-mono text-xs font-medium flex items-center justify-center text-white" style="background: var(--accent-red);">AL</div>
+            <div><div class="text-sm font-medium">Ana Lopez</div><div class="text-xs" style="color: var(--muted);">Content Creator</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="py-24 px-6" style="background: var(--accent-deep);">
+    <div class="max-w-3xl mx-auto text-center text-white fade-in">
+      <h2 class="font-heading font-bold text-3xl sm:text-5xl mb-6" style="letter-spacing: -0.03em;">Ready for a better browser?</h2>
+      <p class="text-lg mb-10 opacity-70">Free for Mac, Windows, and iOS. No account required.</p>
+      <a href="#" class="inline-block rounded-full px-8 py-3.5 text-base font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-yellow-300 cursor-pointer" style="background: var(--bg); color: var(--accent-deep);">Download Prism</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6" style="background: #1a1a2e; color: rgba(255,255,255,0.5);">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid sm:grid-cols-4 gap-8 mb-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-6 h-6 rounded-full" style="background: var(--accent);"></div>
+            <span class="font-heading font-bold text-white">Prism</span>
+          </div>
+          <p class="text-sm">The internet, reimagined.</p>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-white mb-4">Product</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Features</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Download</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">About</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-white mb-4">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Privacy</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t pt-8 text-sm text-center" style="border-color: rgba(255,255,255,0.1);">© 2026 Prism Browser Inc. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenStack — Open Source Backend Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1c1c1c;
+      --text: #ededed;
+      --subtle-bg: #252525;
+      --border: #333333;
+      --muted: #888888;
+      --accent: #3ECF8E;
+      --accent-dark: #2da86e;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    .font-heading { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .green-glow { text-shadow: 0 0 40px rgba(62,207,142,0.3); }
+    .code-block {
+      background: #111111;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .marquee-track { display: flex; animation: marquee 30s linear infinite; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 backdrop-blur-md" style="background: rgba(28,28,28,0.85); border-bottom: 1px solid var(--border);">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--accent);">
+          <svg class="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="font-heading font-bold text-lg">OpenStack</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm" style="color: var(--muted);">
+        <a href="#products" class="hover:text-white transition-colors duration-200">Products</a>
+        <a href="#developers" class="hover:text-white transition-colors duration-200">Developers</a>
+        <a href="#pricing" class="hover:text-white transition-colors duration-200">Pricing</a>
+        <a href="#" class="hover:text-white transition-colors duration-200">Docs</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" class="text-sm hover:text-white transition-colors duration-200" style="color: var(--muted);">Sign in</a>
+        <a href="#" class="rounded-lg px-4 py-2 text-sm font-medium text-black transition-all duration-200 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-400 cursor-pointer" style="background: var(--accent);">Start your project</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-36 pb-28 md:pt-44 md:pb-36 text-center px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium mb-8" style="background: rgba(62,207,142,0.1); color: var(--accent); border: 1px solid rgba(62,207,142,0.2);">
+        <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent);"></span>
+        Now in General Availability
+      </div>
+      <h1 class="font-heading font-bold text-5xl md:text-7xl leading-[1.05] mb-6 green-glow" style="letter-spacing: -0.03em;">
+        Build in a weekend.<br><span style="color: var(--accent);">Scale to millions.</span>
+      </h1>
+      <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style="color: var(--muted);">
+        OpenStack is an open source backend platform. Start your project with a Postgres database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, Storage, and Vector embeddings.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium text-black transition-all duration-200 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-400 cursor-pointer" style="background: var(--accent);">Start your project</a>
+        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-400 cursor-pointer" style="border: 1px solid var(--border); color: var(--text);">View documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Preview -->
+  <section class="pb-20 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="code-block p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-3 h-3 rounded-full" style="background: #ff5f57;"></div>
+          <div class="w-3 h-3 rounded-full" style="background: #febc2e;"></div>
+          <div class="w-3 h-3 rounded-full" style="background: #28c840;"></div>
+        </div>
+        <pre style="color: var(--muted);"><span style="color: #c084fc;">import</span> <span style="color: var(--text);">{ createClient }</span> <span style="color: #c084fc;">from</span> <span style="color: var(--accent);">'@openstack/sdk'</span>
+
+<span style="color: #c084fc;">const</span> <span style="color: var(--text);">client</span> = <span style="color: #60a5fa;">createClient</span>(<span style="color: var(--accent);">'your-project-url'</span>, <span style="color: var(--accent);">'your-anon-key'</span>)
+
+<span style="color: #555;">// Fetch data with realtime subscriptions</span>
+<span style="color: #c084fc;">const</span> { <span style="color: var(--text);">data</span>, <span style="color: var(--text);">error</span> } = <span style="color: #c084fc;">await</span> <span style="color: var(--text);">client</span>
+  .<span style="color: #60a5fa;">from</span>(<span style="color: var(--accent);">'posts'</span>)
+  .<span style="color: #60a5fa;">select</span>(<span style="color: var(--accent);">'*'</span>)
+  .<span style="color: #60a5fa;">order</span>(<span style="color: var(--accent);">'created_at'</span>, { <span style="color: var(--text);">ascending</span>: <span style="color: #c084fc;">false</span> })</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Marquee -->
+  <section class="py-12" style="background: var(--subtle-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="overflow-hidden">
+      <div class="marquee-track">
+        <div class="flex items-center gap-16 px-8 opacity-40 shrink-0">
+          <span class="font-heading font-bold text-lg whitespace-nowrap">GitHub</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Notion</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">1Password</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Humata</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Chatbase</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Maergo</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Pika</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Quivr</span>
+        </div>
+        <div class="flex items-center gap-16 px-8 opacity-40 shrink-0">
+          <span class="font-heading font-bold text-lg whitespace-nowrap">GitHub</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Notion</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">1Password</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Humata</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Chatbase</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Maergo</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Pika</span>
+          <span class="font-heading font-bold text-lg whitespace-nowrap">Quivr</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Features -->
+  <section id="products" class="py-24 px-6" style="background: var(--bg);">
+    <div class="max-w-7xl mx-auto fade-in">
+      <div class="text-center mb-16">
+        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--accent);">Products</div>
+        <h2 class="font-heading font-semibold text-3xl sm:text-4xl" style="letter-spacing: -0.02em;">Everything you need to build</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="sm:col-span-2 rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(62,207,142,0.15);">
+            <svg class="w-5 h-5" fill="none" stroke="#3ECF8E" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Database</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Every project is a full Postgres database with realtime functionality, database backups, and extensions.</p>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(96,165,250,0.15);">
+            <svg class="w-5 h-5" fill="none" stroke="#60a5fa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Auth</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Add user sign ups and logins, securing your data with Row Level Security.</p>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(251,146,60,0.15);">
+            <svg class="w-5 h-5" fill="none" stroke="#fb923c" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Edge Functions</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Write custom code without deploying or scaling servers.</p>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(168,85,247,0.15);">
+            <svg class="w-5 h-5" fill="none" stroke="#a855f7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Storage</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Store, organize, and serve large files with policies.</p>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(251,191,36,0.15);">
+            <svg class="w-5 h-5" fill="none" stroke="#fbbf24" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Realtime</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Listen to database changes, broadcast messages, and sync presence.</p>
+        </div>
+        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1 cursor-default" style="background: var(--subtle-bg); border: 1px solid var(--border);">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(244,114,182,0.15);">
+            <svg class="w-5 h-5" fill="none" stroke="#f472b6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Vectors</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--muted);">Store and search vector embeddings for AI applications.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Framework Support -->
+  <section class="py-16 px-6" style="background: var(--subtle-bg); border-top: 1px solid var(--border);">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <p class="text-sm font-medium mb-8" style="color: var(--muted);">Works with your favorite frameworks</p>
+      <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-50">
+        <span class="font-heading font-semibold">Next.js</span>
+        <span class="font-heading font-semibold">React</span>
+        <span class="font-heading font-semibold">Vue</span>
+        <span class="font-heading font-semibold">Svelte</span>
+        <span class="font-heading font-semibold">Flutter</span>
+        <span class="font-heading font-semibold">Kotlin</span>
+        <span class="font-heading font-semibold">Swift</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Preview -->
+  <section class="py-24 px-6" style="background: var(--bg);">
+    <div class="max-w-6xl mx-auto fade-in">
+      <div class="text-center mb-12">
+        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--accent);">Dashboard</div>
+        <h2 class="font-heading font-semibold text-3xl sm:text-4xl mb-4" style="letter-spacing: -0.02em;">Manage everything from one place</h2>
+        <p class="text-base max-w-xl mx-auto" style="color: var(--muted);">A powerful dashboard that gives you full control over your database, auth, storage, and more.</p>
+      </div>
+      <div class="rounded-xl overflow-hidden" style="border: 1px solid var(--border);">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=650&fit=crop" alt="Dashboard preview" class="w-full h-auto" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Community / Open Source -->
+  <section class="py-20 px-6" style="background: var(--subtle-bg); border-top: 1px solid var(--border);">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--accent);">Open Source</div>
+      <h2 class="font-heading font-semibold text-3xl sm:text-4xl mb-6" style="letter-spacing: -0.02em;">Built with the community</h2>
+      <p class="text-lg mb-10 leading-relaxed" style="color: var(--muted);">OpenStack is open source. Star us on GitHub, contribute code, or build your own integrations.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <div class="text-center">
+          <div class="font-heading font-bold text-4xl mb-1" style="color: var(--accent);">68K+</div>
+          <div class="text-sm" style="color: var(--muted);">GitHub Stars</div>
+        </div>
+        <div class="hidden sm:block w-px h-12" style="background: var(--border);"></div>
+        <div class="text-center">
+          <div class="font-heading font-bold text-4xl mb-1" style="color: var(--accent);">1M+</div>
+          <div class="text-sm" style="color: var(--muted);">Databases</div>
+        </div>
+        <div class="hidden sm:block w-px h-12" style="background: var(--border);"></div>
+        <div class="text-center">
+          <div class="font-heading font-bold text-4xl mb-1" style="color: var(--accent);">200K+</div>
+          <div class="text-sm" style="color: var(--muted);">Developers</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 px-6" style="background: #111111;">
+    <div class="max-w-3xl mx-auto text-center fade-in">
+      <h2 class="font-heading font-bold text-3xl sm:text-5xl mb-6" style="letter-spacing: -0.03em;">Start building today</h2>
+      <p class="text-lg mb-10" style="color: var(--muted);">Free tier includes unlimited API requests, 500MB database, 1GB file storage, and 50K monthly active users.</p>
+      <a href="#" class="inline-block rounded-lg px-8 py-3.5 text-base font-medium text-black transition-all duration-200 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-400 cursor-pointer" style="background: var(--accent);">Start your project — it's free</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6" style="background: #0a0a0a; color: var(--muted); border-top: 1px solid var(--border);">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid sm:grid-cols-5 gap-8 mb-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-6 h-6 rounded-md flex items-center justify-center" style="background: var(--accent);">
+              <svg class="w-3.5 h-3.5 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="font-heading font-bold text-white text-sm">OpenStack</span>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Product</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Database</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Auth</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Storage</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Functions</a></li></ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Resources</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Guides</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Blog</a></li></ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Company</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">About</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Careers</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Open Source</a></li></ul>
+        </div>
+        <div>
+          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Legal</h4>
+          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Privacy</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Terms</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">DPA</a></li></ul>
+        </div>
+      </div>
+      <div class="border-t pt-8 text-xs text-center" style="border-color: var(--border);">© 2026 OpenStack Inc. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
