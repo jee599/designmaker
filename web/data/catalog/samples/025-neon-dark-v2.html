@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>025-v2 — Cyberpunk City</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body { font-family:'JetBrains Mono',monospace; background:#050508; color:#f0f0f0; overflow-x:hidden; }
+    h1,h2,h3,h4 { font-family:'Space Grotesk',sans-serif; }
+
+    /* Full-page scan lines */
+    body::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9998;
+      background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);
+    }
+
+    /* Grid floor perspective */
+    .grid-floor {
+      position:fixed; bottom:0; left:0; right:0; height:50vh; pointer-events:none; z-index:0;
+      background:
+        linear-gradient(rgba(6,182,212,0.05) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(6,182,212,0.05) 1px,transparent 1px);
+      background-size:40px 40px;
+      transform:perspective(500px) rotateX(60deg);
+      transform-origin:bottom center;
+      mask-image:linear-gradient(to top,rgba(0,0,0,0.3),transparent 80%);
+      -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,0.3),transparent 80%);
+    }
+
+    /* Neon sign effect on headings */
+    .neon-sign {
+      text-shadow:
+        0 0 7px rgba(6,182,212,0.8),
+        0 0 10px rgba(6,182,212,0.6),
+        0 0 21px rgba(6,182,212,0.4),
+        0 0 42px rgba(6,182,212,0.2),
+        0 0 82px rgba(6,182,212,0.1);
+      animation:neonFlicker 4s ease-in-out infinite;
+    }
+    @keyframes neonFlicker {
+      0%,19%,21%,23%,25%,54%,56%,100% { text-shadow:0 0 7px rgba(6,182,212,0.8),0 0 10px rgba(6,182,212,0.6),0 0 21px rgba(6,182,212,0.4),0 0 42px rgba(6,182,212,0.2); }
+      20%,24%,55% { text-shadow:none; }
+    }
+    .neon-sign-pink {
+      text-shadow:0 0 7px rgba(236,72,153,0.8),0 0 10px rgba(236,72,153,0.6),0 0 21px rgba(236,72,153,0.4),0 0 42px rgba(236,72,153,0.2);
+    }
+
+    /* Aggressive glitch effect */
+    @keyframes glitchHard {
+      0%{clip-path:inset(40% 0 61% 0);transform:translate(-2px,2px)} 20%{clip-path:inset(92% 0 1% 0);transform:translate(2px,-1px)} 40%{clip-path:inset(43% 0 1% 0);transform:translate(-1px,3px)} 60%{clip-path:inset(25% 0 58% 0);transform:translate(3px,1px)} 80%{clip-path:inset(54% 0 7% 0);transform:translate(-3px,-2px)} 100%{clip-path:inset(0 0 0 0);transform:translate(0)}
+    }
+    .glitch-aggressive { position:relative; }
+    .glitch-aggressive::before,.glitch-aggressive::after {
+      content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%;
+    }
+    .glitch-aggressive::before { color:#06b6d4; animation:glitchHard 3s infinite linear alternate-reverse; z-index:-1; }
+    .glitch-aggressive::after { color:#ec4899; animation:glitchHard 2s infinite linear alternate; z-index:-1; }
+
+    /* CSS @property for gradient */
+    @property --angle { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+    @keyframes rotateGradient { to{--angle:360deg} }
+    .gradient-border { position:relative; background:#0a0a10; border-radius:0.75rem; }
+    .gradient-border::before {
+      content:''; position:absolute; inset:-2px; border-radius:0.875rem;
+      background:conic-gradient(from var(--angle),#06b6d4,#ec4899,#8b5cf6,#06b6d4);
+      animation:rotateGradient 4s linear infinite; z-index:-1;
+    }
+
+    .card-neon { background:#0a0a10; border:1px solid #1a1a2a; transition:border-color 0.4s,box-shadow 0.4s,transform 0.3s; }
+    .card-neon:hover { border-color:#06b6d4; box-shadow:0 0 30px rgba(6,182,212,0.3),0 0 60px rgba(6,182,212,0.1); transform:translateY(-2px); }
+
+    @keyframes neonPulse { 0%,100%{box-shadow:0 0 15px rgba(6,182,212,0.4),0 0 30px rgba(6,182,212,0.15)} 50%{box-shadow:0 0 25px rgba(6,182,212,0.6),0 0 50px rgba(6,182,212,0.25)} }
+    .neon-pulse { animation:neonPulse 2s ease-in-out infinite; }
+
+    /* Scan line animation on cards */
+    @keyframes scanLine { 0%{top:-2px} 100%{top:100%} }
+    .scan-line { position:relative; overflow:hidden; }
+    .scan-line::after {
+      content:''; position:absolute; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,rgba(6,182,212,0.5),transparent);
+      animation:scanLine 3s linear infinite; pointer-events:none;
+    }
+
+    .nav-dark { background:rgba(5,5,8,0.85); backdrop-filter:blur(12px); border-bottom:1px solid #1a1a2a; }
+    .code-block { background:#08080f; border:1px solid #1a1a2a; border-radius:0.5rem; font-size:0.75rem; line-height:1.6; color:#737373; }
+    .code-block .cyan{color:#06b6d4} .code-block .pink{color:#ec4899} .code-block .white{color:#f0f0f0}
+
+    @keyframes typewriter { 0%{width:0} 50%{width:100%} 90%{width:100%} 95%{width:0} 100%{width:0} }
+    @keyframes caret { 50%{border-right-color:transparent} }
+    .type-line { overflow:hidden; white-space:nowrap; border-right:2px solid #06b6d4; animation:typewriter 6s steps(30) infinite,caret 0.5s step-end infinite; }
+    .type-line-2 { overflow:hidden; white-space:nowrap; border-right:2px solid #ec4899; animation:typewriter 6s steps(25) infinite 2s,caret 0.5s step-end infinite; }
+
+    @keyframes particleFloat { 0%,100%{transform:translateY(0) translateX(0);opacity:0.3} 25%{transform:translateY(-20px) translateX(10px);opacity:0.6} 50%{transform:translateY(-10px) translateX(-5px);opacity:0.4} 75%{transform:translateY(-30px) translateX(15px);opacity:0.5} }
+    .particle { position:absolute; width:2px; height:2px; background:#06b6d4; border-radius:50%; pointer-events:none; }
+
+    @keyframes radarPulse { 0%{transform:scale(0.5);opacity:0.6} 100%{transform:scale(3);opacity:0} }
+    .radar-ring { position:absolute; width:80px; height:80px; border:1px solid rgba(6,182,212,0.3); border-radius:50%; animation:radarPulse 3s ease-out infinite; }
+    .radar-ring:nth-child(2){animation-delay:1s} .radar-ring:nth-child(3){animation-delay:2s}
+
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s,transform 0.7s; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Cyberpunk city skyline silhouette */
+    .city-silhouette {
+      position:fixed; bottom:0; left:0; right:0; height:120px; pointer-events:none; z-index:1;
+      background:
+        linear-gradient(to right,
+          transparent 0%, #050508 2%,
+          #050508 2%, transparent 2.5%,
+          transparent 5%, #080810 5.5%,
+          #080810 8%, transparent 8.2%,
+          transparent 12%, #050508 12.3%,
+          #050508 18%, transparent 18.2%,
+          transparent 25%, #080810 25.5%,
+          #080810 30%, transparent 30.2%,
+          transparent 40%, #050508 40.3%,
+          #050508 42%, transparent 42.2%,
+          transparent 55%, #080810 55.5%,
+          #080810 65%, transparent 65.2%,
+          transparent 72%, #050508 72.3%,
+          #050508 78%, transparent 78.2%,
+          transparent 85%, #080810 85.5%,
+          #080810 92%, transparent 92.2%,
+          transparent 95%, #050508 95.3%,
+          #050508 100%
+        );
+      opacity:0.4;
+    }
+  </style>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { neon: { cyan:'#06b6d4', pink:'#ec4899', dark:'#050508', surface:'#08080f', card:'#0a0a10', border:'#1a1a2a' } } } } }
+  </script>
+</head>
+<body>
+
+  <!-- Grid Floor -->
+  <div class="grid-floor"></div>
+  <!-- City silhouette -->
+  <div class="city-silhouette"></div>
+
+  <!-- Floating Particles -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+    <div class="particle" style="top:15%;left:10%;animation:particleFloat 6s ease-in-out infinite 0s;"></div>
+    <div class="particle" style="top:25%;left:80%;animation:particleFloat 8s ease-in-out infinite 1s;"></div>
+    <div class="particle" style="top:45%;left:20%;animation:particleFloat 7s ease-in-out infinite 2s;"></div>
+    <div class="particle" style="top:60%;left:70%;animation:particleFloat 5s ease-in-out infinite 0.5s;"></div>
+    <div class="particle" style="top:75%;left:40%;animation:particleFloat 9s ease-in-out infinite 3s;"></div>
+    <div class="particle" style="top:35%;left:55%;animation:particleFloat 6.5s ease-in-out infinite 1.5s;"></div>
+    <div class="particle" style="top:10%;left:50%;animation:particleFloat 8.5s ease-in-out infinite 0.8s;width:3px;height:3px;background:#ec4899;"></div>
+    <div class="particle" style="top:55%;left:45%;animation:particleFloat 8s ease-in-out infinite 2s;width:3px;height:3px;background:#ec4899;"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav-dark fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md border border-neon-cyan flex items-center justify-center" style="box-shadow:0 0 8px rgba(6,182,212,0.3);"><div class="w-2 h-2 bg-neon-cyan rounded-sm"></div></div>
+        <span class="text-sm font-medium text-white" style="font-family:'Space Grotesk';">FLUX</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm text-gray-400 hover:text-neon-cyan transition-colors">Features</a>
+        <a href="#showcase" class="text-sm text-gray-400 hover:text-neon-cyan transition-colors">Showcase</a>
+        <a href="#testimonial" class="text-sm text-gray-400 hover:text-neon-cyan transition-colors">Reviews</a>
+        <a href="#cta" class="inline-flex items-center px-5 py-2 border border-neon-cyan text-neon-cyan text-sm font-medium rounded-lg hover:bg-cyan-500/10 transition-all neon-pulse">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section — Neon Sign Headings + Aggressive Glitch -->
+  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 z-10">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <div class="reveal">
+        <p class="inline-flex items-center gap-2 px-4 py-1.5 border border-neon-border rounded-full text-xs text-gray-400 mb-8">
+          <span class="w-1.5 h-1.5 bg-neon-cyan rounded-full" style="box-shadow:0 0 8px rgba(6,182,212,0.7);"></span>
+          v2.0 — Now with real-time collaboration
+        </p>
+      </div>
+      <h1 class="reveal neon-sign glitch-aggressive text-5xl md:text-6xl lg:text-7xl font-semibold text-white tracking-tight leading-tight mb-6" style="letter-spacing:-0.02em;" data-text="Build at the speed of imagination">
+        Build at the speed<br>of <span class="text-neon-cyan">imagination</span>
+      </h1>
+      <p class="reveal text-lg md:text-xl text-gray-400 font-light max-w-2xl mx-auto mb-12 leading-relaxed">
+        The creative development toolkit for teams who refuse to compromise. Animation, interaction, and deployment — unified.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+        <a href="#" class="px-8 py-3.5 bg-neon-cyan text-black font-medium rounded-lg hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/25" style="box-shadow:0 0 30px rgba(6,182,212,0.4),0 0 60px rgba(6,182,212,0.15);">Start building free</a>
+        <a href="#" class="px-8 py-3.5 border border-neon-border text-gray-300 font-medium rounded-lg hover:border-gray-500 hover:text-white transition-all">View docs</a>
+      </div>
+
+      <!-- Hero card with scan line + code -->
+      <div class="reveal gradient-border max-w-3xl mx-auto p-8 relative overflow-hidden scan-line" style="box-shadow:0 0 30px rgba(6,182,212,0.4),0 0 60px rgba(6,182,212,0.15);">
+        <div class="code-block p-6 text-left">
+          <p><span class="cyan">import</span> <span class="white">{ motion, stagger }</span> <span class="cyan">from</span> <span class="pink">'flux'</span></p>
+          <p class="mt-2"><span class="cyan">const</span> <span class="white">scene</span> = <span class="cyan">new</span> <span class="white">Scene</span>({</p>
+          <p>&nbsp;&nbsp;renderer: <span class="pink">'webgpu'</span>,</p>
+          <p>&nbsp;&nbsp;fps: <span class="pink">120</span>,</p>
+          <p>&nbsp;&nbsp;responsive: <span class="pink">true</span></p>
+          <p>})</p>
+          <p class="mt-2"><span class="white">scene</span>.<span class="cyan">animate</span>(<span class="pink">'.card'</span>, {</p>
+          <p>&nbsp;&nbsp;y: [<span class="pink">100</span>, <span class="pink">0</span>],</p>
+          <p>&nbsp;&nbsp;opacity: [<span class="pink">0</span>, <span class="pink">1</span>],</p>
+          <p>&nbsp;&nbsp;stagger: <span class="pink">0.08</span>,</p>
+          <p>&nbsp;&nbsp;ease: <span class="pink">'expo.out'</span></p>
+          <p>})</p>
+        </div>
+        <div class="flex items-center justify-between mt-4 px-2">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-green-500" style="box-shadow:0 0 8px rgba(34,197,94,0.6);"></div>
+            <span class="text-xs text-gray-500">scene.flux — 12 lines</span>
+          </div>
+          <span class="text-xs text-gray-500">0.3ms render</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features — Bento Grid -->
+  <section id="features" class="relative py-24 z-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-3xl md:text-4xl font-semibold text-white tracking-tight mb-4 neon-sign" style="letter-spacing:-0.02em;">
+          Engineered for <span class="text-neon-cyan">performance</span>
+        </h2>
+        <p class="text-gray-400 max-w-xl mx-auto">Every API designed to be intuitive. Every animation buttery at 120fps.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Large card: WebGPU -->
+        <div class="reveal card-neon rounded-xl p-8 md:col-span-2 relative overflow-hidden scan-line">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6" style="box-shadow:0 0 15px rgba(6,182,212,0.15);">
+            <svg class="w-6 h-6 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="text-xl font-medium text-white mb-3 neon-sign-pink" style="font-family:'Space Grotesk';">WebGPU Renderer</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Native GPU acceleration for every animation. Complex particle systems, 3D transforms, and shader effects.</p>
+          <div class="code-block p-4">
+            <p><span class="cyan">renderer</span>: <span class="pink">'webgpu'</span></p>
+            <p><span class="cyan">particles</span>: <span class="pink">50_000</span></p>
+            <p><span class="cyan">fps</span>: <span class="white">119.7</span> <span class="text-green-500">// stable</span></p>
+          </div>
+        </div>
+
+        <!-- Tall card: Live Code -->
+        <div class="reveal card-neon rounded-xl p-8 md:row-span-2 relative overflow-hidden">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center mb-6" style="box-shadow:0 0 15px rgba(236,72,153,0.15);">
+            <svg class="w-6 h-6 text-neon-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="text-xl font-medium text-white mb-3" style="font-family:'Space Grotesk';">Live Code</h3>
+          <p class="text-gray-400 leading-relaxed mb-6">Write it, see it. Hot module replacement with instant preview.</p>
+          <div class="code-block p-4 space-y-2">
+            <div class="type-line"><span class="cyan">scene</span>.<span class="white">add</span>(<span class="pink">'particle-field'</span>)</div>
+            <div class="type-line-2"><span class="cyan">scene</span>.<span class="white">play</span>({ <span class="pink">loop</span>: <span class="cyan">true</span> })</div>
+            <p class="mt-3"><span class="text-green-500">// Output:</span></p>
+            <p><span class="white">50,000 particles</span></p>
+            <p><span class="white">120fps</span> <span class="text-green-500">locked</span></p>
+          </div>
+          <div class="absolute bottom-6 right-6 w-20 h-20 flex items-center justify-center">
+            <div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div>
+            <div class="w-3 h-3 rounded-full bg-neon-cyan" style="box-shadow:0 0 10px rgba(6,182,212,0.5);"></div>
+          </div>
+        </div>
+
+        <!-- Smart Stagger -->
+        <div class="reveal card-neon rounded-xl p-8">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6"><svg class="w-6 h-6 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg></div>
+          <h3 class="text-xl font-medium text-white mb-3" style="font-family:'Space Grotesk';">Smart Stagger</h3>
+          <p class="text-gray-400 leading-relaxed">Orchestrate complex sequences with one line. Elements animate in spatial order.</p>
+        </div>
+
+        <!-- Scroll Observer -->
+        <div class="reveal card-neon rounded-xl p-8">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6"><svg class="w-6 h-6 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></div>
+          <h3 class="text-xl font-medium text-white mb-3" style="font-family:'Space Grotesk';">Scroll Observer</h3>
+          <p class="text-gray-400 leading-relaxed">Pin, scrub, and trigger with scroll progress. Built-in viewport detection.</p>
+        </div>
+
+        <!-- Full-width Deploy -->
+        <div class="reveal card-neon rounded-xl p-8 md:col-span-3 relative overflow-hidden">
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center flex-shrink-0" style="box-shadow:0 0 15px rgba(236,72,153,0.15);">
+              <svg class="w-6 h-6 text-neon-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-xl font-medium text-white mb-2" style="font-family:'Space Grotesk';">One-Click Deploy</h3>
+              <p class="text-gray-400 leading-relaxed">Push to production in seconds. Automatic CDN distribution and bundle optimization.</p>
+            </div>
+            <div class="code-block px-4 py-2 flex-shrink-0">
+              <span class="cyan">flux deploy</span> <span class="text-green-500">-- done in 1.2s</span>
+            </div>
+          </div>
+          <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(6,182,212,0.015) 3px,rgba(6,182,212,0.015) 4px);"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase -->
+  <section id="showcase" class="relative py-20 z-10" style="background:#08080f;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-semibold text-white tracking-tight mb-4 neon-sign-pink" style="letter-spacing:-0.02em;">
+          Built by <span class="text-neon-pink">creators</span>, for creators
+        </h2>
+        <p class="text-gray-400 max-w-xl mx-auto">Award-winning studios and indie devs ship with Flux every day.</p>
+      </div>
+      <div class="reveal gradient-border max-w-4xl mx-auto p-1" style="box-shadow:0 0 30px rgba(6,182,212,0.4);">
+        <div class="rounded-xl p-8 md:p-12" style="background:#0a0a10;">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center md:text-left">
+              <div class="w-full aspect-video rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-neon-border mb-4 flex items-center justify-center relative overflow-hidden scan-line"><span class="text-xs text-gray-500">[project preview]</span></div>
+              <h4 class="text-sm font-medium text-white mb-1" style="font-family:'Space Grotesk';">Orbital Landing</h4>
+              <p class="text-xs text-gray-500">WebGL + Flux scroll triggers</p>
+            </div>
+            <div class="text-center md:text-left">
+              <div class="w-full aspect-video rounded-lg bg-gradient-to-br from-pink-500/20 to-cyan-500/20 border border-neon-border mb-4 flex items-center justify-center relative overflow-hidden scan-line"><span class="text-xs text-gray-500">[project preview]</span></div>
+              <h4 class="text-sm font-medium text-white mb-1" style="font-family:'Space Grotesk';">Synth Interface</h4>
+              <p class="text-xs text-gray-500">Drag physics + audio sync</p>
+            </div>
+            <div class="text-center md:text-left">
+              <div class="w-full aspect-video rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-neon-border mb-4 flex items-center justify-center relative overflow-hidden scan-line"><span class="text-xs text-gray-500">[project preview]</span></div>
+              <h4 class="text-sm font-medium text-white mb-1" style="font-family:'Space Grotesk';">Data Canvas</h4>
+              <p class="text-xs text-gray-500">50k particles at 120fps</p>
+            </div>
+          </div>
+          <div class="mt-8 pt-6 border-t border-neon-border flex flex-wrap items-center justify-center gap-8">
+            <span class="text-xs text-gray-500">Used by teams at</span>
+            <span class="text-sm text-gray-400">[your studio]</span>
+            <span class="text-sm text-gray-400">[your agency]</span>
+            <span class="text-sm text-gray-400">[your startup]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section id="testimonial" class="relative py-24 z-10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal card-neon rounded-xl p-10 md:p-14 max-w-3xl mx-auto relative">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-neon-cyan to-neon-pink flex items-center justify-center text-black text-sm font-medium" style="box-shadow:0 0 15px rgba(6,182,212,0.3);">KR</div>
+          <div><p class="text-sm font-medium text-white">Kai Renner</p><p class="text-xs text-gray-500">Creative developer, freelance — Berlin</p></div>
+        </div>
+        <blockquote class="text-lg text-gray-300 leading-relaxed mb-6">
+          "I prototyped a scroll-driven 3D product showcase in 45 minutes. With raw GSAP it was taking me a full day. The stagger API alone saved me from writing 200+ lines of sequencing logic."
+        </blockquote>
+        <div class="code-block inline-block px-3 py-1.5"><span class="cyan">time_saved</span>: <span class="pink">"~6hrs/week"</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="relative py-28 z-10">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <div class="reveal">
+        <h2 class="neon-sign text-3xl md:text-4xl lg:text-5xl font-semibold text-white tracking-tight mb-6" style="letter-spacing:-0.02em;">
+          Ready to build something <span class="text-neon-cyan">electric</span>?
+        </h2>
+        <p class="text-gray-400 max-w-lg mx-auto mb-10">Free for personal projects. Pro plans for teams who need real-time collaboration.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="#" class="px-10 py-4 bg-neon-cyan text-black font-semibold rounded-lg hover:bg-cyan-400 transition-all neon-pulse text-lg">Start for free</a>
+          <a href="#" class="px-10 py-4 border border-neon-border text-gray-300 font-medium rounded-lg hover:border-gray-500 hover:text-white transition-all text-lg">Schedule a demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 relative z-10" style="background:#08080f;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div><p class="text-sm font-medium text-white mb-4" style="font-family:'Space Grotesk';">Product</p><ul class="space-y-2"><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Features</a></li><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Pricing</a></li><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Changelog</a></li></ul></div>
+        <div><p class="text-sm font-medium text-white mb-4" style="font-family:'Space Grotesk';">Developers</p><ul class="space-y-2"><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Documentation</a></li><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">API Reference</a></li><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Examples</a></li></ul></div>
+        <div><p class="text-sm font-medium text-white mb-4" style="font-family:'Space Grotesk';">Community</p><ul class="space-y-2"><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Discord</a></li><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">GitHub</a></li></ul></div>
+        <div><p class="text-sm font-medium text-white mb-4" style="font-family:'Space Grotesk';">Company</p><ul class="space-y-2"><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">About</a></li><li><a href="#" class="text-sm text-gray-500 hover:text-neon-cyan transition-colors">Blog</a></li></ul></div>
+      </div>
+      <div class="pt-6 border-t border-neon-border flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded-md border border-neon-cyan/50 flex items-center justify-center" style="box-shadow:0 0 6px rgba(6,182,212,0.2);"><div class="w-1.5 h-1.5 bg-neon-cyan rounded-sm"></div></div>
+          <span class="text-xs text-gray-500">Flux Labs Inc.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observerOptions = { threshold:0.1, rootMargin:'0px 0px -40px 0px' };
+    const observer = new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');}else{entry.target.classList.remove('visible');}});},observerOptions);
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>047 — Code Editor Theme</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #1E1E2E;
+      color: #CDD6F4;
+      overflow-x: hidden;
+      font-weight: 400;
+      margin: 0;
+    }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+    /* Catppuccin-inspired tokens */
+    .tok-keyword { color: #CBA6F7; }
+    .tok-string { color: #FAB387; }
+    .tok-function { color: #A6E3A1; }
+    .tok-comment { color: #585B70; font-style: italic; }
+    .tok-variable { color: #89B4FA; }
+    .tok-number { color: #FAB387; }
+    .tok-type { color: #F9E2AF; }
+    .tok-operator { color: #89DCEB; }
+    .tok-bracket { color: #F5C2E7; }
+    .tok-plain { color: #CDD6F4; }
+
+    /* Scroll reveal — repeats */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* Tab bar */
+    .tab-bar {
+      background: #181825;
+      border-bottom: 1px solid #313244;
+      display: flex;
+      align-items: stretch;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab {
+      padding: 10px 20px;
+      font-size: 13px;
+      color: #6C7086;
+      border-right: 1px solid #313244;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+    }
+    .tab:hover { color: #CDD6F4; background: #1E1E2E; }
+    .tab.active {
+      color: #CDD6F4;
+      background: #1E1E2E;
+      border-bottom: 2px solid #89B4FA;
+      margin-bottom: -1px;
+    }
+    .tab-icon { font-size: 14px; }
+
+    /* Editor area */
+    .editor-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 48px;
+      background: #11111B;
+      border-right: 1px solid #313244;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 12px;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    .sidebar-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #45475A;
+      transition: color 0.2s ease;
+      cursor: pointer;
+    }
+    .sidebar-icon:hover { color: #CDD6F4; }
+    .sidebar-icon.active { color: #89B4FA; border-left: 2px solid #89B4FA; margin-left: -2px; }
+
+    .line-numbers {
+      width: 52px;
+      text-align: right;
+      padding-right: 16px;
+      color: #45475A;
+      font-size: 14px;
+      line-height: 1.7;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .code-content {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.7;
+      padding-right: 48px;
+    }
+
+    /* Minimap */
+    .minimap {
+      width: 60px;
+      background: #181825;
+      border-left: 1px solid #313244;
+      padding: 8px 4px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .minimap-line {
+      height: 3px;
+      margin-bottom: 2px;
+      border-radius: 1px;
+      opacity: 0.4;
+    }
+
+    /* Cursor blink */
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: #CDD6F4;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Extension card */
+    .ext-card {
+      background: #181825;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .ext-card:hover {
+      border-color: #89B4FA;
+      box-shadow: 0 0 16px rgba(137, 180, 250, 0.08);
+    }
+    .install-btn {
+      background: #89B4FA;
+      color: #1E1E2E;
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    .install-btn:hover { background: #B4D0FB; transform: translateY(-1px); }
+
+    /* Terminal */
+    .terminal {
+      background: #11111B;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .terminal-header {
+      background: #181825;
+      padding: 8px 16px;
+      border-bottom: 1px solid #313244;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #6C7086;
+    }
+    .terminal-body {
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .prompt { color: #A6E3A1; }
+    .terminal-output { color: #6C7086; }
+    .terminal-success { color: #A6E3A1; }
+    .terminal-info { color: #89B4FA; }
+
+    /* Terminal typing animation */
+    .term-line {
+      opacity: 0;
+      animation: termAppear 0.3s ease forwards;
+    }
+    .term-line:nth-child(1) { animation-delay: 0.2s; }
+    .term-line:nth-child(2) { animation-delay: 0.6s; }
+    .term-line:nth-child(3) { animation-delay: 1.0s; }
+    .term-line:nth-child(4) { animation-delay: 1.4s; }
+    .term-line:nth-child(5) { animation-delay: 1.8s; }
+    .term-line:nth-child(6) { animation-delay: 2.2s; }
+    @keyframes termAppear {
+      to { opacity: 1; }
+    }
+
+    /* Diff colors */
+    .diff-add { background: rgba(166, 227, 161, 0.1); border-left: 3px solid #A6E3A1; padding-left: 12px; }
+    .diff-remove { background: rgba(243, 139, 168, 0.1); border-left: 3px solid #F38BA8; padding-left: 12px; text-decoration: line-through; opacity: 0.6; }
+    .diff-neutral { padding-left: 15px; }
+
+    /* Status bar */
+    .status-bar {
+      background: #181825;
+      border-top: 1px solid #313244;
+      padding: 4px 16px;
+      font-size: 11px;
+      color: #6C7086;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Hide sidebar on mobile */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .minimap { display: none; }
+      .line-numbers { width: 36px; padding-right: 8px; font-size: 11px; }
+      .code-content { font-size: 12px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tab Bar (acts as nav) -->
+  <div class="tab-bar fixed top-0 left-0 right-0 z-50">
+    <div class="tab active">
+      <span class="tab-icon tok-variable">TS</span>
+      index.tsx
+    </div>
+    <div class="tab">
+      <span class="tab-icon tok-function">TS</span>
+      features.tsx
+    </div>
+    <div class="tab">
+      <span class="tab-icon tok-string">TS</span>
+      pricing.tsx
+    </div>
+    <div class="flex-1"></div>
+    <div class="tab" style="border-right: none;">
+      <span class="tok-function">&#9654;</span>
+      <span class="tok-function">Run</span>
+    </div>
+  </div>
+
+  <!-- Hero: Editor Panel -->
+  <section class="pt-10">
+    <div class="editor-container">
+      <!-- Sidebar -->
+      <div class="sidebar hidden md:flex">
+        <div class="sidebar-icon active">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <div class="sidebar-icon">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <div class="sidebar-icon">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </div>
+        <div class="sidebar-icon">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Main editor -->
+      <div class="flex-1 flex flex-col">
+        <div class="flex flex-1 py-8 md:py-16 overflow-hidden">
+          <div class="line-numbers">
+            <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+            <div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+            <div>11</div><div>12</div><div>13</div><div>14</div><div>15</div>
+            <div>16</div><div>17</div><div>18</div><div>19</div><div>20</div>
+            <div>21</div><div>22</div>
+          </div>
+          <div class="code-content reveal">
+            <div><span class="tok-comment">// [Your Product] — AI-powered coding assistant</span></div>
+            <div><span class="tok-comment">// Ship code faster with intelligent completions</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tok-keyword">import</span> <span class="tok-bracket">{</span> <span class="tok-type">Assistant</span><span class="tok-plain">,</span> <span class="tok-type">Config</span> <span class="tok-bracket">}</span> <span class="tok-keyword">from</span> <span class="tok-string">'@your-product/core'</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tok-keyword">const</span> <span class="tok-variable">config</span><span class="tok-operator">:</span> <span class="tok-type">Config</span> <span class="tok-operator">=</span> <span class="tok-bracket">{</span></div>
+            <div>&nbsp;&nbsp;<span class="tok-variable">model</span><span class="tok-operator">:</span> <span class="tok-string">'[your-model]'</span><span class="tok-plain">,</span></div>
+            <div>&nbsp;&nbsp;<span class="tok-variable">context</span><span class="tok-operator">:</span> <span class="tok-string">'full-repo'</span><span class="tok-plain">,</span></div>
+            <div>&nbsp;&nbsp;<span class="tok-variable">language</span><span class="tok-operator">:</span> <span class="tok-string">'typescript'</span><span class="tok-plain">,</span></div>
+            <div><span class="tok-bracket">}</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tok-keyword">const</span> <span class="tok-function">assistant</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-type">Assistant</span><span class="tok-bracket">(</span><span class="tok-variable">config</span><span class="tok-bracket">)</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tok-comment">// Understands your entire codebase</span></div>
+            <div><span class="tok-keyword">const</span> <span class="tok-variable">suggestion</span> <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-variable">assistant</span><span class="tok-plain">.</span><span class="tok-function">complete</span><span class="tok-bracket">(</span><span class="tok-bracket">{</span></div>
+            <div>&nbsp;&nbsp;<span class="tok-variable">file</span><span class="tok-operator">:</span> <span class="tok-string">'src/api/handler.ts'</span><span class="tok-plain">,</span></div>
+            <div>&nbsp;&nbsp;<span class="tok-variable">cursor</span><span class="tok-operator">:</span> <span class="tok-bracket">{</span> <span class="tok-variable">line</span><span class="tok-operator">:</span> <span class="tok-number">42</span><span class="tok-plain">,</span> <span class="tok-variable">col</span><span class="tok-operator">:</span> <span class="tok-number">8</span> <span class="tok-bracket">}</span><span class="tok-plain">,</span></div>
+            <div><span class="tok-bracket">}</span><span class="tok-bracket">)</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tok-comment">// Multi-line completions, refactoring, test generation</span></div>
+            <div><span class="tok-variable">console</span><span class="tok-plain">.</span><span class="tok-function">log</span><span class="tok-bracket">(</span><span class="tok-variable">suggestion</span><span class="tok-plain">.</span><span class="tok-variable">code</span><span class="tok-bracket">)</span><span class="cursor-blink"></span></div>
+            <div>&nbsp;</div>
+            <div><span class="tok-comment">// [your-product] init --start to begin</span></div>
+          </div>
+
+          <!-- Minimap -->
+          <div class="minimap hidden md:block">
+            <div class="minimap-line" style="width: 70%; background: #585B70;"></div>
+            <div class="minimap-line" style="width: 55%; background: #585B70;"></div>
+            <div class="minimap-line" style="width: 10%; background: transparent;"></div>
+            <div class="minimap-line" style="width: 80%; background: #CBA6F7;"></div>
+            <div class="minimap-line" style="width: 10%; background: transparent;"></div>
+            <div class="minimap-line" style="width: 45%; background: #89B4FA;"></div>
+            <div class="minimap-line" style="width: 55%; background: #FAB387;"></div>
+            <div class="minimap-line" style="width: 50%; background: #FAB387;"></div>
+            <div class="minimap-line" style="width: 55%; background: #FAB387;"></div>
+            <div class="minimap-line" style="width: 20%; background: #89B4FA;"></div>
+            <div class="minimap-line" style="width: 10%; background: transparent;"></div>
+            <div class="minimap-line" style="width: 60%; background: #A6E3A1;"></div>
+            <div class="minimap-line" style="width: 10%; background: transparent;"></div>
+            <div class="minimap-line" style="width: 65%; background: #585B70;"></div>
+            <div class="minimap-line" style="width: 75%; background: #89B4FA;"></div>
+            <div class="minimap-line" style="width: 60%; background: #FAB387;"></div>
+            <div class="minimap-line" style="width: 70%; background: #89B4FA;"></div>
+            <div class="minimap-line" style="width: 25%; background: #89B4FA;"></div>
+            <div class="minimap-line" style="width: 10%; background: transparent;"></div>
+            <div class="minimap-line" style="width: 55%; background: #585B70;"></div>
+            <div class="minimap-line" style="width: 65%; background: #89B4FA;"></div>
+            <div class="minimap-line" style="width: 10%; background: transparent;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features as Extensions -->
+  <section class="py-24 px-6" style="background: #181825;">
+    <div class="max-w-5xl mx-auto">
+      <div class="reveal text-center mb-16">
+        <p class="text-xs tok-comment uppercase tracking-widest mb-3">// Extensions</p>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight" style="letter-spacing: -0.02em;">Supercharge your editor</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="reveal ext-card">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(166, 227, 161, 0.1);">
+              <svg class="w-5 h-5 tok-function" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold">[Autocomplete]</h3>
+              <p class="text-xs tok-comment">[your-product].autocomplete</p>
+            </div>
+          </div>
+          <p class="text-sm tok-comment leading-relaxed mb-4">[Context-aware completions using your entire repo graph. Supports TypeScript, Python, Rust, Go.]</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs tok-comment">v[x.y.z] — [nn]K installs</span>
+            <a href="#" class="install-btn">Install</a>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-1 ext-card">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(137, 180, 250, 0.1);">
+              <svg class="w-5 h-5 tok-variable" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold">[Code Actions]</h3>
+              <p class="text-xs tok-comment">[your-product].refactor</p>
+            </div>
+          </div>
+          <p class="text-sm tok-comment leading-relaxed mb-4">[Refactoring, rename, extract function — understands the dependency chain across files.]</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs tok-comment">v[x.y.z] — [nn]K installs</span>
+            <a href="#" class="install-btn">Install</a>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2 ext-card">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(203, 166, 247, 0.1);">
+              <svg class="w-5 h-5 tok-keyword" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold">[Test Generation]</h3>
+              <p class="text-xs tok-comment">[your-product].tests</p>
+            </div>
+          </div>
+          <p class="text-sm tok-comment leading-relaxed mb-4">[Generates unit and integration tests from existing code. Understands edge cases from type analysis.]</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs tok-comment">v[x.y.z] — [nn]K installs</span>
+            <a href="#" class="install-btn">Install</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal Output Section -->
+  <section class="py-16 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="reveal">
+        <p class="text-xs tok-comment uppercase tracking-widest mb-4 text-center">// Terminal</p>
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="w-3 h-3 rounded-full" style="background: #F38BA8;"></div>
+            <div class="w-3 h-3 rounded-full" style="background: #F9E2AF;"></div>
+            <div class="w-3 h-3 rounded-full" style="background: #A6E3A1;"></div>
+            <span class="ml-4">Terminal — zsh</span>
+          </div>
+          <div class="terminal-body">
+            <div class="term-line"><span class="prompt">$</span> <span class="tok-plain">[your-product] init my-project</span></div>
+            <div class="term-line"><span class="terminal-info">info</span> <span class="terminal-output">Scanning project structure...</span></div>
+            <div class="term-line"><span class="terminal-info">info</span> <span class="terminal-output">Found [nn] files, [nn] dependencies</span></div>
+            <div class="term-line"><span class="terminal-info">info</span> <span class="terminal-output">Building code graph...</span></div>
+            <div class="term-line"><span class="terminal-success">done</span> <span class="terminal-output">Project indexed in [n.n]s</span></div>
+            <div class="term-line"><span class="terminal-success">ready</span> <span class="tok-plain">[Your product] is ready. Open your editor to start.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Comparison — Diff style -->
+  <section class="py-20 px-6" style="background: #181825;">
+    <div class="max-w-4xl mx-auto">
+      <div class="reveal text-center mb-12">
+        <p class="text-xs tok-comment uppercase tracking-widest mb-3">// Diff</p>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight">Before and after</h2>
+      </div>
+
+      <div class="reveal grid md:grid-cols-2 gap-6">
+        <!-- Before -->
+        <div>
+          <p class="text-xs tok-comment mb-3 uppercase tracking-widest">// Without [product]</p>
+          <div class="terminal">
+            <div class="terminal-header">
+              <span>handler.ts</span>
+            </div>
+            <div class="terminal-body text-sm leading-relaxed">
+              <div class="diff-remove"><span class="tok-keyword">function</span> <span class="tok-function">handleRequest</span><span class="tok-bracket">(</span><span class="tok-variable">req</span><span class="tok-bracket">)</span> <span class="tok-bracket">{</span></div>
+              <div class="diff-remove">&nbsp;&nbsp;<span class="tok-comment">// TODO: add validation</span></div>
+              <div class="diff-remove">&nbsp;&nbsp;<span class="tok-comment">// TODO: add error handling</span></div>
+              <div class="diff-remove">&nbsp;&nbsp;<span class="tok-comment">// TODO: add types</span></div>
+              <div class="diff-remove">&nbsp;&nbsp;<span class="tok-keyword">return</span> <span class="tok-variable">db</span>.<span class="tok-function">query</span><span class="tok-bracket">(</span><span class="tok-variable">req</span>.<span class="tok-variable">body</span><span class="tok-bracket">)</span></div>
+              <div class="diff-remove"><span class="tok-bracket">}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- After -->
+        <div>
+          <p class="text-xs tok-function mb-3 uppercase tracking-widest">// With [product]</p>
+          <div class="terminal">
+            <div class="terminal-header">
+              <span>handler.ts</span>
+            </div>
+            <div class="terminal-body text-sm leading-relaxed">
+              <div class="diff-add"><span class="tok-keyword">async function</span> <span class="tok-function">handleRequest</span><span class="tok-bracket">(</span></div>
+              <div class="diff-add">&nbsp;&nbsp;<span class="tok-variable">req</span><span class="tok-operator">:</span> <span class="tok-type">ValidatedRequest</span></div>
+              <div class="diff-add"><span class="tok-bracket">)</span><span class="tok-operator">:</span> <span class="tok-type">Promise</span><span class="tok-operator">&lt;</span><span class="tok-type">Response</span><span class="tok-operator">&gt;</span> <span class="tok-bracket">{</span></div>
+              <div class="diff-add">&nbsp;&nbsp;<span class="tok-keyword">const</span> <span class="tok-variable">data</span> <span class="tok-operator">=</span> <span class="tok-variable">schema</span>.<span class="tok-function">parse</span><span class="tok-bracket">(</span><span class="tok-variable">req</span>.<span class="tok-variable">body</span><span class="tok-bracket">)</span></div>
+              <div class="diff-add">&nbsp;&nbsp;<span class="tok-keyword">return</span> <span class="tok-variable">db</span>.<span class="tok-function">query</span><span class="tok-bracket">(</span><span class="tok-variable">data</span><span class="tok-bracket">)</span></div>
+              <div class="diff-add"><span class="tok-bracket">}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial as code comment -->
+  <section class="py-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="reveal">
+        <div class="terminal">
+          <div class="terminal-header">
+            <span>review.ts</span>
+          </div>
+          <div class="terminal-body">
+            <div class="text-sm leading-loose">
+              <div><span class="tok-comment">/**</span></div>
+              <div><span class="tok-comment"> * "[Specific technical feedback — mention actual workflow</span></div>
+              <div><span class="tok-comment"> * change. e.g. 'The context window is actually useful —</span></div>
+              <div><span class="tok-comment"> * it suggested a fix in utils.ts when I was editing</span></div>
+              <div><span class="tok-comment"> * handler.ts because it knew they shared a type.']"</span></div>
+              <div><span class="tok-comment"> *</span></div>
+              <div><span class="tok-comment"> * @author [Your Name]</span></div>
+              <div><span class="tok-comment"> * @role [Senior Engineer], [Your Company]</span></div>
+              <div><span class="tok-comment"> */</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA — terminal prompt style -->
+  <section class="py-24 px-6" style="background: #181825;">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="reveal">
+        <p class="text-xs tok-comment uppercase tracking-widest mb-6">// Get started</p>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">Ready to code smarter?</h2>
+        <div class="terminal inline-block mb-8">
+          <div class="terminal-body py-3 px-6">
+            <span class="prompt">$</span> <span class="tok-plain">[your-product] init --start</span><span class="cursor-blink"></span>
+          </div>
+        </div>
+        <div class="block">
+          <a href="#" class="install-btn text-sm !py-3 !px-8">Install Extension</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer — Status Bar style -->
+  <div class="status-bar">
+    <div class="flex items-center gap-6">
+      <div class="status-item">
+        <svg class="w-3.5 h-3.5 tok-function" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span>main</span>
+      </div>
+      <div class="status-item">
+        <span>TypeScript</span>
+      </div>
+      <div class="status-item">
+        <span>UTF-8</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <div class="status-item">
+        <span>Ln 22, Col 48</span>
+      </div>
+      <div class="status-item">
+        <span>Spaces: 2</span>
+      </div>
+      <div class="status-item">
+        <a href="#" class="hover:text-blue-400 transition-colors duration-200">Privacy</a>
+      </div>
+      <div class="status-item">
+        <a href="#" class="hover:text-blue-400 transition-colors duration-200">Terms</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Reveal Script — repeats on scroll -->
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      revealObserver.observe(el);
+    });
+  </script>
+
+</body>
+</html>

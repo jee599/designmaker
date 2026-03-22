@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>027 — Gradient SaaS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: 'DM Sans', sans-serif; font-weight: 700; }
+
+    /* Subtle bg gradient */
+    .bg-gradient-subtle {
+      background: linear-gradient(180deg, #ffffff 0%, #fff5f7 40%, #ffffff 70%, #fff8f0 90%, #ffffff 100%);
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #ec4899, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Gradient button */
+    .btn-gradient {
+      background: linear-gradient(135deg, #ec4899, #f97316);
+      color: white;
+      padding: 0.875rem 2rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.25);
+    }
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(236, 72, 153, 0.35);
+    }
+
+    /* Secondary button */
+    .btn-secondary {
+      border: 1.5px solid #e5e7eb;
+      color: #374151;
+      padding: 0.875rem 2rem;
+      border-radius: 0.75rem;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .btn-secondary:hover {
+      border-color: #ec4899;
+      background: #fff5f7;
+    }
+
+    /* Feature card */
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid #f3f4f6;
+      border-radius: 1rem;
+      transition: transform 0.6s ease, box-shadow 0.6s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+    }
+    .card-border-pink { border-top: 3px solid #ec4899; }
+    .card-border-orange { border-top: 3px solid #f97316; }
+    .card-border-rose { border-top: 3px solid #f43f5e; }
+
+    /* Floating UI mockup cards */
+    .mockup-card {
+      background: #ffffff;
+      border: 1px solid #f3f4f6;
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+
+    /* Nav */
+    .nav-saas {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    /* Pill badge */
+    .pill-badge {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(249, 115, 22, 0.1));
+      color: #ec4899;
+      font-size: 0.75rem;
+      padding: 0.375rem 1rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+
+    /* Integration logos placeholder */
+    .logo-placeholder {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 0.75rem;
+      background: #f9fafb;
+      border: 1px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 0.625rem;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .logo-placeholder:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    /* Bento card */
+    .bento-card {
+      background: #ffffff;
+      border: 1px solid #f0f0f0;
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.07);
+    }
+    .bento-visual {
+      background: #fafafa;
+      padding: 1.25rem;
+      min-height: 10rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .bento-card.span-2 .bento-visual { min-height: 11rem; }
+    .bento-meta { padding: 1rem 1.25rem; }
+
+    /* Task list mockup hover */
+    .bento-card:hover .task-progress {
+      width: 100% !important;
+      transition: width 1s ease;
+    }
+    /* Chat typing dots */
+    @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+    .typing-dot { width:5px; height:5px; border-radius:50%; background:#ec4899; display:inline-block; }
+    .bento-card:hover .typing-dot:nth-child(1) { animation: blink 1.4s infinite 0s; }
+    .bento-card:hover .typing-dot:nth-child(2) { animation: blink 1.4s infinite 0.2s; }
+    .bento-card:hover .typing-dot:nth-child(3) { animation: blink 1.4s infinite 0.4s; }
+    /* Chart bar grow */
+    .chart-bar { transition: height 0.6s ease 0.1s; }
+    .bento-card:hover .chart-bar { height: var(--hover-h) !important; }
+    /* Kanban card slide */
+    .kanban-card-animate { transition: transform 0.5s ease; }
+    .bento-card:hover .kanban-card-animate { transform: translateX(4px); }
+    /* Integration icon pulse */
+    .int-icon { transition: transform 0.3s ease; }
+    .bento-card:hover .int-icon:nth-child(odd) { transform: scale(1.1); }
+    .bento-card:hover .int-icon:nth-child(even) { transform: scale(0.95); }
+
+    /* Floating animation */
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .float-1 { animation: floatUp 4s ease-in-out infinite; }
+    .float-2 { animation: floatUp 4s ease-in-out infinite 1s; }
+    .float-3 { animation: floatUp 4s ease-in-out infinite 2s; }
+
+    /* Check icon */
+    .check-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ec4899, #f97316);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+  
+    /* === 2025-2026 Trend Effects === */
+    /* Animated Gradient Mesh */
+    @keyframes meshShift1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(50px,-40px) scale(1.15)} 66%{transform:translate(-30px,30px) scale(0.9)} }
+    @keyframes meshShift2 { 0%,100%{transform:translate(0,0) scale(1.1)} 50%{transform:translate(-60px,50px) scale(0.95)} }
+    @keyframes meshShift3 { 0%,100%{transform:translate(0,0)} 33%{transform:translate(40px,40px)} 66%{transform:translate(-40px,-20px)} }
+    .mesh-blob { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; }
+    .mesh-blob-1 { animation:meshShift1 15s ease-in-out infinite; }
+    .mesh-blob-2 { animation:meshShift2 18s ease-in-out infinite; }
+    .mesh-blob-3 { animation:meshShift3 20s ease-in-out infinite; }
+  
+
+    /* Text Mask/Clip Effect */
+    .text-gradient-mask {
+      background:linear-gradient(135deg, currentColor 0%, currentColor 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+    }
+  
+
+    /* Elastic/Spring Animations */
+    .elastic-in { transition:transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; }
+    .elastic-hover:hover { transform:scale(1.04); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            saas: {
+              pink: '#ec4899',
+              orange: '#f97316',
+              rose: '#f43f5e',
+              dark: '#1a1a2e',
+              muted: '#6b7280',
+              light: '#f9fafb',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-subtle">
+
+  <!-- Navigation -->
+  <nav class="nav-saas fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="text-xl font-bold text-saas-dark" style="font-family:'DM Sans',sans-serif;">
+          <span class="gradient-text">super</span>flow
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Features</a>
+          <a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Pricing</a>
+          <a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Docs</a>
+          <a href="#" class="btn-gradient text-sm" style="padding:0.5rem 1.25rem;">Get Started</a>
+        </div>
+        <button class="md:hidden text-saas-muted" aria-label="Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="reveal mb-6">
+        <span class="pill-badge inline-block">Now in beta — join [N] teams</span>
+      </div>
+      <h1 class="reveal text-5xl md:text-6xl lg:text-7xl text-saas-dark mb-6 leading-tight" style="letter-spacing:-0.03em;">
+        Work moves <span class="gradient-text">faster</span><br>when tools talk
+      </h1>
+      <p class="reveal text-lg text-saas-muted max-w-xl mx-auto mb-10 leading-relaxed">
+        One workspace that connects your tasks, docs, and conversations. Stop switching between [N] different apps just to get one thing done.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="btn-gradient">Start for Free</a>
+        <a href="#" class="btn-secondary">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Mockup — floating UI cards -->
+  <section class="pb-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="reveal relative">
+        <!-- Main mockup -->
+        <div class="mockup-card p-6 md:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+            <span class="text-xs text-gray-400 ml-2">superflow — workspace</span>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="col-span-1 bg-saas-light rounded-lg p-4">
+              <p class="text-xs font-semibold text-saas-dark mb-3">Projects</p>
+              <div class="space-y-2">
+                <div class="bg-white rounded-md p-2 text-xs text-gray-600">Q1 Launch</div>
+                <div class="bg-white rounded-md p-2 text-xs text-saas-pink font-medium border border-saas-pink/20">Design Sprint</div>
+                <div class="bg-white rounded-md p-2 text-xs text-gray-600">API v2</div>
+              </div>
+            </div>
+            <div class="col-span-2 bg-saas-light rounded-lg p-4">
+              <p class="text-xs font-semibold text-saas-dark mb-3">Design Sprint — Tasks</p>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 bg-white rounded-md p-2">
+                  <div class="check-icon"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                  <span class="text-xs text-gray-500 line-through">User research synthesis</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white rounded-md p-2">
+                  <div class="w-5 h-5 rounded-full border-2 border-gray-200"></div>
+                  <span class="text-xs text-saas-dark">Wireframe review with eng</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white rounded-md p-2">
+                  <div class="w-5 h-5 rounded-full border-2 border-gray-200"></div>
+                  <span class="text-xs text-saas-dark">Prototype handoff</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating cards -->
+        <div class="absolute -right-4 top-8 float-1 hidden lg:block">
+          <div class="mockup-card p-3 w-48">
+            <p class="text-xs text-gray-400 mb-1">Notification</p>
+            <p class="text-xs text-saas-dark font-medium">3 comments on Wireframe</p>
+          </div>
+        </div>
+        <div class="absolute -left-4 bottom-12 float-2 hidden lg:block">
+          <div class="mockup-card p-3 w-44">
+            <p class="text-xs text-gray-400 mb-1">Status</p>
+            <p class="text-xs font-medium" style="color:#ec4899;">Sprint: Day 3 of 5</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Cards — Bento Visual Grid -->
+  <section class="py-24 px-6" style="background:#fafafa;">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-4xl md:text-5xl text-saas-dark mb-4" style="letter-spacing:-0.02em;">
+          Everything <span class="gradient-text">connects</span>
+        </h2>
+        <p class="reveal text-base text-saas-muted max-w-lg mx-auto">
+          Tasks, docs, and conversations in one place. No more copy-pasting links between apps.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+        <!-- Card 1: Unified Tasks (col-span-2) — mini task list UI -->
+        <div class="reveal bento-card span-2 md:col-span-2">
+          <div class="bento-visual">
+            <!-- Mini task list mockup -->
+            <div class="space-y-2.5">
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 shadow-sm">
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cursor-grab" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg>
+                <div class="check-icon" style="width:18px;height:18px;"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                <span class="text-xs text-gray-400 line-through flex-1">User research synthesis</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-600 font-medium">Done</span>
+              </div>
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 shadow-sm border border-pink-100">
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cursor-grab" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg>
+                <div class="w-4.5 h-4.5 rounded-full border-2 border-saas-pink flex-shrink-0" style="width:18px;height:18px;"></div>
+                <span class="text-xs text-saas-dark font-medium flex-1">Wireframe review with eng</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 font-medium">In progress</span>
+              </div>
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 shadow-sm">
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cursor-grab" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg>
+                <div class="w-4.5 h-4.5 rounded-full border-2 border-gray-200 flex-shrink-0" style="width:18px;height:18px;"></div>
+                <span class="text-xs text-saas-dark flex-1">Prototype handoff</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 font-medium">To do</span>
+              </div>
+              <div class="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 shadow-sm">
+                <svg class="w-4 h-4 text-gray-300 flex-shrink-0 cursor-grab" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg>
+                <div class="w-4.5 h-4.5 rounded-full border-2 border-gray-200 flex-shrink-0" style="width:18px;height:18px;"></div>
+                <span class="text-xs text-saas-dark flex-1">Final QA pass</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 font-medium">To do</span>
+              </div>
+            </div>
+            <!-- Progress bar that animates on hover -->
+            <div class="mt-4 flex items-center gap-2">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div class="task-progress h-full rounded-full" style="width:35%;background:linear-gradient(135deg,#ec4899,#f97316);transition:width 1s ease;"></div>
+              </div>
+              <span class="text-xs text-gray-400">1/4</span>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <p class="text-sm font-semibold text-saas-dark">Unified Tasks</p>
+            <p class="text-xs text-saas-muted mt-0.5">Drag, assign, and track from one list</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Smart Threads — chat mockup -->
+        <div class="reveal reveal-delay-1 bento-card md:col-span-1">
+          <div class="bento-visual" style="min-height:11rem;">
+            <div class="space-y-3">
+              <!-- Message 1 -->
+              <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-pink-300 to-orange-300 flex-shrink-0 mt-0.5"></div>
+                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 shadow-sm max-w-[85%]">
+                  <p class="text-xs text-saas-dark">Updated the hero section. Can you review?</p>
+                  <p class="text-xs text-gray-300 mt-1">2m ago</p>
+                </div>
+              </div>
+              <!-- Message 2 -->
+              <div class="flex items-start gap-2 justify-end">
+                <div class="bg-gradient-to-br from-pink-50 to-orange-50 rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-[85%]">
+                  <p class="text-xs text-saas-dark">Looks good! Ship it.</p>
+                  <p class="text-xs text-gray-300 mt-1">1m ago</p>
+                </div>
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-300 to-indigo-300 flex-shrink-0 mt-0.5"></div>
+              </div>
+              <!-- Typing indicator -->
+              <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-gradient-to-br from-green-300 to-teal-300 flex-shrink-0 mt-0.5"></div>
+                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2.5 shadow-sm">
+                  <div class="flex gap-1 items-center">
+                    <span class="typing-dot" style="opacity:0.3;"></span>
+                    <span class="typing-dot" style="opacity:0.3;"></span>
+                    <span class="typing-dot" style="opacity:0.3;"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <p class="text-sm font-semibold text-saas-dark">Smart Threads</p>
+            <p class="text-xs text-saas-muted mt-0.5">Context-linked conversations</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Analytics — mini chart -->
+        <div class="reveal bento-card md:col-span-1">
+          <div class="bento-visual flex flex-col justify-end" style="min-height:11rem;">
+            <p class="text-xs text-gray-400 mb-1">Weekly active users</p>
+            <p class="text-2xl font-bold text-saas-dark" style="font-family:'DM Sans',sans-serif;">↑ 23%</p>
+            <div class="flex items-end gap-1.5 mt-4 h-16">
+              <div class="chart-bar flex-1 rounded-sm" style="height:30%;--hover-h:40%;background:#fce7f3;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:45%;--hover-h:50%;background:#fce7f3;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:35%;--hover-h:55%;background:#fce7f3;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:55%;--hover-h:65%;background:#fbcfe8;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:50%;--hover-h:70%;background:#fbcfe8;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:65%;--hover-h:80%;background:#f9a8d4;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:60%;--hover-h:75%;background:#f9a8d4;"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:80%;--hover-h:90%;background:linear-gradient(to top,#ec4899,#f97316);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:75%;--hover-h:85%;background:linear-gradient(to top,#ec4899,#f97316);"></div>
+              <div class="chart-bar flex-1 rounded-sm" style="height:95%;--hover-h:100%;background:linear-gradient(to top,#ec4899,#f97316);"></div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <p class="text-sm font-semibold text-saas-dark">Live Analytics</p>
+            <p class="text-xs text-saas-muted mt-0.5">Real-time metrics at a glance</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Timeline/Kanban (col-span-2) -->
+        <div class="reveal reveal-delay-1 bento-card span-2 md:col-span-2">
+          <div class="bento-visual">
+            <div class="grid grid-cols-3 gap-3 h-full">
+              <!-- Column: To Do -->
+              <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2.5">To Do</p>
+                <div class="space-y-2">
+                  <div class="kanban-card-animate bg-white rounded-lg p-2.5 shadow-sm">
+                    <p class="text-xs text-saas-dark font-medium">API endpoint design</p>
+                    <div class="flex items-center gap-1.5 mt-2">
+                      <div class="w-4 h-4 rounded-full bg-gradient-to-br from-blue-200 to-blue-300"></div>
+                      <span class="text-xs text-gray-400">3d</span>
+                    </div>
+                  </div>
+                  <div class="kanban-card-animate bg-white rounded-lg p-2.5 shadow-sm">
+                    <p class="text-xs text-saas-dark font-medium">Write test cases</p>
+                    <div class="flex items-center gap-1.5 mt-2">
+                      <div class="w-4 h-4 rounded-full bg-gradient-to-br from-green-200 to-green-300"></div>
+                      <span class="text-xs text-gray-400">1d</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Column: In Progress -->
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider mb-2.5" style="color:#ec4899;">In Progress</p>
+                <div class="space-y-2">
+                  <div class="kanban-card-animate bg-white rounded-lg p-2.5 shadow-sm border border-pink-100">
+                    <p class="text-xs text-saas-dark font-medium">Dashboard redesign</p>
+                    <div class="flex items-center gap-1.5 mt-2">
+                      <div class="w-4 h-4 rounded-full bg-gradient-to-br from-pink-200 to-orange-200"></div>
+                      <span class="text-xs text-gray-400">2d</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Column: Done -->
+              <div>
+                <p class="text-xs font-semibold text-green-500 uppercase tracking-wider mb-2.5">Done</p>
+                <div class="space-y-2">
+                  <div class="kanban-card-animate bg-white rounded-lg p-2.5 shadow-sm opacity-60">
+                    <p class="text-xs text-gray-400 line-through font-medium">Auth flow</p>
+                    <div class="flex items-center gap-1.5 mt-2">
+                      <div class="w-4 h-4 rounded-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                      <span class="text-xs text-gray-400">Done</span>
+                    </div>
+                  </div>
+                  <div class="kanban-card-animate bg-white rounded-lg p-2.5 shadow-sm opacity-60">
+                    <p class="text-xs text-gray-400 line-through font-medium">Onboarding</p>
+                    <div class="flex items-center gap-1.5 mt-2">
+                      <div class="w-4 h-4 rounded-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                      <span class="text-xs text-gray-400">Done</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <p class="text-sm font-semibold text-saas-dark">Board View</p>
+            <p class="text-xs text-saas-muted mt-0.5">Kanban that syncs with your tasks and threads</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Logos -->
+  <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="reveal text-xs tracking-widest uppercase text-saas-muted mb-8">Works with the tools you already use</p>
+      <div class="reveal flex flex-wrap justify-center gap-4">
+        <div class="logo-placeholder">Slack</div>
+        <div class="logo-placeholder">GH</div>
+        <div class="logo-placeholder">Fig</div>
+        <div class="logo-placeholder">GCal</div>
+        <div class="logo-placeholder">Lin</div>
+        <div class="logo-placeholder">Not</div>
+        <div class="logo-placeholder">Jira</div>
+        <div class="logo-placeholder">+[N]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof — specific, not AI-generic (constraints #22, #23, #25) -->
+  <section class="py-24 px-6" style="background:#fafafa;">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="reveal text-3xl md:text-4xl text-saas-dark text-center mb-16" style="letter-spacing:-0.02em;">
+        Teams that <span class="gradient-text">shipped</span> with us
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Testimonial 1 -->
+        <div class="reveal feature-card p-8">
+          <p class="text-sm text-saas-dark leading-relaxed mb-6">
+            "We had tasks in Asana, docs in Notion, and chat in Slack. Every meeting started with 'wait, where is that link?' We moved to Superflow and that question just stopped being asked."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-200 to-orange-200"></div>
+            <div>
+              <p class="text-sm font-medium text-saas-dark">[Your customer]</p>
+              <p class="text-xs text-saas-muted">[Role], [Company]</p>
+            </div>
+          </div>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="reveal reveal-delay-1 feature-card p-8">
+          <p class="text-sm text-saas-dark leading-relaxed mb-6">
+            "I was skeptical of another productivity tool. But the threaded docs changed how our remote team works — decisions happen in context now, not in a random DM I'll never find again."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-200 to-rose-200"></div>
+            <div>
+              <p class="text-sm font-medium text-saas-dark">[Your customer]</p>
+              <p class="text-xs text-saas-muted">[Role], [Company]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works — numbered steps -->
+  <section class="py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14">
+        <h2 class="reveal text-4xl md:text-5xl text-saas-dark mb-4" style="letter-spacing:-0.02em;">
+          Up and running in <span class="gradient-text">minutes</span>
+        </h2>
+        <p class="reveal text-base text-saas-muted max-w-md mx-auto">
+          No migration headache. Import from your existing tools or start fresh.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="reveal text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg, rgba(236,72,153,0.1), rgba(249,115,22,0.1));">
+            <span class="gradient-text text-lg font-bold" style="font-family:'DM Sans',sans-serif;">1</span>
+          </div>
+          <h3 class="text-lg text-saas-dark mb-2">Connect your tools</h3>
+          <p class="text-sm text-saas-muted leading-relaxed">
+            One-click integrations with Slack, GitHub, Google Calendar, and [N] more. We pull in your existing data — no manual re-entry.
+          </p>
+        </div>
+        <div class="reveal reveal-delay-1 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg, rgba(236,72,153,0.1), rgba(249,115,22,0.1));">
+            <span class="gradient-text text-lg font-bold" style="font-family:'DM Sans',sans-serif;">2</span>
+          </div>
+          <h3 class="text-lg text-saas-dark mb-2">Set up your workspace</h3>
+          <p class="text-sm text-saas-muted leading-relaxed">
+            Create projects, invite teammates, and organize by team or initiative. Templates get you started — customize everything later.
+          </p>
+        </div>
+        <div class="reveal reveal-delay-2 text-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5" style="background:linear-gradient(135deg, rgba(236,72,153,0.1), rgba(249,115,22,0.1));">
+            <span class="gradient-text text-lg font-bold" style="font-family:'DM Sans',sans-serif;">3</span>
+          </div>
+          <h3 class="text-lg text-saas-dark mb-2">Ship together</h3>
+          <p class="text-sm text-saas-muted leading-relaxed">
+            Discuss in threads, track in boards, write in docs — all in the same window. Your team's context stays in one place.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Teaser (simple, not a full grid) -->
+  <section class="py-28 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="reveal text-4xl md:text-5xl text-saas-dark mb-4" style="letter-spacing:-0.02em;">
+        Start free. Scale when ready.
+      </h2>
+      <p class="reveal text-base text-saas-muted mb-10 max-w-md mx-auto leading-relaxed">
+        Free for teams up to [N]. No credit card required. Upgrade when your team outgrows the free tier — pricing scales with your usage, not your headcount.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="btn-gradient">Get Started Free</a>
+        <a href="#" class="btn-secondary">Compare Plans</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-gray-100">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div>
+          <p class="text-lg font-bold text-saas-dark mb-4" style="font-family:'DM Sans',sans-serif;">
+            <span class="gradient-text">super</span>flow
+          </p>
+          <p class="text-sm text-saas-muted">Work, connected.</p>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-saas-dark uppercase tracking-wider mb-4">Product</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Features</a></li>
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Pricing</a></li>
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-saas-dark uppercase tracking-wider mb-4">Resources</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Documentation</a></li>
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">API Reference</a></li>
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-saas-dark uppercase tracking-wider mb-4">Company</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">About</a></li>
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Careers</a></li>
+            <li><a href="#" class="text-sm text-saas-muted hover:text-saas-dark transition-colors">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-saas-muted">Design reference 027 — Gradient SaaS</p>
+        <p class="text-xs text-saas-muted">Inspired by Superlist, Wealthsimple</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Reveal Script (animations repeat on scroll) -->
+  <script>
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

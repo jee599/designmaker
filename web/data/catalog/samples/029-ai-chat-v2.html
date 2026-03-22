@@ -1,0 +1,418 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>029-v2 — Conversational UI</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'Inter',sans-serif;background:#fafafa;color:#1f2937;overflow-x:hidden;margin:0}
+  h1,h2,h3,h4{font-family:'Inter',sans-serif;font-weight:700}
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  /* The entire page is a chat interface */
+  .chat-page{display:flex;flex-direction:column;min-height:100vh}
+  .chat-header{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);border-bottom:1px solid #e5e7eb}
+  .chat-body{flex:1;max-width:640px;margin:0 auto;width:100%;padding:5rem 1.5rem 8rem}
+  .chat-input-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-top:1px solid #e5e7eb;padding:1rem;z-index:50}
+
+  /* Messages */
+  .msg-user{display:flex;justify-content:flex-end;margin-bottom:1rem}
+  .msg-user .bubble{background:#7c3aed;color:white;border-radius:1.25rem 1.25rem 0.25rem 1.25rem;padding:0.75rem 1rem;max-width:80%;font-size:0.875rem;line-height:1.6}
+  .msg-ai{display:flex;justify-content:flex-start;margin-bottom:1rem}
+  .msg-ai .bubble{background:white;border:1px solid #e5e7eb;border-radius:1.25rem 1.25rem 1.25rem 0.25rem;padding:0.75rem 1rem;max-width:85%;font-size:0.875rem;line-height:1.6;color:#374151}
+  .msg-ai .bubble.wide{max-width:100%}
+
+  /* Timestamp */
+  .msg-time{font-size:0.625rem;color:#9ca3af;margin-top:0.25rem;padding:0 0.25rem}
+  .msg-user .msg-time{text-align:right}
+
+  /* System message / section divider */
+  .msg-system{text-align:center;margin:2rem 0;font-size:0.75rem;color:#9ca3af;position:relative}
+  .msg-system::before,.msg-system::after{content:'';position:absolute;top:50%;width:calc(50% - 4rem);height:1px;background:#e5e7eb}
+  .msg-system::before{left:0}
+  .msg-system::after{right:0}
+
+  /* Code block in chat */
+  .code-block{background:#1e1e2e;color:#cdd6f4;border-radius:0.5rem;padding:0.75rem;font-size:0.8125rem;line-height:1.6;overflow-x:auto;margin-top:0.5rem}
+  .code-block .keyword{color:#cba6f7} .code-block .string{color:#a6e3a1} .code-block .func{color:#89b4fa}
+
+  /* Typing indicator */
+  @keyframes bounce-dot{0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)}}
+  @keyframes dot-color{0%,100%{background:#7c3aed} 33%{background:#a78bfa} 66%{background:#c084fc}}
+  .typing-dot{width:0.5rem;height:0.5rem;border-radius:50%;background:#7c3aed;animation:bounce-dot 1.4s ease-in-out infinite,dot-color 2.8s ease-in-out infinite}
+  .typing-dot:nth-child(2){animation-delay:0.15s} .typing-dot:nth-child(3){animation-delay:0.3s}
+
+  /* Gradient text */
+  .gradient-text-ai{background:linear-gradient(135deg,#7c3aed,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+  /* Green pulse */
+  @keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.5)} 50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+  .pulse-dot{animation:pulse-green 2s ease-in-out infinite}
+
+  /* Animated border for input */
+  @property --angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+  @keyframes rotate-gradient{to{--angle:360deg}}
+  .animated-border{position:relative;isolation:isolate}
+  .animated-border::before{content:'';position:absolute;inset:-2px;border-radius:0.875rem;background:conic-gradient(from var(--angle),#7c3aed,#a78bfa,#c084fc,#7c3aed);animation:rotate-gradient 3s linear infinite;z-index:-1}
+  .animated-border::after{content:'';position:absolute;inset:0;border-radius:0.75rem;background:white;z-index:-1}
+
+  /* Scroll reveal - messages slide in as you scroll */
+  .chat-msg{opacity:0;transition:opacity 0.5s ease,transform 0.5s ease}
+  .chat-msg.from-right{transform:translateX(40px)}
+  .chat-msg.from-left{transform:translateX(-40px)}
+  .chat-msg.visible{opacity:1;transform:translateX(0)}
+
+  /* Feature card inside chat */
+  .feature-inline{background:#f9fafb;border:1px solid #e5e7eb;border-radius:0.75rem;padding:1rem;margin-top:0.5rem}
+  .feature-inline:hover{border-color:#a78bfa;box-shadow:0 4px 12px rgba(124,58,237,0.06)}
+
+  /* CTA pulse */
+  @keyframes subtle-pulse{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.3)} 50%{box-shadow:0 0 0 8px rgba(124,58,237,0)}}
+  .cta-pulse:hover{animation:subtle-pulse 2s ease-in-out infinite}
+
+  .chat-input:focus{outline:none;box-shadow:0 0 0 3px rgba(124,58,237,0.15)}
+</style>
+</head>
+<body>
+
+  <div class="chat-page">
+
+    <!-- Chat Header (looks like a chat app header) -->
+    <div class="chat-header">
+      <div class="max-w-640 mx-auto px-6 py-3 flex items-center justify-between" style="max-width:640px;">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 bg-violet-100 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">[Product] AI</p>
+            <div class="flex items-center gap-1.5">
+              <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
+              <span class="text-xs text-gray-500">Online — ready to help</span>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="bg-violet-600 text-white text-xs font-medium px-4 py-2 rounded-lg hover:bg-violet-700 transition-colors">Try Free</a>
+      </div>
+    </div>
+
+    <!-- Chat Body — the ENTIRE page content as a conversation -->
+    <div class="chat-body">
+
+      <!-- Welcome system message -->
+      <div class="msg-system chat-msg from-left">Welcome to [Product]</div>
+
+      <!-- AI introduces itself -->
+      <div class="msg-ai chat-msg from-left">
+        <div>
+          <div class="bubble wide">
+            <p class="font-semibold text-gray-900 mb-2">Hey! I'm <span class="gradient-text-ai">[Product]</span>.</p>
+            <p>I'm an AI that actually understands your code, your data, and your writing. Not another chatbot — a reasoning engine that thinks with you.</p>
+            <p class="mt-2 text-gray-500 text-xs">Scroll down to see what I can do. It's like having a conversation with the product itself.</p>
+          </div>
+          <div class="msg-time">Just now</div>
+        </div>
+      </div>
+
+      <!-- User asks about code -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">Code Generation</div>
+
+      <div class="msg-user chat-msg from-right">
+        <div>
+          <div class="bubble">Write a function that validates email addresses</div>
+          <div class="msg-time">12:01 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble">
+            <p class="text-gray-700 mb-2">Here's a TypeScript email validator with RFC 5322 compliance:</p>
+            <div class="code-block text-xs">
+              <span class="keyword">const</span> <span class="func">validateEmail</span> = (email: <span class="keyword">string</span>): <span class="keyword">boolean</span> =&gt; {<br>
+              &nbsp;&nbsp;<span class="keyword">const</span> pattern = <span class="string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;<br>
+              &nbsp;&nbsp;<span class="keyword">return</span> pattern.<span class="func">test</span>(email);<br>
+              };
+            </div>
+          </div>
+          <div class="msg-time">12:01 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-user chat-msg from-right" style="transition-delay:0.2s;">
+        <div>
+          <div class="bubble">Can you make it stricter? Handle edge cases too</div>
+          <div class="msg-time">12:02 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.3s;">
+        <div>
+          <div class="bubble">
+            <p>Done. Added checks for consecutive dots, missing TLD, and quoted local parts. Also added a type guard for better TypeScript integration.</p>
+            <div class="feature-inline">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="w-4 h-4 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                <span class="text-xs font-medium text-gray-700">Generated: validator + types + 4 test cases</span>
+              </div>
+              <p class="text-xs text-gray-500">Copy to clipboard or push directly to your repo</p>
+            </div>
+          </div>
+          <div class="msg-time">12:02 PM</div>
+        </div>
+      </div>
+
+      <!-- Data Analysis section -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">Data Analysis</div>
+
+      <div class="msg-user chat-msg from-right">
+        <div>
+          <div class="bubble">Clean this dataset: remove nulls, normalize dates to ISO, flag outliers in revenue</div>
+          <div class="msg-time">12:05 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble wide">
+            <p>Done. Here's the summary:</p>
+            <div class="grid grid-cols-3 gap-3 mt-3">
+              <div class="feature-inline text-center !p-3">
+                <p class="text-lg font-bold text-violet-600">[N]</p>
+                <p class="text-xs text-gray-500">Null rows removed</p>
+              </div>
+              <div class="feature-inline text-center !p-3">
+                <p class="text-lg font-bold text-violet-600">[N]</p>
+                <p class="text-xs text-gray-500">Dates normalized</p>
+              </div>
+              <div class="feature-inline text-center !p-3">
+                <p class="text-lg font-bold text-violet-600">[N]</p>
+                <p class="text-xs text-gray-500">Revenue outliers</p>
+              </div>
+            </div>
+            <p class="mt-3 text-gray-500 text-xs">Outliers flagged at &gt; 3&sigma; from mean. Download cleaned CSV below.</p>
+          </div>
+          <div class="msg-time">12:05 PM</div>
+        </div>
+      </div>
+
+      <!-- Debugging section -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">Debugging</div>
+
+      <div class="msg-user chat-msg from-right">
+        <div>
+          <div class="bubble">My API returns 403 on POST but GET works fine. Same auth token.</div>
+          <div class="msg-time">12:10 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble">
+            <p>This is likely a <strong>CORS preflight issue</strong>. Your OPTIONS handler probably isn't returning the right <code class="mono text-xs bg-gray-100 px-1 rounded">Access-Control-Allow-Methods</code> header.</p>
+            <p class="mt-2">Check your middleware order — CORS needs to run <em>before</em> auth. Here's the fix:</p>
+            <div class="code-block text-xs mt-2">
+              <span class="keyword">app</span>.<span class="func">use</span>(<span class="func">cors</span>()) <span style="color:#6c7086;">// before auth</span><br>
+              <span class="keyword">app</span>.<span class="func">use</span>(<span class="func">authMiddleware</span>())
+            </div>
+          </div>
+          <div class="msg-time">12:10 PM</div>
+        </div>
+      </div>
+
+      <!-- Creative section -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">Creative Writing</div>
+
+      <div class="msg-user chat-msg from-right">
+        <div>
+          <div class="bubble">Rewrite this headline. Current: "We help teams collaborate better"</div>
+          <div class="msg-time">12:15 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble">
+            <p class="font-medium text-gray-900 mb-2">3 options ranked by specificity:</p>
+            <ol class="space-y-2 text-sm">
+              <li>1. "Ship projects in half the meetings"</li>
+              <li>2. "Your team's second brain, minus the meetings"</li>
+              <li>3. "[Your metric] fewer threads. Same output."</li>
+            </ol>
+            <p class="mt-3 text-gray-500 text-xs">Option 1 is most concrete. Option 3 requires you to plug in a real metric.</p>
+          </div>
+          <div class="msg-time">12:15 PM</div>
+        </div>
+      </div>
+
+      <!-- Social Proof section -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">What people say</div>
+
+      <div class="msg-ai chat-msg from-left">
+        <div>
+          <div class="bubble wide">
+            <p class="text-gray-500 text-xs mb-3">Here's what actual users told us:</p>
+            <div class="feature-inline mb-3">
+              <p class="text-sm text-gray-700 leading-relaxed mb-2">"[Your real user quote — something specific about the problem it solved, not generic praise. Include a detail that only a real user would mention.]"</p>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-violet-200 rounded-full"></div>
+                <div><p class="text-xs font-medium text-gray-900">[Name]</p><p class="text-xs text-gray-500">[Role at Company]</p></div>
+              </div>
+            </div>
+            <div class="feature-inline">
+              <p class="text-sm text-gray-700 leading-relaxed mb-2">"[Second testimonial — mention a specific use case. Something like 'I used it to debug a race condition that took me 3 days — fixed in one conversation.']"</p>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-violet-200 rounded-full"></div>
+                <div><p class="text-xs font-medium text-gray-900">[Name]</p><p class="text-xs text-gray-500">[Role at Company]</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="msg-time">12:18 PM</div>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">How it works</div>
+
+      <div class="msg-user chat-msg from-right">
+        <div>
+          <div class="bubble">How do I get started?</div>
+          <div class="msg-time">12:20 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble wide">
+            <p class="font-medium text-gray-900 mb-3">Three steps. No setup wizard.</p>
+            <div class="space-y-3">
+              <div class="flex gap-3 items-start">
+                <div class="w-7 h-7 bg-violet-600 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">1</div>
+                <div><h4 class="text-sm font-semibold text-gray-900">Start a conversation</h4><p class="text-xs text-gray-500 mt-0.5">Type what you need in plain language. No syntax to learn.</p></div>
+              </div>
+              <div class="flex gap-3 items-start">
+                <div class="w-7 h-7 bg-violet-600 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">2</div>
+                <div><h4 class="text-sm font-semibold text-gray-900">Iterate in context</h4><p class="text-xs text-gray-500 mt-0.5">Follow up naturally. The AI remembers everything from your conversation.</p></div>
+              </div>
+              <div class="flex gap-3 items-start">
+                <div class="w-7 h-7 bg-violet-600 text-white rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0">3</div>
+                <div><h4 class="text-sm font-semibold text-gray-900">Export and use</h4><p class="text-xs text-gray-500 mt-0.5">Copy code, download files, or integrate via API. No lock-in.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="msg-time">12:20 PM</div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">Pricing</div>
+
+      <div class="msg-user chat-msg from-right">
+        <div>
+          <div class="bubble">What does it cost?</div>
+          <div class="msg-time">12:22 PM</div>
+        </div>
+      </div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble wide">
+            <div class="grid grid-cols-2 gap-3 mt-1">
+              <div class="feature-inline">
+                <h4 class="font-semibold text-gray-900 mb-1">Free</h4>
+                <p class="text-xl font-bold text-gray-900">$0</p>
+                <p class="text-xs text-gray-500 mb-3">[N] messages / month</p>
+                <ul class="space-y-1.5 text-xs text-gray-600">
+                  <li class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>[Feature 1]</li>
+                  <li class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>[Feature 2]</li>
+                </ul>
+              </div>
+              <div class="bg-violet-600 rounded-xl p-4 text-white">
+                <h4 class="font-semibold mb-1">Pro</h4>
+                <p class="text-xl font-bold">$[N]</p>
+                <p class="text-xs text-violet-200 mb-3">/ month</p>
+                <ul class="space-y-1.5 text-xs text-violet-100">
+                  <li class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Unlimited</li>
+                  <li class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Priority</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="msg-time">12:22 PM</div>
+        </div>
+      </div>
+
+      <!-- CTA / Try it -->
+      <div class="msg-system chat-msg from-left" style="margin:2.5rem 0;">Try it yourself</div>
+
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.1s;">
+        <div>
+          <div class="bubble wide text-center">
+            <p class="font-semibold text-gray-900 mb-2">Ready to start?</p>
+            <p class="text-gray-500 text-sm mb-4">No signup required. Just type below.</p>
+            <a href="#" class="inline-block bg-violet-600 text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-violet-700 transition-colors cta-pulse">Start for free</a>
+            <p class="text-xs text-gray-400 mt-3">[Product] can make mistakes. Verify important information.</p>
+          </div>
+          <div class="msg-time">12:23 PM</div>
+        </div>
+      </div>
+
+      <!-- Typing indicator at the end -->
+      <div class="msg-ai chat-msg from-left" style="transition-delay:0.2s;">
+        <div>
+          <div class="bubble" style="padding:0.875rem 1rem;">
+            <div class="flex gap-1.5">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Integration strip -->
+      <div class="mt-8 text-center chat-msg from-left">
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">Integrates with your stack</p>
+        <div class="flex flex-wrap justify-center gap-6 items-center">
+          <div class="flex items-center gap-1.5 text-gray-400"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span class="text-xs font-medium">[Tool 1]</span></div>
+          <div class="flex items-center gap-1.5 text-gray-400"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg><span class="text-xs font-medium">[Tool 2]</span></div>
+          <div class="flex items-center gap-1.5 text-gray-400"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7"/></svg><span class="text-xs font-medium">[Tool 3]</span></div>
+          <div class="flex items-center gap-1.5 text-gray-400"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span class="text-xs font-medium">[Tool 4]</span></div>
+        </div>
+      </div>
+
+      <!-- Footer inside chat -->
+      <div class="mt-12 pt-8 border-t border-gray-100 text-center chat-msg from-left">
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <svg class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          <span class="font-semibold text-gray-900">[Product]</span>
+        </div>
+        <div class="flex justify-center gap-6 text-xs text-gray-500">
+          <a href="#" class="hover:text-violet-600 transition-colors">Privacy</a>
+          <a href="#" class="hover:text-violet-600 transition-colors">Terms</a>
+          <a href="#" class="hover:text-violet-600 transition-colors">Docs</a>
+          <a href="#" class="hover:text-violet-600 transition-colors">Status</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed chat input bar at bottom -->
+    <div class="chat-input-bar">
+      <div class="max-w-640 mx-auto" style="max-width:640px;">
+        <div class="animated-border rounded-xl shadow-lg p-2">
+          <div class="flex items-center gap-3">
+            <input type="text" placeholder="Ask anything..." class="chat-input flex-1 px-4 py-3 text-sm text-gray-700 bg-transparent rounded-lg border-none placeholder:text-gray-400">
+            <button class="cta-pulse bg-violet-600 text-white p-3 rounded-lg hover:bg-violet-700 transition-colors flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if(entry.isIntersecting){entry.target.classList.add('visible');}else{entry.target.classList.remove('visible');} });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.chat-msg').forEach(el => { revealObserver.observe(el); });
+  </script>
+
+</body>
+</html>

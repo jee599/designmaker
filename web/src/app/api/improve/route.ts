@@ -6,17 +6,12 @@ import { assembleImprovePrompt } from "@/lib/promptAssembler";
 
 const CATALOG_DIR = join(
   process.cwd(),
-  "..",
-  "output",
-  "web-design-system",
-  "references",
+  "data",
   "catalog"
 );
 const SKILL_PATH = join(
   process.cwd(),
-  "..",
-  "output",
-  "web-design-system",
+  "data",
   "SKILL.md"
 );
 
@@ -66,7 +61,7 @@ export async function POST(request: NextRequest) {
       skillContent = await readFile(SKILL_PATH, "utf-8");
     } catch {
       return Response.json(
-        { error: "SKILL.md를 읽을 수 없습니다." },
+        { error: "Could not read SKILL.md." },
         { status: 500 }
       );
     }

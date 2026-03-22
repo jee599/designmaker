@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>024 — Monochrome Type</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Space Grotesk', sans-serif; }
+
+    body {
+      background: #ffffff;
+      color: #000000;
+      overflow-x: hidden;
+    }
+
+    /* Section hover invert */
+    .invert-section {
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .invert-section:hover {
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    /* Word-by-word reveal */
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      margin-right: 0.25em;
+    }
+    .word.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Line reveal for body text */
+    .line-reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .line-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Navigation link hover */
+    .nav-link {
+      position: relative;
+      transition: opacity 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: currentColor;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Cursor dot (decorative) */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: #000000;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      transition: transform 0.15s ease;
+      mix-blend-mode: difference;
+    }
+
+    /* Section divider line */
+    .divider-line {
+      width: 0;
+      height: 1px;
+      background: currentColor;
+      transition: width 1.2s ease;
+    }
+    .divider-line.visible {
+      width: 100%;
+    }
+
+    /* Extreme letter-spacing for headings */
+    .tight { letter-spacing: -0.04em; }
+    .tighter { letter-spacing: -0.05em; }
+
+    /* Smooth scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Selection style */
+    ::selection {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* Footer email hover */
+    .email-link {
+      transition: letter-spacing 0.4s ease;
+    }
+    .email-link:hover {
+      letter-spacing: 0.02em;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontSize: {
+            '9xl': ['9rem', { lineHeight: '0.9' }],
+            '10xl': ['10rem', { lineHeight: '0.85' }],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Fixed Navigation — words in corners -->
+  <nav class="fixed top-0 left-0 right-0 z-50 pointer-events-none" style="mix-blend-mode: difference;">
+    <div class="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+      <a href="#hero" class="nav-link pointer-events-auto text-base text-white font-normal">Index</a>
+      <div class="flex items-center gap-8">
+        <a href="#work" class="nav-link pointer-events-auto text-base text-white font-normal">Work</a>
+        <a href="#philosophy" class="nav-link pointer-events-auto text-base text-white font-normal">About</a>
+        <a href="#contact" class="nav-link pointer-events-auto text-base text-white font-normal border-b-2 border-white pb-0.5">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Section 1: Hero — centered giant name -->
+  <section id="hero" class="invert-section min-h-screen flex items-center justify-center px-8">
+    <div class="text-center">
+      <h1 class="text-7xl sm:text-8xl md:text-9xl lg:text-10xl font-normal tight leading-none mb-6">
+        <span class="word-wrap" data-split="true">Studio Null</span>
+      </h1>
+      <p class="line-reveal text-lg font-light tracking-wide" style="color: inherit; opacity: 0.5;">
+        Design direction & digital craft
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 2: Work — left-aligned -->
+  <section id="work" class="invert-section min-h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 py-20">
+    <div class="max-w-7xl">
+      <div class="divider-line mb-12"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-12" style="opacity: 0.4;">Selected Work</p>
+
+      <div class="space-y-16 md:space-y-24">
+        <!-- Project 1 -->
+        <div class="group">
+          <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tight leading-none mb-4">
+            <span class="word-wrap" data-split="true">Reframe</span>
+          </h2>
+          <div class="flex flex-col md:flex-row md:items-end gap-4 md:gap-12">
+            <p class="line-reveal text-lg font-light max-w-lg leading-relaxed" style="opacity: 0.6;">
+              Visual identity and web platform for a cognitive behavioral therapy startup. Stripped the clinical feel, kept the trust. Launched with 3,847 signups in the first week.
+            </p>
+            <p class="line-reveal text-sm tracking-widest uppercase whitespace-nowrap" style="opacity: 0.3;">2025</p>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="group">
+          <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tight leading-none mb-4">
+            <span class="word-wrap" data-split="true">Voidform</span>
+          </h2>
+          <div class="flex flex-col md:flex-row md:items-end gap-4 md:gap-12">
+            <p class="line-reveal text-lg font-light max-w-lg leading-relaxed" style="opacity: 0.6;">
+              Generative art tool for architects. Interface had to disappear — the output is the only thing that matters. Exhibited at Seoul Design Week.
+            </p>
+            <p class="line-reveal text-sm tracking-widest uppercase whitespace-nowrap" style="opacity: 0.3;">2024</p>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="group">
+          <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tight leading-none mb-4">
+            <span class="word-wrap" data-split="true">Murmur</span>
+          </h2>
+          <div class="flex flex-col md:flex-row md:items-end gap-4 md:gap-12">
+            <p class="line-reveal text-lg font-light max-w-lg leading-relaxed" style="opacity: 0.6;">
+              Audio journaling app. No text input — speak, and AI structures your thoughts. Design challenge: making silence feel intentional, not empty.
+            </p>
+            <p class="line-reveal text-sm tracking-widest uppercase whitespace-nowrap" style="opacity: 0.3;">2024</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Approach — centered, large statement -->
+  <section class="invert-section min-h-screen flex flex-col items-center justify-center px-8 py-20">
+    <div class="max-w-5xl text-center">
+      <div class="divider-line mx-auto mb-12" style="max-width: 80px;"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-16" style="opacity: 0.4;">Approach</p>
+
+      <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tight leading-tight mb-12">
+        <span class="word-wrap" data-split="true">Every pixel must justify its existence.</span>
+      </h2>
+
+      <div class="max-w-2xl mx-auto space-y-8">
+        <p class="line-reveal text-lg font-light leading-relaxed" style="opacity: 0.6;">
+          The process is subtractive. Start with everything the brief asks for, then remove until only the essential remains. What survives that filter is what ships.
+        </p>
+        <p class="line-reveal text-lg font-light leading-relaxed" style="opacity: 0.6;">
+          Typography is the interface. When letters are set with enough care — size, weight, spacing, rhythm — they don't need decoration. They become the design.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Recognition — left-aligned, smaller text list -->
+  <section class="invert-section min-h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 py-20">
+    <div class="max-w-7xl">
+      <div class="divider-line mb-12"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-12" style="opacity: 0.4;">Recognition</p>
+
+      <div class="space-y-6">
+        <div class="line-reveal flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Awwwards SOTD</h3>
+          <span class="text-sm tracking-widest uppercase" style="opacity: 0.3;">Reframe — 2025</span>
+        </div>
+        <div class="line-reveal flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">FWA of the Day</h3>
+          <span class="text-sm tracking-widest uppercase" style="opacity: 0.3;">Voidform — 2024</span>
+        </div>
+        <div class="line-reveal flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">CSS Design Awards</h3>
+          <span class="text-sm tracking-widest uppercase" style="opacity: 0.3;">Murmur — 2024</span>
+        </div>
+        <div class="line-reveal flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Communication Arts</h3>
+          <span class="text-sm tracking-widest uppercase" style="opacity: 0.3;">Annual — 2024</span>
+        </div>
+        <div class="line-reveal flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">D&AD Pencil</h3>
+          <span class="text-sm tracking-widest uppercase" style="opacity: 0.3;">Type Work — 2023</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Philosophy — right-aligned -->
+  <section id="philosophy" class="invert-section min-h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 py-20">
+    <div class="max-w-7xl ml-auto text-right">
+      <div class="divider-line ml-auto mb-12"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-12" style="opacity: 0.4;">About</p>
+
+      <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tight leading-none mb-8">
+        <span class="word-wrap" data-split="true">Less, then less again.</span>
+      </h2>
+
+      <div class="max-w-2xl ml-auto space-y-6">
+        <p class="line-reveal text-lg font-light leading-relaxed" style="opacity: 0.6;">
+          Studio Null is one person working at the intersection of typography and interaction. Based in Seoul, working globally. Every project starts by removing what doesn't earn its place on the page.
+        </p>
+        <p class="line-reveal text-lg font-light leading-relaxed" style="opacity: 0.6;">
+          Former design lead at a company you haven't heard of. Left to do work that's more honest. Clients come through referrals only — no portfolio deck, no pitch process. The work speaks or it doesn't.
+        </p>
+        <p class="line-reveal text-lg font-light leading-relaxed" style="opacity: 0.6;">
+          Tools: Figma for wireframes, code for everything else. No design system — every project gets its own rules, then I follow them obsessively.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Services — left-aligned, large text list -->
+  <section class="invert-section min-h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 py-20">
+    <div class="max-w-7xl">
+      <div class="divider-line mb-12"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-16" style="opacity: 0.4;">Capabilities</p>
+
+      <div class="space-y-4">
+        <div class="line-reveal group">
+          <div class="flex items-baseline justify-between border-b border-black/10 pb-4 group-hover:border-black transition-colors">
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Brand Identity</h3>
+            <span class="text-sm" style="opacity: 0.3;">01</span>
+          </div>
+        </div>
+        <div class="line-reveal group">
+          <div class="flex items-baseline justify-between border-b border-black/10 pb-4 group-hover:border-black transition-colors">
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Web Design & Dev</h3>
+            <span class="text-sm" style="opacity: 0.3;">02</span>
+          </div>
+        </div>
+        <div class="line-reveal group">
+          <div class="flex items-baseline justify-between border-b border-black/10 pb-4 group-hover:border-black transition-colors">
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Typography Systems</h3>
+            <span class="text-sm" style="opacity: 0.3;">03</span>
+          </div>
+        </div>
+        <div class="line-reveal group">
+          <div class="flex items-baseline justify-between border-b border-black/10 pb-4 group-hover:border-black transition-colors">
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Art Direction</h3>
+            <span class="text-sm" style="opacity: 0.3;">04</span>
+          </div>
+        </div>
+        <div class="line-reveal group">
+          <div class="flex items-baseline justify-between border-b border-black/10 pb-4 group-hover:border-black transition-colors">
+            <h3 class="text-3xl sm:text-4xl md:text-5xl font-normal tight">Motion & Interaction</h3>
+            <span class="text-sm" style="opacity: 0.3;">05</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Process — centered, numbered steps -->
+  <section class="invert-section min-h-screen flex flex-col items-center justify-center px-8 py-20">
+    <div class="max-w-4xl text-center">
+      <div class="divider-line mx-auto mb-12" style="max-width: 80px;"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-16" style="opacity: 0.4;">Process</p>
+
+      <div class="space-y-16 text-left">
+        <div class="line-reveal">
+          <div class="flex items-start gap-8">
+            <span class="text-6xl md:text-7xl font-light tight" style="opacity: 0.15; line-height: 1;">01</span>
+            <div>
+              <h3 class="text-2xl md:text-3xl font-normal tight mb-3">Listen</h3>
+              <p class="text-lg font-light leading-relaxed" style="opacity: 0.5;">
+                A one-hour call. No deck. I ask what you're building, who it's for, and what keeps you up at night about the current version. Usually the real brief emerges 40 minutes in.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="line-reveal">
+          <div class="flex items-start gap-8">
+            <span class="text-6xl md:text-7xl font-light tight" style="opacity: 0.15; line-height: 1;">02</span>
+            <div>
+              <h3 class="text-2xl md:text-3xl font-normal tight mb-3">Reduce</h3>
+              <p class="text-lg font-light leading-relaxed" style="opacity: 0.5;">
+                I take the brief and cut it in half. Then cut it again. What remains goes into a one-page design direction — typography scale, color (or lack of it), layout rhythm. We align before a single pixel is placed.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="line-reveal">
+          <div class="flex items-start gap-8">
+            <span class="text-6xl md:text-7xl font-light tight" style="opacity: 0.15; line-height: 1;">03</span>
+            <div>
+              <h3 class="text-2xl md:text-3xl font-normal tight mb-3">Build</h3>
+              <p class="text-lg font-light leading-relaxed" style="opacity: 0.5;">
+                Design and code happen simultaneously. I don't hand off Figma files — I build the real thing. Two review rounds. Ship date is set on day one and doesn't move.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="line-reveal">
+          <div class="flex items-start gap-8">
+            <span class="text-6xl md:text-7xl font-light tight" style="opacity: 0.15; line-height: 1;">04</span>
+            <div>
+              <h3 class="text-2xl md:text-3xl font-normal tight mb-3">Refine</h3>
+              <p class="text-lg font-light leading-relaxed" style="opacity: 0.5;">
+                After launch, one week of tuning. Kerning adjustments, animation timing, responsive edge cases. The 2% that separates good from precise.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Colophon — right-aligned, small details -->
+  <section class="invert-section py-32 flex flex-col justify-center px-8 md:px-16 lg:px-24">
+    <div class="max-w-7xl ml-auto text-right">
+      <div class="divider-line ml-auto mb-12"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-12" style="opacity: 0.4;">Colophon</p>
+
+      <div class="max-w-xl ml-auto space-y-4">
+        <p class="line-reveal text-lg font-light" style="opacity: 0.5;">
+          This site is set in Space Grotesk, designed by Florian Karsten. Hosted on Vercel. No analytics, no cookies, no tracking. Built with vanilla HTML and CSS in a single afternoon.
+        </p>
+        <p class="line-reveal text-lg font-light" style="opacity: 0.5;">
+          Last updated March 2026. Weights: 300, 400. Zero JavaScript frameworks. Zero dependencies. The page weighs 47KB total.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 9: Contact — centered -->
+  <section id="contact" class="invert-section min-h-screen flex flex-col items-center justify-center px-8 py-20">
+    <div class="text-center">
+      <div class="divider-line mx-auto mb-12" style="max-width: 120px;"></div>
+      <p class="line-reveal text-sm font-normal tracking-widest uppercase mb-12" style="opacity: 0.4;">Get in touch</p>
+
+      <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tight leading-none mb-8">
+        <span class="word-wrap" data-split="true">Let's make something quiet.</span>
+      </h2>
+
+      <p class="line-reveal text-lg font-light mb-4" style="opacity: 0.5;">
+        Currently taking on two projects per quarter.
+      </p>
+      <p class="line-reveal text-lg font-light mb-4" style="opacity: 0.5;">
+        Response time: usually within a day.
+      </p>
+      <p class="line-reveal text-lg font-light" style="opacity: 0.5;">
+        Minimum engagement: 4 weeks. No hourly rates — project-based only.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer — email + minimal info -->
+  <footer class="px-8 md:px-16 lg:px-24 py-12 border-t border-black/10">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 mb-12">
+        <div>
+          <a href="mailto:hello@studionull.co" class="email-link text-3xl md:text-4xl lg:text-5xl font-normal tight hover:opacity-60 transition-opacity block mb-4">
+            hello@studionull.co
+          </a>
+          <p class="line-reveal text-sm font-light" style="opacity: 0.4;">
+            The fastest way to start a conversation.
+          </p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs tracking-widest uppercase mb-2" style="opacity: 0.3;">Seoul / Everywhere</p>
+          <p class="text-xs tracking-widest uppercase" style="opacity: 0.3;">UTC+9</p>
+        </div>
+      </div>
+      <div class="divider-line mb-8" style="background: rgba(0,0,0,0.08);"></div>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-xs" style="opacity: 0.25;">Studio Null. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="nav-link text-xs" style="opacity: 0.35;">Instagram</a>
+          <a href="#" class="nav-link text-xs" style="opacity: 0.35;">Twitter</a>
+          <a href="#" class="nav-link text-xs" style="opacity: 0.35;">Are.na</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Word-by-word split and reveal
+    document.querySelectorAll('[data-split="true"]').forEach(el => {
+      const text = el.textContent.trim();
+      const words = text.split(/\s+/);
+      el.innerHTML = words.map(w => `<span class="word">${w}</span>`).join('');
+    });
+
+    // Intersection Observer for reveals
+    const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -30px 0px' };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Word reveals with staggered delay
+          const words = entry.target.querySelectorAll('.word');
+          words.forEach((word, i) => {
+            setTimeout(() => word.classList.add('visible'), i * 80);
+          });
+
+          // Line reveals
+          const lines = entry.target.querySelectorAll('.line-reveal');
+          lines.forEach((line, i) => {
+            setTimeout(() => line.classList.add('visible'), 200 + i * 150);
+          });
+
+          // Divider lines
+          const dividers = entry.target.querySelectorAll('.divider-line');
+          dividers.forEach(d => d.classList.add('visible'));
+        } else {
+          // Reset on scroll out for re-trigger
+          const words = entry.target.querySelectorAll('.word');
+          words.forEach(word => word.classList.remove('visible'));
+
+          const lines = entry.target.querySelectorAll('.line-reveal');
+          lines.forEach(line => line.classList.remove('visible'));
+
+          const dividers = entry.target.querySelectorAll('.divider-line');
+          dividers.forEach(d => d.classList.remove('visible'));
+        }
+      });
+    }, observerOptions);
+
+    // Observe sections
+    document.querySelectorAll('section, footer').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+
+</body>
+</html>

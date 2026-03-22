@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>049 — Swiss Design v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Inter"', 'Helvetica Neue', 'Helvetica', 'sans-serif'],
+            body: ['"Inter"', 'Helvetica Neue', 'Helvetica', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            surface: '#ffffff',
+            ink: '#000000',
+            grid: '#e5e5e5',
+            muted: '#737373',
+            red: '#ef4444',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, sans-serif;
+      font-weight: 400;
+      background: #ffffff;
+      color: #000000;
+      overflow-x: hidden;
+    }
+    h1, h2, h3 { font-family: 'Inter', 'Helvetica Neue', Helvetica, sans-serif; font-weight: 700; }
+
+    /* Visible grid background */
+    .swiss-grid {
+      background-image:
+        linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+        linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .swiss-grid-subtle {
+      background-image:
+        linear-gradient(to right, rgba(229,229,229,0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(229,229,229,0.4) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* Single red accent dot */
+    .red-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      display: inline-block;
+    }
+
+    /* Scroll reveal */
+    .swiss-reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .swiss-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .swiss-delay-1 { transition-delay: 0.1s; }
+    .swiss-delay-2 { transition-delay: 0.2s; }
+    .swiss-delay-3 { transition-delay: 0.3s; }
+    .swiss-delay-4 { transition-delay: 0.4s; }
+
+    /* Horizontal rule animation */
+    .swiss-line {
+      height: 2px;
+      background: #000;
+      width: 0;
+      transition: width 0.8s ease;
+    }
+    .swiss-line.visible { width: 100%; }
+
+    /* Number emphasis */
+    .swiss-number {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 3rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* Hover interactions */
+    .swiss-card {
+      border: 1px solid #e5e5e5;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .swiss-card:hover {
+      border-color: #000;
+      transform: translateY(-2px);
+    }
+
+    /* Red accent line animation */
+    .red-line {
+      height: 2px;
+      background: #ef4444;
+      width: 0;
+      transition: width 1s ease;
+    }
+    .red-line.visible {
+      width: 40px;
+    }
+
+    /* Fade from right */
+    .swiss-reveal-right {
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .swiss-reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav — strict alignment -->
+  <nav class="fixed top-0 left-0 w-full z-50 bg-white border-b border-grid px-8 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="red-dot"></span>
+      <span class="font-heading font-bold text-lg tracking-tight">GRID</span>
+    </div>
+    <div class="flex items-center gap-8">
+      <a href="#system" class="text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors">System</a>
+      <a href="#data" class="text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors">Data</a>
+      <a href="#about" class="text-xs uppercase tracking-widest text-muted hover:text-ink transition-colors">About</a>
+      <a href="#start" class="text-xs uppercase tracking-widest bg-ink text-white px-4 py-2 hover:bg-neutral-800 transition-colors">Start</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="min-h-screen swiss-grid flex items-end px-8 pb-24 pt-32">
+    <div class="max-w-5xl w-full">
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-8">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted mb-6">Design infrastructure for systematic teams</p>
+          <h1 class="swiss-reveal swiss-delay-1 text-5xl md:text-7xl lg:text-8xl font-heading leading-none tracking-tight mb-8">
+            Order from<br>complexity<span class="text-red">.</span>
+          </h1>
+          <div class="swiss-reveal swiss-delay-2">
+            <div class="swiss-line mb-8"></div>
+          </div>
+          <p class="swiss-reveal swiss-delay-3 text-base text-muted max-w-md leading-relaxed mb-8">
+            A design system that enforces consistency without killing creativity.
+            Strict grids, flexible components, zero ambiguity.
+          </p>
+        </div>
+        <div class="col-span-12 md:col-span-4 flex flex-col justify-end">
+          <div class="swiss-reveal swiss-delay-3 text-right md:text-left">
+            <p class="swiss-number">2026</p>
+            <p class="text-xs uppercase tracking-widest text-muted mt-2">Current version</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- System overview -->
+  <section id="system" class="px-8 py-24 md:py-32 swiss-grid-subtle">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted">01 — System</p>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-5xl font-heading tracking-tight mb-4">Built on principles</h2>
+          <div class="swiss-reveal swiss-delay-2 swiss-line mb-8"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-4 swiss-reveal swiss-delay-1">
+          <div class="swiss-card p-6">
+            <svg class="w-6 h-6 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+            <h3 class="font-heading text-lg mb-2">Grid System</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              12-column grid, 80px baseline. Every element snaps to intersection points.
+              No "eyeballing" — the grid decides.
+            </p>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-4 swiss-reveal swiss-delay-2">
+          <div class="swiss-card p-6">
+            <svg class="w-6 h-6 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            <h3 class="font-heading text-lg mb-2">Type Scale</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              5 sizes. 2 weights. No exceptions. The constraint is the point —
+              hierarchy comes from size and placement, not decoration.
+            </p>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-4 swiss-reveal swiss-delay-3">
+          <div class="swiss-card p-6">
+            <svg class="w-6 h-6 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <h3 class="font-heading text-lg mb-2">Token System</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              Design tokens as source of truth. Change one value,
+              every component updates. Tested across 847 component permutations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data section — numbers prominent -->
+  <section id="data" class="px-8 py-24 md:py-32 bg-ink text-white swiss-grid" style="background-image: linear-gradient(to right, rgba(64,64,64,0.3) 1px, transparent 1px), linear-gradient(to bottom, rgba(64,64,64,0.3) 1px, transparent 1px); background-color: #000; background-size: 80px 80px;">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-neutral-500">02 — Data</p>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-5xl font-heading tracking-tight mb-4">By the numbers</h2>
+          <div class="swiss-reveal swiss-delay-2 swiss-line mb-8" style="background: #fff;"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-8">
+        <div class="col-span-6 md:col-span-3 swiss-reveal swiss-delay-1">
+          <p class="swiss-number text-white">[metric]</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-500 mt-3">components in system</p>
+        </div>
+        <div class="col-span-6 md:col-span-3 swiss-reveal swiss-delay-2">
+          <p class="swiss-number text-white">[metric]</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-500 mt-3">design tokens</p>
+        </div>
+        <div class="col-span-6 md:col-span-3 swiss-reveal swiss-delay-3">
+          <p class="swiss-number text-white">[metric]</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-500 mt-3">ms avg render</p>
+        </div>
+        <div class="col-span-6 md:col-span-3 swiss-reveal swiss-delay-4">
+          <p class="swiss-number text-red">[metric]</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-500 mt-3">breaking changes since v1</p>
+        </div>
+      </div>
+      <div class="swiss-reveal mt-16">
+        <p class="text-sm text-neutral-400 leading-relaxed max-w-lg">
+          We track everything. Component adoption rates across teams, render performance per viewport,
+          accessibility violations per sprint. The system improves because we measure it, not because we guess.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Philosophy -->
+  <section id="about" class="px-8 py-24 md:py-32 swiss-grid-subtle">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted">03 — About</p>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-5xl font-heading tracking-tight mb-4">Systematic, not sterile</h2>
+          <div class="swiss-reveal swiss-delay-2 swiss-line mb-8"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-8">
+        <div class="col-span-12 md:col-span-6 swiss-reveal swiss-delay-1">
+          <p class="text-base leading-relaxed text-muted mb-6">
+            The Swiss style isn't about removing personality. It's about giving personality
+            a structure to live inside. When every element has a reason and a position,
+            the work speaks louder than the decoration.
+          </p>
+          <p class="text-base leading-relaxed text-muted">
+            We built this system after watching three redesigns fail because nobody
+            agreed on spacing. Now spacing is a function, not a feeling.
+          </p>
+        </div>
+        <div class="col-span-12 md:col-span-6 swiss-reveal swiss-delay-2">
+          <!-- Testimonial — large text, no card, no border-left -->
+          <p class="text-2xl font-heading tracking-tight leading-snug mb-4">
+            "First design system where our junior designers
+            couldn't break the layout even if they tried.
+            The grid enforces itself."
+          </p>
+          <p class="text-xs uppercase tracking-widest text-muted">
+            — product design lead, fintech startup with 6 designers
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Component showcase -->
+  <section class="px-8 py-24 md:py-32 border-t border-grid">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted">04 — Components</p>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-5xl font-heading tracking-tight mb-4">Sample from the library</h2>
+          <div class="swiss-reveal swiss-delay-2 swiss-line mb-8"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-8 swiss-reveal swiss-delay-1">
+          <div class="swiss-card p-8">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="text-xs font-mono uppercase tracking-widest text-muted">Button</span>
+              <span class="red-dot"></span>
+              <span class="text-xs font-mono text-muted">v3.1</span>
+            </div>
+            <div class="flex gap-3 flex-wrap mb-6">
+              <button class="bg-ink text-white px-6 py-2.5 text-sm hover:bg-neutral-800 transition-colors">Primary</button>
+              <button class="border border-ink text-ink px-6 py-2.5 text-sm hover:bg-ink hover:text-white transition-colors">Secondary</button>
+              <button class="text-ink underline underline-offset-4 px-6 py-2.5 text-sm hover:text-muted transition-colors">Tertiary</button>
+            </div>
+            <p class="text-xs font-mono text-muted">3 variants · 3 sizes · 2 states · accessible</p>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-4 swiss-reveal swiss-delay-2">
+          <div class="swiss-card p-8 h-full flex flex-col justify-between">
+            <div>
+              <p class="text-xs font-mono uppercase tracking-widest text-muted mb-4">Spacing Scale</p>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-2 h-2 bg-ink"></div>
+                  <span class="text-xs font-mono">4px</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-4 h-2 bg-ink"></div>
+                  <span class="text-xs font-mono">8px</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-2 bg-ink"></div>
+                  <span class="text-xs font-mono">16px</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-16 h-2 bg-ink"></div>
+                  <span class="text-xs font-mono">32px</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-20 h-2 bg-ink"></div>
+                  <span class="text-xs font-mono">80px</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs font-mono text-muted mt-4">Base unit: 4px</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Changelog / Updates -->
+  <section class="px-8 py-24 md:py-32 border-t border-grid">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted">05 — Changelog</p>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-5xl font-heading tracking-tight mb-4">Recent updates</h2>
+          <div class="swiss-reveal swiss-delay-2 swiss-line mb-8"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs font-mono text-muted">2026-03-14</p>
+        </div>
+        <div class="col-span-12 md:col-span-9 swiss-reveal swiss-delay-1">
+          <h3 class="font-heading text-lg mb-2">v3.1.0 — Grid Inspector</h3>
+          <p class="text-sm text-muted leading-relaxed mb-6">
+            Toggle grid overlay in any viewport. See exactly where elements snap.
+            Added 12-column, 8-column, and custom grid presets.
+            Performance: grid rendering uses CSS only, zero JS overhead.
+          </p>
+        </div>
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs font-mono text-muted">2026-02-28</p>
+        </div>
+        <div class="col-span-12 md:col-span-9 swiss-reveal swiss-delay-2">
+          <h3 class="font-heading text-lg mb-2">v3.0.2 — Token Migration Tool</h3>
+          <p class="text-sm text-muted leading-relaxed mb-6">
+            One-command migration from v2 tokens to v3 format.
+            Handles custom aliases, deprecated values, and edge cases.
+            Tested on 23 codebases with zero breaking changes.
+          </p>
+        </div>
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs font-mono text-muted">2026-02-10</p>
+        </div>
+        <div class="col-span-12 md:col-span-9 swiss-reveal swiss-delay-3">
+          <h3 class="font-heading text-lg mb-2">v3.0.0 — Major Release</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Complete type scale revision. Spacing system moved to 4px base (from 8px).
+            New color token architecture with semantic naming.
+            Dark mode tokens ship as first-class. Figma plugin v2 launched.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="start" class="px-8 py-24 md:py-32 border-t border-grid swiss-grid-subtle">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-8">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted mb-6">05 — Start</p>
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-6xl font-heading tracking-tight mb-6">
+            Adopt the system<span class="text-red">.</span>
+          </h2>
+          <p class="swiss-reveal swiss-delay-2 text-base text-muted leading-relaxed max-w-md mb-8">
+            Open source core. Premium tokens and templates for teams.
+            The grid is free. Structure costs nothing.
+          </p>
+          <div class="swiss-reveal swiss-delay-3 flex gap-4 flex-wrap">
+            <a href="#" class="bg-ink text-white px-8 py-3 text-sm hover:bg-neutral-800 transition-colors">
+              View documentation
+            </a>
+            <a href="#" class="border border-ink text-ink px-8 py-3 text-sm hover:bg-ink hover:text-white transition-colors">
+              GitHub repo
+            </a>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-4 swiss-reveal swiss-delay-3 flex items-end">
+          <div>
+            <p class="swiss-number">v3<span class="text-red">.</span>1</p>
+            <p class="text-xs uppercase tracking-widest text-muted mt-2">Latest stable</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="px-8 py-24 md:py-32 border-t border-grid">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-12 gap-4 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <p class="swiss-reveal text-xs uppercase tracking-widest text-muted">07 — FAQ</p>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <h2 class="swiss-reveal swiss-delay-1 text-4xl md:text-5xl font-heading tracking-tight mb-4">Common questions</h2>
+          <div class="swiss-reveal swiss-delay-2 swiss-line mb-8"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-3"></div>
+        <div class="col-span-12 md:col-span-9 space-y-8">
+          <div class="swiss-reveal swiss-delay-1">
+            <h3 class="font-heading text-lg mb-2">Can I use GRID with an existing design system?</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              Yes. GRID is additive. Import your existing tokens,
+              map them to the grid structure, and the system enforces
+              your rules. It doesn't replace your decisions — it enforces them.
+            </p>
+          </div>
+          <div class="swiss-reveal swiss-delay-2">
+            <h3 class="font-heading text-lg mb-2">What frameworks are supported?</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              React, Vue, Svelte, and vanilla HTML/CSS.
+              Tokens export as CSS custom properties, SCSS variables,
+              JS modules, or JSON. Framework adapters handle the rest.
+            </p>
+          </div>
+          <div class="swiss-reveal swiss-delay-3">
+            <h3 class="font-heading text-lg mb-2">How do I enforce the grid across a team?</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              Lint rules ship with every install. Components that break
+              the grid throw warnings in dev mode. The Figma plugin
+              snaps to grid automatically. Violations show up in
+              the weekly design system health report.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="px-8 py-6 border-t border-grid">
+    <div class="max-w-5xl mx-auto flex justify-between items-center text-xs uppercase tracking-widest text-muted">
+      <div class="flex items-center gap-2">
+        <span class="red-dot"></span>
+        <span>GRID</span>
+      </div>
+      <span>© 2026</span>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.swiss-reveal, .swiss-reveal-right, .swiss-line, .red-line').forEach(el => observer.observe(el));
+    });
+  </script>
+
+</body>
+</html>

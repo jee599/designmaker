@@ -6,17 +6,12 @@ import { assembleGeneratePrompt } from "@/lib/promptAssembler";
 
 const CATALOG_DIR = join(
   process.cwd(),
-  "..",
-  "output",
-  "web-design-system",
-  "references",
+  "data",
   "catalog"
 );
 const SKILL_PATH = join(
   process.cwd(),
-  "..",
-  "output",
-  "web-design-system",
+  "data",
   "SKILL.md"
 );
 
@@ -54,7 +49,7 @@ export async function POST(request: NextRequest) {
       referenceContent = await readFile(join(CATALOG_DIR, refFile), "utf-8");
     } catch {
       return Response.json(
-        { error: `래퍼런스 ${referenceId}를 찾을 수 없습니다.` },
+        { error: `Reference ${referenceId} not found.` },
         { status: 404 }
       );
     }
@@ -64,7 +59,7 @@ export async function POST(request: NextRequest) {
       skillContent = await readFile(SKILL_PATH, "utf-8");
     } catch {
       return Response.json(
-        { error: "SKILL.md를 읽을 수 없습니다." },
+        { error: "Could not read SKILL.md." },
         { status: 500 }
       );
     }

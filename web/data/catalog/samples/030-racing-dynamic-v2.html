@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>030-v2 — Telemetry Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'JetBrains Mono',monospace;background:#0a0a0a;color:#fff;overflow-x:hidden}
+    h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:800}
+    .mono{font-family:'JetBrains Mono',monospace}
+    .speed-lines{background-image:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(57,255,20,0.02) 40px,rgba(57,255,20,0.02) 41px)}
+    .scan-lines{position:relative}.scan-lines::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:1}
+    .gradient-text-neon{background:linear-gradient(135deg,#39FF14,#00e5ff,#39FF14);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradient-shift 3s ease-in-out infinite}
+    @keyframes gradient-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    .reveal-left{opacity:0;transform:translateX(-60px);transition:opacity 0.2s,transform 0.2s}
+    .reveal-right{opacity:0;transform:translateX(60px);transition:opacity 0.2s,transform 0.2s}
+    .reveal-up{opacity:0;transform:translateY(30px);transition:opacity 0.2s,transform 0.2s}
+    .reveal-left.visible,.reveal-right.visible,.reveal-up.visible{opacity:1;transform:translate(0)}
+    .race-card{border:1px solid transparent;transition:border-color 0.2s,box-shadow 0.2s,transform 0.2s}
+    .race-card:hover{border-color:#39FF14;transform:perspective(800px) rotateY(-1deg) rotateX(1deg)}
+    .racing-stripe{height:2px;background:linear-gradient(90deg,transparent,#39FF14,transparent);opacity:0.4}
+    .green-glow:hover{box-shadow:0 0 20px rgba(57,255,20,0.15),0 0 40px rgba(57,255,20,0.05)}
+    /* Live counter animation */
+    @keyframes counterPulse{0%,100%{opacity:1}50%{opacity:0.7}}
+    .live-counter{animation:counterPulse 2s ease-in-out infinite;font-variant-numeric:tabular-nums}
+    /* Split screen layout */
+    .split-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:100vh}
+    @media(max-width:768px){.split-layout{grid-template-columns:1fr;min-height:auto}}
+    .dashboard-panel{background:#0d0d0d;border-right:1px solid rgba(57,255,20,0.1);padding:2rem;overflow-y:auto}
+    .content-panel{padding:2rem}
+    /* Telemetry gauge */
+    .gauge{position:relative;width:120px;height:120px}
+    .gauge-ring{stroke-dasharray:339;stroke-dashoffset:calc(339 - (339 * var(--pct,75)) / 100);transition:stroke-dashoffset 1s ease}
+    /* Data ticker */
+    @keyframes dataFlash{0%,90%{color:#39FF14}95%{color:#fff}100%{color:#39FF14}}
+    .data-flash{animation:dataFlash 3s ease-in-out infinite}
+    .float-badge{animation:float-drift 4s ease-in-out infinite}
+    @keyframes float-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .speed-ticker{font-variant-numeric:tabular-nums}
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <span class="font-extrabold text-lg tracking-tight" style="font-family:'Space Grotesk';">[DRIVER<span class="text-[#39FF14]">.</span>]</span>
+      <div class="hidden md:flex items-center gap-8 text-sm text-gray-400">
+        <a href="#telemetry" class="hover:text-white transition-colors">Telemetry</a>
+        <a href="#gallery" class="hover:text-white transition-colors">Gallery</a>
+        <a href="#career" class="hover:text-white transition-colors">Career</a>
+      </div>
+      <a href="#contact" class="text-sm font-medium px-5 py-2 border border-[#39FF14] text-[#39FF14] hover:bg-[#39FF14] hover:text-black transition-all">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- Hero — Split Screen: Left=Dashboard, Right=Content -->
+  <section class="split-layout pt-16 scan-lines speed-lines relative" id="telemetry">
+    <!-- LEFT: Data Dashboard Panel -->
+    <div class="dashboard-panel relative z-10">
+      <div class="mb-6">
+        <p class="mono text-[10px] text-[#39FF14] tracking-widest uppercase mb-2">LIVE TELEMETRY</p>
+        <p class="mono text-xs text-gray-600" id="liveTime">--:--:--</p>
+      </div>
+
+      <!-- Speed Gauge -->
+      <div class="mb-8">
+        <p class="mono text-xs text-gray-500 uppercase mb-3">CURRENT SPEED</p>
+        <div class="flex items-center gap-4">
+          <svg class="gauge" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#1a1a1a" stroke-width="6"/>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#39FF14" stroke-width="6" class="gauge-ring" style="--pct:78;transform:rotate(-90deg);transform-origin:center;" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <p class="text-4xl font-bold speed-ticker live-counter" id="speedVal">287</p>
+            <p class="mono text-xs text-gray-500">km/h</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Data Grid -->
+      <div class="space-y-3 mb-8">
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">RPM</span>
+          <span class="mono text-sm text-white live-counter" id="rpmVal">11,847</span>
+        </div>
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">THROTTLE</span>
+          <span class="mono text-sm text-[#39FF14] data-flash">92%</span>
+        </div>
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">BRAKE TEMP</span>
+          <span class="mono text-sm text-white" id="brakeVal">847°C</span>
+        </div>
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">TIRE TEMP FL</span>
+          <span class="mono text-sm text-[#39FF14]" id="tireFLVal">103°C</span>
+        </div>
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">TIRE TEMP FR</span>
+          <span class="mono text-sm text-white" id="tireFRVal">101°C</span>
+        </div>
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">FUEL LOAD</span>
+          <span class="mono text-sm text-white">47.3 kg</span>
+        </div>
+        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+          <span class="mono text-xs text-gray-500">ERS DEPLOY</span>
+          <span class="mono text-sm text-[#39FF14] data-flash">OVERTAKE</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="mono text-xs text-gray-500">DRS</span>
+          <span class="mono text-sm text-[#39FF14]">OPEN</span>
+        </div>
+      </div>
+
+      <!-- Sector Times -->
+      <div class="mb-8">
+        <p class="mono text-xs text-gray-500 uppercase mb-3">SECTOR TIMES</p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="mono text-xs text-gray-500 w-8">S1</span>
+            <div class="flex-1 h-1 bg-white/5 overflow-hidden"><div class="h-full bg-[#39FF14]" style="width:95%"></div></div>
+            <span class="mono text-xs text-[#39FF14]">[N.NNN]</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="mono text-xs text-gray-500 w-8">S2</span>
+            <div class="flex-1 h-1 bg-white/5 overflow-hidden"><div class="h-full bg-white/40" style="width:88%"></div></div>
+            <span class="mono text-xs text-gray-400">[N.NNN]</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="mono text-xs text-gray-500 w-8">S3</span>
+            <div class="flex-1 h-1 bg-white/5 overflow-hidden"><div class="h-full bg-yellow-500/60" style="width:82%"></div></div>
+            <span class="mono text-xs text-yellow-500">[N.NNN]</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Position Board -->
+      <div>
+        <p class="mono text-xs text-gray-500 uppercase mb-3">POSITION</p>
+        <div class="space-y-1">
+          <div class="flex items-center gap-3 bg-white/[0.03] px-3 py-2">
+            <span class="mono text-xs text-gray-500">P1</span>
+            <span class="mono text-xs text-white">[Driver A]</span>
+            <span class="mono text-xs text-gray-500 ml-auto">--</span>
+          </div>
+          <div class="flex items-center gap-3 bg-[#39FF14]/10 px-3 py-2 border border-[#39FF14]/30">
+            <span class="mono text-xs text-[#39FF14] font-bold">P2</span>
+            <span class="mono text-xs text-[#39FF14] font-bold">[YOUR DRIVER]</span>
+            <span class="mono text-xs text-[#39FF14] ml-auto">+0.847</span>
+          </div>
+          <div class="flex items-center gap-3 bg-white/[0.03] px-3 py-2">
+            <span class="mono text-xs text-gray-500">P3</span>
+            <span class="mono text-xs text-white">[Driver C]</span>
+            <span class="mono text-xs text-gray-500 ml-auto">+2.103</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Content Panel -->
+    <div class="content-panel flex items-center relative z-10">
+      <div class="max-w-lg">
+        <div class="reveal-left">
+          <p class="mono text-xs text-[#39FF14] tracking-widest uppercase mb-6">[Season Year] // Race [N] of [N]</p>
+        </div>
+        <h1 class="reveal-left text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none tracking-tight mb-8" style="transition-delay:0.05s;">
+          BORN TO<br><span class="gradient-text-neon">RACE</span><span class="text-gray-600">.</span>
+        </h1>
+        <p class="reveal-left text-gray-400 text-lg max-w-md leading-relaxed mb-6" style="transition-delay:0.1s;">
+          [Driver name]. [N] podiums. [N] fastest laps. Every telemetry point streamed live.
+        </p>
+        <div class="reveal-left mb-10" style="transition-delay:0.1s;">
+          <div class="inline-flex items-baseline gap-2">
+            <span class="mono text-5xl font-bold text-white speed-ticker" data-target="347" id="heroSpeed">0</span>
+            <span class="mono text-lg text-gray-500">km/h</span>
+          </div>
+          <p class="mono text-xs text-gray-600 mt-1">TOP SPEED — [Circuit Name]</p>
+        </div>
+        <div class="reveal-left flex gap-4" style="transition-delay:0.15s;">
+          <a href="#stats" class="bg-[#39FF14] text-black text-sm font-bold px-8 py-3 hover:bg-[#2de00f] transition-colors tracking-wide">VIEW STATS</a>
+          <a href="#gallery" class="border border-white/20 text-white text-sm font-medium px-8 py-3 hover:border-[#39FF14] hover:text-[#39FF14] transition-all tracking-wide">GALLERY</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="racing-stripe"></div>
+
+  <!-- Stats Section — more telemetry data -->
+  <section id="stats" class="py-24 px-6 speed-lines scan-lines">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="reveal-left mb-16">
+        <p class="mono text-xs text-[#39FF14] tracking-widest uppercase mb-4">Performance Data</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Season Numbers</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-16">
+        <div class="reveal-left md:col-span-2 race-card bg-white/[0.03] p-8">
+          <p class="mono text-xs text-gray-500 uppercase tracking-widest mb-3">Fastest Lap</p>
+          <p class="mono text-5xl font-bold text-[#39FF14] mb-2">[N:NN.NNN]</p>
+          <p class="text-sm text-gray-500">[Circuit Name] — [Date]</p>
+          <div class="mt-6 flex gap-6">
+            <div><p class="mono text-xs text-gray-600 mb-1">DELTA TO P2</p><p class="mono text-lg text-white">-[N.NNN]s</p></div>
+            <div><p class="mono text-xs text-gray-600 mb-1">SECTOR BEST</p><p class="mono text-lg text-[#39FF14]">[N]/[N]</p></div>
+          </div>
+        </div>
+        <div class="reveal-right race-card bg-white/[0.03] p-8">
+          <p class="mono text-xs text-gray-500 uppercase tracking-widest mb-3">Top Speed</p>
+          <p class="mono text-4xl font-bold text-white mb-1">[NNN] <span class="text-lg text-gray-500">km/h</span></p>
+          <p class="text-sm text-gray-500">[Straight Name]</p>
+        </div>
+        <div class="reveal-left race-card bg-white/[0.03] p-8">
+          <p class="mono text-xs text-gray-500 uppercase tracking-widest mb-3">Championship</p>
+          <p class="mono text-4xl font-bold text-white mb-1">P[N]</p>
+          <p class="text-sm text-gray-500">[N] points — [N] races left</p>
+        </div>
+        <div class="reveal-right md:col-span-2 race-card bg-white/[0.03] p-8">
+          <p class="mono text-xs text-gray-500 uppercase tracking-widest mb-3">Season Summary</p>
+          <div class="grid grid-cols-3 gap-6">
+            <div><p class="mono text-2xl font-bold text-white">[N]</p><p class="text-xs text-gray-500">Podiums</p></div>
+            <div><p class="mono text-2xl font-bold text-[#39FF14]">[N]</p><p class="text-xs text-gray-500">Fastest Laps</p></div>
+            <div><p class="mono text-2xl font-bold text-white">[N.N]%</p><p class="text-xs text-gray-500">Points Finish Rate</p></div>
+          </div>
+        </div>
+      </div>
+      <!-- Lap comparison -->
+      <div class="reveal-up">
+        <p class="mono text-xs text-gray-500 uppercase tracking-widest mb-6">Recent Lap Times</p>
+        <div class="space-y-3">
+          <div class="flex items-center gap-4 race-card bg-white/[0.03] p-4">
+            <span class="mono text-sm text-[#39FF14] w-20">[Circuit]</span>
+            <div class="flex-1 h-1 bg-white/5 relative overflow-hidden"><div class="absolute inset-y-0 left-0 bg-[#39FF14]" style="width:92%"></div></div>
+            <span class="mono text-sm text-gray-400 w-24 text-right">[N:NN.NNN]</span>
+          </div>
+          <div class="flex items-center gap-4 race-card bg-white/[0.03] p-4">
+            <span class="mono text-sm text-white w-20">[Circuit]</span>
+            <div class="flex-1 h-1 bg-white/5 relative overflow-hidden"><div class="absolute inset-y-0 left-0 bg-white/40" style="width:88%"></div></div>
+            <span class="mono text-sm text-gray-400 w-24 text-right">[N:NN.NNN]</span>
+          </div>
+          <div class="flex items-center gap-4 race-card bg-white/[0.03] p-4">
+            <span class="mono text-sm text-white w-20">[Circuit]</span>
+            <div class="flex-1 h-1 bg-white/5 relative overflow-hidden"><div class="absolute inset-y-0 left-0 bg-white/40" style="width:95%"></div></div>
+            <span class="mono text-sm text-gray-400 w-24 text-right">[N:NN.NNN]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="racing-stripe"></div>
+
+  <!-- Gallery -->
+  <section id="gallery" class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="reveal-right mb-16 text-right">
+        <p class="mono text-xs text-[#39FF14] tracking-widest uppercase mb-4">Gallery</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">On Track</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="reveal-left md:col-span-2 race-card">
+          <div class="bg-gray-800 aspect-video flex items-center justify-center" style="clip-path:polygon(8% 0%,100% 0%,92% 100%,0% 100%);">
+            <p class="text-gray-600 text-xs mono">[Race Action Shot]</p>
+          </div>
+        </div>
+        <div class="reveal-right race-card">
+          <div class="bg-gray-800 aspect-square flex items-center justify-center" style="clip-path:polygon(8% 0%,100% 0%,92% 100%,0% 100%);">
+            <p class="text-gray-600 text-xs mono">[Helmet Close-up]</p>
+          </div>
+        </div>
+        <div class="reveal-left race-card">
+          <div class="bg-gray-800 aspect-square flex items-center justify-center" style="clip-path:polygon(8% 0%,100% 0%,92% 100%,0% 100%);">
+            <p class="text-gray-600 text-xs mono">[Podium]</p>
+          </div>
+        </div>
+        <div class="reveal-right md:col-span-2 race-card">
+          <div class="bg-gray-800 aspect-[21/9] flex items-center justify-center" style="clip-path:polygon(8% 0%,100% 0%,92% 100%,0% 100%);">
+            <p class="text-gray-600 text-xs mono">[Pit Stop Wide]</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="racing-stripe"></div>
+
+  <!-- Career -->
+  <section id="career" class="py-24 px-6 speed-lines scan-lines">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="reveal-left mb-16">
+        <p class="mono text-xs text-[#39FF14] tracking-widest uppercase mb-4">Timeline</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Career Highlights</h2>
+      </div>
+      <div class="space-y-6">
+        <div class="reveal-left race-card bg-white/[0.03] p-6 flex gap-6 items-start">
+          <span class="mono text-sm text-[#39FF14] whitespace-nowrap">[YEAR]</span>
+          <div><h3 class="text-lg font-bold mb-1">[Achievement Title]</h3><p class="text-gray-400 text-sm leading-relaxed">[Specific details about the race, team, or milestone.]</p></div>
+        </div>
+        <div class="reveal-left race-card bg-white/[0.03] p-6 flex gap-6 items-start" style="transition-delay:0.05s;">
+          <span class="mono text-sm text-[#39FF14] whitespace-nowrap">[YEAR]</span>
+          <div><h3 class="text-lg font-bold mb-1">[Achievement Title]</h3><p class="text-gray-400 text-sm leading-relaxed">[Circuit name, position gained, or record broken.]</p></div>
+        </div>
+        <div class="reveal-left race-card bg-white/[0.03] p-6 flex gap-6 items-start" style="transition-delay:0.1s;">
+          <span class="mono text-sm text-[#39FF14] whitespace-nowrap">[YEAR]</span>
+          <div><h3 class="text-lg font-bold mb-1">[Achievement Title]</h3><p class="text-gray-400 text-sm leading-relaxed">[Debut, first win, championship.]</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="racing-stripe"></div>
+
+  <!-- Equipment -->
+  <section class="py-24 px-6 speed-lines">
+    <div class="max-w-6xl mx-auto">
+      <div class="reveal-right mb-16 text-right">
+        <p class="mono text-xs text-[#39FF14] tracking-widest uppercase mb-4">Setup</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">The Machine</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="reveal-left race-card bg-white/[0.03] p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <svg class="w-6 h-6 text-[#39FF14]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <h3 class="text-lg font-bold">Engine Specs</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-sm text-gray-500">Power Unit</span><span class="mono text-sm">[Manufacturer] V[N] Turbo</span></div>
+            <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-sm text-gray-500">Power</span><span class="mono text-sm text-[#39FF14]">[N]+ bhp</span></div>
+            <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-sm text-gray-500">Weight</span><span class="mono text-sm">[N] kg</span></div>
+            <div class="flex justify-between"><span class="text-sm text-gray-500">0-100</span><span class="mono text-sm">[N.N]s</span></div>
+          </div>
+        </div>
+        <div class="reveal-right race-card bg-white/[0.03] p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <svg class="w-6 h-6 text-[#39FF14]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <h3 class="text-lg font-bold">Race Setup</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-sm text-gray-500">Front Wing</span><span class="mono text-sm">[Low/Med/High]</span></div>
+            <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-sm text-gray-500">Compound</span><span class="mono text-sm text-[#39FF14]">[Soft/Med/Hard]</span></div>
+            <div class="flex justify-between border-b border-white/5 pb-2"><span class="text-sm text-gray-500">Brake Bias</span><span class="mono text-sm">[NN]% front</span></div>
+            <div class="flex justify-between"><span class="text-sm text-gray-500">DRS Zones</span><span class="mono text-sm">[N]</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="racing-stripe"></div>
+
+  <!-- Sponsors -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto text-center">
+      <div class="reveal-up">
+        <p class="mono text-xs text-gray-500 uppercase tracking-widest mb-10">Partners & Sponsors</p>
+        <div class="flex flex-wrap justify-center gap-12 items-center">
+          <span class="text-gray-600 font-bold text-xl tracking-wider" style="font-family:'Space Grotesk';">[SPONSOR 1]</span>
+          <span class="text-gray-600 font-bold text-xl tracking-wider" style="font-family:'Space Grotesk';">[SPONSOR 2]</span>
+          <span class="text-gray-600 font-bold text-xl tracking-wider" style="font-family:'Space Grotesk';">[SPONSOR 3]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="py-28 px-6 relative">
+    <div class="absolute inset-0 speed-lines opacity-50"></div>
+    <div class="max-w-6xl mx-auto text-center relative z-10">
+      <div class="reveal-up">
+        <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">LET'S <span class="text-[#39FF14]">WORK</span> TOGETHER</h2>
+        <p class="text-gray-400 max-w-md mx-auto mb-10">Sponsorships, media inquiries, and collaborations.</p>
+        <a href="#" class="inline-block bg-[#39FF14] text-black text-sm font-bold px-10 py-4 hover:bg-[#2de00f] transition-colors tracking-widest green-glow">GET IN TOUCH</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-white/5">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <span class="font-extrabold text-sm tracking-tight text-gray-500" style="font-family:'Space Grotesk';">[DRIVER<span class="text-[#39FF14]">.</span>]</span>
+      <span class="mono text-xs text-gray-600">&copy; [YEAR] [Driver Name]</span>
+    </div>
+  </footer>
+
+  <script>
+    const revealObserver=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');else entry.target.classList.remove('visible');});},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
+    document.querySelectorAll('.reveal-left,.reveal-right,.reveal-up').forEach(el=>revealObserver.observe(el));
+
+    // Live telemetry updates
+    function updateTelemetry(){
+      const speed=Math.floor(270+Math.random()*50);
+      const rpm=Math.floor(10500+Math.random()*2000);
+      const brake=Math.floor(780+Math.random()*150);
+      document.getElementById('speedVal').textContent=speed;
+      document.getElementById('rpmVal').textContent=rpm.toLocaleString();
+      document.getElementById('brakeVal').textContent=brake+'°C';
+      document.getElementById('tireFLVal').textContent=Math.floor(98+Math.random()*10)+'°C';
+      document.getElementById('tireFRVal').textContent=Math.floor(96+Math.random()*10)+'°C';
+      document.getElementById('liveTime').textContent=new Date().toLocaleTimeString();
+    }
+    setInterval(updateTelemetry,2000);
+    updateTelemetry();
+
+    // Hero speed counter
+    const tickerObserver=new IntersectionObserver((entries)=>{entries.forEach(entry=>{const el=entry.target;const target=parseInt(el.dataset.target,10);if(entry.isIntersecting){let c=0;const dur=1500,step=target/(dur/16);const t=setInterval(()=>{c+=step;if(c>=target){c=target;clearInterval(t);}el.textContent=Math.floor(c);},16);el._t=t;}else{if(el._t)clearInterval(el._t);el.textContent='0';}});},{threshold:0.3});
+    document.querySelectorAll('.speed-ticker[data-target]').forEach(el=>tickerObserver.observe(el));
+  </script>
+</body>
+</html>
