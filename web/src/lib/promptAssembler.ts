@@ -48,7 +48,9 @@ ${skillContent}
 === Selected Reference ===
 ${referenceContent}`;
 
-  const userMessage = `다음 사이트를 만들어주세요:\n\n${description}\n\n브랜드 색상: ${brandColor}\n출력 형식: ${outputFormat === "code" ? "HTML 코드" : "Markdown 설계서"}`;
+  const userMessage = description
+    ? `Create this site:\n\n${description}\n\nBrand color: ${brandColor}\nOutput format: ${outputFormat === "code" ? "HTML code" : "Markdown spec"}`
+    : `Generate a landing page using the reference design above.\n\nBrand color: ${brandColor}\nOutput format: ${outputFormat === "code" ? "HTML code" : "Markdown spec"}`;
 
   return `[System Prompt]\n${systemPrompt}\n\n---\n\n[User Message]\n${userMessage}`;
 }

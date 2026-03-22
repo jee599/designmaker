@@ -107,12 +107,16 @@ function GeneratePageInner() {
 
   useEffect(() => {
     const ref = searchParams.get("ref");
+    const mode = searchParams.get("mode");
     if (ref) {
       const match = REFERENCES.find((r) => r.id.startsWith(ref));
       if (match) {
         setSelectedRef(match.id);
         setBrandColor(match.accent);
       }
+    }
+    if (mode === "prompt") {
+      setFormat("prompt");
     }
   }, [searchParams]);
 
@@ -123,7 +127,7 @@ function GeneratePageInner() {
   };
 
   const handleGenerate = async () => {
-    if (!description.trim()) {
+    if (format !== "prompt" && !description.trim()) {
       setError("Please enter a site description.");
       return;
     }

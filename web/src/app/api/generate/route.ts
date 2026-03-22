@@ -39,9 +39,9 @@ export async function POST(request: NextRequest) {
     const { referenceId, description, brandColor, format, model: modelChoice } = body;
     const modelId = MODEL_MAP[modelChoice ?? "sonnet"] ?? MODEL_MAP.sonnet;
 
-    if (!referenceId || !description) {
+    if (!referenceId || (format !== "prompt" && !description)) {
       return Response.json(
-        { error: "referenceId와 description은 필수입니다." },
+        { error: "referenceId and description are required." },
         { status: 400 }
       );
     }
