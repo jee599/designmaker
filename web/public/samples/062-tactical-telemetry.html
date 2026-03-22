@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>062 — Tactical Telemetry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-subtle: #111111;
+      --text: #00ff41;
+      --text-dim: #00cc33;
+      --border: #333333;
+      --muted: #666666;
+      --accent: #ff3333;
+      --font-macro: 'Space Grotesk', sans-serif;
+      --font-micro: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-micro);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Scanline overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+      );
+    }
+
+    /* ── CRT flicker ── */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.8; }
+      94% { opacity: 1; }
+      96% { opacity: 0.9; }
+      97% { opacity: 1; }
+    }
+    body { animation: flicker 8s infinite; }
+
+    /* ── Typewriter ── */
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink-caret {
+      0%, 100% { border-color: var(--text); }
+      50% { border-color: transparent; }
+    }
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid var(--text);
+      animation: typewriter 2.5s steps(28) 0.5s 1 normal both,
+                 blink-caret 0.75s step-end infinite;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    /* ── Shared ── */
+    .border-all { border: 1px solid var(--border); }
+    .border-b { border-bottom: 1px solid var(--border); }
+    .border-t { border-top: 1px solid var(--border); }
+    .font-macro { font-family: var(--font-macro); font-weight: 700; }
+    .font-micro { font-family: var(--font-micro); }
+    .text-accent { color: var(--accent); }
+    .text-muted { color: var(--muted); }
+    .text-dim { color: var(--text-dim); }
+    .bg-subtle { background: var(--bg-subtle); }
+    .uppercase { text-transform: uppercase; }
+    .tracking-wide { letter-spacing: 0.1em; }
+    .tracking-tight { letter-spacing: -0.02em; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--text); }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-brand { color: var(--text); font-weight: 700; font-size: 13px; }
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: 10px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--text);
+      display: inline-block;
+      animation: blink-caret 1s step-end infinite;
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 120px 0 64px;
+      position: relative;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+    .hero-main {
+      padding: 48px 40px;
+      border-right: 1px solid var(--border);
+    }
+    .hero-side {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero h1 {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+    .ascii-frame {
+      font-size: 11px;
+      color: var(--border);
+      line-height: 1.4;
+      white-space: pre;
+      font-family: var(--font-micro);
+    }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .meta-item {
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    .meta-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      font-size: 18px;
+      font-family: var(--font-macro);
+      font-weight: 700;
+    }
+
+    /* ── Status Bar ── */
+    .status-bar {
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .status-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+    .status-item { display: flex; align-items: center; gap: 8px; }
+    .status-ok { color: var(--text); }
+    .status-warn { color: var(--accent); }
+
+    /* ── Features Grid ── */
+    .features {
+      padding: 64px 0;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+    }
+    .feature-cell {
+      padding: 32px 24px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      transition: background 0.2s;
+    }
+    .feature-cell:hover { background: var(--bg-subtle); }
+    .feature-cell:nth-child(3n) { border-right: none; }
+    .feature-cell:nth-last-child(-n+3) { border-bottom: none; }
+    .feature-idx {
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+    }
+    .feature-name {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .feature-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: var(--text-dim);
+    }
+
+    /* ── Dashboard ── */
+    .dashboard {
+      padding: 64px 0;
+      background: var(--bg-subtle);
+    }
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+    .dash-main {
+      padding: 32px;
+      border-right: 1px solid var(--border);
+    }
+    .dash-sidebar {
+      display: flex;
+      flex-direction: column;
+    }
+    .dash-sidebar-item {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      flex: 1;
+    }
+    .dash-sidebar-item:last-child { border-bottom: none; }
+    .threat-bar {
+      height: 4px;
+      background: var(--border);
+      margin-top: 12px;
+      position: relative;
+    }
+    .threat-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .log-entry {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(51,51,51,0.5);
+      font-size: 11px;
+      display: flex;
+      gap: 16px;
+    }
+    .log-time { color: var(--muted); white-space: nowrap; }
+    .log-event { color: var(--text); }
+    .log-critical { color: var(--accent); }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 80px 0;
+    }
+    .cta-box {
+      border: 2px solid var(--accent);
+      padding: 48px;
+      text-align: center;
+      position: relative;
+    }
+    .cta-box::before {
+      content: '◉ PRIORITY ALERT ◉';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg);
+      padding: 0 16px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cta-title {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .cta-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 14px 32px;
+      font-family: var(--font-micro);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #cc2929; }
+    .btn-secondary {
+      display: inline-block;
+      border: 1px solid var(--text);
+      color: var(--text);
+      padding: 14px 32px;
+      font-family: var(--font-micro);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      margin-left: 16px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      font-size: 11px;
+    }
+    .footer-brand {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .footer-copy {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+    .footer-heading {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 11px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-bottom {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-main { border-right: none; border-bottom: 1px solid var(--border); }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-cell { border-right: none !important; }
+      .feature-cell:last-child { border-bottom: none; }
+      .dash-grid { grid-template-columns: 1fr; }
+      .dash-main { border-right: none; border-bottom: 1px solid var(--border); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-meta { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .cta-box { padding: 32px 20px; }
+      .btn-secondary { margin-left: 0; margin-top: 12px; display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div style="display:flex;align-items:center;gap:24px;">
+      <span class="nav-brand">◎ AEGIS</span>
+      <div class="nav-links">
+        <a href="#features">Systems</a>
+        <a href="#dashboard">Telemetry</a>
+        <a href="#deploy">Deploy</a>
+      </div>
+    </div>
+    <div class="nav-status">
+      <span class="text-muted">SYS.STATUS</span>
+      <span class="status-dot"></span>
+      <span>OPERATIONAL</span>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="container">
+      <div class="ascii-frame" style="margin-bottom:16px;">┌─── AEGIS DEFENSE SYSTEM v4.2.1 ───────────────────────────────────┐</div>
+      <div class="hero-grid">
+        <div class="hero-main">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:var(--muted);margin-bottom:24px;">◉ THREAT DETECTION &amp; RESPONSE PLATFORM</div>
+          <h1><span class="typewriter">AEGIS SHIELD</span></h1>
+          <p class="hero-desc">
+            Autonomous threat detection engine. Real-time network telemetry analysis with sub-millisecond response. Zero-trust architecture. Military-grade encryption protocols.
+          </p>
+          <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap;">
+            <a href="#deploy" class="btn-primary">Initialize System</a>
+            <a href="#dashboard" class="btn-secondary">View Telemetry</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="ascii-frame">
+│ SCAN REPORT             │
+│ ─────────────────────── │
+│ Endpoints:    14,892    │
+│ Threats:      0 active  │
+│ Latency:      0.3ms     │
+│ Uptime:       99.997%   │
+│ Protocol:     AES-256   │
+│ Last sweep:   NOW       │
+          </div>
+          <div class="hero-meta">
+            <div class="meta-item">
+              <div class="meta-label">Threats Blocked</div>
+              <div class="meta-value">2.4M</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Response Time</div>
+              <div class="meta-value">0.3<span style="font-size:12px;color:var(--muted);">ms</span></div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Endpoints</div>
+              <div class="meta-value">14.8K</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Uptime</div>
+              <div class="meta-value text-accent">99.99<span style="font-size:12px;">%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ascii-frame" style="margin-top:-1px;">└───────────────────────────────────────────────────────────────────┘</div>
+    </div>
+  </section>
+
+  <!-- ── STATUS BAR ── -->
+  <div class="status-bar">
+    <div class="container">
+      <div class="status-inner">
+        <div class="status-item status-ok">
+          <span class="status-dot"></span>
+          <span>FIREWALL: ACTIVE</span>
+        </div>
+        <div class="status-item status-ok">
+          <span class="status-dot"></span>
+          <span>IDS: MONITORING</span>
+        </div>
+        <div class="status-item status-warn">
+          <span style="color:var(--accent);">▣</span>
+          <span>THREAT LEVEL: ELEVATED</span>
+        </div>
+        <div class="status-item status-ok">
+          <span class="status-dot"></span>
+          <span>ENCRYPTION: AES-256</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FEATURES ── -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Core Systems</h2>
+        <span class="section-label">SYS.MODULES // 6 ACTIVE</span>
+      </div>
+      <div class="features-grid">
+        <div class="feature-cell">
+          <div class="feature-idx">SYS.001</div>
+          <div class="feature-icon">├─</div>
+          <div class="feature-name">Neural IDS</div>
+          <div class="feature-desc">Deep-learning intrusion detection. Pattern recognition across 400+ attack vectors with self-evolving rulesets.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-idx">SYS.002</div>
+          <div class="feature-icon">├─</div>
+          <div class="feature-name">Zero Trust</div>
+          <div class="feature-desc">Every packet authenticated. Continuous verification with cryptographic attestation at every network hop.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-idx">SYS.003</div>
+          <div class="feature-icon">├─</div>
+          <div class="feature-name">Threat Intel</div>
+          <div class="feature-desc">Global threat feeds aggregated in real-time. Correlates IOCs across 12 intelligence sources simultaneously.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-idx">SYS.004</div>
+          <div class="feature-icon">├─</div>
+          <div class="feature-name">Auto Response</div>
+          <div class="feature-desc">Autonomous containment in under 1ms. Isolates compromised segments without human intervention.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-idx">SYS.005</div>
+          <div class="feature-icon">├─</div>
+          <div class="feature-name">Forensics</div>
+          <div class="feature-desc">Full packet capture with 90-day retention. Reconstruct attack timelines with nanosecond precision.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-idx">SYS.006</div>
+          <div class="feature-icon">└─</div>
+          <div class="feature-name">Compliance</div>
+          <div class="feature-desc">SOC2, ISO 27001, HIPAA, FedRAMP automated compliance reporting with continuous audit trails.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DASHBOARD ── -->
+  <section class="dashboard" id="dashboard">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Live Telemetry</h2>
+        <span class="section-label">FEED // REAL-TIME</span>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-main">
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:var(--muted);margin-bottom:16px;">◉ EVENT LOG — LAST 24H</div>
+          <div class="log-entry">
+            <span class="log-time">03:42:17</span>
+            <span class="log-event">Port scan detected on 10.0.4.x — blocked 342 probes</span>
+          </div>
+          <div class="log-entry">
+            <span class="log-time">03:41:58</span>
+            <span class="log-critical">◉ SQL injection attempt — origin: 185.220.x.x — NEUTRALIZED</span>
+          </div>
+          <div class="log-entry">
+            <span class="log-time">03:41:33</span>
+            <span class="log-event">Certificate rotation completed — 892 endpoints updated</span>
+          </div>
+          <div class="log-entry">
+            <span class="log-time">03:40:12</span>
+            <span class="log-event">Firewall rule #4471 auto-generated from threat intel feed</span>
+          </div>
+          <div class="log-entry">
+            <span class="log-time">03:39:47</span>
+            <span class="log-critical">◉ Brute force attempt — origin: 91.134.x.x — IP BANNED</span>
+          </div>
+          <div class="log-entry">
+            <span class="log-time">03:38:22</span>
+            <span class="log-event">Anomaly score threshold adjusted: 0.72 → 0.68</span>
+          </div>
+          <div class="log-entry">
+            <span class="log-time">03:37:01</span>
+            <span class="log-event">Network segment 10.0.7.x — health check passed</span>
+          </div>
+          <div class="log-entry" style="border-bottom:none;">
+            <span class="log-time">03:36:44</span>
+            <span class="log-event">Threat intel update — 1,247 new IOCs ingested</span>
+          </div>
+        </div>
+        <div class="dash-sidebar">
+          <div class="dash-sidebar-item">
+            <div class="meta-label">Threat Level</div>
+            <div class="meta-value text-accent" style="font-size:24px;">ELEVATED</div>
+            <div class="threat-bar"><div class="threat-fill" style="width:65%;"></div></div>
+          </div>
+          <div class="dash-sidebar-item">
+            <div class="meta-label">Packets Analyzed</div>
+            <div class="meta-value" style="font-size:20px;">847.2M</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">↑ 12.4% vs yesterday</div>
+          </div>
+          <div class="dash-sidebar-item">
+            <div class="meta-label">Active Rules</div>
+            <div class="meta-value" style="font-size:20px;">4,471</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">+23 auto-generated</div>
+          </div>
+          <div class="dash-sidebar-item">
+            <div class="meta-label">Blocked Today</div>
+            <div class="meta-value text-accent" style="font-size:20px;">12,847</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">342 port scans, 2 injections</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-section" id="deploy">
+    <div class="container">
+      <div class="cta-box">
+        <h2 class="cta-title">Deploy AEGIS Now</h2>
+        <p class="cta-desc">Initialize your perimeter defense in under 60 seconds. No agents required. Full network visibility from first packet.</p>
+        <div>
+          <a href="#" class="btn-primary">Start Deployment</a>
+          <a href="#" class="btn-secondary">Request Briefing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">◎ AEGIS</div>
+          <div class="footer-copy">
+            Autonomous threat detection &amp; response platform.<br>
+            Military-grade network defense for enterprise infrastructure.
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Systems</div>
+          <ul class="footer-links">
+            <li><a href="#">Neural IDS</a></li>
+            <li><a href="#">Zero Trust</a></li>
+            <li><a href="#">Threat Intel</a></li>
+            <li><a href="#">Forensics</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Resources</div>
+          <ul class="footer-links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Status Page</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Company</div>
+          <ul class="footer-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Compliance</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>◉ ◎ ▣ — AEGIS DEFENSE SYSTEMS — ALL RIGHTS RESERVED</span>
+        <span>BUILD 4.2.1 // TACTICAL TELEMETRY UI</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
