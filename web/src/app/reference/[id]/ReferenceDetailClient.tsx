@@ -247,7 +247,7 @@ export default function ReferenceDetailClient({
           <div>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
-                // palettes
+                팔레트
                 <span className="ml-2 text-zinc-700">({designPalettes.length})</span>
               </h2>
               {hasCustomChanges && (
@@ -255,7 +255,7 @@ export default function ReferenceDetailClient({
                   onClick={resetColors}
                   className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
                 >
-                  reset
+                  초기화
                 </button>
               )}
             </div>
@@ -304,7 +304,7 @@ export default function ReferenceDetailClient({
         {/* Current Palette Display */}
         <div>
           <h2 className="mb-3 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
-            // current colors
+            현재 색상
           </h2>
           <div className="grid grid-cols-2 gap-2">
             <CopyableSwatch color={hasCustomChanges ? customBg : r.bg} label="bg" />
@@ -322,7 +322,7 @@ export default function ReferenceDetailClient({
               onClick={() => setIsCustomizing(!isCustomizing)}
               className="mb-3 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600 hover:text-accent-light transition-colors cursor-pointer"
             >
-              // fine-tune {isCustomizing ? "[-]" : "[+]"}
+              색상 미세조정 {isCustomizing ? "[-]" : "[+]"}
             </button>
             {isCustomizing && (
               <div className="space-y-3 rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
@@ -385,7 +385,7 @@ export default function ReferenceDetailClient({
                     onClick={resetColors}
                     className="font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
                   >
-                    $ reset --colors
+                    색상 초기화
                   </button>
                 )}
               </div>
@@ -396,7 +396,7 @@ export default function ReferenceDetailClient({
         {/* Tags */}
         <div>
           <h2 className="mb-2 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
-            // tags
+            태그
           </h2>
           <div className="flex flex-wrap gap-2">
             {r.tags.map((tag) => (
@@ -413,7 +413,7 @@ export default function ReferenceDetailClient({
         {/* Inspired by */}
         <div>
           <h2 className="mb-2 font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
-            // inspired_by
+            영감
           </h2>
           <div className="flex flex-wrap gap-2">
             {r.inspired.map((site) => (
@@ -439,14 +439,14 @@ export default function ReferenceDetailClient({
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-lg border border-accent-30 bg-accent-10 px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-accent-light transition-colors hover:bg-accent-20"
             >
-              $ open --preview
+              미리보기
             </a>
             {htmlContent && (
               <button
                 onClick={handleDownloadRef}
                 className="inline-flex items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-zinc-300 transition-colors hover:bg-zinc-700 cursor-pointer"
               >
-                $ download{activePaletteId ? ` --palette ${activePaletteId}` : ` --ref ${r.id}`}
+                다운로드
               </button>
             )}
           </div>
@@ -457,7 +457,7 @@ export default function ReferenceDetailClient({
           {/* Site description input */}
           <div>
             <label className="mb-2 block font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
-              // site description
+              사이트 설명
             </label>
             <textarea
               value={siteDescription}
@@ -497,21 +497,23 @@ export default function ReferenceDetailClient({
                 }
               }}
               disabled={promptLoading || !siteDescription.trim()}
-              className="inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-zinc-950 transition-colors hover:bg-accent-60 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="inline-flex items-center justify-center rounded-lg px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-zinc-950 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              style={{ backgroundColor: customAccent }}
             >
-              {promptLoading ? "generating..." : "$ export --prompt"}
+              {promptLoading ? "생성 중..." : "프롬프트 받기 (무료)"}
             </button>
             <a
               href={`/generate?ref=${r.id}`}
-              className="inline-flex items-center justify-center rounded-lg border border-accent-30 bg-accent-10 px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-accent-light transition-colors hover:bg-accent-20"
+              className="inline-flex items-center justify-center rounded-lg border px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium transition-colors"
+              style={{ borderColor: customAccent + '4d', backgroundColor: customAccent + '1a', color: customAccent }}
             >
-              $ generate --conversation
+              AI로 생성하기
             </a>
             <a
               href="/improve"
               className="inline-flex items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-zinc-300 transition-colors hover:bg-zinc-700"
             >
-              $ improve --redesign
+              내 사이트 리디자인
             </a>
           </div>
 
@@ -520,7 +522,7 @@ export default function ReferenceDetailClient({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-[family-name:var(--font-jetbrains-mono)] text-xs font-semibold uppercase tracking-wider text-zinc-600">
-                  // generated prompt
+                  생성된 프롬프트
                 </span>
                 <button
                   onClick={() => {
@@ -528,12 +530,15 @@ export default function ReferenceDetailClient({
                     setPromptCopied(true);
                     setTimeout(() => setPromptCopied(false), 2000);
                   }}
-                  className="rounded-md border border-accent-30 bg-accent-10 px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium text-accent-light transition-all duration-200 hover:bg-accent-20 cursor-pointer"
+                  className="rounded-md border px-3 py-1.5 font-[family-name:var(--font-jetbrains-mono)] text-xs font-medium transition-all duration-200 cursor-pointer"
+                  style={{ borderColor: customAccent + '4d', backgroundColor: customAccent + '1a', color: customAccent }}
                 >
-                  {promptCopied ? "copied!" : "copy"}
+                  {promptCopied ? "복사됨!" : "복사"}
                 </button>
               </div>
-              <div className="rounded-lg border border-accent-30 bg-accent-10 px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-xs text-accent-light">
+              <div className="rounded-lg border px-4 py-3 font-[family-name:var(--font-jetbrains-mono)] text-xs"
+                style={{ borderColor: customAccent + '4d', backgroundColor: customAccent + '1a', color: customAccent }}
+              >
                 이 프롬프트를 Claude, ChatGPT 등 AI에 붙여넣으세요.
               </div>
               <pre className="max-h-[400px] overflow-auto rounded-lg border border-zinc-800 bg-[#0c0c0e] p-4 font-[family-name:var(--font-jetbrains-mono)] text-xs leading-relaxed text-zinc-300 whitespace-pre-wrap break-words">
