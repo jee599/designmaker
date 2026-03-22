@@ -39,4 +39,4 @@ SKILL.md 참조. 사이클 진행하며 필요 시 사용자가 추가.
 - 패턴: dark 선호, luxury/glassmorphism/colorful 선호, military/monospace 거부
 
 ## 스킬 변경 이력
-(없음)
+- 2026-03-23 사이클 1: Godly/Httpster/Minimal Gallery 등 date-based 검색 약한 소스의 쿼리를 카테고리 기반으로 수정
