@@ -91,7 +91,8 @@ function GeneratePageInner() {
   const [description, setDescription] = useState("");
   const [brandColor, setBrandColor] = useState(REFERENCES[1].accent);
   const [format, setFormat] = useState<OutputFormat>("code");
-  const isFreeMode = format === "prompt";
+  const [enteredAsFree, setEnteredAsFree] = useState(false);
+  const isFreeMode = enteredAsFree;
   const [showPaywall, setShowPaywall] = useState(false);
   const [paywallEmail, setPaywallEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
@@ -125,6 +126,7 @@ function GeneratePageInner() {
     }
     if (mode === "prompt") {
       setFormat("prompt");
+      setEnteredAsFree(true);
     }
   }, [searchParams]);
 

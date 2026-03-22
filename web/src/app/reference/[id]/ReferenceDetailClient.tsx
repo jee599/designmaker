@@ -164,6 +164,11 @@ export default function ReferenceDetailClient({
   // Palette state
   const [activePaletteId, setActivePaletteId] = useState<string | null>(null);
 
+  // Pro paywall state
+  const [showProModal, setShowProModal] = useState(false);
+  const [proEmail, setProEmail] = useState("");
+  const [proEmailSubmitted, setProEmailSubmitted] = useState(false);
+
   const generatedPalettes = useMemo(
     () => generateHarmonicPalettes(r.accent, r.bg, defaultTextColor, r.tone),
     [r.accent, r.bg, defaultTextColor, r.tone]
@@ -326,9 +331,9 @@ export default function ReferenceDetailClient({
               </p>
             </a>
             {/* Pro - conversation */}
-            <a
-              href={`/generate?ref=${r.id}&accent=${encodeURIComponent(customAccent)}&bg=${encodeURIComponent(customBg)}&text=${encodeURIComponent(customText)}`}
-              className="block rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group"
+            <button
+              onClick={() => setShowProModal(true)}
+              className="block w-full text-left rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group cursor-pointer"
             >
               <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
                 <span className="text-emerald-500">$</span>
@@ -339,11 +344,11 @@ export default function ReferenceDetailClient({
               <p className="mt-1 ml-5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
                 AI-powered iterative design generation
               </p>
-            </a>
+            </button>
             {/* Pro - redesign */}
-            <a
-              href={`/improve?ref=${r.id}&accent=${encodeURIComponent(customAccent)}`}
-              className="block rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group"
+            <button
+              onClick={() => setShowProModal(true)}
+              className="block w-full text-left rounded-md px-3 py-2.5 transition-all hover:bg-zinc-800/50 group cursor-pointer"
             >
               <div className="flex items-center gap-2 font-[family-name:var(--font-jetbrains-mono)] text-sm">
                 <span className="text-emerald-500">$</span>
@@ -354,7 +359,7 @@ export default function ReferenceDetailClient({
               <p className="mt-1 ml-5 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
                 Redesign an existing site with this reference
               </p>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -529,6 +534,94 @@ export default function ReferenceDetailClient({
           </div>
         </div>
       </div>
+
+      {/* Pro Paywall Modal */}
+      {showProModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowProModal(false)}>
+          <div
+            className="mx-4 w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-950 p-8 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {!proEmailSubmitted ? (
+              <>
+                <div className="mb-6 text-center">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10">
+                    <svg className="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h2 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-zinc-100">
+                    Refmade Pro
+                  </h2>
+                  <p className="mt-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-500">
+                    Coming soon. AI-powered design generation with iterative conversation.
+                  </p>
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-2 font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-400">
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-400">&#x2713;</span> Generate HTML/Markdown directly
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-400">&#x2713;</span> Conversational design iteration
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-400">&#x2713;</span> Redesign existing sites
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-400">&#x2713;</span> Custom description &amp; brand
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <label className="mb-1.5 block font-[family-name:var(--font-jetbrains-mono)] text-xs text-zinc-600">
+                      Get notified when Pro launches
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="email"
+                        value={proEmail}
+                        onChange={(e) => setProEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-500 focus:outline-none"
+                      />
+                      <button
+                        onClick={() => {
+                          if (proEmail.includes("@")) {
+                            setProEmailSubmitted(true);
+                          }
+                        }}
+                        className="shrink-0 rounded-lg bg-emerald-500 px-4 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm font-medium text-zinc-950 transition-colors hover:bg-emerald-400 cursor-pointer"
+                      >
+                        Notify me
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-4">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10">
+                  <svg className="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-zinc-100">
+                  You&apos;re on the list!
+                </h2>
+                <p className="mt-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-500">
+                  We&apos;ll notify you when Refmade Pro launches.
+                </p>
+                <button
+                  onClick={() => setShowProModal(false)}
+                  className="mt-4 rounded-lg border border-zinc-700 bg-zinc-800 px-6 py-2 font-[family-name:var(--font-jetbrains-mono)] text-sm text-zinc-300 transition-colors hover:bg-zinc-700 cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
