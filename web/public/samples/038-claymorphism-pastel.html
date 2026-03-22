@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>038 — Claymorphism Pastel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    body {
+      background: #F8F5FF;
+      color: #2D1B69;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-weight: 800; }
+
+    /* Clay card base */
+    .clay-card {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      box-shadow:
+        inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+        inset -2px -2px 6px rgba(124, 92, 252, 0.08),
+        6px 10px 28px rgba(124, 92, 252, 0.12),
+        0 2px 6px rgba(124, 92, 252, 0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .clay-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+        inset -2px -2px 6px rgba(124, 92, 252, 0.08),
+        8px 14px 36px rgba(124, 92, 252, 0.18),
+        0 4px 8px rgba(124, 92, 252, 0.08);
+    }
+
+    /* Clay button */
+    .clay-btn {
+      background: #7C5CFC;
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.875rem 2.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow:
+        inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+        inset -1px -1px 3px rgba(0, 0, 0, 0.1),
+        4px 6px 16px rgba(124, 92, 252, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .clay-btn:hover {
+      transform: translateY(2px);
+      box-shadow:
+        inset 2px 2px 4px rgba(255, 255, 255, 0.25),
+        inset -1px -1px 3px rgba(0, 0, 0, 0.1),
+        2px 3px 8px rgba(124, 92, 252, 0.2);
+    }
+
+    /* Floating blob shapes */
+    .blob-shape {
+      position: absolute;
+      border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%;
+      opacity: 0.5;
+      filter: blur(1px);
+      z-index: 0;
+    }
+    @keyframes blobMorph1 {
+      0%, 100% { border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%; transform: translate(0, 0) rotate(0deg); }
+      33% { border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%; transform: translate(15px, -20px) rotate(5deg); }
+      66% { border-radius: 70% 30% 50% 50% / 30% 70% 50% 50%; transform: translate(-10px, 15px) rotate(-3deg); }
+    }
+    @keyframes blobMorph2 {
+      0%, 100% { border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%; transform: translate(0, 0) rotate(0deg); }
+      33% { border-radius: 50% 50% 40% 60% / 60% 40% 50% 50%; transform: translate(-20px, 10px) rotate(-5deg); }
+      66% { border-radius: 60% 40% 60% 40% / 40% 60% 40% 60%; transform: translate(10px, -15px) rotate(4deg); }
+    }
+    @keyframes blobMorph3 {
+      0%, 100% { border-radius: 50% 50% 40% 60% / 60% 40% 50% 50%; transform: translate(0, 0) rotate(0deg); }
+      50% { border-radius: 40% 60% 60% 40% / 50% 50% 40% 60%; transform: translate(20px, 10px) rotate(-6deg); }
+    }
+
+    /* Wavy section divider */
+    .wavy-divider {
+      height: 60px;
+      overflow: hidden;
+    }
+
+    /* Clay pill for steps */
+    .clay-pill {
+      background: #ffffff;
+      border-radius: 9999px;
+      box-shadow:
+        inset 1px 1px 3px rgba(255, 255, 255, 0.9),
+        inset -1px -1px 3px rgba(124, 92, 252, 0.06),
+        3px 5px 14px rgba(124, 92, 252, 0.1);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* Dotted connector */
+    .dotted-line {
+      border-left: 3px dotted rgba(124, 92, 252, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-[#7C5CFC] flex items-center justify-center"
+             style="box-shadow: inset 1px 1px 2px rgba(255,255,255,0.3), 2px 3px 8px rgba(124,92,252,0.25);">
+          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+        </div>
+        <span class="font-extrabold text-lg text-[#2D1B69]">[Product]</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm text-[#8B7FA8] hover:text-[#7C5CFC] transition-colors duration-300">Features</a>
+        <a href="#how" class="text-sm text-[#8B7FA8] hover:text-[#7C5CFC] transition-colors duration-300">How It Works</a>
+        <a href="#testimonial" class="text-sm text-[#8B7FA8] hover:text-[#7C5CFC] transition-colors duration-300">Reviews</a>
+        <button class="clay-btn text-sm py-2 px-5">Start Free</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative py-28 pt-36 px-6 overflow-hidden">
+    <!-- Floating blob shapes -->
+    <div class="blob-shape w-64 h-64 top-20 -left-16"
+         style="background: linear-gradient(135deg, #7C5CFC, #FF6B9D); animation: blobMorph1 8s ease-in-out infinite;"></div>
+    <div class="blob-shape w-48 h-48 top-32 right-8"
+         style="background: linear-gradient(135deg, #4ECDC4, #38BDF8); animation: blobMorph2 10s ease-in-out infinite;"></div>
+    <div class="blob-shape w-56 h-56 bottom-8 left-1/3"
+         style="background: linear-gradient(135deg, #FF6B9D, #FCA5A5); animation: blobMorph3 12s ease-in-out infinite;"></div>
+
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+      <div class="reveal">
+        <span class="inline-block clay-pill px-4 py-1.5 text-xs font-bold text-[#7C5CFC] uppercase tracking-widest mb-6">
+          Built for builders
+        </span>
+      </div>
+      <h1 class="reveal reveal-delay-1 text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#2D1B69] mb-6" style="letter-spacing: -0.02em;">
+        Ship products that<br class="hidden sm:block"> feel like <span class="text-[#7C5CFC]">magic</span>
+      </h1>
+      <p class="reveal reveal-delay-2 text-lg text-[#8B7FA8] max-w-xl mx-auto mb-10 leading-relaxed">
+        [Your value proposition here — one sentence that captures why your product matters to the people who need it most.]
+      </p>
+      <div class="reveal reveal-delay-3 flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="clay-btn text-base py-3 px-8">Get started — free</button>
+        <button class="clay-pill px-8 py-3 text-[#7C5CFC] font-bold hover:bg-white/50 transition-colors duration-300">
+          Watch demo →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wavy Divider -->
+  <div class="wavy-divider">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0 30C240 50 480 10 720 30C960 50 1200 10 1440 30V60H0V30Z" fill="#ffffff"/>
+    </svg>
+  </div>
+
+  <!-- Features -->
+  <section id="features" class="bg-white py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-2xl sm:text-3xl text-[#2D1B69] mb-4">Everything you need, nothing you don't</h2>
+        <p class="reveal reveal-delay-1 text-[#8B7FA8] max-w-md mx-auto">
+          [Subheading that reinforces your product's simplicity and focus.]
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Large card spanning full width on first row -->
+        <div class="reveal clay-card p-8 md:p-10 md:col-span-2">
+          <div class="flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 rounded-2xl bg-[#F8F5FF] flex items-center justify-center"
+                   style="box-shadow: inset 1px 1px 3px rgba(255,255,255,0.8), 2px 4px 12px rgba(124,92,252,0.1);">
+                <svg class="w-8 h-8 text-[#7C5CFC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg text-[#2D1B69] mb-2">[Core feature name]</h3>
+              <p class="text-[#8B7FA8] leading-relaxed">
+                [Describe the primary thing your product does. Be specific. What does the user see, feel, or accomplish? This card is intentionally larger because it's your #1 feature.]
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two smaller cards -->
+        <div class="reveal reveal-delay-1 clay-card p-8">
+          <div class="w-12 h-12 rounded-2xl bg-[#F8F5FF] flex items-center justify-center mb-5"
+               style="box-shadow: inset 1px 1px 3px rgba(255,255,255,0.8), 2px 4px 12px rgba(124,92,252,0.1);">
+            <svg class="w-6 h-6 text-[#7C5CFC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg text-[#2D1B69] mb-2">[Second feature]</h3>
+          <p class="text-[#8B7FA8] leading-relaxed text-sm">
+            [What does this feature do for the user? Be concrete, not aspirational.]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-2 clay-card p-8">
+          <div class="w-12 h-12 rounded-2xl bg-[#F8F5FF] flex items-center justify-center mb-5"
+               style="box-shadow: inset 1px 1px 3px rgba(255,255,255,0.8), 2px 4px 12px rgba(124,92,252,0.1);">
+            <svg class="w-6 h-6 text-[#7C5CFC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg text-[#2D1B69] mb-2">[Third feature]</h3>
+          <p class="text-[#8B7FA8] leading-relaxed text-sm">
+            [Specifics matter. What metric improves? What pain goes away?]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wavy Divider -->
+  <div class="wavy-divider bg-white">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0 30C360 0 720 60 1080 30C1260 15 1380 25 1440 30V60H0V30Z" fill="#F8F5FF"/>
+    </svg>
+  </div>
+
+  <!-- How It Works -->
+  <section id="how" class="py-20 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal text-2xl sm:text-3xl text-[#2D1B69] text-center mb-16">How it works</h2>
+
+      <div class="relative">
+        <!-- Dotted connector line -->
+        <div class="absolute left-6 top-12 bottom-12 dotted-line hidden md:block"></div>
+
+        <!-- Step 1 -->
+        <div class="reveal flex items-start gap-6 mb-12">
+          <div class="flex-shrink-0 w-12 h-12 clay-pill flex items-center justify-center font-extrabold text-[#7C5CFC] text-lg relative z-10">
+            1
+          </div>
+          <div class="clay-card p-6 flex-1">
+            <h3 class="text-lg text-[#2D1B69] mb-2">[First step name]</h3>
+            <p class="text-[#8B7FA8] text-sm leading-relaxed">
+              [What does the user do first? Connect an account, paste a URL, upload a file? Be literal.]
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="reveal reveal-delay-1 flex items-start gap-6 mb-12">
+          <div class="flex-shrink-0 w-12 h-12 clay-pill flex items-center justify-center font-extrabold text-[#7C5CFC] text-lg relative z-10">
+            2
+          </div>
+          <div class="clay-card p-6 flex-1">
+            <h3 class="text-lg text-[#2D1B69] mb-2">[Second step name]</h3>
+            <p class="text-[#8B7FA8] text-sm leading-relaxed">
+              [What happens next? Describe the transformation or processing that occurs.]
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="reveal reveal-delay-2 flex items-start gap-6">
+          <div class="flex-shrink-0 w-12 h-12 clay-pill flex items-center justify-center font-extrabold text-[#7C5CFC] text-lg relative z-10">
+            3
+          </div>
+          <div class="clay-card p-6 flex-1">
+            <h3 class="text-lg text-[#2D1B69] mb-2">[Third step — the result]</h3>
+            <p class="text-[#8B7FA8] text-sm leading-relaxed">
+              [What does the user get at the end? Be specific about the output or result.]
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wavy Divider -->
+  <div class="wavy-divider">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0 30C480 55 960 5 1440 30V60H0V30Z" fill="#ffffff"/>
+    </svg>
+  </div>
+
+  <!-- Testimonial -->
+  <section id="testimonial" class="bg-white py-24 px-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="reveal clay-card p-8 md:p-10" style="transform: rotate(-1deg);">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#F8F5FF] flex items-center justify-center"
+               style="box-shadow: inset 1px 1px 2px rgba(255,255,255,0.8), 2px 3px 8px rgba(124,92,252,0.12);">
+            <span class="text-lg">🧑‍💻</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-[#2D1B69]">[Real person name]</p>
+            <p class="text-xs text-[#8B7FA8]">[Role @ Company]</p>
+          </div>
+        </div>
+        <blockquote class="text-[#2D1B69] leading-relaxed">
+          "[A specific, slightly messy testimonial. Not polished marketing speak. Include a concrete detail — a number, a before/after, a specific moment. Something that couldn't be generated.]"
+        </blockquote>
+        <div class="mt-4 flex gap-1">
+          <span class="text-[#FF6B9D]">★</span>
+          <span class="text-[#FF6B9D]">★</span>
+          <span class="text-[#FF6B9D]">★</span>
+          <span class="text-[#FF6B9D]">★</span>
+          <span class="text-[#FF6B9D]">★</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="bg-white py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal text-2xl sm:text-3xl text-[#2D1B69] text-center mb-4">Simple, soft pricing</h2>
+      <p class="reveal reveal-delay-1 text-[#8B7FA8] text-center mb-16 max-w-md mx-auto">
+        [No hidden fees. Scale when you're ready.]
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Free -->
+        <div class="reveal clay-card p-8">
+          <h3 class="text-lg text-[#2D1B69] mb-1">Free</h3>
+          <p class="text-sm text-[#8B7FA8] mb-4">[For side projects]</p>
+          <p class="text-3xl font-extrabold text-[#2D1B69] mb-6">$0</p>
+          <ul class="space-y-3 text-sm text-[#8B7FA8] mb-8">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Free tier limit — be specific]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Another included feature]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Cap or limitation]
+            </li>
+          </ul>
+          <button class="w-full clay-pill py-3 text-[#7C5CFC] font-bold text-sm hover:bg-[#F8F5FF] transition-colors duration-300">
+            Get started
+          </button>
+        </div>
+
+        <!-- Pro -->
+        <div class="reveal reveal-delay-1 clay-card p-8 relative" style="border: 2px solid #7C5CFC;">
+          <span class="absolute -top-3 left-6 bg-[#7C5CFC] text-white text-xs font-bold px-3 py-1 rounded-full"
+                style="box-shadow: 2px 3px 8px rgba(124,92,252,0.3);">Popular</span>
+          <h3 class="text-lg text-[#2D1B69] mb-1">Pro</h3>
+          <p class="text-sm text-[#8B7FA8] mb-4">[For shipping teams]</p>
+          <p class="text-3xl font-extrabold text-[#2D1B69] mb-6">$[N]<span class="text-base font-normal text-[#8B7FA8]">/mo</span></p>
+          <ul class="space-y-3 text-sm text-[#8B7FA8] mb-8">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              Everything in Free
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Pro feature]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Another pro feature]
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#7C5CFC] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+              </svg>
+              [Priority support]
+            </li>
+          </ul>
+          <button class="w-full clay-btn text-sm">Upgrade to Pro</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wavy Divider -->
+  <div class="wavy-divider bg-white">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-full">
+      <path d="M0 30C300 55 600 5 900 30C1100 48 1300 15 1440 30V60H0V30Z" fill="#F0ECFF"/>
+    </svg>
+  </div>
+
+  <!-- Social Proof -->
+  <section class="py-20 px-6" style="background: #F0ECFF;">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="reveal text-sm text-[#8B7FA8] mb-8 uppercase tracking-widest font-bold">Trusted by builders at</p>
+      <div class="reveal reveal-delay-1 flex flex-wrap justify-center gap-8 items-center opacity-40">
+        <span class="text-[#2D1B69] font-extrabold text-lg">[Company 1]</span>
+        <span class="text-[#2D1B69] font-extrabold text-lg">[Company 2]</span>
+        <span class="text-[#2D1B69] font-extrabold text-lg">[Company 3]</span>
+        <span class="text-[#2D1B69] font-extrabold text-lg">[Company 4]</span>
+        <span class="text-[#2D1B69] font-extrabold text-lg">[Company 5]</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-28 px-6" style="background: #F0ECFF;">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="reveal text-2xl sm:text-3xl text-[#2D1B69] mb-4">Ready to build something soft?</h2>
+      <p class="reveal reveal-delay-1 text-[#8B7FA8] mb-10">
+        [One line that creates urgency or removes friction. Free tier? No credit card? Say it here.]
+      </p>
+      <div class="reveal reveal-delay-2">
+        <button class="clay-btn text-lg py-4 px-10">Start building — it's free</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24 px-6" style="background: #F8F5FF;">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal text-2xl sm:text-3xl text-[#2D1B69] text-center mb-12">Questions & answers</h2>
+
+      <div class="space-y-4">
+        <div class="reveal clay-card p-6">
+          <h3 class="text-base font-bold text-[#2D1B69] mb-2">[Is it free to start?]</h3>
+          <p class="text-sm text-[#8B7FA8] leading-relaxed">
+            [Direct answer. Yes + specific limits, or free trial duration.]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-1 clay-card p-6">
+          <h3 class="text-base font-bold text-[#2D1B69] mb-2">[What makes it different from [competitor]?]</h3>
+          <p class="text-sm text-[#8B7FA8] leading-relaxed">
+            [Honest comparison. Don't trash competitors — highlight your unique angle.]
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-2 clay-card p-6">
+          <h3 class="text-base font-bold text-[#2D1B69] mb-2">[Can I use it with my existing tools?]</h3>
+          <p class="text-sm text-[#8B7FA8] leading-relaxed">
+            [Integrations, APIs, export formats. Be specific.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6" style="background: #F8F5FF;">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-full bg-[#7C5CFC] flex items-center justify-center"
+             style="box-shadow: inset 1px 1px 1px rgba(255,255,255,0.3), 1px 2px 4px rgba(124,92,252,0.2);">
+          <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+        </div>
+        <span class="text-sm font-bold text-[#2D1B69]">[Product]</span>
+      </div>
+      <div class="flex gap-6 text-sm text-[#8B7FA8]">
+        <a href="#" class="hover:text-[#7C5CFC] transition-colors duration-300">Privacy</a>
+        <a href="#" class="hover:text-[#7C5CFC] transition-colors duration-300">Terms</a>
+        <a href="#" class="hover:text-[#7C5CFC] transition-colors duration-300">Docs</a>
+        <a href="#" class="hover:text-[#7C5CFC] transition-colors duration-300">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Reveal Script — repeats on scroll -->
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      revealObserver.observe(el);
+    });
+  </script>
+
+</body>
+</html>

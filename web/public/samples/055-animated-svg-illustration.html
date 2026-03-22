@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>055 — Animated SVG Illustration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #FFFFFF;
+      color: #1E293B;
+      overflow-x: hidden;
+    }
+    .mono { font-family: 'Fira Code', monospace; }
+
+    /* SVG draw animation */
+    .draw-path {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      transition: stroke-dashoffset 2s ease;
+    }
+    .draw-path.animate {
+      stroke-dashoffset: 0;
+    }
+
+    /* Bounce in */
+    @keyframes bounce-in {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .bounce-el {
+      opacity: 0;
+      transform: scale(0);
+    }
+    .bounce-el.animate {
+      animation: bounce-in 0.6s ease forwards;
+    }
+
+    /* Wiggle */
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+    .wiggle-el.animate {
+      animation: wiggle 1.5s ease-in-out infinite;
+    }
+
+    /* Bar grow */
+    @keyframes grow-bar {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+    .grow-bar {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+    .grow-bar.animate {
+      animation: grow-bar 1s ease forwards;
+    }
+    .grow-delay-1 { animation-delay: 0.2s !important; }
+    .grow-delay-2 { animation-delay: 0.4s !important; }
+    .grow-delay-3 { animation-delay: 0.6s !important; }
+
+    /* Checkmark draw */
+    .check-path {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      transition: stroke-dashoffset 0.6s ease 0.3s;
+    }
+    .check-path.animate {
+      stroke-dashoffset: 0;
+    }
+
+    /* Confetti */
+    @keyframes confetti-1 { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 100% { transform: translate(-30px, -40px) rotate(180deg); opacity: 0; } }
+    @keyframes confetti-2 { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 100% { transform: translate(25px, -35px) rotate(-120deg); opacity: 0; } }
+    @keyframes confetti-3 { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 100% { transform: translate(-15px, -50px) rotate(90deg); opacity: 0; } }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* CTA */
+    .btn-indigo {
+      background: #6366F1;
+      color: #FFFFFF;
+      padding: 14px 36px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+      display: inline-block;
+    }
+    .btn-indigo:hover { background: #4F46E5; }
+    .btn-outline-indigo {
+      background: transparent;
+      color: #6366F1;
+      padding: 14px 36px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 2px solid #E2E8F0;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    .btn-outline-indigo:hover { border-color: #6366F1; }
+
+    /* Feature card */
+    .feature-card {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(30,41,59,0.06);
+    }
+
+    /* Step connector dashed */
+    .step-dash {
+      border-top: 2px dashed #E2E8F0;
+    }
+
+    /* Wave footer */
+    @keyframes wave-move {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav style="border-bottom: 1px solid #E2E8F0;">
+    <div class="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
+      <span class="text-xl font-bold" style="color: #6366F1;">Buildkit</span>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#" class="text-sm font-medium" style="color: #64748B;">Features</a>
+        <a href="#" class="text-sm font-medium" style="color: #64748B;">Templates</a>
+        <a href="#" class="text-sm font-medium" style="color: #64748B;">Pricing</a>
+      </div>
+      <a href="#" class="btn-indigo text-sm py-2 px-6">Get started</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="py-24">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <h1 class="text-5xl md:text-7xl font-bold mb-6" style="letter-spacing: -0.02em; line-height: 1.05;">
+            Ship interfaces<br>people love
+          </h1>
+          <p class="text-lg mb-8" style="color: #64748B; line-height: 1.7;">
+            A component toolkit that handles the boring parts — auth screens, settings panels, data tables — so you can focus on what makes your product different.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="btn-indigo">Browse components</a>
+            <a href="#" class="btn-outline-indigo">See demos</a>
+          </div>
+        </div>
+        <!-- Animated SVG dashboard wireframe -->
+        <div class="reveal reveal-delay-1" id="hero-svg-container">
+          <svg viewBox="0 0 400 320" class="w-full">
+            <!-- Frame -->
+            <rect x="10" y="10" width="380" height="300" rx="12" stroke="#E2E8F0" stroke-width="2" fill="#F8FAFC" class="draw-path"/>
+            <!-- Top bar -->
+            <rect x="10" y="10" width="380" height="45" rx="12" stroke="#E2E8F0" stroke-width="1.5" fill="#F8FAFC" class="draw-path"/>
+            <!-- Dots -->
+            <circle cx="30" cy="32" r="5" fill="#E2E8F0" class="bounce-el"/>
+            <circle cx="48" cy="32" r="5" fill="#E2E8F0" class="bounce-el"/>
+            <circle cx="66" cy="32" r="5" fill="#E2E8F0" class="bounce-el"/>
+            <!-- Nav bar text placeholders -->
+            <rect x="200" y="27" width="40" height="8" rx="3" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="250" y="27" width="35" height="8" rx="3" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="295" y="27" width="30" height="8" rx="3" fill="#6366F1" opacity="0.3" class="bounce-el"/>
+            <!-- Sidebar -->
+            <rect x="20" y="65" width="80" height="8" rx="3" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="20" y="85" width="65" height="8" rx="3" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="20" y="105" width="70" height="8" rx="3" fill="#6366F1" opacity="0.4" class="bounce-el"/>
+            <rect x="20" y="125" width="55" height="8" rx="3" fill="#E2E8F0" class="bounce-el"/>
+            <!-- Chart bars -->
+            <rect x="130" y="230" width="20" height="60" rx="3" fill="#6366F1" opacity="0.2" class="grow-bar"/>
+            <rect x="160" y="210" width="20" height="80" rx="3" fill="#6366F1" opacity="0.35" class="grow-bar grow-delay-1"/>
+            <rect x="190" y="240" width="20" height="50" rx="3" fill="#6366F1" opacity="0.2" class="grow-bar grow-delay-2"/>
+            <rect x="220" y="195" width="20" height="95" rx="3" fill="#6366F1" opacity="0.5" class="grow-bar grow-delay-3"/>
+            <rect x="250" y="220" width="20" height="70" rx="3" fill="#6366F1" opacity="0.3" class="grow-bar grow-delay-1"/>
+            <!-- Cards -->
+            <rect x="130" y="70" width="110" height="60" rx="8" stroke="#E2E8F0" stroke-width="1.5" fill="white" class="draw-path"/>
+            <rect x="260" y="70" width="110" height="60" rx="8" stroke="#E2E8F0" stroke-width="1.5" fill="white" class="draw-path"/>
+            <!-- Card content -->
+            <rect x="145" y="85" width="50" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="145" y="100" width="35" height="12" rx="3" fill="#1E293B" opacity="0.2" class="bounce-el"/>
+            <rect x="275" y="85" width="45" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="275" y="100" width="40" height="12" rx="3" fill="#22C55E" opacity="0.3" class="bounce-el"/>
+            <!-- Big card -->
+            <rect x="130" y="145" width="240" height="50" rx="8" stroke="#E2E8F0" stroke-width="1.5" fill="white" class="draw-path"/>
+            <rect x="145" y="160" width="100" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+            <rect x="145" y="175" width="70" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+            <!-- Checkmark -->
+            <circle cx="350" cy="170" r="10" fill="#22C55E" opacity="0.15" class="bounce-el"/>
+            <polyline points="345,170 349,174 357,166" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-path"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Cards -->
+  <section class="py-28">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4" style="letter-spacing: -0.01em;">Everything ships with motion</h2>
+        <p class="text-base" style="color: #64748B;">Components that feel alive, not static.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1: Gear spinning -->
+        <div class="feature-card p-8 reveal reveal-delay-1" style="min-height: 260px;" id="card-gear">
+          <div class="mb-6">
+            <svg width="48" height="48" viewBox="0 0 48 48" class="wiggle-el">
+              <circle cx="24" cy="24" r="8" stroke="#6366F1" stroke-width="2" fill="none"/>
+              <path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.5 9.5l4.2 4.2M34.3 34.3l4.2 4.2M9.5 38.5l4.2-4.2M34.3 13.7l4.2-4.2" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Auto Theming</h3>
+          <p class="text-sm" style="color: #64748B; line-height: 1.7;">
+            Drop in your brand colors. Every component adapts — buttons, inputs, cards, modals. No manual overriding of 47 CSS variables.
+          </p>
+        </div>
+        <!-- Card 2: Chart bars growing -->
+        <div class="feature-card p-8 reveal reveal-delay-2" style="min-height: 300px;" id="card-chart">
+          <div class="mb-6">
+            <svg width="48" height="48" viewBox="0 0 48 48">
+              <rect x="4" y="28" width="8" height="16" rx="2" fill="#6366F1" opacity="0.3" class="grow-bar"/>
+              <rect x="16" y="18" width="8" height="26" rx="2" fill="#6366F1" opacity="0.5" class="grow-bar grow-delay-1"/>
+              <rect x="28" y="24" width="8" height="20" rx="2" fill="#6366F1" opacity="0.4" class="grow-bar grow-delay-2"/>
+              <rect x="40" y="10" width="8" height="34" rx="2" fill="#6366F1" opacity="0.7" class="grow-bar grow-delay-3"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Data Viz Built-in</h3>
+          <p class="text-sm" style="color: #64748B; line-height: 1.7;">
+            Bar charts, line charts, sparklines — all animated on mount. Responsive by default. Connected to your data layer with zero config. Tested across 1,247 viewport widths (no, really).
+          </p>
+          <div class="mt-4 mono text-xs p-3 rounded-lg" style="background: #F1F5F9; color: #64748B;">
+            &lt;Chart data={metrics} animate /&gt;
+          </div>
+        </div>
+        <!-- Card 3: Checkmark drawing -->
+        <div class="feature-card p-8 reveal reveal-delay-3" style="min-height: 240px;" id="card-check">
+          <div class="mb-6">
+            <svg width="48" height="48" viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="20" stroke="#E2E8F0" stroke-width="2" fill="none" class="draw-path"/>
+              <circle cx="24" cy="24" r="20" stroke="#22C55E" stroke-width="2" fill="none" opacity="0.2" class="draw-path"/>
+              <polyline points="15,24 22,31 33,18" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-path"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Form Validation</h3>
+          <p class="text-sm" style="color: #64748B; line-height: 1.7;">
+            Real-time validation with animated feedback. Green check draws itself on valid input. Red shake on error. Users know instantly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4" style="letter-spacing: -0.01em;">Three steps to shipping</h2>
+      </div>
+      <div class="flex flex-col md:flex-row items-start justify-between gap-8 reveal">
+        <!-- Step 1 -->
+        <div class="flex-1 text-center">
+          <div class="mx-auto mb-4">
+            <svg width="64" height="64" viewBox="0 0 64 64" class="mx-auto" id="step-1-svg">
+              <rect x="12" y="12" width="40" height="40" rx="8" stroke="#6366F1" stroke-width="2" fill="none" class="draw-path"/>
+              <line x1="22" y1="28" x2="42" y2="28" stroke="#E2E8F0" stroke-width="2" stroke-linecap="round" class="draw-path"/>
+              <line x1="22" y1="36" x2="36" y2="36" stroke="#E2E8F0" stroke-width="2" stroke-linecap="round" class="draw-path"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Pick components</h3>
+          <p class="text-sm" style="color: #64748B;">Browse the library. Copy what you need.</p>
+        </div>
+        <!-- Dashed connector -->
+        <div class="hidden md:flex items-center pt-8">
+          <svg width="60" height="20" viewBox="0 0 60 20">
+            <line x1="0" y1="10" x2="50" y2="10" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="4 4"/>
+            <polygon points="50,5 60,10 50,15" fill="#E2E8F0"/>
+          </svg>
+        </div>
+        <!-- Step 2 -->
+        <div class="flex-1 text-center">
+          <div class="mx-auto mb-4">
+            <svg width="64" height="64" viewBox="0 0 64 64" class="mx-auto" id="step-2-svg">
+              <circle cx="32" cy="32" r="20" stroke="#6366F1" stroke-width="2" fill="none" class="draw-path"/>
+              <path d="M24 32 C28 24 36 24 40 32 C36 40 28 40 24 32" stroke="#6366F1" stroke-width="1.5" fill="none" class="draw-path"/>
+              <circle cx="32" cy="32" r="4" fill="#6366F1" opacity="0.3" class="bounce-el"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Customize theme</h3>
+          <p class="text-sm" style="color: #64748B;">Drop your colors. Everything adapts.</p>
+        </div>
+        <!-- Dashed connector -->
+        <div class="hidden md:flex items-center pt-8">
+          <svg width="60" height="20" viewBox="0 0 60 20">
+            <line x1="0" y1="10" x2="50" y2="10" stroke="#E2E8F0" stroke-width="2" stroke-dasharray="4 4"/>
+            <polygon points="50,5 60,10 50,15" fill="#E2E8F0"/>
+          </svg>
+        </div>
+        <!-- Step 3 -->
+        <div class="flex-1 text-center">
+          <div class="mx-auto mb-4">
+            <svg width="64" height="64" viewBox="0 0 64 64" class="mx-auto" id="step-3-svg">
+              <rect x="12" y="16" width="40" height="32" rx="4" stroke="#22C55E" stroke-width="2" fill="none" class="draw-path"/>
+              <polyline points="24,32 30,38 42,26" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="check-path"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Ship it</h3>
+          <p class="text-sm" style="color: #64748B;">Production-ready. Accessible. Animated.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase -->
+  <section class="py-24">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <div class="reveal" id="showcase-svg-container">
+        <svg viewBox="0 0 400 250" class="w-full max-w-lg mx-auto mb-8">
+          <!-- Building blocks assembling -->
+          <rect x="50" y="170" width="80" height="60" rx="6" stroke="#6366F1" stroke-width="2" fill="#F8FAFC" class="draw-path"/>
+          <rect x="160" y="170" width="80" height="60" rx="6" stroke="#6366F1" stroke-width="2" fill="#F8FAFC" class="draw-path"/>
+          <rect x="270" y="170" width="80" height="60" rx="6" stroke="#6366F1" stroke-width="2" fill="#F8FAFC" class="draw-path"/>
+          <rect x="105" y="100" width="80" height="60" rx="6" stroke="#6366F1" stroke-width="2" fill="#EEF2FF" class="bounce-el"/>
+          <rect x="215" y="100" width="80" height="60" rx="6" stroke="#6366F1" stroke-width="2" fill="#EEF2FF" class="bounce-el"/>
+          <rect x="160" y="30" width="80" height="60" rx="6" stroke="#6366F1" stroke-width="2" fill="#6366F1" opacity="0.15" class="bounce-el"/>
+          <!-- Stars -->
+          <circle cx="350" cy="50" r="3" fill="#F59E0B" class="bounce-el"/>
+          <circle cx="60" cy="40" r="2" fill="#F59E0B" class="bounce-el"/>
+          <circle cx="330" cy="130" r="2.5" fill="#F59E0B" class="bounce-el"/>
+          <!-- Labels -->
+          <rect x="65" y="190" width="50" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+          <rect x="175" y="190" width="50" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+          <rect x="285" y="190" width="50" height="6" rx="2" fill="#E2E8F0" class="bounce-el"/>
+        </svg>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4" style="letter-spacing: -0.01em;">Assemble, don't build from scratch</h2>
+        <p class="text-base" style="color: #64748B; line-height: 1.7; max-width: 500px; margin: 0 auto;">
+          Every block is tested, animated, and accessible. Stack them into pages in minutes, not weeks.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="py-16">
+    <div class="max-w-2xl mx-auto px-6">
+      <div class="feature-card p-8 reveal" style="border-left: 4px solid #6366F1;">
+        <svg width="24" height="24" viewBox="0 0 24 24" class="mb-4 wiggle-el">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#6366F1" stroke-width="2" fill="none"/>
+        </svg>
+        <p class="text-lg mb-6" style="line-height: 1.8;">
+          "Saved us 3 weeks on the settings panel alone. The form validation animations are genuinely nice — our beta users commented on them unprompted, which never happens. Only complaint: the date picker doesn't support fiscal year formatting. Filed an issue, got a fix in 48 hours."
+        </p>
+        <div>
+          <p class="font-bold text-sm">R. Nakamura</p>
+          <p class="text-xs" style="color: #64748B;">Full-stack dev, 6-person B2B SaaS</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-28">
+    <div class="max-w-2xl mx-auto px-6 text-center reveal" id="cta-section">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6" style="letter-spacing: -0.01em;">Start building something worth shipping</h2>
+      <p class="text-base mb-8" style="color: #64748B;">Free for personal use. No credit card.</p>
+      <div class="relative inline-block">
+        <a href="#" class="btn-indigo text-lg px-10 py-4 relative z-10">Open the toolkit</a>
+        <!-- Confetti SVG elements (hidden until hover) -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer with wave -->
+  <footer style="border-top: 1px solid #E2E8F0;">
+    <div class="overflow-hidden" style="height: 30px;">
+      <svg viewBox="0 0 2400 30" preserveAspectRatio="none" style="width: 200%; animation: wave-move 8s linear infinite;">
+        <path d="M0 15 Q150 0 300 15 T600 15 T900 15 T1200 15 T1500 15 T1800 15 T2100 15 T2400 15 V30 H0 Z" fill="none" stroke="#E2E8F0" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="max-w-screen-xl mx-auto px-6 py-12">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <span class="text-lg font-bold" style="color: #6366F1;">Buildkit</span>
+          <p class="text-sm mt-2" style="color: #64748B;">Ship interfaces people love.</p>
+        </div>
+        <div>
+          <p class="text-sm font-bold mb-3">Product</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm" style="color: #64748B;">Components</a></li>
+            <li><a href="#" class="text-sm" style="color: #64748B;">Templates</a></li>
+            <li><a href="#" class="text-sm" style="color: #64748B;">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-bold mb-3">Community</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm" style="color: #64748B;">GitHub</a></li>
+            <li><a href="#" class="text-sm" style="color: #64748B;">Discord</a></li>
+            <li><a href="#" class="text-sm" style="color: #64748B;">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8" style="border-top: 1px solid #E2E8F0;">
+        <p class="text-sm text-center" style="color: #64748B;">&copy; 2025 Buildkit. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal — repeats
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Trigger SVG animations within the element
+          entry.target.querySelectorAll('.draw-path, .bounce-el, .wiggle-el, .grow-bar, .check-path').forEach(el => {
+            el.classList.add('animate');
+          });
+        } else {
+          entry.target.classList.remove('visible');
+          // Reset SVG animations
+          entry.target.querySelectorAll('.draw-path, .bounce-el, .wiggle-el, .grow-bar, .check-path').forEach(el => {
+            el.classList.remove('animate');
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Also observe SVG containers that aren't .reveal
+    ['hero-svg-container', 'card-gear', 'card-chart', 'card-check', 'showcase-svg-container'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const svgObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            const targets = entry.target.querySelectorAll('.draw-path, .bounce-el, .wiggle-el, .grow-bar, .check-path');
+            if (entry.isIntersecting) {
+              targets.forEach(t => t.classList.add('animate'));
+            } else {
+              targets.forEach(t => t.classList.remove('animate'));
+            }
+          });
+        }, { threshold: 0.2 });
+        svgObserver.observe(el);
+      }
+    });
+  </script>
+</body>
+</html>

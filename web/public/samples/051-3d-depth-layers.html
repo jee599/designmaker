@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>051 — 3D Depth Layers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #09090B;
+      color: #FAFAFA;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: 'Syne', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+
+    /* Perspective container */
+    .perspective-container {
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    /* Depth cards */
+    .depth-card {
+      background: #18181B;
+      border: 1px solid #27272A;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      transform-style: preserve-3d;
+    }
+    .depth-card:hover {
+      transform: rotateY(4deg) rotateX(-2deg) translateZ(8px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3), 0 24px 48px rgba(0,0,0,0.2);
+    }
+
+    /* Stacked layers behind hero */
+    .hero-layer {
+      position: absolute;
+      border-radius: 12px;
+      border: 1px solid #27272A;
+    }
+    .hero-layer-1 {
+      background: #18181B;
+      transform: translateZ(-40px) scale(0.95);
+      opacity: 0.8;
+    }
+    .hero-layer-2 {
+      background: #27272A;
+      transform: translateZ(-80px) scale(0.9);
+      opacity: 0.5;
+    }
+    .hero-layer-3 {
+      background: #3F3F46;
+      transform: translateZ(-120px) scale(0.85);
+      opacity: 0.3;
+    }
+
+    /* Stacked showcase cards */
+    .stack-card {
+      transition: transform 0.6s ease;
+    }
+    .stack-card.separated {
+      transform: translateY(0) !important;
+    }
+
+    /* Multi-layer shadow */
+    .shadow-depth {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 12px 24px rgba(0,0,0,0.15), 0 32px 48px rgba(0,0,0,0.1);
+    }
+
+    /* Blue glow subtle */
+    .glow-blue {
+      box-shadow: 0 0 40px rgba(59,130,246,0.08);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+
+    /* CTA */
+    .btn-blue {
+      background: #3B82F6;
+      color: #FFFFFF;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+      display: inline-block;
+    }
+    .btn-blue:hover { background: #2563EB; }
+    .btn-outline {
+      background: transparent;
+      color: #FAFAFA;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: 1px solid #27272A;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: #3B82F6; color: #3B82F6; }
+
+    /* Timeline */
+    .timeline-line {
+      width: 2px;
+      background: linear-gradient(to bottom, #3B82F6, #27272A);
+    }
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #3B82F6;
+      border: 2px solid #09090B;
+      position: absolute;
+      left: -5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50" style="background: rgba(9,9,11,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #27272A;">
+    <div class="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
+      <span class="text-xl font-bold" style="font-family: 'Syne', sans-serif;">DepthUI</span>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#" class="text-sm" style="color: #71717A;">Features</a>
+        <a href="#" class="text-sm" style="color: #71717A;">Docs</a>
+        <a href="#" class="text-sm" style="color: #71717A;">Pricing</a>
+      </div>
+      <a href="#" class="btn-blue text-sm py-2 px-6">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Hero with Layered Cards -->
+  <section class="py-32 pt-40 relative">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <h1 class="text-5xl md:text-7xl font-bold mb-6" style="letter-spacing: -0.04em; line-height: 1.05;">
+            Design in<br>three dimensions
+          </h1>
+          <p class="text-lg mb-8" style="color: #71717A; line-height: 1.7;">
+            Interfaces that feel spatial. Components with real depth. Build UIs that breathe.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="btn-blue">Try it now</a>
+            <a href="#" class="btn-outline">View docs</a>
+          </div>
+        </div>
+        <div class="perspective-container relative reveal reveal-delay-1" style="min-height: 400px;">
+          <div class="hero-layer hero-layer-3 inset-4 md:inset-8"></div>
+          <div class="hero-layer hero-layer-2 inset-4 md:inset-8"></div>
+          <div class="hero-layer hero-layer-1 inset-4 md:inset-8"></div>
+          <div class="relative rounded-xl p-8 shadow-depth glow-blue" style="background: #18181B; border: 1px solid #27272A;">
+            <div class="flex items-center gap-2 mb-6">
+              <div class="w-3 h-3 rounded-full" style="background: #FF5F57;"></div>
+              <div class="w-3 h-3 rounded-full" style="background: #FEBC2E;"></div>
+              <div class="w-3 h-3 rounded-full" style="background: #28C840;"></div>
+            </div>
+            <div class="space-y-3">
+              <div class="h-4 rounded" style="background: #27272A; width: 70%;"></div>
+              <div class="h-4 rounded" style="background: #27272A; width: 55%;"></div>
+              <div class="h-4 rounded" style="background: #3B82F6; width: 40%; opacity: 0.6;"></div>
+              <div class="h-4 rounded" style="background: #27272A; width: 65%;"></div>
+              <div class="h-8 rounded mt-4" style="background: #27272A; width: 100%;"></div>
+              <div class="grid grid-cols-3 gap-3 mt-4">
+                <div class="h-16 rounded" style="background: #27272A;"></div>
+                <div class="h-16 rounded" style="background: #27272A;"></div>
+                <div class="h-16 rounded" style="background: rgba(59,130,246,0.15);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Layered Feature Cards -->
+  <section class="py-28">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-3xl md:text-5xl font-bold mb-4" style="letter-spacing: -0.02em;">Built for depth</h2>
+        <p class="text-lg" style="color: #71717A;">Components that feel alive, not flat.</p>
+      </div>
+      <div class="perspective-container grid md:grid-cols-3 gap-6">
+        <div class="depth-card rounded-xl p-8 reveal reveal-delay-1" style="min-height: 280px;">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-6" style="background: rgba(59,130,246,0.15);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3">Spatial Layout</h3>
+          <p class="text-sm" style="color: #71717A; line-height: 1.7;">Cards, panels, and containers with real z-index depth. Not simulated — actually rendered in 3D space using CSS transforms.</p>
+        </div>
+        <div class="depth-card rounded-xl p-8 reveal reveal-delay-2" style="min-height: 320px;">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-6" style="background: rgba(59,130,246,0.15);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3">Parallax Motion</h3>
+          <p class="text-sm" style="color: #71717A; line-height: 1.7;">Scroll-driven depth separation creates a sense of physical space. Elements move at different speeds, mimicking how we perceive real-world depth.</p>
+          <div class="mt-6 p-4 rounded-lg" style="background: #27272A;">
+            <p class="mono text-xs" style="color: #71717A;">translateZ(-40px) scale(0.95)</p>
+          </div>
+        </div>
+        <div class="depth-card rounded-xl p-8 reveal reveal-delay-3" style="min-height: 260px;">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-6" style="background: rgba(59,130,246,0.15);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M12 3v18"/><path d="M18 9l-6-6-6 6"/><path d="M6 15l6 6 6-6"/></svg>
+          </div>
+          <h3 class="text-lg font-bold mb-3">Layer Shadows</h3>
+          <p class="text-sm" style="color: #71717A; line-height: 1.7;">Three-tier shadow system. Light, medium, deep — stacked for realistic depth perception.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stacked Showcase -->
+  <section class="py-20">
+    <div class="max-w-2xl mx-auto px-6">
+      <div class="text-center mb-12 reveal">
+        <h2 class="text-3xl md:text-5xl font-bold mb-4" style="letter-spacing: -0.02em;">Stack. Separate. Reveal.</h2>
+        <p class="text-base" style="color: #71717A;">Scroll to watch the layers separate.</p>
+      </div>
+      <div class="relative reveal" style="min-height: 500px;" id="stack-container">
+        <div class="stack-card rounded-xl p-8 shadow-depth" style="background: #18181B; border: 1px solid #27272A; position: relative; z-index: 3; margin-bottom: -60px; transition: margin 0.6s ease;">
+          <h3 class="text-lg font-bold mb-2">Layer 1 — Interface</h3>
+          <p class="text-sm" style="color: #71717A;">The surface layer. What users see and touch. Clean, minimal, immediate.</p>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <div class="h-12 rounded-lg" style="background: #27272A;"></div>
+            <div class="h-12 rounded-lg" style="background: rgba(59,130,246,0.15);"></div>
+          </div>
+        </div>
+        <div class="stack-card rounded-xl p-8 shadow-depth" style="background: #27272A; border: 1px solid #3F3F46; position: relative; z-index: 2; margin-bottom: -60px; transition: margin 0.6s ease;">
+          <h3 class="text-lg font-bold mb-2">Layer 2 — Logic</h3>
+          <p class="text-sm" style="color: #71717A;">The orchestration layer. State management, routing, business rules.</p>
+          <div class="mt-4 mono text-xs p-3 rounded-lg" style="background: #18181B; color: #71717A;">
+            useDepth({ z: -40, scale: 0.95 })
+          </div>
+        </div>
+        <div class="stack-card rounded-xl p-8 shadow-depth" style="background: #3F3F46; border: 1px solid #52525B; position: relative; z-index: 1; transition: margin 0.6s ease;">
+          <h3 class="text-lg font-bold mb-2">Layer 3 — Infrastructure</h3>
+          <p class="text-sm" style="color: #A1A1AA;">The foundation. APIs, databases, CDN. Invisible but essential.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Inline (constraint #26 — no 4-col grid) -->
+  <section class="py-12">
+    <div class="max-w-screen-xl mx-auto px-6 text-center reveal">
+      <p class="text-lg" style="color: #71717A;">
+        Trusted by <span class="text-white font-semibold">[your number]</span> teams building interfaces across <span class="text-white font-semibold">[your count]</span> countries
+      </p>
+    </div>
+  </section>
+
+  <!-- How It Works (Timeline) -->
+  <section class="py-24">
+    <div class="max-w-2xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-3xl md:text-5xl font-bold mb-4" style="letter-spacing: -0.02em;">How it works</h2>
+      </div>
+      <div class="relative pl-8">
+        <div class="timeline-line absolute left-0 top-0 bottom-0"></div>
+        <div class="relative mb-12 reveal reveal-delay-1">
+          <div class="timeline-dot" style="top: 4px;"></div>
+          <div class="depth-card rounded-xl p-6 ml-4">
+            <p class="mono text-xs mb-2" style="color: #3B82F6;">Step 01</p>
+            <h3 class="text-lg font-bold mb-2">Import your design</h3>
+            <p class="text-sm" style="color: #71717A;">Paste a Figma URL or upload a screenshot. The system extracts layers automatically.</p>
+          </div>
+        </div>
+        <div class="relative mb-12 reveal reveal-delay-2">
+          <div class="timeline-dot" style="top: 4px;"></div>
+          <div class="depth-card rounded-xl p-6 ml-4">
+            <p class="mono text-xs mb-2" style="color: #3B82F6;">Step 02</p>
+            <h3 class="text-lg font-bold mb-2">Add depth tokens</h3>
+            <p class="text-sm" style="color: #71717A;">Assign z-depth, parallax speed, and shadow tier to each layer. Takes about 3 minutes for a full page.</p>
+          </div>
+        </div>
+        <div class="relative reveal reveal-delay-3">
+          <div class="timeline-dot" style="top: 4px;"></div>
+          <div class="depth-card rounded-xl p-6 ml-4">
+            <p class="mono text-xs mb-2" style="color: #3B82F6;">Step 03</p>
+            <h3 class="text-lg font-bold mb-2">Export spatial code</h3>
+            <p class="text-sm" style="color: #71717A;">Get production CSS with perspective, transforms, and scroll-driven animations baked in.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="py-16">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="depth-card rounded-xl p-8 md:p-10 reveal" style="border-left: 3px solid #3B82F6;">
+        <p class="text-lg md:text-xl mb-6" style="line-height: 1.7;">
+          "Honestly expected it to be a gimmick — '3D CSS' sounds like 2012 WebGL demos. But the card hover effects alone got our design lead to stop mid-sentence in a review. We shipped the depth system to prod in 4 days, zero regressions."
+        </p>
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full" style="background: #3B82F6;"></div>
+          <div>
+            <p class="font-semibold text-sm">M. Chen</p>
+            <p class="text-xs" style="color: #71717A;">Frontend Architect, 38-person startup</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA with depth cards behind -->
+  <section class="py-28 relative">
+    <div class="max-w-2xl mx-auto px-6 text-center">
+      <div class="perspective-container relative reveal">
+        <div class="absolute inset-0 rounded-xl" style="background: #27272A; transform: translateZ(-40px) scale(0.95) rotate(-1deg); opacity: 0.3; border: 1px solid #3F3F46;"></div>
+        <div class="absolute inset-0 rounded-xl" style="background: #18181B; transform: translateZ(-20px) scale(0.97) rotate(0.5deg); opacity: 0.5; border: 1px solid #27272A;"></div>
+        <div class="relative rounded-xl p-12" style="background: #18181B; border: 1px solid #27272A;">
+          <h2 class="text-3xl md:text-5xl font-bold mb-6" style="letter-spacing: -0.02em;">Add depth to your next project</h2>
+          <p class="text-base mb-8" style="color: #71717A;">Start with the free tier. Upgrade when your interfaces demand it.</p>
+          <a href="#" class="btn-blue text-lg px-10 py-4">Get started free</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t" style="border-color: #27272A;">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <span class="text-lg font-bold" style="font-family: 'Syne', sans-serif;">DepthUI</span>
+          <p class="text-sm mt-2" style="color: #71717A;">Interfaces with real depth.</p>
+        </div>
+        <div>
+          <p class="text-sm font-semibold mb-3">Product</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm" style="color: #71717A;">Features</a></li>
+            <li><a href="#" class="text-sm" style="color: #71717A;">Documentation</a></li>
+            <li><a href="#" class="text-sm" style="color: #71717A;">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold mb-3">Company</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm" style="color: #71717A;">About</a></li>
+            <li><a href="#" class="text-sm" style="color: #71717A;">Blog</a></li>
+            <li><a href="#" class="text-sm" style="color: #71717A;">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8 border-t" style="border-color: #27272A;">
+        <p class="text-sm text-center" style="color: #71717A;">&copy; 2025 DepthUI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal — repeats
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Stack separation on scroll
+    const stackContainer = document.getElementById('stack-container');
+    const stackObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const cards = entry.target.querySelectorAll('.stack-card');
+        if (entry.isIntersecting) {
+          cards.forEach(card => { card.style.marginBottom = '16px'; });
+        } else {
+          cards[0].style.marginBottom = '-60px';
+          cards[1].style.marginBottom = '-60px';
+        }
+      });
+    }, { threshold: 0.5 });
+    if (stackContainer) stackObserver.observe(stackContainer);
+  </script>
+</body>
+</html>

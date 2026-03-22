@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>020 — Bold Colorful Reference</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Space Grotesk"', 'sans-serif'],
+            body: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            electric: '#1F42E3',
+            electricLight: '#4C68E9',
+            lemon: '#E5DC23',
+            charcoal: '#0a0a0a',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Space Grotesk', sans-serif; margin: 0; overflow-x: hidden; }
+
+    /* Slam-in animations — fast 200ms, not smooth */
+    @keyframes slamUp {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slamLeft {
+      from { opacity: 0; transform: translateX(-80px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slamRight {
+      from { opacity: 0; transform: translateX(80px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slamScale {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .slam-up { opacity: 0; }
+    .slam-up.visible { animation: slamUp 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slam-left { opacity: 0; }
+    .slam-left.visible { animation: slamLeft 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slam-right { opacity: 0; }
+    .slam-right.visible { animation: slamRight 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .slam-scale { opacity: 0; }
+    .slam-scale.visible { animation: slamScale 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    /* Marquee */
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .marquee-track { animation: marquee 20s linear infinite; }
+
+    /* Hover lift for cards */
+    .card-lift { transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .card-lift:hover { transform: translateY(-6px); }
+
+    /* Button hover */
+    .btn-bold { transition: background 150ms, color 150ms, transform 100ms; }
+    .btn-bold:hover { transform: scale(1.03); }
+
+    /* Nav link underline */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: currentColor;
+      transition: width 150ms;
+    }
+    .nav-link:hover::after { width: 100%; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-electric" style="border-bottom: 3px solid #000;">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+      <a href="#" class="text-white font-heading font-bold text-xl tracking-tight">STUDIO●</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#work" class="nav-link text-white font-heading text-sm font-medium tracking-wide uppercase">Work</a>
+        <a href="#about" class="nav-link text-white font-heading text-sm font-medium tracking-wide uppercase">About</a>
+        <a href="#services" class="nav-link text-white font-heading text-sm font-medium tracking-wide uppercase">Services</a>
+        <a href="#contact" class="btn-bold bg-black text-white font-heading text-sm font-bold px-6 py-3 uppercase tracking-wide">Let's Talk</a>
+      </div>
+      <button class="md:hidden text-white" aria-label="Menu">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO — Electric Blue -->
+  <section class="bg-electric min-h-screen flex items-center relative pt-20" style="border-bottom: 4px solid #000;">
+    <div class="max-w-7xl mx-auto px-6 py-32 w-full">
+      <h1 class="slam-up text-white font-heading font-extrabold tracking-tighter leading-none"
+          style="font-size: clamp(80px, 12vw, 160px); font-weight: 900;">
+        We make<br>it bold.
+      </h1>
+      <div class="mt-12 flex flex-col sm:flex-row items-start gap-6 slam-up" style="animation-delay: 100ms;">
+        <a href="#work" class="btn-bold bg-black text-white font-heading text-lg font-bold px-10 py-5 uppercase tracking-wide">
+          See the work
+        </a>
+        <p class="text-white/70 font-body text-lg max-w-sm leading-relaxed">
+          Design studio for brands that refuse to blend in. Strategy, identity, digital.
+        </p>
+      </div>
+      <!-- Decorative arrow -->
+      <div class="absolute bottom-12 left-6 slam-up" style="animation-delay: 300ms;">
+        <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP — Black -->
+  <div class="bg-black py-5 overflow-hidden" style="border-bottom: 4px solid #1F42E3;">
+    <div class="flex whitespace-nowrap">
+      <div class="marquee-track flex items-center gap-12 text-white font-heading text-2xl font-bold uppercase tracking-widest">
+        <span>Branding</span><span class="text-electric">●</span>
+        <span>Web Design</span><span class="text-electric">●</span>
+        <span>Motion</span><span class="text-electric">●</span>
+        <span>Strategy</span><span class="text-electric">●</span>
+        <span>Identity</span><span class="text-electric">●</span>
+        <span>Art Direction</span><span class="text-electric">●</span>
+        <span>Branding</span><span class="text-electric">●</span>
+        <span>Web Design</span><span class="text-electric">●</span>
+        <span>Motion</span><span class="text-electric">●</span>
+        <span>Strategy</span><span class="text-electric">●</span>
+        <span>Identity</span><span class="text-electric">●</span>
+        <span>Art Direction</span><span class="text-electric">●</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORK SECTION — White -->
+  <section id="work" class="bg-white py-28 px-6" style="border-bottom: 4px solid #000;">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-end justify-between mb-16">
+        <h2 class="slam-left font-heading font-extrabold text-black tracking-tighter leading-none"
+            style="font-size: clamp(48px, 7vw, 96px); font-weight: 900;">
+          Selected<br>work
+        </h2>
+        <span class="slam-right text-black/40 font-heading font-bold text-xl uppercase tracking-widest hidden md:block">(6)</span>
+      </div>
+
+      <!-- Work Grid — varying card sizes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+        <!-- Project 1 — Large -->
+        <div class="card-lift slam-up border-t-4 border-r-0 md:border-r-4 border-black p-8 md:p-12 group cursor-pointer" style="background: #1F42E3;">
+          <div class="aspect-[4/3] w-full mb-6 flex items-center justify-center" style="background: rgba(0,0,0,0.15);">
+            <span class="text-white/30 font-heading text-sm uppercase tracking-widest">Project Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-white text-3xl tracking-tight">[Project Name]</h3>
+          <p class="font-body text-white/60 text-base mt-2">Brand Identity — [Year]</p>
+        </div>
+        <!-- Project 2 — Large -->
+        <div class="card-lift slam-up border-t-4 border-black p-8 md:p-12 group cursor-pointer bg-lemon">
+          <div class="aspect-[4/3] w-full mb-6 flex items-center justify-center" style="background: rgba(0,0,0,0.08);">
+            <span class="text-black/30 font-heading text-sm uppercase tracking-widest">Project Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-black text-3xl tracking-tight">[Project Name]</h3>
+          <p class="font-body text-black/50 text-base mt-2">Web Design — [Year]</p>
+        </div>
+        <!-- Project 3 -->
+        <div class="card-lift slam-up border-t-4 border-r-0 md:border-r-4 border-black p-8 md:p-12 group cursor-pointer bg-black">
+          <div class="aspect-[4/3] w-full mb-6 flex items-center justify-center" style="background: rgba(255,255,255,0.05);">
+            <span class="text-white/30 font-heading text-sm uppercase tracking-widest">Project Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-white text-3xl tracking-tight">[Project Name]</h3>
+          <p class="font-body text-white/40 text-base mt-2">Motion — [Year]</p>
+        </div>
+        <!-- Project 4 -->
+        <div class="card-lift slam-up border-t-4 border-black p-8 md:p-12 group cursor-pointer bg-white">
+          <div class="aspect-[4/3] w-full mb-6 flex items-center justify-center border-4 border-black">
+            <span class="text-black/30 font-heading text-sm uppercase tracking-widest">Project Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-black text-3xl tracking-tight">[Project Name]</h3>
+          <p class="font-body text-black/50 text-base mt-2">Strategy — [Year]</p>
+        </div>
+      </div>
+
+      <!-- Bottom row — 3 columns -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t-4 border-black">
+        <div class="card-lift slam-up p-8 group cursor-pointer border-r-0 md:border-r-4 border-black" style="background: #4C68E9;">
+          <div class="aspect-square w-full mb-4 flex items-center justify-center" style="background: rgba(0,0,0,0.12);">
+            <span class="text-white/30 font-heading text-xs uppercase tracking-widest">Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-white text-xl tracking-tight">[Project]</h3>
+        </div>
+        <div class="card-lift slam-up p-8 group cursor-pointer border-r-0 md:border-r-4 border-black bg-white">
+          <div class="aspect-square w-full mb-4 flex items-center justify-center border-4 border-black">
+            <span class="text-black/30 font-heading text-xs uppercase tracking-widest">Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-black text-xl tracking-tight">[Project]</h3>
+        </div>
+        <div class="card-lift slam-up p-8 group cursor-pointer bg-lemon">
+          <div class="aspect-square w-full mb-4 flex items-center justify-center" style="background: rgba(0,0,0,0.08);">
+            <span class="text-black/30 font-heading text-xs uppercase tracking-widest">Image</span>
+          </div>
+          <h3 class="font-heading font-bold text-black text-xl tracking-tight">[Project]</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT — Lemon Yellow -->
+  <section id="about" class="py-32 px-6" style="background: #E5DC23; border-bottom: 4px solid #000;">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="slam-left">
+        <h2 class="font-heading font-extrabold text-black tracking-tighter leading-none"
+            style="font-size: clamp(48px, 6vw, 80px); font-weight: 900;">
+          Not your<br>typical<br>agency.
+        </h2>
+      </div>
+      <div class="slam-right">
+        <p class="font-body text-black/80 text-xl leading-relaxed mb-8">
+          We're a [your-size] team that does one thing: make brands impossible to ignore.
+          No committees, no decks that go nowhere. Direct collaboration, fast output,
+          work that hits.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <span class="font-heading text-sm font-bold uppercase tracking-widest bg-black text-lemon px-5 py-3">Since [year]</span>
+          <span class="font-heading text-sm font-bold uppercase tracking-widest bg-black text-white px-5 py-3">[N] Projects</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES — Black -->
+  <section id="services" class="bg-charcoal py-32 px-6" style="border-bottom: 4px solid #1F42E3;">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="slam-up font-heading font-extrabold text-white tracking-tighter leading-none mb-20"
+          style="font-size: clamp(48px, 6vw, 80px); font-weight: 900;">
+        What we do
+      </h2>
+
+      <!-- Service rows — not equal cards, stacked rows with divider -->
+      <div class="slam-up border-t-2 border-white/20">
+        <div class="py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b-2 border-white/20 group cursor-pointer">
+          <div class="flex items-center gap-6">
+            <span class="font-heading text-white/30 text-sm font-bold tracking-widest">01</span>
+            <h3 class="font-heading font-bold text-white text-3xl md:text-5xl tracking-tight group-hover:text-electric transition-colors duration-150">[Service name]</h3>
+          </div>
+          <p class="font-body text-white/50 text-base max-w-md leading-relaxed">[Brief description of what this service includes and delivers]</p>
+          <svg class="w-8 h-8 text-white/30 group-hover:text-electric transition-colors duration-150 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </div>
+      </div>
+
+      <div class="slam-up">
+        <div class="py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b-2 border-white/20 group cursor-pointer">
+          <div class="flex items-center gap-6">
+            <span class="font-heading text-white/30 text-sm font-bold tracking-widest">02</span>
+            <h3 class="font-heading font-bold text-white text-3xl md:text-5xl tracking-tight group-hover:text-electric transition-colors duration-150">[Service name]</h3>
+          </div>
+          <p class="font-body text-white/50 text-base max-w-md leading-relaxed">[Brief description of what this service includes and delivers]</p>
+          <svg class="w-8 h-8 text-white/30 group-hover:text-electric transition-colors duration-150 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </div>
+      </div>
+
+      <div class="slam-up">
+        <div class="py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b-2 border-white/20 group cursor-pointer">
+          <div class="flex items-center gap-6">
+            <span class="font-heading text-white/30 text-sm font-bold tracking-widest">03</span>
+            <h3 class="font-heading font-bold text-white text-3xl md:text-5xl tracking-tight group-hover:text-lemon transition-colors duration-150">[Service name]</h3>
+          </div>
+          <p class="font-body text-white/50 text-base max-w-md leading-relaxed">[Brief description of what this service includes and delivers]</p>
+          <svg class="w-8 h-8 text-white/30 group-hover:text-lemon transition-colors duration-150 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </div>
+      </div>
+
+      <div class="slam-up">
+        <div class="py-10 flex flex-col md:flex-row md:items-center justify-between gap-6 group cursor-pointer">
+          <div class="flex items-center gap-6">
+            <span class="font-heading text-white/30 text-sm font-bold tracking-widest">04</span>
+            <h3 class="font-heading font-bold text-white text-3xl md:text-5xl tracking-tight group-hover:text-electric transition-colors duration-150">[Service name]</h3>
+          </div>
+          <p class="font-body text-white/50 text-base max-w-md leading-relaxed">[Brief description of what this service includes and delivers]</p>
+          <svg class="w-8 h-8 text-white/30 group-hover:text-electric transition-colors duration-150 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS — White bg, numbered steps -->
+  <section class="bg-white py-32 px-6" style="border-bottom: 4px solid #000;">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="slam-up font-heading font-extrabold text-black tracking-tighter leading-none mb-20"
+          style="font-size: clamp(48px, 6vw, 80px); font-weight: 900;">
+        How it<br>works
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
+        <!-- Step 1 -->
+        <div class="slam-up p-8 md:p-10 border-t-4 border-r-0 md:border-r-4 border-black">
+          <span class="font-heading text-electric text-8xl font-extrabold leading-none block mb-6" style="font-weight: 900;">01</span>
+          <h3 class="font-heading font-bold text-black text-2xl tracking-tight mb-3">[Step name]</h3>
+          <p class="font-body text-black/50 text-base leading-relaxed">
+            [Description of the first step in the process. What happens, what's involved, how long it takes.]
+          </p>
+        </div>
+        <!-- Step 2 -->
+        <div class="slam-up p-8 md:p-10 border-t-4 border-r-0 md:border-r-4 border-black bg-electric">
+          <span class="font-heading text-white/20 text-8xl font-extrabold leading-none block mb-6" style="font-weight: 900;">02</span>
+          <h3 class="font-heading font-bold text-white text-2xl tracking-tight mb-3">[Step name]</h3>
+          <p class="font-body text-white/60 text-base leading-relaxed">
+            [Description of the second step. How it builds on step one, what the client does vs what you do.]
+          </p>
+        </div>
+        <!-- Step 3 -->
+        <div class="slam-up p-8 md:p-10 border-t-4 border-black">
+          <span class="font-heading text-lemon text-8xl font-extrabold leading-none block mb-6" style="font-weight: 900; color: #E5DC23;">03</span>
+          <h3 class="font-heading font-bold text-black text-2xl tracking-tight mb-3">[Step name]</h3>
+          <p class="font-body text-black/50 text-base leading-relaxed">
+            [Description of the final step. What gets delivered, what happens next, how handoff works.]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELECTED CLIENTS / RECOGNITION — Black -->
+  <section class="bg-charcoal py-24 px-6" style="border-bottom: 4px solid #E5DC23;">
+    <div class="max-w-7xl mx-auto">
+      <div class="slam-up flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
+        <h2 class="font-heading font-extrabold text-white tracking-tighter text-4xl md:text-5xl" style="font-weight: 900;">
+          Recognition
+        </h2>
+        <p class="font-body text-white/40 text-base max-w-sm leading-relaxed">
+          [Short note about awards, features, or press — be specific]
+        </p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-t-2 border-white/10">
+        <div class="slam-up p-6 md:p-8 border-b-2 border-r-2 border-white/10">
+          <span class="font-heading text-white/20 text-sm uppercase tracking-widest block mb-3">[Award Body]</span>
+          <span class="font-heading text-white text-lg font-bold">[Award Name]</span>
+          <span class="font-body text-white/30 text-sm block mt-1">[Year]</span>
+        </div>
+        <div class="slam-up p-6 md:p-8 border-b-2 border-r-0 md:border-r-2 border-white/10">
+          <span class="font-heading text-white/20 text-sm uppercase tracking-widest block mb-3">[Publication]</span>
+          <span class="font-heading text-white text-lg font-bold">[Feature Title]</span>
+          <span class="font-body text-white/30 text-sm block mt-1">[Year]</span>
+        </div>
+        <div class="slam-up p-6 md:p-8 border-b-2 border-r-2 border-white/10">
+          <span class="font-heading text-white/20 text-sm uppercase tracking-widest block mb-3">[Award Body]</span>
+          <span class="font-heading text-white text-lg font-bold">[Award Name]</span>
+          <span class="font-body text-white/30 text-sm block mt-1">[Year]</span>
+        </div>
+        <div class="slam-up p-6 md:p-8 border-b-2 border-white/10">
+          <span class="font-heading text-white/20 text-sm uppercase tracking-widest block mb-3">[Gallery]</span>
+          <span class="font-heading text-white text-lg font-bold">[Feature Title]</span>
+          <span class="font-body text-white/30 text-sm block mt-1">[Year]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM — Electric Blue -->
+  <section class="bg-electric py-28 px-6" style="border-bottom: 4px solid #000;">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="slam-up font-heading font-extrabold text-white tracking-tighter leading-none mb-16"
+          style="font-size: clamp(40px, 5vw, 64px); font-weight: 900;">
+        The team
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="slam-up group cursor-pointer">
+          <div class="aspect-square w-full mb-4 flex items-center justify-center" style="background: rgba(0,0,0,0.15);">
+            <span class="text-white/20 font-heading text-xs uppercase tracking-widest">Photo</span>
+          </div>
+          <h3 class="font-heading font-bold text-white text-xl tracking-tight group-hover:text-black transition-colors duration-150">[Name]</h3>
+          <p class="font-body text-white/50 text-sm mt-1">[Role]</p>
+        </div>
+        <div class="slam-up group cursor-pointer">
+          <div class="aspect-square w-full mb-4 flex items-center justify-center" style="background: rgba(0,0,0,0.15);">
+            <span class="text-white/20 font-heading text-xs uppercase tracking-widest">Photo</span>
+          </div>
+          <h3 class="font-heading font-bold text-white text-xl tracking-tight group-hover:text-black transition-colors duration-150">[Name]</h3>
+          <p class="font-body text-white/50 text-sm mt-1">[Role]</p>
+        </div>
+        <div class="slam-up group cursor-pointer">
+          <div class="aspect-square w-full mb-4 flex items-center justify-center" style="background: rgba(0,0,0,0.15);">
+            <span class="text-white/20 font-heading text-xs uppercase tracking-widest">Photo</span>
+          </div>
+          <h3 class="font-heading font-bold text-white text-xl tracking-tight group-hover:text-black transition-colors duration-150">[Name]</h3>
+          <p class="font-body text-white/50 text-sm mt-1">[Role]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL — Electric Blue -->
+  <section class="bg-lemon py-32 px-6" style="border-bottom: 4px solid #000;">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="slam-scale">
+        <svg class="w-16 h-16 text-black/20 mx-auto mb-10" fill="currentColor" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+        <blockquote class="font-heading font-bold text-black text-3xl md:text-5xl tracking-tight leading-tight mb-10">
+          "[A real, specific quote from a client about the impact — not generic praise]"
+        </blockquote>
+        <cite class="font-body text-black/50 text-lg not-italic block">
+          — [Name], [Role] at [Company]
+        </cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA — Lemon -->
+  <section id="contact" class="py-36 px-6" style="background: #E5DC23; border-bottom: 4px solid #000;">
+    <div class="max-w-5xl mx-auto text-center">
+      <h2 class="slam-up font-heading font-extrabold text-black tracking-tighter leading-none mb-8"
+          style="font-size: clamp(56px, 8vw, 120px); font-weight: 900;">
+        Got a<br>project?
+      </h2>
+      <p class="slam-up font-body text-black/60 text-xl mb-12 max-w-lg mx-auto leading-relaxed">
+        We take on [N] projects per quarter. If you're serious about standing out, let's talk.
+      </p>
+      <a href="#" class="slam-up btn-bold inline-block bg-black text-white font-heading text-xl font-bold px-14 py-6 uppercase tracking-wide hover:bg-electric hover:text-white">
+        Start a project →
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ — White -->
+  <section class="bg-white py-28 px-6" style="border-bottom: 4px solid #000;">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="slam-up font-heading font-extrabold text-black tracking-tighter leading-none mb-16"
+          style="font-size: clamp(40px, 5vw, 64px); font-weight: 900;">
+        FAQ
+      </h2>
+      <div class="slam-up border-t-4 border-black">
+        <details class="border-b-4 border-black group">
+          <summary class="py-6 flex items-center justify-between cursor-pointer">
+            <span class="font-heading font-bold text-black text-xl md:text-2xl tracking-tight">[Question about timeline]</span>
+            <svg class="w-6 h-6 text-black shrink-0 transition-transform duration-150 group-open:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+          </summary>
+          <p class="font-body text-black/60 text-base leading-relaxed pb-6 max-w-2xl">
+            [Answer with specifics — actual timelines, what's included, what affects duration.]
+          </p>
+        </details>
+        <details class="border-b-4 border-black group">
+          <summary class="py-6 flex items-center justify-between cursor-pointer">
+            <span class="font-heading font-bold text-black text-xl md:text-2xl tracking-tight">[Question about pricing]</span>
+            <svg class="w-6 h-6 text-black shrink-0 transition-transform duration-150 group-open:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+          </summary>
+          <p class="font-body text-black/60 text-base leading-relaxed pb-6 max-w-2xl">
+            [Answer with specifics — starting ranges, what determines cost, what's not included.]
+          </p>
+        </details>
+        <details class="border-b-4 border-black group">
+          <summary class="py-6 flex items-center justify-between cursor-pointer">
+            <span class="font-heading font-bold text-black text-xl md:text-2xl tracking-tight">[Question about process]</span>
+            <svg class="w-6 h-6 text-black shrink-0 transition-transform duration-150 group-open:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+          </summary>
+          <p class="font-body text-black/60 text-base leading-relaxed pb-6 max-w-2xl">
+            [Answer with specifics — how collaboration works, tools used, communication cadence.]
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER — Black -->
+  <footer class="bg-black py-16 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+        <div>
+          <span class="text-white font-heading font-bold text-2xl tracking-tight">STUDIO●</span>
+          <p class="font-body text-white/40 text-sm mt-3">[City], [Country]</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-8 sm:gap-16">
+          <div>
+            <h4 class="font-heading font-bold text-white text-sm uppercase tracking-widest mb-4">Connect</h4>
+            <div class="flex flex-col gap-2">
+              <a href="#" class="font-body text-white/50 text-sm hover:text-electric transition-colors duration-150">Twitter</a>
+              <a href="#" class="font-body text-white/50 text-sm hover:text-electric transition-colors duration-150">Instagram</a>
+              <a href="#" class="font-body text-white/50 text-sm hover:text-electric transition-colors duration-150">Dribbble</a>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-white text-sm uppercase tracking-widest mb-4">Contact</h4>
+            <a href="mailto:hello@studio.com" class="font-body text-white/50 text-sm hover:text-electric transition-colors duration-150">[your@email.com]</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p class="font-body text-white/30 text-sm">© [Year] Studio. All rights reserved.</p>
+        <p class="font-body text-white/30 text-sm">Design by [you]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll reveal script -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Re-trigger on every scroll into view
+        }
+      });
+    }, { threshold: 0.15 });
+
+    // Reset animation when element leaves viewport for repeat
+    const resetObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0 });
+
+    document.querySelectorAll('.slam-up, .slam-left, .slam-right, .slam-scale').forEach(el => {
+      observer.observe(el);
+      resetObserver.observe(el);
+    });
+  </script>
+
+</body>
+</html>

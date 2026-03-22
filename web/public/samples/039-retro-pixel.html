@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>039 — Green Phosphor CRT v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"VT323"', 'monospace'],
+            body: ['"Space Mono"', 'monospace'],
+          },
+          colors: {
+            crt: '#0a0a0a',
+            phosphor: '#00ff41',
+            dim: '#00cc33',
+            amber: '#ffb000',
+            ghost: '#003b10',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Space Mono', monospace;
+      background: #0a0a0a;
+      color: #00ff41;
+      overflow-x: hidden;
+      margin: 0;
+    }
+
+    /* CRT curvature */
+    .crt-screen {
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .crt-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+      background: repeating-linear-gradient(
+        transparent 0px, transparent 2px,
+        rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px
+      );
+    }
+
+    /* Phosphor glow on all text */
+    .glow { text-shadow: 0 0 8px #00ff41, 0 0 2px #00ff41; }
+    .glow-amber { text-shadow: 0 0 8px #ffb000, 0 0 2px #ffb000; color: #ffb000; }
+
+    /* Flicker effect */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      3% { opacity: 0.92; }
+      6% { opacity: 1; }
+      9% { opacity: 0.95; }
+      12% { opacity: 1; }
+      47% { opacity: 0.97; }
+      50% { opacity: 0.9; }
+      53% { opacity: 1; }
+      87% { opacity: 0.96; }
+      90% { opacity: 1; }
+    }
+    .flicker { animation: flicker 4s infinite; }
+
+    /* Boot sequence */
+    .boot-screen {
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .boot-screen.done {
+      opacity: 0;
+      pointer-events: none;
+    }
+    @keyframes bootType {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    .boot-line {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid #00ff41;
+      animation: bootType 0.6s steps(30) forwards;
+      opacity: 0;
+    }
+    .boot-line.show { opacity: 1; }
+
+    /* Cursor blink */
+    @keyframes cursorBlink { 50% { border-color: transparent; } }
+    .boot-cursor { animation: cursorBlink 0.8s step-end infinite; }
+
+    /* Scroll reveal with glow-in */
+    .crt-reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .crt-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .crt-delay-1 { transition-delay: 0.15s; }
+    .crt-delay-2 { transition-delay: 0.3s; }
+    .crt-delay-3 { transition-delay: 0.45s; }
+
+    /* Prompt cursor */
+    @keyframes promptBlink { 50% { opacity: 0; } }
+    .prompt-cursor {
+      display: inline-block;
+      width: 8px; height: 16px;
+      background: #00ff41;
+      animation: promptBlink 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    h1, h2, h3 { font-family: 'VT323', monospace; }
+  
+    /* === 2025-2026 Trend Effects === */
+    /* Cursor Trail */
+    .trail-dot { position:fixed; pointer-events:none; z-index:9997; width:6px; height:6px; border-radius:50%; transition:opacity 0.5s ease; }
+  
+
+    /* Marquee/Ticker Strip */
+    @keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .marquee-strip { overflow:hidden; white-space:nowrap; }
+    .marquee-inner { display:inline-flex; animation:marqueeScroll 20s linear infinite; }
+    .marquee-inner:hover { animation-play-state:paused; }
+  
+
+    /* Elastic/Spring Animations */
+    .elastic-in { transition:transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; }
+    .elastic-hover:hover { transform:scale(1.04); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  
+  </style>
+</head>
+<body>
+
+  <!-- Boot Sequence -->
+  <div class="boot-screen" id="bootScreen">
+    <div class="crt-screen w-full h-full flex flex-col justify-center px-8 md:px-24">
+      <div class="font-body text-sm glow space-y-1" id="bootLog"></div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between border-b border-ghost" style="background: rgba(10,10,10,0.95);">
+    <span class="font-heading text-2xl glow flicker">CRT://OS</span>
+    <div class="flex items-center gap-6">
+      <a href="#system" class="text-xs glow hover:text-amber hover:glow-amber transition-colors">SYS.INFO</a>
+      <a href="#modules" class="text-xs glow hover:text-amber hover:glow-amber transition-colors">MODULES</a>
+      <a href="#terminal" class="text-xs bg-phosphor text-crt px-4 py-1.5 hover:bg-dim transition-colors font-bold rounded-sm">CONNECT</a>
+    </div>
+  </nav>
+
+  <!-- Section 1: Hero -->
+  <section class="min-h-screen flex items-center justify-center px-6 pt-20 pb-16">
+    <div class="crt-screen max-w-3xl w-full border border-ghost p-8 md:p-16" style="background: rgba(0,59,16,0.08);">
+      <div class="crt-reveal">
+        <p class="text-xs text-dim mb-6">user@crt:~$ cat welcome.txt</p>
+      </div>
+      <h1 class="crt-reveal crt-delay-1 text-5xl md:text-7xl glow flicker mb-8 leading-tight">
+        SYSTEM<br>ONLINE_
+      </h1>
+      <p class="crt-reveal crt-delay-2 text-sm text-dim leading-relaxed max-w-md mb-10">
+        Terminal-native development environment.
+        Build, deploy, monitor — all from a single phosphor screen.
+        No GUI required. No distractions possible.
+      </p>
+      <div class="crt-reveal crt-delay-3 flex gap-4 flex-wrap">
+        <a href="#modules" class="border border-phosphor px-6 py-2 text-sm glow hover:bg-phosphor hover:text-crt transition-all duration-300 rounded-sm">
+          $ explore --modules
+        </a>
+        <a href="#status" class="border border-ghost px-6 py-2 text-sm text-dim hover:border-phosphor hover:text-phosphor transition-all duration-300 rounded-sm">
+          $ cat status.log
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: System Status -->
+  <section id="system" class="px-6 py-24 md:py-32">
+    <div class="max-w-4xl mx-auto">
+      <div class="crt-reveal mb-12">
+        <p class="text-xs text-dim mb-2">user@crt:~$ uptime</p>
+        <h2 class="text-4xl md:text-5xl glow font-heading">SYSTEM STATUS</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="crt-reveal crt-delay-1 border border-ghost p-6 crt-screen" style="background: rgba(0,59,16,0.05);">
+          <p class="text-xs text-dim mb-3">UPTIME</p>
+          <p class="text-3xl font-heading glow flicker">[your metric]</p>
+          <p class="text-xs text-dim mt-2">days continuous operation</p>
+        </div>
+        <div class="crt-reveal crt-delay-2 border border-ghost p-6 crt-screen" style="background: rgba(0,59,16,0.05);">
+          <p class="text-xs text-dim mb-3">ACTIVE SESSIONS</p>
+          <p class="text-3xl font-heading glow flicker">[your metric]</p>
+          <p class="text-xs text-dim mt-2">concurrent terminals open now</p>
+        </div>
+      </div>
+      <div class="crt-reveal crt-delay-3 mt-6 border border-ghost p-6 crt-screen" style="background: rgba(0,59,16,0.05);">
+        <p class="text-xs text-dim mb-3">SYSTEM LOG</p>
+        <div class="space-y-1 text-xs">
+          <p class="glow"><span class="text-dim">[03:14:07]</span> Build pipeline completed in 847ms</p>
+          <p class="glow"><span class="text-dim">[03:14:02]</span> Deploy to prod-east-2 ✓</p>
+          <p class="glow-amber"><span class="text-dim">[03:13:58]</span> ⚠ Memory threshold at 78% — scaling initiated</p>
+          <p class="glow"><span class="text-dim">[03:13:41]</span> 23 test suites passed, 0 failed</p>
+          <p class="glow"><span class="text-dim">[03:13:12]</span> git push origin main — 4 files changed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Modules -->
+  <section id="modules" class="px-6 py-24 md:py-32">
+    <div class="max-w-4xl mx-auto">
+      <div class="crt-reveal mb-12">
+        <p class="text-xs text-dim mb-2">user@crt:~$ ls /modules</p>
+        <h2 class="text-4xl md:text-5xl glow font-heading">MODULES</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="crt-reveal crt-delay-1 border border-ghost p-6 crt-screen hover:border-phosphor transition-colors duration-300 group" style="background: rgba(0,59,16,0.05);">
+          <div class="flex items-start gap-4">
+            <svg class="w-6 h-6 text-phosphor flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <div>
+              <h3 class="text-xl glow font-heading mb-2">EDITOR.SYS</h3>
+              <p class="text-xs text-dim leading-relaxed">
+                Keystroke-optimized code editor. Modal editing with vim bindings baked in.
+                Syntax highlighting for 47 languages. LSP integration runs locally — no cloud roundtrip.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="crt-reveal crt-delay-2 border border-ghost p-6 crt-screen hover:border-phosphor transition-colors duration-300 group" style="background: rgba(0,59,16,0.05);">
+          <div class="flex items-start gap-4">
+            <svg class="w-6 h-6 text-phosphor flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <div>
+              <h3 class="text-xl glow font-heading mb-2">PIPELINE.SYS</h3>
+              <p class="text-xs text-dim leading-relaxed">
+                CI/CD from your terminal. Push triggers build, build triggers test, test triggers deploy.
+                Average pipeline: 1m 23s. Rollback: one command, 4 seconds.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="crt-reveal crt-delay-3 border border-ghost p-6 crt-screen hover:border-amber transition-colors duration-300 group" style="background: rgba(0,59,16,0.05);">
+          <div class="flex items-start gap-4">
+            <svg class="w-6 h-6 text-amber flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5C2.57 17.333 3.532 19 5.072 19z"/></svg>
+            <div>
+              <h3 class="text-xl glow-amber font-heading mb-2">MONITOR.SYS</h3>
+              <p class="text-xs text-dim leading-relaxed">
+                Real-time error tracking in your terminal. Stack traces render inline.
+                Alerts via terminal bell — you hear it before your phone buzzes.
+                <span class="glow-amber text-xs">[ AMBER = WARNING LEVEL ]</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Testimonial -->
+  <section class="px-6 py-24 md:py-32">
+    <div class="max-w-3xl mx-auto">
+      <div class="crt-reveal mb-12">
+        <p class="text-xs text-dim mb-2">user@crt:~$ cat /var/log/feedback.log</p>
+        <h2 class="text-4xl md:text-5xl glow font-heading">TRANSMISSIONS</h2>
+      </div>
+      <div class="crt-reveal crt-delay-1 crt-screen border border-ghost p-8" style="background: rgba(0,59,16,0.05);">
+        <p class="text-lg glow leading-relaxed font-heading mb-6">
+          "Went back to VS Code for a client project last week.
+          Kept instinctively hitting :wq to save.
+          Realized I'd been fully terminal-native for 5 months without noticing the switch."
+        </p>
+        <p class="text-xs text-dim">
+          — backend eng, contribution history shows 2,847 commits since onboarding
+        </p>
+      </div>
+      <div class="crt-reveal crt-delay-2 crt-screen border border-ghost p-8 mt-4" style="background: rgba(0,59,16,0.05);">
+        <p class="text-lg glow leading-relaxed font-heading mb-6">
+          "The deploy pipeline alone saved our team 11 hours/week.
+          We measured. It was embarrassing how much time we'd been wasting on dashboards."
+        </p>
+        <p class="text-xs text-dim">
+          — infra lead at an agency with 14 active projects
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Keybindings / Cheat Sheet -->
+  <section class="px-6 py-24 md:py-32">
+    <div class="max-w-4xl mx-auto">
+      <div class="crt-reveal mb-12">
+        <p class="text-xs text-dim mb-2">user@crt:~$ man crt-keys</p>
+        <h2 class="text-4xl md:text-5xl glow font-heading">KEYBINDINGS</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="crt-reveal crt-delay-1 border border-ghost p-6 crt-screen" style="background: rgba(0,59,16,0.05);">
+          <p class="text-xs text-dim mb-4 tracking-wider">NAVIGATION</p>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Switch workspace</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + W</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Open file</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + P</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Command palette</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + Shift + P</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Toggle terminal</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + `</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Split pane</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + \</span>
+            </div>
+          </div>
+        </div>
+        <div class="crt-reveal crt-delay-2 border border-ghost p-6 crt-screen" style="background: rgba(0,59,16,0.05);">
+          <p class="text-xs text-dim mb-4 tracking-wider">PIPELINE</p>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Build</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + B</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Deploy</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + D</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">Run tests</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + T</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow-amber">Rollback</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + Z + Z</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs glow">View logs</span>
+              <span class="text-xs text-dim border border-ghost px-2 py-0.5 rounded-sm">Ctrl + L</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="crt-reveal crt-delay-3 mt-6 text-xs text-dim">
+        <p class="glow">All keybindings are remappable. Config lives in <code class="text-phosphor">~/.crt/keys.toml</code></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Compatibility -->
+  <section class="px-6 py-24 md:py-32">
+    <div class="max-w-4xl mx-auto">
+      <div class="crt-reveal mb-12">
+        <p class="text-xs text-dim mb-2">user@crt:~$ crt --compatibility</p>
+        <h2 class="text-4xl md:text-5xl glow font-heading">COMPATIBILITY</h2>
+      </div>
+      <div class="crt-reveal crt-delay-1 border border-ghost p-8 crt-screen" style="background: rgba(0,59,16,0.05);">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div>
+            <p class="text-xs glow-amber mb-3 tracking-wider">PLATFORMS</p>
+            <div class="space-y-2 text-xs">
+              <p class="glow">✓ macOS 12+</p>
+              <p class="glow">✓ Ubuntu 20.04+</p>
+              <p class="glow">✓ Fedora 36+</p>
+              <p class="glow">✓ Arch (btw)</p>
+              <p class="glow">✓ WSL2</p>
+              <p class="text-dim">✗ Windows native (use WSL)</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs glow-amber mb-3 tracking-wider">TERMINALS</p>
+            <div class="space-y-2 text-xs">
+              <p class="glow">✓ iTerm2</p>
+              <p class="glow">✓ Alacritty</p>
+              <p class="glow">✓ Kitty</p>
+              <p class="glow">✓ WezTerm</p>
+              <p class="glow">✓ Ghostty</p>
+              <p class="text-dim">△ Terminal.app (limited)</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs glow-amber mb-3 tracking-wider">INTEGRATIONS</p>
+            <div class="space-y-2 text-xs">
+              <p class="glow">✓ Git</p>
+              <p class="glow">✓ Docker</p>
+              <p class="glow">✓ Kubernetes</p>
+              <p class="glow">✓ AWS CLI</p>
+              <p class="glow">✓ GitHub Actions</p>
+              <p class="glow">✓ SSH tunneling</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Terminal / CTA -->
+  <section id="terminal" class="px-6 py-24 md:py-32">
+    <div class="max-w-3xl mx-auto">
+      <div class="crt-reveal crt-screen border border-phosphor p-8 md:p-12" style="background: rgba(0,59,16,0.1);">
+        <p class="text-xs text-dim mb-6">user@crt:~$ ./install.sh</p>
+        <h2 class="text-4xl md:text-5xl glow font-heading flicker mb-6">
+          INITIALIZE_
+        </h2>
+        <p class="text-sm text-dim leading-relaxed mb-8 max-w-md">
+          One command. Works on macOS, Linux, WSL2.
+          No Electron. No 400MB download. The binary is 12MB.
+        </p>
+        <div class="bg-crt border border-ghost p-4 mb-8 rounded-sm">
+          <code class="text-sm glow">$ curl -fsSL https://crt.dev/install | sh</code>
+          <span class="prompt-cursor"></span>
+        </div>
+        <div class="flex gap-4 flex-wrap">
+          <a href="#" class="bg-phosphor text-crt px-6 py-2.5 text-sm font-bold hover:bg-dim transition-colors rounded-sm">
+            DOWNLOAD v3.2.1
+          </a>
+          <a href="#" class="border border-ghost px-6 py-2.5 text-sm text-dim hover:border-phosphor hover:text-phosphor transition-colors rounded-sm">
+            VIEW SOURCE
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="px-6 py-8 border-t border-ghost">
+    <div class="max-w-4xl mx-auto flex justify-between text-xs text-dim">
+      <span class="glow">CRT://OS v3.2.1</span>
+      <span>© 2026 — All signals reserved</span>
+    </div>
+  </footer>
+
+  <script>
+    // Boot sequence
+    const bootLines = [
+      'BIOS v2.41 ... OK',
+      'Memory test: 65536K ... OK',
+      'Detecting drives ... /dev/sda1 mounted',
+      'Loading kernel modules .......... OK',
+      'Starting network daemon ... connected',
+      'CRT://OS v3.2.1 initialized',
+      '',
+      'Welcome. System ready.',
+    ];
+    const bootLog = document.getElementById('bootLog');
+    const bootScreen = document.getElementById('bootScreen');
+    let lineIdx = 0;
+
+    function addBootLine() {
+      if (lineIdx >= bootLines.length) {
+        setTimeout(() => bootScreen.classList.add('done'), 600);
+        setTimeout(() => bootScreen.style.display = 'none', 1500);
+        return;
+      }
+      const p = document.createElement('p');
+      p.className = 'boot-line show glow';
+      p.textContent = '> ' + bootLines[lineIdx];
+      if (bootLines[lineIdx].includes('⚠') || bootLines[lineIdx].includes('Warning')) {
+        p.className += ' glow-amber';
+      }
+      p.style.animationDelay = '0s';
+      bootLog.appendChild(p);
+      lineIdx++;
+      setTimeout(addBootLine, 180 + Math.random() * 120);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(addBootLine, 400);
+
+      // Scroll reveal with repeat
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.crt-reveal').forEach(el => observer.observe(el));
+    });
+  
+
+      // Cursor Trail
+      (function(){
+        var trailDots = [];
+        var numDots = 12;
+        for(var i=0;i<numDots;i++){
+          var dot = document.createElement('div');
+          dot.className = 'trail-dot';
+          dot.style.background = 'rgba(34,197,94,0.7)';
+          dot.style.opacity = String(1 - i/numDots);
+          dot.style.width = String(Math.max(2, 6 - i*0.4)) + 'px';
+          dot.style.height = String(Math.max(2, 6 - i*0.4)) + 'px';
+          document.body.appendChild(dot);
+          trailDots.push({el:dot, x:0, y:0});
+        }
+        var mouseX=0, mouseY=0;
+        document.addEventListener('mousemove', function(e){ mouseX=e.clientX; mouseY=e.clientY; });
+        function animateTrail(){
+          var prevX=mouseX, prevY=mouseY;
+          trailDots.forEach(function(dot,i){
+            var target = i===0 ? {x:mouseX,y:mouseY} : trailDots[i-1];
+            dot.x += (target.x - dot.x) * 0.35;
+            dot.y += (target.y - dot.y) * 0.35;
+            dot.el.style.left = dot.x + 'px';
+            dot.el.style.top = dot.y + 'px';
+          });
+          requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+      })();
+  
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>022 — Dashboard Dark Reference</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            ui: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            surface: '#0c0c0e',
+            surfaceLight: '#141418',
+            surfaceLighter: '#1c1c22',
+            accent: '#8b5cf6',
+            accentMuted: '#7c3aed',
+            border: 'rgba(255,255,255,0.08)',
+            borderHover: 'rgba(255,255,255,0.15)',
+            textPrimary: '#e4e4e7',
+            textMuted: '#71717a',
+            textDim: '#52525b',
+            positive: '#22c55e',
+            negative: '#ef4444',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #0c0c0e;
+      color: #e4e4e7;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* Card base */
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      transition: background 200ms ease, border-color 200ms ease;
+    }
+    .card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Sidebar link */
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      color: #71717a;
+      transition: all 200ms ease;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .sidebar-link:hover { background: rgba(255,255,255,0.05); color: #e4e4e7; }
+    .sidebar-link.active { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+
+    /* Bar chart animation */
+    @keyframes growBar {
+      from { height: 0; }
+      to { height: var(--bar-h); }
+    }
+    .bar { animation: growBar 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    /* Fade in for cards */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-anim { opacity: 0; }
+    .card-anim.visible { animation: fadeSlide 400ms ease forwards; }
+
+    /* Number pulse for live data */
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+    .live-pulse { animation: pulse 2s ease-in-out infinite; }
+
+    /* Status dot */
+    @keyframes statusPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+    .status-dot-active { animation: statusPulse 2s ease-in-out infinite; }
+
+    /* Table row hover */
+    .table-row { transition: background 150ms ease; }
+    .table-row:hover { background: rgba(255,255,255,0.03); }
+
+    /* Topbar search */
+    .search-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      transition: border-color 200ms ease;
+    }
+    .search-box:focus-within { border-color: rgba(139, 92, 246, 0.5); }
+  </style>
+</head>
+<body class="flex h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="hidden lg:flex flex-col w-60 shrink-0 bg-surface border-r border-border h-screen sticky top-0 overflow-y-auto">
+    <!-- Logo -->
+    <div class="px-5 py-6 flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="font-ui font-semibold text-textPrimary text-base">[App Name]</span>
+    </div>
+
+    <!-- Nav sections -->
+    <nav class="flex-1 px-3 py-2">
+      <p class="font-ui text-textDim text-xs font-semibold uppercase tracking-wider px-4 mb-2">Overview</p>
+      <a href="#" class="sidebar-link active">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Dashboard
+      </a>
+      <a href="#" class="sidebar-link">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Analytics
+      </a>
+      <a href="#" class="sidebar-link">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Users
+      </a>
+
+      <p class="font-ui text-textDim text-xs font-semibold uppercase tracking-wider px-4 mb-2 mt-8">Manage</p>
+      <a href="#" class="sidebar-link">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Messages
+      </a>
+      <a href="#" class="sidebar-link">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <!-- Sidebar footer — user -->
+    <div class="px-3 py-4 border-t border-border">
+      <div class="flex items-center gap-3 px-3">
+        <div class="w-9 h-9 rounded-full bg-surfaceLighter flex items-center justify-center">
+          <span class="font-ui text-textMuted text-sm font-semibold">JD</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-ui text-textPrimary text-sm font-medium truncate">[User Name]</p>
+          <p class="font-ui text-textDim text-xs truncate">[user@email.com]</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 flex flex-col min-h-screen overflow-y-auto">
+
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-30 bg-surface/80 backdrop-blur-xl border-b border-border px-6 py-3 flex items-center justify-between gap-4">
+      <!-- Mobile menu -->
+      <button class="lg:hidden text-textMuted" aria-label="Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <!-- Search -->
+      <div class="search-box flex items-center gap-3 px-4 py-2.5 flex-1 max-w-md">
+        <svg class="w-4 h-4 text-textDim shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" placeholder="Search..." class="bg-transparent text-textPrimary text-sm font-ui w-full outline-none placeholder-textDim">
+        <kbd class="hidden sm:inline-block font-mono text-textDim text-xs bg-surface px-1.5 py-0.5 rounded border border-border">⌘K</kbd>
+      </div>
+
+      <!-- Right side -->
+      <div class="flex items-center gap-3">
+        <!-- Notification -->
+        <button class="relative p-2 text-textMuted hover:text-textPrimary transition-colors" aria-label="Notifications">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-accent rounded-full status-dot-active"></span>
+        </button>
+        <!-- Avatar -->
+        <div class="w-8 h-8 rounded-full bg-surfaceLighter flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-accent/30 transition-all">
+          <span class="font-ui text-textMuted text-xs font-semibold">JD</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD CONTENT -->
+    <main class="flex-1 p-6 lg:p-8">
+      <!-- Page header -->
+      <div class="mb-8">
+        <h1 class="font-ui font-semibold text-textPrimary text-2xl tracking-tight">Dashboard</h1>
+        <p class="font-ui text-textMuted text-sm mt-1">Overview of your key metrics and activity.</p>
+      </div>
+
+      <!-- Metric cards row — 3 cards, different sizes -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Revenue -->
+        <div class="card card-anim p-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-ui text-textMuted text-sm font-medium">Revenue</span>
+            <span class="font-mono text-positive text-xs font-medium bg-positive/10 px-2 py-1 rounded-lg">+[N]%</span>
+          </div>
+          <p class="font-mono text-textPrimary text-3xl font-semibold tracking-tight live-pulse">$[N,NNN]</p>
+          <p class="font-ui text-textDim text-xs mt-2">vs $[N,NNN] last period</p>
+        </div>
+
+        <!-- Active Users -->
+        <div class="card card-anim p-6" style="animation-delay: 100ms;">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-ui text-textMuted text-sm font-medium">Active Users</span>
+            <span class="font-mono text-positive text-xs font-medium bg-positive/10 px-2 py-1 rounded-lg">+[N]%</span>
+          </div>
+          <p class="font-mono text-textPrimary text-3xl font-semibold tracking-tight live-pulse">[N,NNN]</p>
+          <p class="font-ui text-textDim text-xs mt-2">[N] new today</p>
+        </div>
+
+        <!-- Conversion -->
+        <div class="card card-anim p-6" style="animation-delay: 200ms;">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-ui text-textMuted text-sm font-medium">Conversion</span>
+            <span class="font-mono text-negative text-xs font-medium bg-negative/10 px-2 py-1 rounded-lg">-[N]%</span>
+          </div>
+          <p class="font-mono text-textPrimary text-3xl font-semibold tracking-tight">[N.N]%</p>
+          <p class="font-ui text-textDim text-xs mt-2">vs [N.N]% last period</p>
+        </div>
+      </div>
+
+      <!-- Main grid — chart + table -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-6">
+        <!-- Revenue Chart — 3 cols -->
+        <div class="card card-anim lg:col-span-3 p-6">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="font-ui text-textPrimary text-base font-semibold">Revenue Overview</h3>
+              <p class="font-ui text-textDim text-xs mt-1">Last [N] months</p>
+            </div>
+            <div class="flex gap-1 bg-surfaceLight rounded-lg p-1">
+              <button class="font-ui text-xs font-medium px-3 py-1.5 rounded-md bg-accent/15 text-accent">Monthly</button>
+              <button class="font-ui text-xs font-medium px-3 py-1.5 rounded-md text-textDim hover:text-textMuted transition-colors">Weekly</button>
+            </div>
+          </div>
+
+          <!-- CSS Bar Chart -->
+          <div class="flex items-end gap-3 h-48 px-2">
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent/60 hover:bg-accent transition-colors" style="--bar-h: 60%; animation-delay: 0ms;"></div>
+              <span class="font-mono text-textDim text-xs">Jan</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent/60 hover:bg-accent transition-colors" style="--bar-h: 45%; animation-delay: 50ms;"></div>
+              <span class="font-mono text-textDim text-xs">Feb</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent/60 hover:bg-accent transition-colors" style="--bar-h: 72%; animation-delay: 100ms;"></div>
+              <span class="font-mono text-textDim text-xs">Mar</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent/60 hover:bg-accent transition-colors" style="--bar-h: 55%; animation-delay: 150ms;"></div>
+              <span class="font-mono text-textDim text-xs">Apr</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent/60 hover:bg-accent transition-colors" style="--bar-h: 85%; animation-delay: 200ms;"></div>
+              <span class="font-mono text-textDim text-xs">May</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent/60 hover:bg-accent transition-colors" style="--bar-h: 68%; animation-delay: 250ms;"></div>
+              <span class="font-mono text-textDim text-xs">Jun</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-md bg-accent hover:bg-accentMuted transition-colors" style="--bar-h: 92%; animation-delay: 300ms;"></div>
+              <span class="font-mono text-textPrimary text-xs font-medium">Jul</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Card — 2 cols -->
+        <div class="card card-anim lg:col-span-2 p-6 flex flex-col">
+          <h3 class="font-ui text-textPrimary text-base font-semibold mb-6">Quick Stats</h3>
+          <div class="flex-1 flex flex-col gap-5">
+            <div class="flex items-center justify-between">
+              <span class="font-ui text-textMuted text-sm">Avg. Session</span>
+              <span class="font-mono text-textPrimary text-sm font-medium">[N]m [N]s</span>
+            </div>
+            <div class="w-full h-px bg-border"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-ui text-textMuted text-sm">Bounce Rate</span>
+              <span class="font-mono text-textPrimary text-sm font-medium">[N.N]%</span>
+            </div>
+            <div class="w-full h-px bg-border"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-ui text-textMuted text-sm">Pages / Session</span>
+              <span class="font-mono text-textPrimary text-sm font-medium">[N.N]</span>
+            </div>
+            <div class="w-full h-px bg-border"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-ui text-textMuted text-sm">Top Channel</span>
+              <span class="font-mono text-textPrimary text-sm font-medium">[Channel]</span>
+            </div>
+            <div class="w-full h-px bg-border"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-ui text-textMuted text-sm">MRR Growth</span>
+              <span class="font-mono text-positive text-sm font-medium">+[N]%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row — table + activity -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <!-- User Table — 3 cols -->
+        <div class="card card-anim lg:col-span-3 overflow-hidden">
+          <div class="px-6 py-4 border-b border-border flex items-center justify-between">
+            <h3 class="font-ui text-textPrimary text-base font-semibold">Recent Users</h3>
+            <a href="#" class="font-ui text-accent text-sm font-medium hover:underline">View all</a>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-border">
+                  <th class="font-ui text-textDim text-xs font-semibold uppercase tracking-wider text-left px-6 py-3">User</th>
+                  <th class="font-ui text-textDim text-xs font-semibold uppercase tracking-wider text-left px-6 py-3">Plan</th>
+                  <th class="font-ui text-textDim text-xs font-semibold uppercase tracking-wider text-left px-6 py-3">Status</th>
+                  <th class="font-ui text-textDim text-xs font-semibold uppercase tracking-wider text-right px-6 py-3">Spent</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row border-b border-border">
+                  <td class="px-6 py-3.5">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full bg-surfaceLighter flex items-center justify-center shrink-0">
+                        <span class="font-ui text-textDim text-xs font-semibold">[A]</span>
+                      </div>
+                      <div>
+                        <p class="font-ui text-textPrimary text-sm font-medium">[User Name]</p>
+                        <p class="font-ui text-textDim text-xs">[user@email]</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-3.5"><span class="font-ui text-textMuted text-sm">[Plan]</span></td>
+                  <td class="px-6 py-3.5">
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-positive status-dot-active"></span>
+                      <span class="font-ui text-positive text-sm">Active</span>
+                    </span>
+                  </td>
+                  <td class="px-6 py-3.5 text-right"><span class="font-mono text-textPrimary text-sm">$[NNN]</span></td>
+                </tr>
+                <tr class="table-row border-b border-border">
+                  <td class="px-6 py-3.5">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full bg-surfaceLighter flex items-center justify-center shrink-0">
+                        <span class="font-ui text-textDim text-xs font-semibold">[B]</span>
+                      </div>
+                      <div>
+                        <p class="font-ui text-textPrimary text-sm font-medium">[User Name]</p>
+                        <p class="font-ui text-textDim text-xs">[user@email]</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-3.5"><span class="font-ui text-textMuted text-sm">[Plan]</span></td>
+                  <td class="px-6 py-3.5">
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-positive status-dot-active"></span>
+                      <span class="font-ui text-positive text-sm">Active</span>
+                    </span>
+                  </td>
+                  <td class="px-6 py-3.5 text-right"><span class="font-mono text-textPrimary text-sm">$[NNN]</span></td>
+                </tr>
+                <tr class="table-row border-b border-border">
+                  <td class="px-6 py-3.5">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full bg-surfaceLighter flex items-center justify-center shrink-0">
+                        <span class="font-ui text-textDim text-xs font-semibold">[C]</span>
+                      </div>
+                      <div>
+                        <p class="font-ui text-textPrimary text-sm font-medium">[User Name]</p>
+                        <p class="font-ui text-textDim text-xs">[user@email]</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-3.5"><span class="font-ui text-textMuted text-sm">[Plan]</span></td>
+                  <td class="px-6 py-3.5">
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-textDim"></span>
+                      <span class="font-ui text-textDim text-sm">Inactive</span>
+                    </span>
+                  </td>
+                  <td class="px-6 py-3.5 text-right"><span class="font-mono text-textPrimary text-sm">$[NNN]</span></td>
+                </tr>
+                <tr class="table-row border-b border-border">
+                  <td class="px-6 py-3.5">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full bg-surfaceLighter flex items-center justify-center shrink-0">
+                        <span class="font-ui text-textDim text-xs font-semibold">[D]</span>
+                      </div>
+                      <div>
+                        <p class="font-ui text-textPrimary text-sm font-medium">[User Name]</p>
+                        <p class="font-ui text-textDim text-xs">[user@email]</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-3.5"><span class="font-ui text-textMuted text-sm">[Plan]</span></td>
+                  <td class="px-6 py-3.5">
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-positive status-dot-active"></span>
+                      <span class="font-ui text-positive text-sm">Active</span>
+                    </span>
+                  </td>
+                  <td class="px-6 py-3.5 text-right"><span class="font-mono text-textPrimary text-sm">$[NNN]</span></td>
+                </tr>
+                <tr class="table-row">
+                  <td class="px-6 py-3.5">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full bg-surfaceLighter flex items-center justify-center shrink-0">
+                        <span class="font-ui text-textDim text-xs font-semibold">[E]</span>
+                      </div>
+                      <div>
+                        <p class="font-ui text-textPrimary text-sm font-medium">[User Name]</p>
+                        <p class="font-ui text-textDim text-xs">[user@email]</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-3.5"><span class="font-ui text-textMuted text-sm">[Plan]</span></td>
+                  <td class="px-6 py-3.5">
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-accent status-dot-active"></span>
+                      <span class="font-ui text-accent text-sm">Trial</span>
+                    </span>
+                  </td>
+                  <td class="px-6 py-3.5 text-right"><span class="font-mono text-textPrimary text-sm">$[NNN]</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Activity Feed — 2 cols -->
+        <div class="card card-anim lg:col-span-2 p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-ui text-textPrimary text-base font-semibold">Activity</h3>
+            <span class="font-mono text-textDim text-xs">Live</span>
+          </div>
+          <div class="flex flex-col gap-5">
+            <!-- Event 1 -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-positive/10 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-positive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-ui text-textPrimary text-sm">[User] signed up</p>
+                <p class="font-mono text-textDim text-xs mt-1">[N]m ago</p>
+              </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-ui text-textPrimary text-sm">[User] upgraded to [Plan]</p>
+                <p class="font-mono text-textDim text-xs mt-1">[N]m ago</p>
+              </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-surfaceLighter flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-textMuted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-ui text-textPrimary text-sm">[User] left feedback</p>
+                <p class="font-mono text-textDim text-xs mt-1">[N]h ago</p>
+              </div>
+            </div>
+
+            <!-- Event 4 -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-negative/10 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-negative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-ui text-textPrimary text-sm">Payment failed for [User]</p>
+                <p class="font-mono text-textDim text-xs mt-1">[N]h ago</p>
+              </div>
+            </div>
+
+            <!-- Event 5 -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-positive/10 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-positive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-ui text-textPrimary text-sm">[Feature] deployed to prod</p>
+                <p class="font-mono text-textDim text-xs mt-1">[N]h ago</p>
+              </div>
+            </div>
+
+            <!-- Event 6 -->
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-ui text-textPrimary text-sm">[User] created a workspace</p>
+                <p class="font-mono text-textDim text-xs mt-1">[N]h ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scroll reveal script -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const resetObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0 });
+
+    document.querySelectorAll('.card-anim').forEach(el => {
+      observer.observe(el);
+      resetObserver.observe(el);
+    });
+
+    // Bar chart re-animate on scroll
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const bars = entry.target.querySelectorAll('.bar');
+        if (entry.isIntersecting) {
+          bars.forEach(bar => { bar.style.animationPlayState = 'running'; });
+        } else {
+          bars.forEach(bar => {
+            bar.style.height = '0';
+            bar.style.animation = 'none';
+            bar.offsetHeight; // reflow
+            bar.style.animation = '';
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const chartCard = document.querySelector('.lg\\:col-span-3');
+    if (chartCard) barObserver.observe(chartCard);
+  </script>
+
+</body>
+</html>
