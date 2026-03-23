@@ -3,282 +3,1537 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagecraft — One workspace for everything</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Pagecraft — One workspace. Every team.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Inter', sans-serif; }
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-cream: #ffffff;
+      --bg-warm: #f6f5f4;
+      --bg-subtle: #fbfbfa;
+      --text-primary: #1a1a1a;
+      --text-secondary: #73726e;
+      --text-tertiary: #9b9a97;
+      --border-light: #e3e2de;
+      --border-subtle: #ebebea;
+      --accent-blue: #2383e2;
+      --accent-teal: #0b877d;
+      --accent-orange: #d9730d;
+      --accent-red: #e03e3e;
+      --accent-purple: #6940a5;
+      --accent-pink: #ad1a72;
+
+      /* Notion-style pastel card backgrounds */
+      --card-blue: #d3e5ef;
+      --card-teal: #d1ece8;
+      --card-orange: #fadec9;
+      --card-red: #ffe2dd;
+      --card-purple: #e8deee;
+      --card-yellow: #fdecc8;
+      --card-pink: #f5e0e9;
+      --card-green: #dbeddb;
+
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --max-width: 1100px;
     }
-    .fade-in.visible {
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-primary);
+      background: var(--bg-cream);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 52px;
+    }
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo-icon {
+      width: 24px; height: 24px;
+      background: var(--text-primary);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; font-weight: 700;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 4px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-links a:hover {
+      background: var(--bg-warm);
+      color: var(--text-primary);
+    }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .nav-right a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-right a:hover { color: var(--text-primary); }
+
+    /* ─── BUTTONS ─── */
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent-blue);
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: #1b6ec2; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-primary-dark {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--text-primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn-primary-dark:hover { background: #333; }
+    .btn-primary-dark:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-secondary:hover { border-color: var(--text-tertiary); background: var(--bg-warm); }
+
+    .btn-nav {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent-blue);
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s;
+    }
+    .btn-nav:hover { background: #1b6ec2; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 120px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      background: linear-gradient(180deg, #f6f5f4 0%, #ffffff 100%);
+      z-index: -1;
+    }
+    .hero-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(40px, 7vw, 72px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent-blue);
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-sub {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-top: 16px;
+    }
+
+    /* Hero illustration — CSS-only Notion-style scene */
+    .hero-illustration {
+      margin-top: 56px;
+      position: relative;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-app-frame {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+    .app-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-subtle);
+    }
+    .app-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .app-dot-r { background: #ff5f57; }
+    .app-dot-y { background: #febc2e; }
+    .app-dot-g { background: #28c840; }
+    .app-content {
+      display: flex;
+      min-height: 340px;
+    }
+    .app-sidebar {
+      width: 220px;
+      border-right: 1px solid var(--border-subtle);
+      padding: 16px 12px;
+      background: var(--bg-warm);
+      flex-shrink: 0;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+    .sidebar-item:hover { background: rgba(0,0,0,0.04); }
+    .sidebar-item.active {
+      background: rgba(0,0,0,0.04);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .sidebar-icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-section {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      padding: 16px 8px 6px;
+      font-weight: 600;
+    }
+    .app-main {
+      flex: 1;
+      padding: 32px 40px;
+    }
+    .app-page-icon { font-size: 40px; margin-bottom: 8px; }
+    .app-page-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    .app-block {
+      display: flex; align-items: flex-start; gap: 4px;
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .app-block-bullet {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-tertiary);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .app-toggle {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 0;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .app-toggle-arrow { color: var(--text-tertiary); font-size: 12px; }
+    .app-callout {
+      background: var(--card-yellow);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 13px;
+      display: flex;
+      gap: 10px;
+      margin: 8px 0;
+      color: var(--text-primary);
+    }
+    .app-tag {
+      display: inline-block;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* ─── LOGO STRIP ─── */
+    .logo-strip {
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .logo-strip p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    .logo-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.35;
+    }
+    .logo-row span {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    /* ─── FEATURE SECTION (Notion-style colored bento cards) ─── */
+    .features {
+      padding: 80px 24px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .features-header .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-blue);
+      margin-bottom: 12px;
+    }
+    .features-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    .features-header p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      max-width: 520px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .bento-card {
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .bento-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+    .bento-card.wide {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .bento-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bento-eyebrow .new-badge {
+      background: rgba(0,0,0,0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .bento-card h3 {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .bento-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .bento-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.2s;
+    }
+    .bento-link:hover { gap: 8px; }
+    .bento-link .arrow { transition: transform 0.2s; }
+    .bento-link:hover .arrow { transform: translateX(2px); }
+
+    /* Mini UI previews inside bento cards */
+    .mini-ui {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .mini-doc-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .mini-doc-line .icon { width: 18px; text-align: center; }
+    .mini-doc-heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 4px 0;
+      margin-bottom: 4px;
+    }
+
+    .mini-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+    .mini-table th {
+      text-align: left;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .mini-table td {
+      padding: 8px 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+    .status-tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .status-done { background: var(--card-green); color: #2b7a2b; }
+    .status-progress { background: var(--card-blue); color: #2270b5; }
+    .status-todo { background: var(--bg-warm); color: var(--text-tertiary); }
+
+    .mini-kanban {
+      display: flex; gap: 8px;
+    }
+    .mini-kanban-col {
+      flex: 1;
+      background: var(--bg-warm);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+    }
+    .mini-kanban-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+    .mini-kanban-card {
+      background: white;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .mini-kanban-card:last-child { margin-bottom: 0; }
+
+    .mini-chat { display: flex; flex-direction: column; gap: 10px; }
+    .mini-chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .mini-chat-user {
+      background: var(--bg-warm);
+      color: var(--text-primary);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .mini-chat-ai {
+      background: var(--card-purple);
+      color: var(--text-primary);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* ─── USE CASES ─── */
+    .use-cases {
+      background: var(--bg-warm);
+      padding: 80px 24px;
+    }
+    .use-cases-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .use-cases-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .use-cases-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+    .use-cases-header p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+    }
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .use-case-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      border: 1px solid var(--border-subtle);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .use-case-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+    .use-case-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .use-case-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .use-case-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ─── TEMPLATE GALLERY ─── */
+    .templates {
+      padding: 80px 24px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .templates-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .templates-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+    .templates-header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .template-card {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .template-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+    .template-preview {
+      height: 160px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .template-preview-inner {
+      background: white;
+      border-radius: 6px;
+      padding: 12px;
+      height: 100%;
+      border: 1px solid var(--border-subtle);
+      font-size: 11px;
+      color: var(--text-tertiary);
+      overflow: hidden;
+    }
+    .template-preview-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .template-info {
+      padding: 16px;
+      background: white;
+    }
+    .template-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .template-info p {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .template-meta {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 8px;
+    }
+    .template-author {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--card-blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600;
+    }
+    .template-author-name { font-size: 12px; color: var(--text-tertiary); }
+
+    /* ─── INTEGRATIONS ─── */
+    .integrations {
+      padding: 80px 24px;
+      background: var(--bg-warm);
+    }
+    .integrations-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      text-align: center;
+    }
+    .integrations-inner h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .integrations-inner > p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
+    .integration-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+    .integration-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: 100px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .integration-chip:hover {
+      border-color: var(--border-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .integration-icon {
+      width: 20px; height: 20px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+    }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials {
+      padding: 80px 24px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .testimonials-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .testimonial-card {
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .testimonial-card.featured {
+      border: 2px solid var(--text-primary);
+    }
+    .testimonial-quote {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      flex: 1;
+      margin-bottom: 20px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* ─── PLATFORMS ─── */
+    .platforms {
+      padding: 64px 24px;
+      text-align: center;
+      background: var(--bg-warm);
+    }
+    .platforms h2 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .platforms > p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+    .platform-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .platform-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .platform-pill:hover {
+      border-color: var(--border-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .platform-pill .platform-icon { font-size: 18px; }
+
+    /* ─── CTA ─── */
+    .cta {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, var(--card-yellow) 0%, var(--card-orange) 50%, var(--card-red) 100%);
+      opacity: 0.3;
+      z-index: 0;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .cta h2 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .cta p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-note {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-top: 16px;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      border-top: 1px solid var(--border-light);
+      padding: 56px 24px 40px;
+      background: white;
+    }
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    .footer h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
+    }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 10px; }
+    .footer a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+    .footer a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .footer-bottom span {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+    .footer-legal {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-legal a {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
       opacity: 1;
       transform: translateY(0);
     }
-  </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            warm: { bg: '#fbfaf8', subtle: '#f7f6f3', border: '#e9e5df', muted: '#6b6b6b', text: '#191919' }
-          }
-        }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-card.wide {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
       }
+      .use-cases-grid { grid-template-columns: repeat(2, 1fr); }
+      .template-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .app-sidebar { display: none; }
     }
-  </script>
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero { padding: 100px 16px 60px; }
+      .use-cases-grid { grid-template-columns: 1fr; }
+      .template-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .templates-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+  </style>
 </head>
-<body class="bg-[#fbfaf8] text-[#191919]">
-  <!-- Nav -->
-  <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-[#e9e5df]">
-    <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-8">
-        <a href="#" class="text-base font-bold tracking-tight">Pagecraft</a>
-        <div class="hidden md:flex items-center gap-6 text-sm text-[#6b6b6b]">
-          <a href="#" class="hover:text-[#191919] transition-colors duration-200">Product</a>
-          <a href="#" class="hover:text-[#191919] transition-colors duration-200">Teams</a>
-          <a href="#" class="hover:text-[#191919] transition-colors duration-200">Enterprise</a>
-          <a href="#" class="hover:text-[#191919] transition-colors duration-200">Pricing</a>
-        </div>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="#" class="nav-logo">
+          <div class="nav-logo-icon">P</div>
+          Pagecraft
+        </a>
+        <ul class="nav-links">
+          <li><a href="#">Product</a></li>
+          <li><a href="#">Teams</a></li>
+          <li><a href="#">Individuals</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="#" class="hidden sm:block text-sm text-[#6b6b6b] hover:text-[#191919] transition-colors duration-200">Log in</a>
-        <button class="bg-[#191919] text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-[#333] transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#191919] focus-visible:ring-offset-2">Get Pagecraft free</button>
+      <div class="nav-right">
+        <a href="#">Log in</a>
+        <button class="btn-nav">Get Pagecraft free</button>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="pt-28 pb-24 md:pt-36 md:pb-32">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h1 class="text-5xl md:text-6xl font-bold tracking-[-0.03em] leading-[1.1] mb-6">
-        One workspace.<br/>Zero busywork.
-      </h1>
-      <p class="text-lg text-[#6b6b6b] max-w-xl mx-auto mb-8 leading-relaxed">
-        Write, plan, organize, and collaborate — all in one place. Pagecraft is the connected workspace where better, faster work happens.
-      </p>
-      <div class="flex justify-center gap-4">
-        <button class="bg-[#191919] text-white font-medium px-6 py-3 rounded-md hover:bg-[#333] transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#191919] focus-visible:ring-offset-2">Get Pagecraft free</button>
-        <button class="border border-[#e9e5df] text-[#191919] font-medium px-6 py-3 rounded-md hover:border-[#6b6b6b] transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#191919] focus-visible:ring-offset-2">Request a demo</button>
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>The happier way to&nbsp;<em>work</em></h1>
+      <p>Docs, projects, and wikis for every team. One workspace that does it all. Beautifully simple. Powerfully flexible.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary">Get Pagecraft free</button>
+        <button class="btn-secondary">Request a demo</button>
       </div>
+      <p class="hero-sub">Free for individuals. Team plans start at $10/seat/month.</p>
     </div>
-  </section>
 
-  <!-- Logo Strip -->
-  <section class="bg-white py-12">
-    <div class="max-w-6xl mx-auto px-6">
-      <p class="text-center text-xs text-[#6b6b6b] uppercase tracking-widest mb-6">Trusted by teams at</p>
-      <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-40">
-        <span class="text-xl font-bold">Toyota</span>
-        <span class="text-xl font-bold">Figma</span>
-        <span class="text-xl font-bold">Pixar</span>
-        <span class="text-xl font-bold">Nike</span>
-        <span class="text-xl font-bold">Spotify</span>
-        <span class="text-xl font-bold">Headspace</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Feature Cards (Bento) -->
-  <section class="py-24 fade-in">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-bold tracking-[-0.02em] mb-4">Everything you need, nothing you don't</h2>
-        <p class="text-[#6b6b6b] max-w-lg mx-auto">Replace scattered tools with one workspace that adapts to how your team works.</p>
-      </div>
-      <div class="grid sm:grid-cols-2 gap-6">
-        <!-- Docs card — blue accent -->
-        <div class="bg-[#e8f4fd] rounded-2xl p-8 hover:shadow-sm transition-all duration-300">
-          <span class="text-3xl mb-4 block">📝</span>
-          <h3 class="text-xl font-semibold mb-2">Docs & Notes</h3>
-          <p class="text-sm text-[#6b6b6b] leading-relaxed mb-6">Beautiful documents with drag-and-drop blocks. Embed anything: databases, images, code, bookmarks.</p>
-          <!-- Mini doc UI -->
-          <div class="bg-white rounded-xl p-4 border border-[#e9e5df]">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-sm">📄</span>
-              <span class="text-sm font-medium">Q4 Product Roadmap</span>
+    <!-- Notion-style app preview -->
+    <div class="hero-illustration reveal">
+      <div class="hero-app-frame">
+        <div class="app-titlebar">
+          <div class="app-dot app-dot-r"></div>
+          <div class="app-dot app-dot-y"></div>
+          <div class="app-dot app-dot-g"></div>
+        </div>
+        <div class="app-content">
+          <div class="app-sidebar">
+            <div class="sidebar-item active">
+              <span class="sidebar-icon">🏠</span> Home
             </div>
-            <div class="space-y-2 text-sm text-[#6b6b6b]">
-              <div class="flex items-center gap-2"><span class="font-medium text-[#191919]">H2</span> Launch mobile app v2</div>
-              <div class="flex items-center gap-2 pl-4">☑️ Design system update</div>
-              <div class="flex items-center gap-2 pl-4">⬜ API rate limiting</div>
-              <div class="flex items-center gap-2 pl-4">⬜ Push notifications</div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">🔍</span> Search
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">📥</span> Inbox
+            </div>
+            <div class="sidebar-section">Workspace</div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">📋</span> Product Roadmap
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">📝</span> Meeting Notes
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">🎯</span> OKRs — Q1 2026
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">📚</span> Team Wiki
+            </div>
+            <div class="sidebar-item">
+              <span class="sidebar-icon">📊</span> Sprint Board
             </div>
           </div>
-        </div>
-        <!-- Database card — yellow accent -->
-        <div class="bg-[#fdf4e8] rounded-2xl p-8 hover:shadow-sm transition-all duration-300">
-          <span class="text-3xl mb-4 block">📊</span>
-          <h3 class="text-xl font-semibold mb-2">Databases</h3>
-          <p class="text-sm text-[#6b6b6b] leading-relaxed mb-6">Flexible tables, boards, timelines, and calendars. Filter, sort, and view your data any way you want.</p>
-          <!-- Mini table UI -->
-          <div class="bg-white rounded-xl p-4 border border-[#e9e5df] overflow-hidden">
-            <table class="w-full text-sm">
-              <thead><tr class="border-b border-[#e9e5df] text-left text-[#6b6b6b]"><th class="pb-2 font-medium">Task</th><th class="pb-2 font-medium">Status</th><th class="pb-2 font-medium">Owner</th></tr></thead>
-              <tbody>
-                <tr class="border-b border-[#e9e5df]"><td class="py-2">Design review</td><td class="py-2"><span class="bg-[#dbeddb] text-[#2b7a2b] text-xs px-2 py-0.5 rounded">Done</span></td><td class="py-2">Alice</td></tr>
-                <tr class="border-b border-[#e9e5df]"><td class="py-2">API integration</td><td class="py-2"><span class="bg-[#e8f4fd] text-[#2270b5] text-xs px-2 py-0.5 rounded">In progress</span></td><td class="py-2">Bob</td></tr>
-                <tr><td class="py-2">User testing</td><td class="py-2"><span class="bg-[#f5f5f5] text-[#6b6b6b] text-xs px-2 py-0.5 rounded">Planned</span></td><td class="py-2">Carol</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!-- Projects card — pink accent -->
-        <div class="bg-[#fce8f0] rounded-2xl p-8 hover:shadow-sm transition-all duration-300">
-          <span class="text-3xl mb-4 block">🎯</span>
-          <h3 class="text-xl font-semibold mb-2">Projects</h3>
-          <p class="text-sm text-[#6b6b6b] leading-relaxed mb-6">Manage any project from start to finish. Kanban boards, timelines, and custom workflows for every team.</p>
-          <!-- Mini kanban -->
-          <div class="flex gap-3">
-            <div class="flex-1 bg-white rounded-xl p-3 border border-[#e9e5df]">
-              <p class="text-xs font-medium text-[#6b6b6b] mb-2">To Do</p>
-              <div class="bg-[#f7f6f3] rounded-lg p-2 text-xs mb-1.5">Research competitors</div>
-              <div class="bg-[#f7f6f3] rounded-lg p-2 text-xs">Write brief</div>
+          <div class="app-main">
+            <div class="app-page-icon">🚀</div>
+            <div class="app-page-title">Product Roadmap</div>
+            <div class="app-callout">
+              <span>💡</span>
+              <span>Updated weekly by the product team. Tag @design for visual specs.</span>
             </div>
-            <div class="flex-1 bg-white rounded-xl p-3 border border-[#e9e5df]">
-              <p class="text-xs font-medium text-[#6b6b6b] mb-2">Doing</p>
-              <div class="bg-[#e8f4fd] rounded-lg p-2 text-xs">Build prototype</div>
+            <div class="app-toggle" style="margin-top: 12px;">
+              <span class="app-toggle-arrow">▸</span> Q1 2026 Goals
             </div>
-            <div class="flex-1 bg-white rounded-xl p-3 border border-[#e9e5df]">
-              <p class="text-xs font-medium text-[#6b6b6b] mb-2">Done</p>
-              <div class="bg-[#dbeddb] rounded-lg p-2 text-xs">User interviews</div>
+            <div class="app-block" style="margin-top: 8px;">
+              <div class="app-block-bullet"></div>
+              <span>Mobile app v3 launch — <span class="app-tag status-done">Done</span></span>
+            </div>
+            <div class="app-block">
+              <div class="app-block-bullet"></div>
+              <span>AI writing assistant — <span class="app-tag status-progress">In progress</span></span>
+            </div>
+            <div class="app-block">
+              <div class="app-block-bullet"></div>
+              <span>Enterprise SSO integration — <span class="app-tag status-todo">Planned</span></span>
+            </div>
+            <div class="app-toggle" style="margin-top: 12px;">
+              <span class="app-toggle-arrow">▸</span> Q2 2026 Goals
             </div>
           </div>
         </div>
-        <!-- AI card — purple accent -->
-        <div class="bg-[#f0e8fd] rounded-2xl p-8 hover:shadow-sm transition-all duration-300">
-          <span class="text-3xl mb-4 block">🤖</span>
-          <h3 class="text-xl font-semibold mb-2">AI Assistant</h3>
-          <p class="text-sm text-[#6b6b6b] leading-relaxed mb-6">Ask questions, generate summaries, write drafts, and automate tasks — your built-in AI power user.</p>
-          <!-- Mini AI chat -->
-          <div class="bg-white rounded-xl p-4 border border-[#e9e5df] space-y-3">
-            <div class="bg-[#f7f6f3] rounded-lg p-3 text-sm max-w-[80%]">Summarize last week's meeting notes</div>
-            <div class="bg-[#f0e8fd] rounded-lg p-3 text-sm ml-auto max-w-[80%]">Here's a summary of your 3 meetings: Product sync covered the v2 launch timeline. Design review approved the new dashboard. Sprint retro identified 2 action items...</div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="bg-[#f7f6f3] py-20 fade-in">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl sm:text-4xl font-bold tracking-[-0.02em]">Teams love Pagecraft</h2>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl p-6 border border-[#e9e5df]">
-          <p class="text-sm text-[#191919] leading-relaxed mb-6">"Pagecraft replaced 5 tools for us. Docs, tasks, wikis, spreadsheets, and meeting notes — all in one place. Our team of 7 now feels like 70."</p>
-          <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face" alt="" class="w-10 h-10 rounded-full object-cover">
-            <div><p class="text-sm font-medium">Maria Chen</p><p class="text-xs text-[#6b6b6b]">Head of Product, Flowstate</p></div>
-          </div>
-        </div>
-        <div class="bg-white rounded-2xl p-6 border-2 border-[#191919] sm:scale-105">
-          <p class="text-sm text-[#191919] leading-relaxed mb-6">"The flexibility is incredible. Engineering uses it for sprint planning, marketing for content calendars, and HR for onboarding. One tool, every team."</p>
-          <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" alt="" class="w-10 h-10 rounded-full object-cover">
-            <div><p class="text-sm font-medium">James Park</p><p class="text-xs text-[#6b6b6b]">CTO, Luminary Labs</p></div>
-          </div>
-        </div>
-        <div class="bg-white rounded-2xl p-6 border border-[#e9e5df]">
-          <p class="text-sm text-[#191919] leading-relaxed mb-6">"The AI features are a game changer. I ask it to draft proposals, summarize threads, and create action items. It saves me 2 hours daily."</p>
-          <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" alt="" class="w-10 h-10 rounded-full object-cover">
-            <div><p class="text-sm font-medium">Sophie Laurent</p><p class="text-xs text-[#6b6b6b]">Operations Lead, Craft&Co</p></div>
-          </div>
-        </div>
-      </div>
+  <!-- ─── LOGO STRIP ─── -->
+  <section class="logo-strip reveal">
+    <p>Trusted by teams at</p>
+    <div class="logo-row">
+      <span>Toyota</span>
+      <span>Figma</span>
+      <span>Pixar</span>
+      <span>Nike</span>
+      <span>Spotify</span>
+      <span>Headspace</span>
+      <span>Vercel</span>
     </div>
   </section>
 
-  <!-- Download -->
-  <section class="py-16 fade-in">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-2xl font-bold tracking-tight mb-4">Available everywhere</h2>
-      <p class="text-[#6b6b6b] mb-8">Mac, Windows, iOS, Android, and web. Your workspace travels with you.</p>
-      <div class="flex justify-center gap-4 flex-wrap">
-        <div class="border border-[#e9e5df] rounded-xl px-6 py-3 flex items-center gap-2 text-sm hover:border-[#6b6b6b] transition-colors cursor-pointer">🍎 Mac</div>
-        <div class="border border-[#e9e5df] rounded-xl px-6 py-3 flex items-center gap-2 text-sm hover:border-[#6b6b6b] transition-colors cursor-pointer">🪟 Windows</div>
-        <div class="border border-[#e9e5df] rounded-xl px-6 py-3 flex items-center gap-2 text-sm hover:border-[#6b6b6b] transition-colors cursor-pointer">📱 iOS</div>
-        <div class="border border-[#e9e5df] rounded-xl px-6 py-3 flex items-center gap-2 text-sm hover:border-[#6b6b6b] transition-colors cursor-pointer">🤖 Android</div>
-        <div class="border border-[#e9e5df] rounded-xl px-6 py-3 flex items-center gap-2 text-sm hover:border-[#6b6b6b] transition-colors cursor-pointer">🌐 Web</div>
-      </div>
+  <!-- ─── FEATURES (Bento Grid) ─── -->
+  <section class="features">
+    <div class="features-header reveal">
+      <div class="eyebrow">Product</div>
+      <h2>Everything you need, beautifully connected</h2>
+      <p>Replace your scattered tools with one workspace that adapts to how your team actually works.</p>
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="bg-[#191919] py-24 fade-in">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-[-0.02em] text-white mb-4">Get started for free</h2>
-      <p class="text-[#999] text-lg mb-8 max-w-lg mx-auto">Play around with it first. Pay when you're ready. Generous free tier with unlimited blocks for individuals.</p>
-      <div class="flex justify-center gap-4">
-        <button class="bg-white text-[#191919] font-medium px-8 py-3 rounded-md hover:bg-[#ededed] transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#191919]">Get Pagecraft free</button>
-        <button class="border border-white/20 text-white font-medium px-8 py-3 rounded-md hover:border-white/50 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#191919]">Request a demo</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-[#191919] border-t border-white/10 py-16">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+    <div class="bento-grid">
+      <!-- Wide card: Docs -->
+      <div class="bento-card wide reveal" style="background: var(--card-blue);">
         <div>
-          <h4 class="text-white text-sm font-semibold mb-4">Product</h4>
-          <ul class="space-y-2 text-sm text-[#999]">
-            <li><a href="#" class="hover:text-white transition-colors">AI</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Docs</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Projects</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Wikis</a></li>
+          <div class="bento-eyebrow" style="color: var(--accent-blue);">Docs & Notes</div>
+          <h3>Write, plan, and organize with blocks</h3>
+          <p>Beautiful documents with drag-and-drop blocks. Embed databases, images, code, and 50+ block types.</p>
+          <a href="#" class="bento-link">Learn more <span class="arrow">&rarr;</span></a>
+        </div>
+        <div class="mini-ui">
+          <div class="mini-doc-heading">📄 Q4 Product Roadmap</div>
+          <div class="mini-doc-line"><span class="icon">📌</span> Pinned to workspace</div>
+          <div class="mini-doc-line" style="font-weight: 500; color: var(--text-primary); font-size: 14px; padding-top: 8px;">Launch milestones</div>
+          <div class="mini-doc-line"><span class="icon">☑️</span> Design system update</div>
+          <div class="mini-doc-line"><span class="icon">☑️</span> API rate limiting</div>
+          <div class="mini-doc-line"><span class="icon">⬜</span> Push notifications</div>
+          <div class="mini-doc-line"><span class="icon">⬜</span> Analytics dashboard</div>
+        </div>
+      </div>
+
+      <!-- Database -->
+      <div class="bento-card reveal" style="background: var(--card-yellow);">
+        <div class="bento-eyebrow" style="color: var(--accent-orange);">Databases</div>
+        <h3>Tables, boards, timelines</h3>
+        <p>View your data any way you want. Filter, sort, and group with powerful built-in databases.</p>
+        <div class="mini-ui" style="margin-top: 16px;">
+          <table class="mini-table">
+            <thead><tr><th>Task</th><th>Status</th><th>Owner</th></tr></thead>
+            <tbody>
+              <tr><td>Design review</td><td><span class="status-tag status-done">Done</span></td><td>Alice</td></tr>
+              <tr><td>API integration</td><td><span class="status-tag status-progress">In progress</span></td><td>Bob</td></tr>
+              <tr><td>User testing</td><td><span class="status-tag status-todo">Planned</span></td><td>Carol</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="bento-card reveal" style="background: var(--card-pink);">
+        <div class="bento-eyebrow" style="color: var(--accent-pink);">Projects</div>
+        <h3>Manage any workflow</h3>
+        <p>Kanban boards, timelines, and custom workflows for every team's needs.</p>
+        <div class="mini-ui" style="margin-top: 16px;">
+          <div class="mini-kanban">
+            <div class="mini-kanban-col">
+              <div class="mini-kanban-title">To Do</div>
+              <div class="mini-kanban-card">Research competitors</div>
+              <div class="mini-kanban-card">Write brief</div>
+            </div>
+            <div class="mini-kanban-col">
+              <div class="mini-kanban-title">Doing</div>
+              <div class="mini-kanban-card">Build prototype</div>
+            </div>
+            <div class="mini-kanban-col">
+              <div class="mini-kanban-title">Done</div>
+              <div class="mini-kanban-card">User interviews</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI — wide card -->
+      <div class="bento-card wide reveal" style="background: var(--card-purple);">
+        <div>
+          <div class="bento-eyebrow" style="color: var(--accent-purple);">
+            AI Assistant
+            <span class="new-badge">New</span>
+          </div>
+          <h3>Your AI that knows your work</h3>
+          <p>Ask questions, generate summaries, draft proposals, and automate tasks. Built right into your workspace, with full context of your content.</p>
+          <a href="#" class="bento-link">Explore AI <span class="arrow">&rarr;</span></a>
+        </div>
+        <div class="mini-ui">
+          <div class="mini-chat">
+            <div class="mini-chat-msg mini-chat-user">Summarize last week's meeting notes</div>
+            <div class="mini-chat-msg mini-chat-ai">Here's a summary of your 3 meetings: Product sync covered the v2 launch timeline. Design review approved the new dashboard layout. Sprint retro identified 2 action items for next cycle.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── USE CASES ─── -->
+  <section class="use-cases">
+    <div class="use-cases-inner">
+      <div class="use-cases-header reveal">
+        <h2>Built for every team</h2>
+        <p>From startups to enterprises, Pagecraft adapts to how your team works.</p>
+      </div>
+      <div class="use-cases-grid">
+        <div class="use-case-card reveal reveal-delay-1">
+          <div class="use-case-icon" style="background: var(--card-blue);">🛠️</div>
+          <h3>Engineering</h3>
+          <p>Sprint planning, bug tracking, and technical docs all in one place.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-1">
+          <div class="use-case-icon" style="background: var(--card-pink);">🎨</div>
+          <h3>Design</h3>
+          <p>Design specs, feedback boards, and asset libraries your whole team can find.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-2">
+          <div class="use-case-icon" style="background: var(--card-orange);">📊</div>
+          <h3>Product</h3>
+          <p>Roadmaps, user research, and feature prioritization connected together.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-2">
+          <div class="use-case-icon" style="background: var(--card-green);">📢</div>
+          <h3>Marketing</h3>
+          <p>Content calendars, campaign trackers, and brand guidelines in one wiki.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-3">
+          <div class="use-case-icon" style="background: var(--card-purple);">👥</div>
+          <h3>HR &amp; People</h3>
+          <p>Onboarding checklists, policies, and team directories everyone can access.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-3">
+          <div class="use-case-icon" style="background: var(--card-yellow);">💰</div>
+          <h3>Sales</h3>
+          <p>CRM databases, deal trackers, and proposal templates to close faster.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-3">
+          <div class="use-case-icon" style="background: var(--card-red);">🎓</div>
+          <h3>Education</h3>
+          <p>Course materials, student wikis, and research notes in a shared space.</p>
+        </div>
+        <div class="use-case-card reveal reveal-delay-3">
+          <div class="use-case-icon" style="background: var(--card-teal);">🏠</div>
+          <h3>Personal</h3>
+          <p>Journals, reading lists, habit trackers, and life dashboards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TEMPLATE GALLERY ─── -->
+  <section class="templates">
+    <div class="templates-header reveal">
+      <div>
+        <h2>Start with a template</h2>
+        <p>Get going fast with 10,000+ community templates.</p>
+      </div>
+      <a href="#" class="bento-link">Browse all templates <span class="arrow">&rarr;</span></a>
+    </div>
+    <div class="template-grid">
+      <div class="template-card reveal reveal-delay-1">
+        <div class="template-preview" style="background: var(--card-blue);">
+          <div class="template-preview-inner">
+            <div class="template-preview-title">📋 Sprint Board</div>
+            <div style="display: flex; gap: 6px; margin-top: 6px;">
+              <div style="flex:1; background: var(--bg-warm); border-radius: 4px; padding: 6px; font-size: 10px;">Backlog</div>
+              <div style="flex:1; background: var(--bg-warm); border-radius: 4px; padding: 6px; font-size: 10px;">In Progress</div>
+              <div style="flex:1; background: var(--bg-warm); border-radius: 4px; padding: 6px; font-size: 10px;">Done</div>
+            </div>
+          </div>
+        </div>
+        <div class="template-info">
+          <h4>Sprint Board</h4>
+          <p>Agile project management with customizable workflows.</p>
+          <div class="template-meta">
+            <div class="template-author" style="background: var(--card-teal);">P</div>
+            <span class="template-author-name">Pagecraft</span>
+          </div>
+        </div>
+      </div>
+      <div class="template-card reveal reveal-delay-2">
+        <div class="template-preview" style="background: var(--card-yellow);">
+          <div class="template-preview-inner">
+            <div class="template-preview-title">📅 Content Calendar</div>
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 8px;">
+              <div style="background: var(--bg-warm); border-radius: 3px; padding: 4px; font-size: 9px;">Mon</div>
+              <div style="background: var(--bg-warm); border-radius: 3px; padding: 4px; font-size: 9px;">Tue</div>
+              <div style="background: var(--bg-warm); border-radius: 3px; padding: 4px; font-size: 9px;">Wed</div>
+              <div style="background: var(--bg-warm); border-radius: 3px; padding: 4px; font-size: 9px;">Thu</div>
+              <div style="background: var(--bg-warm); border-radius: 3px; padding: 4px; font-size: 9px;">Fri</div>
+            </div>
+          </div>
+        </div>
+        <div class="template-info">
+          <h4>Content Calendar</h4>
+          <p>Plan and schedule your content across all channels.</p>
+          <div class="template-meta">
+            <div class="template-author" style="background: var(--card-orange);">M</div>
+            <span class="template-author-name">Maria Chen</span>
+          </div>
+        </div>
+      </div>
+      <div class="template-card reveal reveal-delay-3">
+        <div class="template-preview" style="background: var(--card-purple);">
+          <div class="template-preview-inner">
+            <div class="template-preview-title">🎯 OKR Tracker</div>
+            <div style="margin-top: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <div style="flex:1; height: 6px; background: var(--border-subtle); border-radius: 3px; overflow: hidden;">
+                  <div style="width: 75%; height: 100%; background: var(--accent-purple); border-radius: 3px;"></div>
+                </div>
+                <span style="font-size: 10px;">75%</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="flex:1; height: 6px; background: var(--border-subtle); border-radius: 3px; overflow: hidden;">
+                  <div style="width: 40%; height: 100%; background: var(--accent-orange); border-radius: 3px;"></div>
+                </div>
+                <span style="font-size: 10px;">40%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="template-info">
+          <h4>OKR Tracker</h4>
+          <p>Set objectives and track key results across your org.</p>
+          <div class="template-meta">
+            <div class="template-author" style="background: var(--card-pink);">J</div>
+            <span class="template-author-name">James Park</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INTEGRATIONS ─── -->
+  <section class="integrations">
+    <div class="integrations-inner reveal">
+      <h2>Connects to the tools you already use</h2>
+      <p>Bring your favorite tools together in one workspace.</p>
+      <div class="integration-grid">
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #4285f4; color: white; border-radius: 50%;">G</span>
+          Google Drive
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #7b68ee; color: white; border-radius: 50%;">S</span>
+          Slack
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #f24e1e; color: white; border-radius: 50%;">F</span>
+          Figma
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #333; color: white; border-radius: 50%;">G</span>
+          GitHub
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #0079bf; color: white; border-radius: 50%;">J</span>
+          Jira
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #ff4500; color: white; border-radius: 50%;">Z</span>
+          Zapier
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #00a4ef; color: white; border-radius: 50%;">O</span>
+          Outlook
+        </div>
+        <div class="integration-chip">
+          <span class="integration-icon" style="background: #1db954; color: white; border-radius: 50%;">A</span>
+          Asana
+        </div>
+      </div>
+      <a href="#" class="bento-link">See all 100+ integrations <span class="arrow">&rarr;</span></a>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIALS ─── -->
+  <section class="testimonials">
+    <div class="testimonials-header reveal">
+      <h2>Loved by teams everywhere</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal reveal-delay-1">
+        <p class="testimonial-quote">"Pagecraft replaced 5 tools for us. Docs, tasks, wikis, spreadsheets, and meeting notes. Our team of 7 now moves like a team of 70."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=72&h=72&fit=crop&crop=face" alt="" class="testimonial-avatar">
+          <div>
+            <div class="testimonial-name">Maria Chen</div>
+            <div class="testimonial-role">Head of Product, Flowstate</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card featured reveal reveal-delay-2">
+        <p class="testimonial-quote">"The flexibility is incredible. Engineering uses it for sprint planning, marketing for content calendars, and HR for onboarding. One tool, every team."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=72&h=72&fit=crop&crop=face" alt="" class="testimonial-avatar">
+          <div>
+            <div class="testimonial-name">James Park</div>
+            <div class="testimonial-role">CTO, Luminary Labs</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-3">
+        <p class="testimonial-quote">"The AI features are genuinely useful. I ask it to draft proposals, summarize threads, and create action items. It saves me 2 hours every day."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=72&h=72&fit=crop&crop=face" alt="" class="testimonial-avatar">
+          <div>
+            <div class="testimonial-name">Sophie Laurent</div>
+            <div class="testimonial-role">Operations Lead, Craft&Co</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PLATFORMS ─── -->
+  <section class="platforms reveal">
+    <h2>Available everywhere you work</h2>
+    <p>Mac, Windows, iOS, Android, and web. Your workspace travels with you.</p>
+    <div class="platform-row">
+      <div class="platform-pill"><span class="platform-icon">&#63743;</span> Mac</div>
+      <div class="platform-pill"><span class="platform-icon">&#8862;</span> Windows</div>
+      <div class="platform-pill"><span class="platform-icon">&#9898;</span> iOS</div>
+      <div class="platform-pill"><span class="platform-icon">&#9654;</span> Android</div>
+      <div class="platform-pill"><span class="platform-icon">&#127760;</span> Web</div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta">
+    <div class="cta-inner reveal">
+      <h2>Get started for free</h2>
+      <p>Play around with it first. Pay when you're ready. Generous free tier with unlimited blocks for individuals.</p>
+      <div class="cta-buttons">
+        <button class="btn-primary-dark">Get Pagecraft free</button>
+        <button class="btn-secondary">Request a demo</button>
+      </div>
+      <p class="cta-note">No credit card required</p>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">P</div>
+            Pagecraft
+          </a>
+          <p>One workspace for docs, projects, and wikis. Built for every team.</p>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">AI</a></li>
+            <li><a href="#">Docs</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Wikis</a></li>
+            <li><a href="#">Calendar</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="text-white text-sm font-semibold mb-4">Solutions</h4>
-          <ul class="space-y-2 text-sm text-[#999]">
-            <li><a href="#" class="hover:text-white transition-colors">Engineering</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Design</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Product</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Marketing</a></li>
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="#">Engineering</a></li>
+            <li><a href="#">Design</a></li>
+            <li><a href="#">Product</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">HR</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="text-white text-sm font-semibold mb-4">Resources</h4>
-          <ul class="space-y-2 text-sm text-[#999]">
-            <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Help center</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Guides</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Templates</a></li>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Help center</a></li>
+            <li><a href="#">Guides</a></li>
+            <li><a href="#">Templates</a></li>
+            <li><a href="#">API docs</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="text-white text-sm font-semibold mb-4">Company</h4>
-          <ul class="space-y-2 text-sm text-[#999]">
-            <li><a href="#" class="hover:text-white transition-colors">About</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Privacy</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Terms</a></li>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Contact</a></li>
           </ul>
         </div>
       </div>
-      <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-[#999]">Pagecraft</p>
-        <p class="text-xs text-[#999]/50">&copy; 2024 Pagecraft, Inc.</p>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Pagecraft, Inc.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookie settings</a>
+        </div>
       </div>
     </div>
   </footer>
 
   <script>
+    // Intersection Observer for reveal animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

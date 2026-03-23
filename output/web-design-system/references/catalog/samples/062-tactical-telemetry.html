@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>062 — Tactical Telemetry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-alt: #111111;
+      --green: #00ff41;
+      --green-dim: rgba(0, 255, 65, 0.6);
+      --red: #ff3333;
+      --border: #333333;
+      --muted: #666666;
+      --font-macro: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--font-mono);
+      background: var(--bg);
+      color: var(--green);
+      overflow-x: hidden;
+      font-size: 14px;
+      line-height: 1.6;
+      border-radius: 0 !important;
+    }
+
+    /* CRT Scanline Overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    }
+
+    /* CRT Flicker */
+    @keyframes crt-flicker {
+      0%, 100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.85; }
+      94% { opacity: 1; }
+      96% { opacity: 0.92; }
+      97% { opacity: 1; }
+    }
+    body { animation: crt-flicker 4s infinite; }
+
+    /* Typewriter */
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 36ch; }
+    }
+    @keyframes blink-caret {
+      0%, 100% { border-color: var(--green); }
+      50% { border-color: transparent; }
+    }
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--green);
+      width: 0;
+      animation: typewriter 2.5s steps(36) 0.8s forwards,
+                 blink-caret 0.8s step-end infinite;
+      display: inline-block;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+
+    /* No border-radius anywhere */
+    * { border-radius: 0 !important; }
+
+    h1, h2 {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    h3 {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 12px;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { color: #fff; }
+
+    .section-comment {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 24px;
+    }
+
+    .ascii-frame {
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .ascii-corner-tl::before {
+      content: '┌';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+    }
+    .ascii-corner-tr::after {
+      content: '┐';
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+    }
+    .ascii-corner-bl .corner-bl::before {
+      content: '└';
+      position: absolute;
+      bottom: -1px;
+      left: -1px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+    }
+    .ascii-corner-br .corner-br::after {
+      content: '┘';
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* Blinking status dot */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .status-dot {
+      display: inline-block;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-timestamp {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-timestamp { display: none; }
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 120px 24px 96px;
+      background: var(--bg);
+    }
+    .hero-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hero-frame {
+      border: 1px solid var(--border);
+      padding: 48px 32px;
+      position: relative;
+    }
+    .hero-frame::before {
+      content: '┌── SYS.INIT ──';
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--bg);
+      padding: 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+    .hero-frame::after {
+      content: '──────────────────────────────────────────────┘';
+      position: absolute;
+      bottom: -10px;
+      right: 16px;
+      background: var(--bg);
+      padding: 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      max-width: 60%;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .hero-reg {
+      position: absolute;
+      top: 48px;
+      right: 48px;
+      color: var(--muted);
+      font-size: 18px;
+      letter-spacing: 12px;
+      opacity: 0.4;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      margin-top: 32px;
+      border: 1px solid var(--border);
+    }
+    .hero-stat {
+      flex: 1;
+      padding: 12px 16px;
+      border-right: 1px solid var(--border);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-label {
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .hero-stat-value {
+      color: var(--green);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 96px 16px 64px; }
+      .hero-frame { padding: 32px 20px; }
+      .hero-reg { display: none; }
+      .hero-stats { flex-direction: column; }
+      .hero-stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .hero-stat:last-child { border-bottom: none; }
+    }
+
+    /* ─── STATUS BAR ─── */
+    .status-bar {
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--green-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      scrollbar-width: none;
+    }
+    .status-bar::-webkit-scrollbar { display: none; }
+    .status-bar .divider { color: var(--border); margin: 0 16px; }
+
+    /* ─── FEATURES ─── */
+    .features {
+      padding: 64px 24px 96px;
+      background: var(--bg);
+    }
+    .features-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+    }
+    .feature-cell {
+      padding: 32px 24px;
+      border: 1px solid var(--border);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 200px;
+    }
+    .feature-code {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .feature-title {
+      font-family: var(--font-macro);
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+    .feature-desc {
+      font-size: 13px;
+      color: var(--green-dim);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .feature-status {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: right;
+    }
+    .feature-status.online { color: var(--green); }
+    .feature-status.alert { color: var(--red); }
+
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .features { padding: 48px 16px 64px; }
+    }
+
+    /* ─── DASHBOARD ─── */
+    .dashboard {
+      padding: 64px 24px;
+      background: var(--bg-alt);
+    }
+    .dashboard-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      border: 1px solid var(--border);
+    }
+    .dashboard-panel {
+      padding: 24px;
+      border: 1px solid var(--border);
+    }
+    .log-line {
+      font-size: 12px;
+      line-height: 2;
+      display: flex;
+      gap: 12px;
+    }
+    .log-time { color: var(--muted); white-space: nowrap; }
+    .log-ok { color: var(--green); }
+    .log-warn { color: var(--red); }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-label { color: var(--muted); }
+    .metric-value { color: var(--green); font-weight: 700; font-size: 16px; }
+    .metric-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      margin-top: 8px;
+    }
+    .metric-bar-fill {
+      height: 100%;
+      background: var(--green);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .dashboard { padding: 48px 16px; }
+    }
+
+    /* ─── CTA ─── */
+    .cta {
+      padding: 80px 24px;
+      background: var(--bg);
+    }
+    .cta-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .cta-frame {
+      border: 1px solid var(--border);
+      padding: 48px 32px;
+      position: relative;
+    }
+    .cta-frame::before {
+      content: '⊕';
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      opacity: 0.5;
+    }
+    .cta-frame::after {
+      content: '⊕';
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      opacity: 0.5;
+    }
+    .cta h2 {
+      color: var(--red);
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 20px;
+    }
+    .cta-cmd {
+      font-size: 14px;
+      color: var(--green);
+      margin-bottom: 32px;
+      display: inline-block;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: var(--red);
+      color: #000;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 14px 40px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cta-btn:hover { background: #ff5555; color: #000; }
+    .cta-corner-marks {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 14px;
+      opacity: 0.5;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      padding: 48px 24px;
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    .footer-marks {
+      text-align: center;
+      color: var(--muted);
+      font-size: 16px;
+      letter-spacing: 16px;
+      margin-bottom: 32px;
+      opacity: 0.4;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 32px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .footer-grid a {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+    .footer-grid a:hover { color: var(--green); }
+    .footer-copyright {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer { padding: 32px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span style="color: var(--muted);">◉</span>
+      [PRODUCT_NAME]//SYS
+    </div>
+    <div class="nav-links">
+      <a href="#">Modules</a>
+      <a href="#">Telemetry</a>
+      <a href="#">Deploy</a>
+      <a href="#">Docs</a>
+    </div>
+    <div class="nav-timestamp" id="nav-clock">UTC 2024.03.15 14:32:07</div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-frame reveal">
+        <div class="hero-reg">◎ ▣ ◉</div>
+        <h1>[Product Name]</h1>
+        <div style="font-size: 14px; color: var(--green); margin-bottom: 8px;">
+          <span class="typewriter">&gt; INITIALIZING TACTICAL INTERFACE_</span>
+        </div>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 16px; max-width: 560px;">
+          [One-line description of your product. Keep it concise, technical, and direct. No marketing fluff.]
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-label">Uptime</div>
+            <div class="hero-stat-value">99.97%</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Latency</div>
+            <div class="hero-stat-value">12ms</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Nodes</div>
+            <div class="hero-stat-value">2,048</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STATUS BAR ─── -->
+  <div class="status-bar">
+    <span class="status-dot">◉</span> CORE_TEMP: 42°C
+    <span class="divider">│</span>
+    MEM_ALLOC: 78.3%
+    <span class="divider">│</span>
+    NET_IO: 1.2Gb/s
+    <span class="divider">│</span>
+    THREAT_LVL: LOW
+    <span class="divider">│</span>
+    DISK_RW: 340MB/s
+    <span class="divider">│</span>
+    CPU_LOAD: 34%
+    <span class="divider">│</span>
+    ACTIVE_CONN: 8,412
+    <span class="divider">│</span>
+    CACHE_HIT: 97.2%
+  </div>
+
+  <!-- ─── FEATURES ─── -->
+  <section class="features">
+    <div class="features-inner">
+      <div class="section-comment reveal">// SYSTEM MODULES</div>
+      <div class="features-grid">
+        <div class="feature-cell reveal">
+          <div class="feature-code">MOD.01</div>
+          <div class="feature-title">[Real-time Monitoring]</div>
+          <div class="feature-desc">[Sub-millisecond event streaming with configurable alert thresholds. Tracks system health across all nodes in the cluster.]</div>
+          <div class="feature-status online"><span class="status-dot">●</span> ONLINE</div>
+        </div>
+        <div class="feature-cell reveal reveal-d1">
+          <div class="feature-code">MOD.02</div>
+          <div class="feature-title">[Threat Detection]</div>
+          <div class="feature-desc">[ML-powered anomaly detection that identifies zero-day patterns before they propagate. Auto-isolates compromised nodes.]</div>
+          <div class="feature-status online"><span class="status-dot">●</span> ONLINE</div>
+        </div>
+        <div class="feature-cell reveal reveal-d2">
+          <div class="feature-code">MOD.03</div>
+          <div class="feature-title">[Auto-Scaling]</div>
+          <div class="feature-desc">[Predictive scaling engine that pre-provisions resources based on historical traffic patterns and current load signals.]</div>
+          <div class="feature-status alert">▲ SCALING</div>
+        </div>
+        <div class="feature-cell reveal reveal-d3">
+          <div class="feature-code">MOD.04</div>
+          <div class="feature-title">[Data Pipeline]</div>
+          <div class="feature-desc">[Unified ingestion layer supporting batch and stream processing. Schema validation and dead-letter routing built in.]</div>
+          <div class="feature-status online"><span class="status-dot">●</span> ONLINE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DASHBOARD ─── -->
+  <section class="dashboard">
+    <div class="dashboard-inner">
+      <div class="section-comment reveal">// THREAT ANALYSIS</div>
+      <div class="dashboard-grid">
+        <!-- Log Panel -->
+        <div class="dashboard-panel reveal">
+          <h3 style="margin-bottom: 16px; color: var(--muted);">SYSTEM LOG</h3>
+          <div class="log-line">
+            <span class="log-time">[14:32:07]</span>
+            <span class="log-ok">SCAN COMPLETE — 0 vulnerabilities detected</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[14:31:44]</span>
+            <span class="log-ok">Node cluster-07 health check passed</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[14:31:12]</span>
+            <span class="log-warn">WARN: Latency spike on edge-03 (89ms)</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[14:30:58]</span>
+            <span class="log-ok">Auto-scale triggered: +2 instances (us-east)</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[14:30:22]</span>
+            <span class="log-ok">TLS certificate rotation complete</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[14:29:47]</span>
+            <span class="log-warn">WARN: Rate limit approaching on /api/v2</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[14:29:03]</span>
+            <span class="log-ok">Backup snapshot saved (12.4GB)</span>
+          </div>
+        </div>
+
+        <!-- Metrics Panel -->
+        <div class="dashboard-panel reveal reveal-d1">
+          <h3 style="margin-bottom: 16px; color: var(--muted);">KEY METRICS</h3>
+          <div class="metric-row">
+            <div>
+              <div class="metric-label">Requests/sec</div>
+              <div class="metric-value">12,847</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width: 78%;"></div></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div>
+              <div class="metric-label">Error Rate</div>
+              <div class="metric-value">0.02%</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width: 2%; background: var(--green);"></div></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div>
+              <div class="metric-label">P99 Latency</div>
+              <div class="metric-value">23ms</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width: 23%;"></div></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div>
+              <div class="metric-label">Throughput</div>
+              <div class="metric-value">4.2Gb/s</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width: 62%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="cta-frame reveal">
+        <div class="cta-corner-marks"><span>⊕</span><span>⊕</span></div>
+        <h2>Deploy Now</h2>
+        <div class="cta-cmd">
+          <span style="color: var(--muted);">$</span> [your-product] deploy --production<span style="display:inline-block;width:2px;height:1em;background:var(--green);vertical-align:text-bottom;margin-left:2px;animation:blink-caret 0.8s step-end infinite;border:none;"></span>
+        </div>
+        <br>
+        <a href="#" class="cta-btn">Initialize Deploy Sequence</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-marks reveal">◉ ◎ ▣ ⊕ ▪</div>
+      <div class="footer-grid reveal">
+        <div>
+          <a href="#">Documentation</a>
+          <a href="#">API Reference</a>
+          <a href="#">Changelog</a>
+        </div>
+        <div>
+          <a href="#">Status Page</a>
+          <a href="#">Security</a>
+          <a href="#">Support</a>
+        </div>
+        <div>
+          <a href="#">GitHub</a>
+          <a href="#">Twitter</a>
+          <a href="#">Discord</a>
+        </div>
+      </div>
+      <div class="footer-copyright reveal">
+        &copy; 2024 [PRODUCT_NAME] // ALL SYSTEMS NOMINAL
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── JS ─── -->
+  <script>
+    // Scroll reveal (repeats)
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        } else {
+          e.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Live clock in nav
+    function updateClock() {
+      const now = new Date();
+      const y = now.getUTCFullYear();
+      const m = String(now.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(now.getUTCDate()).padStart(2, '0');
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const min = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      const el = document.getElementById('nav-clock');
+      if (el) el.textContent = `UTC ${y}.${m}.${d} ${h}:${min}:${s}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+
+</body>
+</html>

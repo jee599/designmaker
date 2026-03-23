@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>061 — Editorial Minimal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FFFFFF;
+      --bg-subtle: #F7F6F3;
+      --text: #111111;
+      --text-secondary: #888888;
+      --text-muted: #ABABAB;
+      --border: #EAEAEA;
+      --accent: #111111;
+      --accent-hover: #333333;
+      --badge-text: #666666;
+      --font-serif: 'Newsreader', Georgia, serif;
+      --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
+      --max-w: 1120px;
+      --radius-card: 8px;
+      --radius-btn: 6px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 1rem;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3 { font-family: var(--font-serif); }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent); color: #FFFFFF;
+      padding: 12px 24px; border-radius: var(--radius-btn);
+      font-size: 0.9375rem; font-weight: 500;
+      border: none; cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--text);
+      padding: 12px 24px; border-radius: var(--radius-btn);
+      font-size: 0.9375rem; font-weight: 500;
+      border: 1px solid var(--border); cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+    .btn-secondary:hover { border-color: var(--text); }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--badge-text);
+      user-select: none;
+    }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+    .reveal-d5 { transition-delay: 0.40s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: 64px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s ease;
+    }
+    nav .nav-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: var(--font-serif); font-weight: 600; font-style: italic;
+      font-size: 1.25rem; color: var(--text);
+    }
+    .nav-links { display: none; gap: 32px; align-items: center; }
+    .nav-links a {
+      font-size: 0.875rem; color: var(--text-secondary);
+      transition: color 0.15s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta .btn-primary { padding: 8px 20px; font-size: 0.8125rem; }
+
+    .nav-mobile-toggle {
+      display: flex; flex-direction: column; gap: 4px; cursor: pointer;
+      background: none; border: none; padding: 4px;
+    }
+    .nav-mobile-toggle span {
+      display: block; width: 18px; height: 1.5px; background: var(--text);
+    }
+
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .nav-mobile-toggle { display: none; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 120px 24px 96px;
+      text-align: center;
+      background: var(--bg);
+    }
+    .hero h1 {
+      font-size: 3rem; font-weight: 600;
+      letter-spacing: -0.03em; line-height: 1.08;
+      max-width: 640px; margin: 20px auto 0;
+    }
+    .hero .subtitle {
+      font-size: 1.125rem; color: var(--text-secondary);
+      max-width: 480px; margin: 20px auto 0; line-height: 1.6;
+    }
+    .hero .cta-row {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 32px; flex-wrap: wrap;
+    }
+    .hero .cta-note {
+      margin-top: 16px; font-size: 0.8125rem; color: var(--text-muted);
+    }
+    @media (min-width: 768px) {
+      .hero { padding: 160px 24px 128px; }
+      .hero h1 { font-size: 4rem; }
+    }
+
+    /* ── Social Proof ── */
+    .social-proof {
+      background: var(--bg-subtle); padding: 40px 24px;
+      text-align: center;
+    }
+    .social-proof p {
+      font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 24px;
+    }
+    .logo-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .logo-row span {
+      font-family: var(--font-sans); font-weight: 600;
+      font-size: 0.9375rem; color: var(--text); opacity: 0.25;
+      user-select: none; white-space: nowrap;
+    }
+    @media (min-width: 768px) {
+      .logo-row { gap: 56px; }
+    }
+
+    /* ── Features ── */
+    .features {
+      background: var(--bg); padding: 80px 24px;
+    }
+    .features .section-head {
+      text-align: center; margin-bottom: 56px;
+    }
+    .features .section-head h2 {
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: -0.02em; line-height: 1.15;
+      margin-top: 16px;
+    }
+    .features .section-head p {
+      font-size: 1rem; color: var(--text-secondary);
+      max-width: 520px; margin: 12px auto 0;
+    }
+    .features-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .feature-card {
+      border: 1px solid var(--border); border-radius: var(--radius-card);
+      padding: 28px 28px 32px; background: var(--bg);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .feature-card .icon-wrap {
+      width: 36px; height: 36px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .feature-card .icon-wrap svg {
+      width: 24px; height: 24px;
+      stroke: var(--text); stroke-width: 1.5; fill: none;
+    }
+    .feature-card h3 {
+      font-size: 1.25rem; font-weight: 500;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;
+    }
+    @media (min-width: 768px) {
+      .features { padding: 80px 24px 112px; }
+      .features .section-head h2 { font-size: 2.5rem; }
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── How It Works ── */
+    .how-it-works {
+      background: var(--bg-subtle); padding: 80px 24px 96px;
+    }
+    .how-it-works .section-head {
+      text-align: center; margin-bottom: 56px;
+    }
+    .how-it-works .section-head h2 {
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: -0.02em; margin-top: 16px;
+    }
+    .steps {
+      display: grid; grid-template-columns: 1fr; gap: 40px;
+      max-width: 960px; margin: 0 auto;
+      position: relative;
+    }
+    .step { text-align: center; position: relative; }
+    .step-number {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 2rem; font-weight: 400; color: #CCCCCC;
+      margin-bottom: 12px; line-height: 1;
+    }
+    .step h3 {
+      font-size: 1.25rem; font-weight: 500;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .step p {
+      font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;
+      max-width: 280px; margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .how-it-works .section-head h2 { font-size: 2.5rem; }
+      .steps { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .steps::before {
+        content: ''; position: absolute;
+        top: 18px; left: 16.66%; right: 16.66%;
+        height: 1px; background: var(--border);
+      }
+    }
+
+    /* ── Testimonials ── */
+    .testimonials {
+      background: var(--bg); padding: 80px 24px 96px;
+    }
+    .testimonials .section-head {
+      text-align: center; margin-bottom: 48px;
+    }
+    .testimonials .section-head h2 {
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: -0.02em; margin-top: 16px;
+    }
+    .quote-block {
+      max-width: 640px; margin: 0 auto 56px;
+      padding-left: 24px;
+      border-left: 2px solid var(--text);
+    }
+    .quote-block blockquote {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 1.375rem; line-height: 1.55;
+      color: var(--text); margin-bottom: 20px;
+    }
+    .quote-block .attribution {
+      font-size: 0.875rem;
+    }
+    .quote-block .attribution strong {
+      color: var(--text); font-weight: 600;
+    }
+    .quote-block .attribution span {
+      color: var(--text-secondary);
+    }
+    .testimonial-grid {
+      display: grid; grid-template-columns: 1fr; gap: 24px;
+      max-width: 960px; margin: 0 auto;
+    }
+    .testimonial-card {
+      border: 1px solid var(--border); border-radius: var(--radius-card);
+      padding: 24px 28px;
+    }
+    .testimonial-card p {
+      font-size: 0.9375rem; color: var(--text-secondary);
+      line-height: 1.6; margin-bottom: 16px;
+    }
+    .testimonial-card .author {
+      font-size: 0.8125rem;
+    }
+    .testimonial-card .author strong {
+      color: var(--text); font-weight: 600;
+    }
+    .testimonial-card .author span {
+      color: var(--text-muted);
+    }
+    @media (min-width: 768px) {
+      .testimonials .section-head h2 { font-size: 2.5rem; }
+      .quote-block blockquote { font-size: 1.625rem; }
+      .testimonial-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--bg-subtle); padding: 96px 24px;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: -0.02em; line-height: 1.15;
+    }
+    .cta-section .cta-sub {
+      font-size: 1rem; color: var(--text-secondary);
+      margin: 12px auto 0; max-width: 400px;
+    }
+    .cta-section .btn-primary {
+      margin-top: 28px; padding: 14px 32px;
+    }
+    .cta-section .cta-note {
+      margin-top: 14px; font-size: 0.8125rem; color: var(--text-muted);
+    }
+    @media (min-width: 768px) {
+      .cta-section { padding: 112px 24px; }
+      .cta-section h2 { font-size: 2.5rem; }
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg); padding: 64px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1fr; gap: 40px;
+      max-width: var(--max-w); margin: 0 auto;
+    }
+    .footer-brand .brand-name {
+      font-family: var(--font-serif); font-style: italic;
+      font-weight: 600; font-size: 1.125rem;
+      margin-bottom: 8px;
+    }
+    .footer-brand .brand-tagline {
+      font-size: 0.875rem; color: var(--text-secondary);
+    }
+    .footer-col h4 {
+      font-family: var(--font-sans); font-size: 0.8125rem;
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text);
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      font-size: 0.875rem; color: var(--text-secondary);
+      transition: color 0.15s ease;
+    }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 40px auto 0;
+      padding-top: 24px; border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-bottom p {
+      font-size: 0.8125rem; color: var(--text-muted);
+    }
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">Clarendon</a>
+      <div class="nav-links">
+        <a href="#">Features</a>
+        <a href="#">Pricing</a>
+        <a href="#">Docs</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#" class="btn-primary">Get started</a>
+      </div>
+      <button class="nav-mobile-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="reveal">
+      <span class="badge">NOW IN BETA</span>
+      <h1>Write, plan, and ship&mdash;without the noise</h1>
+      <p class="subtitle">A workspace for people who care about craft. Organize projects, write documents, and track progress in one quiet place.</p>
+      <div class="cta-row">
+        <a href="#" class="btn-primary">Start for free</a>
+        <a href="#" class="btn-secondary">See how it works</a>
+      </div>
+      <p class="cta-note">Free for individuals. No credit card required.</p>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof">
+    <div class="reveal">
+      <p>Trusted by 2,400+ teams building better products</p>
+      <div class="logo-row">
+        <span>Archway</span>
+        <span>Kindling</span>
+        <span>Threadwork</span>
+        <span>Nomad</span>
+        <span>Halfmoon</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="badge">FEATURES</span>
+        <h2>Everything you need, nothing you don't</h2>
+        <p>Six tools, one workspace. Each built to stay out of your way until you need it.</p>
+      </div>
+      <div class="features-grid">
+        <!-- Card 1 -->
+        <div class="feature-card reveal reveal-d1">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Documents</h3>
+          <p>Write and nest pages without limits. Markdown shortcuts, tables, and embeds built in. No formatting toolbar clutter.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="feature-card reveal reveal-d2">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3>Projects</h3>
+          <p>Kanban boards, timelines, and lists that adapt to your workflow. Switch views without losing context.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="feature-card reveal reveal-d3">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3>Search</h3>
+          <p>Find anything across every page and project in under 200ms. Filters by author, date, and tag. No indexing delays.</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="feature-card reveal reveal-d1">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Collaboration</h3>
+          <p>Real-time editing with presence indicators. Comment threads that resolve into action items. No notification overload.</p>
+        </div>
+        <!-- Card 5 -->
+        <div class="feature-card reveal reveal-d2">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>Automations</h3>
+          <p>Set rules once and forget them. Move tasks on status change, assign reviewers on PR merge, archive after 30 days of inactivity.</p>
+        </div>
+        <!-- Card 6 -->
+        <div class="feature-card reveal reveal-d3">
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>API &amp; Integrations</h3>
+          <p>REST and GraphQL APIs with typed SDKs. Connect to GitHub, Slack, Figma, and 40 other tools without middleware.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="badge">HOW IT WORKS</span>
+        <h2>Three steps, five minutes</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal reveal-d1">
+          <div class="step-number">01</div>
+          <h3>Create a workspace</h3>
+          <p>Sign up with your email. Invite your team or start solo. No setup wizard, no onboarding calls.</p>
+        </div>
+        <div class="step reveal reveal-d2">
+          <div class="step-number">02</div>
+          <h3>Import or start fresh</h3>
+          <p>Bring your Notion, Confluence, or Markdown files. The importer handles formatting, links, and attachments.</p>
+        </div>
+        <div class="step reveal reveal-d3">
+          <div class="step-number">03</div>
+          <h3>Ship your first project</h3>
+          <p>Create a project, add tasks, write the spec. Everything lives in one place. No tab-switching between apps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="badge">FROM OUR USERS</span>
+        <h2>Quiet tools, loud results</h2>
+      </div>
+
+      <!-- Featured Quote -->
+      <div class="quote-block reveal">
+        <blockquote>&ldquo;We moved our entire product team off Notion and Linear into Clarendon in a weekend. The migration tool handled 1,200 pages. Two months in, our meeting time dropped by 30% because everything is findable now.&rdquo;</blockquote>
+        <div class="attribution">
+          <strong>Elena Voss</strong> &mdash; <span>Head of Product, Threadwork (42 people)</span>
+        </div>
+      </div>
+
+      <!-- Smaller testimonials -->
+      <div class="testimonial-grid">
+        <div class="testimonial-card reveal reveal-d1">
+          <p>&ldquo;I tried every productivity tool on the market. Clarendon is the first one I didn't have to fight. The keyboard shortcuts alone saved me 20 minutes a day.&rdquo;</p>
+          <div class="author">
+            <strong>M. Tanaka</strong> &mdash; <span>Solo founder</span>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-d2">
+          <p>&ldquo;Our engineers refused to use the old wiki. Three weeks after switching, doc coverage went from 40% to 85%. The editor just feels right.&rdquo;</p>
+          <div class="author">
+            <strong>R. Okonkwo</strong> &mdash; <span>Engineering Manager, Halfmoon</span>
+          </div>
+        </div>
+        <div class="testimonial-card reveal reveal-d3">
+          <p>&ldquo;The API is genuinely good. We built our internal dashboard on top of it in three days. TypeScript SDK, proper error codes, 99.98% uptime.&rdquo;</p>
+          <div class="author">
+            <strong>J. Lindqvist</strong> &mdash; <span>CTO, Archway</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="reveal">
+      <h2>Start building today</h2>
+      <p class="cta-sub">Join 2,400+ teams who traded complexity for clarity.</p>
+      <a href="#" class="btn-primary">Get Clarendon free</a>
+      <p class="cta-note">No credit card required</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-name">Clarendon</div>
+        <p class="brand-tagline">The workspace for people who ship.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Roadmap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Templates</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Clarendon. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal with IntersectionObserver (repeating)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

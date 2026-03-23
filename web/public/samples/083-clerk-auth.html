@@ -9,201 +9,341 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #09090b;
-      --text: #f4f4f5;
-      --subtle-bg: #18181b;
-      --border: #27272a;
-      --muted: #71717a;
-      --accent: #7c3aed;
-      --accent-light: #a78bfa;
-      --cyan: #06b6d4;
-    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
-    .font-heading { font-family: 'Inter', sans-serif; }
+
+    :root {
+      --bg: #09090b;
+      --surface: #18181b;
+      --elevated: #1f1f23;
+      --border: #27272a;
+      --border-hover: #3f3f46;
+      --text: #fafafa;
+      --muted: #71717a;
+      --purple: #7c3aed;
+      --purple-light: #a78bfa;
+      --purple-dim: rgba(124,58,237,0.12);
+      --cyan: #06b6d4;
+      --cyan-dim: rgba(6,182,212,0.12);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* Hero gradient */
     .hero-gradient {
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(124,58,237,0.12) 0%, transparent 65%);
     }
-    .code-block {
-      background: #0f0f12;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .auth-card {
-      background: var(--subtle-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-    }
+
+    /* Meteor animation */
     .meteor {
       position: absolute;
       width: 2px;
-      height: 60px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: meteor-fall 3s linear infinite;
-      opacity: 0.4;
+      background: linear-gradient(to bottom, var(--purple), transparent);
+      opacity: 0;
+      animation: meteor-fall 4s linear infinite;
     }
     @keyframes meteor-fall {
-      0% { transform: translateY(-100px) translateX(0); opacity: 0; }
-      10% { opacity: 0.4; }
-      90% { opacity: 0.4; }
-      100% { transform: translateY(600px) translateX(100px); opacity: 0; }
+      0% { transform: translateY(-80px) translateX(0) rotate(15deg); opacity: 0; height: 0; }
+      5% { opacity: 0.5; height: 50px; }
+      80% { opacity: 0.3; }
+      100% { transform: translateY(500px) translateX(80px) rotate(15deg); opacity: 0; height: 50px; }
     }
-    .grid-lines {
-      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 60px 60px;
-      opacity: 0.3;
+
+    /* Grid lines background */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* Buttons */
+    .btn-purple {
+      background: var(--purple);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-purple:hover { opacity: 0.9; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.03); border-color: var(--border-hover); }
+
+    /* Auth card */
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    /* Code block */
+    .code-block {
+      background: #0c0c0f;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    /* Feature card */
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: all 0.2s ease;
+    }
+    .feature-card:hover { transform: translateY(-2px); border-color: var(--border-hover); }
+
+    /* Icon box */
+    .icon-box {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--purple-light);
+    }
+
+    /* Social button */
+    .social-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .social-btn:hover { background: rgba(255,255,255,0.03); }
+
+    /* Input */
+    .auth-input {
+      width: 100%;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .auth-input:focus { border-color: var(--purple); box-shadow: 0 0 0 2px rgba(124,58,237,0.15); }
+    .auth-input::placeholder { color: var(--muted); }
+
+    /* Divider */
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* Testimonial card */
+    .testimonial-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.2s ease;
+    }
+    .testimonial-card:hover { transform: translateY(-2px); }
+    .testimonial-card.featured { border: 2px solid var(--purple); }
+
+    /* Avatar */
+    .avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500;
     }
   </style>
 </head>
 <body>
   <!-- Nav -->
-  <nav class="fixed top-0 w-full z-50 backdrop-blur-md" style="background: rgba(9,9,11,0.85); border-bottom: 1px solid var(--border);">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+  <nav class="fixed top-0 w-full z-50" style="background: rgba(9,9,11,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);">
+    <div class="max-w-[1080px] mx-auto px-6 py-3.5 flex items-center justify-between">
       <div class="flex items-center gap-8">
         <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: var(--accent);">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <div class="w-[26px] h-[26px] rounded-lg flex items-center justify-center" style="background: var(--purple);">
+            <svg class="w-[14px] h-[14px] text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
           </div>
-          <span class="font-heading font-bold text-base">AuthKit</span>
+          <span class="font-bold text-[15px]">AuthKit</span>
         </div>
-        <div class="hidden md:flex items-center gap-6 text-sm" style="color: var(--muted);">
-          <a href="#" class="hover:text-white transition-colors duration-200">Products</a>
-          <a href="#" class="hover:text-white transition-colors duration-200">Docs</a>
-          <a href="#" class="hover:text-white transition-colors duration-200">Pricing</a>
-          <a href="#" class="hover:text-white transition-colors duration-200">Blog</a>
+        <div class="hidden md:flex items-center gap-5 text-[13px] text-[#71717a]">
+          <a href="#" class="hover:text-white transition-colors">Products</a>
+          <a href="#" class="hover:text-white transition-colors">Docs</a>
+          <a href="#" class="hover:text-white transition-colors">Pricing</a>
+          <a href="#" class="hover:text-white transition-colors">Blog</a>
+          <a href="#" class="hover:text-white transition-colors">Changelog</a>
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="#" class="text-sm hover:text-white transition-colors duration-200" style="color: var(--muted);">Sign in</a>
-        <a href="#" class="rounded-lg px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-400 cursor-pointer" style="background: var(--accent);">Get Started</a>
+        <a href="#" class="text-[13px] text-[#71717a] hover:text-white transition-colors">Sign in</a>
+        <a href="#" class="btn-purple text-[13px] px-4 py-[7px]">Get Started</a>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="relative pt-36 pb-28 md:pt-44 md:pb-36 text-center px-6 hero-gradient overflow-hidden">
-    <div class="meteor" style="top: -60px; left: 20%; animation-delay: 0s;"></div>
-    <div class="meteor" style="top: -60px; left: 60%; animation-delay: 1.5s;"></div>
-    <div class="meteor" style="top: -60px; left: 80%; animation-delay: 2.3s;"></div>
-    <div class="max-w-4xl mx-auto relative z-10">
-      <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium mb-8" style="background: rgba(124,58,237,0.1); color: var(--accent-light); border: 1px solid rgba(124,58,237,0.2);">
+  <section class="relative pt-[140px] pb-[100px] md:pt-[180px] md:pb-[120px] text-center px-6 hero-gradient overflow-hidden">
+    <!-- Meteors -->
+    <div class="meteor" style="top: -60px; left: 15%; animation-delay: 0s; height: 50px;"></div>
+    <div class="meteor" style="top: -60px; left: 45%; animation-delay: 1.2s; height: 40px;"></div>
+    <div class="meteor" style="top: -60px; left: 70%; animation-delay: 2.5s; height: 60px;"></div>
+    <div class="meteor" style="top: -60px; left: 85%; animation-delay: 3.8s; height: 35px;"></div>
+
+    <div class="max-w-[780px] mx-auto relative z-10">
+      <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[12px] font-medium mb-8" style="background: var(--purple-dim); color: var(--purple-light); border: 1px solid rgba(124,58,237,0.2);">
+        <span class="w-1.5 h-1.5 rounded-full" style="background: var(--purple-light);"></span>
         Trusted by 50,000+ applications
       </div>
-      <h1 class="font-heading font-bold text-5xl md:text-6xl leading-[1.1] mb-6" style="letter-spacing: -0.03em;">
-        Authentication & user management for <span style="color: var(--accent-light);">modern apps</span>
+      <h1 class="font-bold text-[44px] md:text-[60px] leading-[1.08] mb-6" style="letter-spacing: -0.035em;">
+        Authentication &amp; user management for <span style="color: var(--purple-light);">modern apps</span>
       </h1>
-      <p class="text-lg max-w-2xl mx-auto mb-10 leading-relaxed" style="color: var(--muted);">
+      <p class="text-[17px] max-w-[560px] mx-auto mb-10 leading-[1.6] text-[#71717a]">
         Drop-in UI components, flexible APIs, and admin dashboards to authenticate and manage your users. Works with any framework.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium text-white transition-all duration-200 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-400 cursor-pointer" style="background: var(--accent);">Start Building</a>
-        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-400 cursor-pointer" style="border: 1px solid var(--border); color: var(--text);">Read the Docs</a>
+        <a href="#" class="btn-purple text-[14px] px-6 py-[11px]">Start Building</a>
+        <a href="#" class="btn-ghost text-[14px] px-6 py-[11px]">Read the Docs</a>
       </div>
     </div>
   </section>
 
   <!-- Company Logos -->
-  <section class="py-12" style="background: var(--subtle-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-    <div class="max-w-6xl mx-auto px-6 fade-in">
-      <p class="text-center text-xs uppercase tracking-widest mb-8" style="color: var(--muted);">Powering authentication for</p>
-      <div class="flex flex-wrap items-center justify-center gap-10 md:gap-14 opacity-40">
-        <span class="font-heading font-bold text-base">Vercel</span>
-        <span class="font-heading font-bold text-base">Supabase</span>
-        <span class="font-heading font-bold text-base">Notion</span>
-        <span class="font-heading font-bold text-base">Stripe</span>
-        <span class="font-heading font-bold text-base">Linear</span>
-        <span class="font-heading font-bold text-base">Loom</span>
+  <section class="py-10" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="max-w-[1080px] mx-auto px-6 fade-in">
+      <p class="text-center text-[11px] uppercase tracking-[0.12em] mb-8 text-[#71717a]">Powering authentication for</p>
+      <div class="flex flex-wrap items-center justify-center gap-10 md:gap-14 opacity-35">
+        <span class="font-semibold text-[14px]">Vercel</span>
+        <span class="font-semibold text-[14px]">Supabase</span>
+        <span class="font-semibold text-[14px]">Notion</span>
+        <span class="font-semibold text-[14px]">Stripe</span>
+        <span class="font-semibold text-[14px]">Linear</span>
+        <span class="font-semibold text-[14px]">Loom</span>
       </div>
     </div>
   </section>
 
   <!-- Auth Component Showcase -->
-  <section class="py-24 px-6" style="background: var(--bg);">
-    <div class="max-w-6xl mx-auto fade-in">
+  <section class="py-24 px-6">
+    <div class="max-w-[1080px] mx-auto fade-in">
       <div class="text-center mb-16">
-        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--accent-light);">Components</div>
-        <h2 class="font-heading font-semibold text-3xl sm:text-4xl" style="letter-spacing: -0.02em;">Beautiful auth, out of the box</h2>
+        <div class="section-label mb-3">Components</div>
+        <h2 class="font-semibold text-[32px] sm:text-[40px]" style="letter-spacing: -0.025em;">Beautiful auth, out of the box</h2>
       </div>
       <div class="grid md:grid-cols-2 gap-8 items-start">
         <!-- Sign In Preview -->
         <div class="auth-card p-8">
-          <div class="max-w-xs mx-auto">
+          <div class="max-w-[280px] mx-auto">
             <div class="text-center mb-6">
-              <div class="w-10 h-10 rounded-lg mx-auto mb-4 flex items-center justify-center" style="background: var(--accent);">
+              <div class="w-10 h-10 rounded-lg mx-auto mb-4 flex items-center justify-center" style="background: var(--purple);">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
               </div>
-              <h3 class="font-heading font-semibold text-lg">Sign in to AuthKit</h3>
-              <p class="text-sm mt-1" style="color: var(--muted);">Welcome back! Please sign in to continue</p>
+              <h3 class="font-semibold text-[17px]">Sign in to AuthKit</h3>
+              <p class="text-[13px] mt-1 text-[#71717a]">Welcome back! Please sign in to continue</p>
             </div>
-            <div class="space-y-3 mb-4">
-              <button class="w-full flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-white/5 cursor-pointer" style="border: 1px solid var(--border);">
+            <!-- Social logins -->
+            <div class="space-y-2.5 mb-4">
+              <button class="social-btn">
                 <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                 Continue with Google
               </button>
-              <button class="w-full flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-white/5 cursor-pointer" style="border: 1px solid var(--border);">
+              <button class="social-btn">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                 Continue with GitHub
               </button>
             </div>
-            <div class="flex items-center gap-3 my-5">
-              <div class="flex-1 h-px" style="background: var(--border);"></div>
-              <span class="text-xs" style="color: var(--muted);">or</span>
-              <div class="flex-1 h-px" style="background: var(--border);"></div>
+            <!-- Divider -->
+            <div class="or-divider my-5">
+              <span class="text-[11px] text-[#71717a]">or</span>
             </div>
+            <!-- Email -->
             <div class="space-y-3">
               <div>
-                <label class="block text-xs font-medium mb-1.5" style="color: var(--muted);">Email address</label>
-                <input type="email" placeholder="you@example.com" class="w-full rounded-lg px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200" style="border: 1px solid var(--border); color: var(--text);" />
+                <label class="block text-[11px] font-medium mb-1.5 text-[#71717a]">Email address</label>
+                <input type="email" placeholder="you@example.com" class="auth-input" />
               </div>
-              <button class="w-full rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:opacity-90 cursor-pointer" style="background: var(--accent);">Continue</button>
+              <button class="btn-purple w-full text-[13px] py-[10px]">Continue</button>
             </div>
+            <p class="text-[11px] text-[#71717a] text-center mt-4">
+              Don't have an account? <a href="#" class="text-[var(--purple-light)] hover:underline">Sign up</a>
+            </p>
           </div>
         </div>
+
         <!-- Code Preview -->
         <div>
-          <div class="font-mono text-xs mb-3" style="color: var(--muted);">// Add auth in 5 minutes</div>
-          <div class="code-block p-5">
+          <div class="font-mono text-[11px] text-[#71717a] mb-3">// Add auth in 5 minutes</div>
+          <div class="code-block p-5 mb-4">
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full" style="background: #ff5f57;"></div>
-                <div class="w-3 h-3 rounded-full" style="background: #febc2e;"></div>
-                <div class="w-3 h-3 rounded-full" style="background: #28c840;"></div>
+              <div class="flex items-center gap-1.5">
+                <div class="w-2.5 h-2.5 rounded-full" style="background: #ff5f57;"></div>
+                <div class="w-2.5 h-2.5 rounded-full" style="background: #febc2e;"></div>
+                <div class="w-2.5 h-2.5 rounded-full" style="background: #28c840;"></div>
               </div>
-              <span class="text-xs" style="color: var(--muted);">app/layout.tsx</span>
+              <span class="font-mono text-[11px] text-[#71717a]">app/layout.tsx</span>
             </div>
-            <pre style="color: var(--muted); overflow-x: auto;"><span style="color: #c084fc;">import</span> <span style="color: var(--text);">{ AuthProvider }</span> <span style="color: #c084fc;">from</span> <span style="color: #6ee7b7;">'@authkit/nextjs'</span>
+            <pre class="font-mono" style="color: #71717a; overflow-x: auto;"><span style="color: #c084fc;">import</span> <span style="color: #fafafa;">{ AuthProvider }</span> <span style="color: #c084fc;">from</span> <span style="color: #6ee7b7;">'@authkit/nextjs'</span>
 
 <span style="color: #c084fc;">export default function</span> <span style="color: #60a5fa;">RootLayout</span>({
-  <span style="color: var(--text);">children</span>,
+  <span style="color: #fafafa;">children</span>,
 }: {
-  <span style="color: var(--text);">children</span>: <span style="color: #fbbf24;">React.ReactNode</span>
+  <span style="color: #fafafa;">children</span>: <span style="color: #fbbf24;">React.ReactNode</span>
 }) {
   <span style="color: #c084fc;">return</span> (
-    <span style="color: var(--muted);">&lt;</span><span style="color: #60a5fa;">AuthProvider</span><span style="color: var(--muted);">&gt;</span>
-      {<span style="color: var(--text);">children</span>}
-    <span style="color: var(--muted);">&lt;/</span><span style="color: #60a5fa;">AuthProvider</span><span style="color: var(--muted);">&gt;</span>
+    <span style="color: #71717a;">&lt;</span><span style="color: #60a5fa;">AuthProvider</span><span style="color: #71717a;">&gt;</span>
+      {<span style="color: #fafafa;">children</span>}
+    <span style="color: #71717a;">&lt;/</span><span style="color: #60a5fa;">AuthProvider</span><span style="color: #71717a;">&gt;</span>
   )
 }</pre>
           </div>
-          <div class="code-block p-5 mt-4">
+          <div class="code-block p-5">
             <div class="flex items-center justify-between mb-4">
-              <span class="text-xs" style="color: var(--accent-light);">middleware.ts</span>
+              <span class="font-mono text-[11px]" style="color: var(--purple-light);">middleware.ts</span>
             </div>
-            <pre style="color: var(--muted); overflow-x: auto;"><span style="color: #c084fc;">import</span> <span style="color: var(--text);">{ authMiddleware }</span> <span style="color: #c084fc;">from</span> <span style="color: #6ee7b7;">'@authkit/nextjs/server'</span>
+            <pre class="font-mono" style="color: #71717a; overflow-x: auto;"><span style="color: #c084fc;">import</span> <span style="color: #fafafa;">{ authMiddleware }</span> <span style="color: #c084fc;">from</span> <span style="color: #6ee7b7;">'@authkit/nextjs/server'</span>
 
 <span style="color: #c084fc;">export default</span> <span style="color: #60a5fa;">authMiddleware</span>()
 
-<span style="color: #c084fc;">export const</span> <span style="color: var(--text);">config</span> = {
-  <span style="color: var(--text);">matcher</span>: [<span style="color: #6ee7b7;">'/((?!.*\\..*|_next).*)' </span>, <span style="color: #6ee7b7;">'/'</span>],
+<span style="color: #c084fc;">export const</span> <span style="color: #fafafa;">config</span> = {
+  <span style="color: #fafafa;">matcher</span>: [<span style="color: #6ee7b7;">'/((?!.*\\..*|_next).*)'</span>, <span style="color: #6ee7b7;">'/'</span>],
 }</pre>
           </div>
         </div>
@@ -212,93 +352,93 @@
   </section>
 
   <!-- Framework Support -->
-  <section class="py-16 px-6" style="background: var(--subtle-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-    <div class="max-w-4xl mx-auto text-center fade-in">
-      <p class="text-sm font-medium mb-8" style="color: var(--muted);">Works with every framework</p>
-      <div class="flex flex-wrap items-center justify-center gap-6">
-        <span class="font-mono text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/5" style="border: 1px solid var(--border);">Next.js</span>
-        <span class="font-mono text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/5" style="border: 1px solid var(--border);">React</span>
-        <span class="font-mono text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/5" style="border: 1px solid var(--border);">Remix</span>
-        <span class="font-mono text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/5" style="border: 1px solid var(--border);">Astro</span>
-        <span class="font-mono text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/5" style="border: 1px solid var(--border);">Express</span>
-        <span class="font-mono text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/5" style="border: 1px solid var(--border);">Ruby on Rails</span>
+  <section class="py-14 px-6" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="max-w-[780px] mx-auto text-center fade-in">
+      <p class="text-[13px] font-medium mb-8 text-[#71717a]">Works with every framework</p>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <span class="font-mono text-[12px] px-4 py-2 rounded-lg transition-all hover:bg-white/[0.03]" style="border: 1px solid var(--border);">Next.js</span>
+        <span class="font-mono text-[12px] px-4 py-2 rounded-lg transition-all hover:bg-white/[0.03]" style="border: 1px solid var(--border);">React</span>
+        <span class="font-mono text-[12px] px-4 py-2 rounded-lg transition-all hover:bg-white/[0.03]" style="border: 1px solid var(--border);">Remix</span>
+        <span class="font-mono text-[12px] px-4 py-2 rounded-lg transition-all hover:bg-white/[0.03]" style="border: 1px solid var(--border);">Astro</span>
+        <span class="font-mono text-[12px] px-4 py-2 rounded-lg transition-all hover:bg-white/[0.03]" style="border: 1px solid var(--border);">Express</span>
+        <span class="font-mono text-[12px] px-4 py-2 rounded-lg transition-all hover:bg-white/[0.03]" style="border: 1px solid var(--border);">Ruby on Rails</span>
       </div>
     </div>
   </section>
 
   <!-- Features Grid -->
-  <section class="py-24 px-6" style="background: var(--bg);">
-    <div class="max-w-6xl mx-auto fade-in">
+  <section class="py-24 px-6">
+    <div class="max-w-[1080px] mx-auto fade-in">
       <div class="text-center mb-16">
-        <div class="font-mono text-xs tracking-widest uppercase mb-4" style="color: var(--accent-light);">Features</div>
-        <h2 class="font-heading font-semibold text-3xl sm:text-4xl" style="letter-spacing: -0.02em;">Everything for modern auth</h2>
+        <div class="section-label mb-3">Features</div>
+        <h2 class="font-semibold text-[32px] sm:text-[40px]" style="letter-spacing: -0.025em;">Everything for modern auth</h2>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="sm:col-span-2 rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(124,58,237,0.15);">
-            <svg class="w-5 h-5" fill="none" stroke="#a78bfa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="sm:col-span-2 feature-card">
+          <div class="icon-box mb-4" style="background: var(--purple-dim);">
+            <svg class="w-5 h-5" fill="none" stroke="#a78bfa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
-          <h3 class="font-heading font-semibold text-lg mb-2">User Management</h3>
-          <p class="text-sm leading-relaxed" style="color: var(--muted);">Complete user profiles, metadata, sessions, and multi-factor authentication. Built-in admin dashboard to manage all your users.</p>
+          <h3 class="font-semibold text-[17px] mb-2">User Management</h3>
+          <p class="text-[14px] leading-[1.6] text-[#71717a]">Complete user profiles, metadata, sessions, and multi-factor authentication. Built-in admin dashboard to manage all your users.</p>
         </div>
-        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(6,182,212,0.15);">
-            <svg class="w-5 h-5" fill="none" stroke="#06b6d4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        <div class="feature-card">
+          <div class="icon-box mb-4" style="background: var(--cyan-dim);">
+            <svg class="w-5 h-5" fill="none" stroke="#06b6d4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
           </div>
-          <h3 class="font-heading font-semibold text-lg mb-2">Organizations</h3>
-          <p class="text-sm leading-relaxed" style="color: var(--muted);">Multi-tenant support with roles, permissions, and invitations out of the box.</p>
+          <h3 class="font-semibold text-[17px] mb-2">Organizations</h3>
+          <p class="text-[14px] leading-[1.6] text-[#71717a]">Multi-tenant support with roles, permissions, and invitations out of the box.</p>
         </div>
-        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(124,58,237,0.15);">
-            <svg class="w-5 h-5" fill="none" stroke="#a78bfa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <div class="feature-card">
+          <div class="icon-box mb-4" style="background: var(--purple-dim);">
+            <svg class="w-5 h-5" fill="none" stroke="#a78bfa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
           </div>
-          <h3 class="font-heading font-semibold text-lg mb-2">Security</h3>
-          <p class="text-sm leading-relaxed" style="color: var(--muted);">Bot detection, brute-force protection, and device fingerprinting built in.</p>
+          <h3 class="font-semibold text-[17px] mb-2">Security</h3>
+          <p class="text-[14px] leading-[1.6] text-[#71717a]">Bot detection, brute-force protection, and device fingerprinting built in.</p>
         </div>
-        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(6,182,212,0.15);">
-            <svg class="w-5 h-5" fill="none" stroke="#06b6d4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        <div class="feature-card">
+          <div class="icon-box mb-4" style="background: var(--cyan-dim);">
+            <svg class="w-5 h-5" fill="none" stroke="#06b6d4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
           </div>
-          <h3 class="font-heading font-semibold text-lg mb-2">Webhooks</h3>
-          <p class="text-sm leading-relaxed" style="color: var(--muted);">React to auth events in real time with webhooks and event subscriptions.</p>
+          <h3 class="font-semibold text-[17px] mb-2">Webhooks</h3>
+          <p class="text-[14px] leading-[1.6] text-[#71717a]">React to auth events in real time with webhooks and event subscriptions.</p>
         </div>
-        <div class="rounded-xl p-8 transition-all duration-200 hover:-translate-y-1" style="background: var(--subtle-bg); border: 1px solid var(--border);">
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style="background: rgba(124,58,237,0.15);">
-            <svg class="w-5 h-5" fill="none" stroke="#a78bfa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="feature-card">
+          <div class="icon-box mb-4" style="background: var(--purple-dim);">
+            <svg class="w-5 h-5" fill="none" stroke="#a78bfa" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
-          <h3 class="font-heading font-semibold text-lg mb-2">Billing</h3>
-          <p class="text-sm leading-relaxed" style="color: var(--muted);">Stripe-powered billing, subscription management, and usage-based pricing.</p>
+          <h3 class="font-semibold text-[17px] mb-2">Billing</h3>
+          <p class="text-[14px] leading-[1.6] text-[#71717a]">Stripe-powered billing, subscription management, and usage-based pricing.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Testimonials -->
-  <section class="py-20 px-6" style="background: var(--subtle-bg); border-top: 1px solid var(--border);">
-    <div class="max-w-6xl mx-auto fade-in">
+  <section class="py-20 px-6" style="background: var(--surface); border-top: 1px solid var(--border);">
+    <div class="max-w-[1080px] mx-auto fade-in">
       <div class="text-center mb-12">
-        <h2 class="font-heading font-semibold text-3xl" style="letter-spacing: -0.02em;">Developers love AuthKit</h2>
+        <h2 class="font-semibold text-[28px] sm:text-[36px]" style="letter-spacing: -0.025em;">Developers love AuthKit</h2>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1" style="background: var(--bg); border: 1px solid var(--border);">
-          <p class="text-sm leading-relaxed mb-4" style="color: var(--muted);">"Implemented auth in our Next.js app in under an hour. The DX is unmatched."</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="testimonial-card">
+          <p class="text-[14px] leading-[1.6] mb-5 text-[#71717a]">"Implemented auth in our Next.js app in under an hour. The DX is unmatched."</p>
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-medium" style="background: rgba(124,58,237,0.2); color: var(--accent-light);">DL</div>
-            <div><div class="text-sm font-medium">Daniel Lee</div><div class="text-xs" style="color: var(--muted);">Full-Stack Developer</div></div>
+            <div class="avatar" style="background: var(--purple-dim); color: var(--purple-light);">DL</div>
+            <div><div class="text-[13px] font-medium">Daniel Lee</div><div class="text-[11px] text-[#71717a]">Full-Stack Developer</div></div>
           </div>
         </div>
-        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1" style="background: var(--bg); border: 2px solid var(--accent);">
-          <p class="text-sm leading-relaxed mb-4" style="color: var(--muted);">"We moved from a custom auth solution to AuthKit and reduced auth-related bugs by 95%."</p>
+        <div class="testimonial-card featured">
+          <p class="text-[14px] leading-[1.6] mb-5 text-[#71717a]">"We moved from a custom auth solution to AuthKit and reduced auth-related bugs by 95%."</p>
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-medium" style="background: rgba(6,182,212,0.2); color: var(--cyan);">RP</div>
-            <div><div class="text-sm font-medium">Rachel Park</div><div class="text-xs" style="color: var(--muted);">Engineering Lead</div></div>
+            <div class="avatar" style="background: var(--cyan-dim); color: var(--cyan);">RP</div>
+            <div><div class="text-[13px] font-medium">Rachel Park</div><div class="text-[11px] text-[#71717a]">Engineering Lead</div></div>
           </div>
         </div>
-        <div class="rounded-xl p-6 transition-all duration-200 hover:-translate-y-1" style="background: var(--bg); border: 1px solid var(--border);">
-          <p class="text-sm leading-relaxed mb-4" style="color: var(--muted);">"The organizations feature saved us months of development. B2B auth is hard — AuthKit makes it easy."</p>
+        <div class="testimonial-card">
+          <p class="text-[14px] leading-[1.6] mb-5 text-[#71717a]">"The organizations feature saved us months of development. B2B auth is hard -- AuthKit makes it easy."</p>
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-medium" style="background: rgba(124,58,237,0.2); color: var(--accent-light);">TN</div>
-            <div><div class="text-sm font-medium">Tom Nguyen</div><div class="text-xs" style="color: var(--muted);">CTO, SaaSCo</div></div>
+            <div class="avatar" style="background: var(--purple-dim); color: var(--purple-light);">TN</div>
+            <div><div class="text-[13px] font-medium">Tom Nguyen</div><div class="text-[11px] text-[#71717a]">CTO, SaaSCo</div></div>
           </div>
         </div>
       </div>
@@ -306,52 +446,51 @@
   </section>
 
   <!-- CTA -->
-  <section class="py-24 px-6 relative overflow-hidden" style="background: linear-gradient(135deg, var(--accent) 0%, #4c1d95 100%);">
-    <div class="absolute inset-0 grid-lines"></div>
-    <div class="max-w-3xl mx-auto text-center text-white relative z-10 fade-in">
-      <h2 class="font-heading font-bold text-3xl sm:text-5xl mb-6" style="letter-spacing: -0.03em;">Ship auth today,<br>not next quarter</h2>
-      <p class="text-lg mb-10 opacity-70">Free for up to 10,000 monthly active users. No credit card required.</p>
+  <section class="py-28 px-6 relative overflow-hidden grid-bg" style="background: linear-gradient(135deg, var(--purple) 0%, #4c1d95 100%);">
+    <div class="max-w-[640px] mx-auto text-center text-white relative z-10 fade-in">
+      <h2 class="font-bold text-[32px] sm:text-[48px] mb-6" style="letter-spacing: -0.035em;">Ship auth today,<br>not next quarter</h2>
+      <p class="text-[17px] mb-10 opacity-60">Free for up to 10,000 monthly active users. No credit card required.</p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium text-purple-900 bg-white transition-all duration-200 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer">Start Building Free</a>
-        <a href="#" class="rounded-lg px-6 py-3 text-base font-medium transition-all duration-200 hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer" style="border: 1px solid rgba(255,255,255,0.3);">Talk to Sales</a>
+        <a href="#" class="rounded-[8px] px-6 py-[11px] text-[14px] font-medium text-[#4c1d95] bg-white hover:bg-gray-100 transition-colors cursor-pointer">Start Building Free</a>
+        <a href="#" class="rounded-[8px] px-6 py-[11px] text-[14px] font-medium text-white hover:bg-white/10 transition-colors cursor-pointer" style="border: 1px solid rgba(255,255,255,0.25);">Talk to Sales</a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-16 px-6" style="background: var(--bg); color: var(--muted); border-top: 1px solid var(--border);">
-    <div class="max-w-6xl mx-auto">
+  <footer class="py-16 px-6" style="background: var(--bg); color: #71717a; border-top: 1px solid var(--border);">
+    <div class="max-w-[1080px] mx-auto">
       <div class="grid sm:grid-cols-4 gap-8 mb-12">
         <div>
           <div class="flex items-center gap-2 mb-4">
-            <div class="w-5 h-5 rounded flex items-center justify-center" style="background: var(--accent);">
+            <div class="w-5 h-5 rounded flex items-center justify-center" style="background: var(--purple);">
               <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
-            <span class="font-heading font-bold text-white text-sm">AuthKit</span>
+            <span class="font-bold text-white text-[13px]">AuthKit</span>
           </div>
-          <p class="text-sm">Auth for modern apps.</p>
+          <p class="text-[12px]">Auth for modern apps.</p>
         </div>
         <div>
-          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Product</h4>
-          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Authentication</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">User Management</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Organizations</a></li></ul>
+          <h4 class="text-[11px] font-medium text-white mb-3 uppercase tracking-[0.06em]">Product</h4>
+          <ul class="space-y-2 text-[13px]"><li><a href="#" class="hover:text-white transition-colors">Authentication</a></li><li><a href="#" class="hover:text-white transition-colors">User Management</a></li><li><a href="#" class="hover:text-white transition-colors">Organizations</a></li></ul>
         </div>
         <div>
-          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Developers</h4>
-          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">API Reference</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">SDKs</a></li></ul>
+          <h4 class="text-[11px] font-medium text-white mb-3 uppercase tracking-[0.06em]">Developers</h4>
+          <ul class="space-y-2 text-[13px]"><li><a href="#" class="hover:text-white transition-colors">Documentation</a></li><li><a href="#" class="hover:text-white transition-colors">API Reference</a></li><li><a href="#" class="hover:text-white transition-colors">SDKs</a></li></ul>
         </div>
         <div>
-          <h4 class="text-xs font-semibold text-white mb-3 uppercase tracking-wider">Company</h4>
-          <ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors duration-200">About</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Blog</a></li><li><a href="#" class="hover:text-white transition-colors duration-200">Changelog</a></li></ul>
+          <h4 class="text-[11px] font-medium text-white mb-3 uppercase tracking-[0.06em]">Company</h4>
+          <ul class="space-y-2 text-[13px]"><li><a href="#" class="hover:text-white transition-colors">About</a></li><li><a href="#" class="hover:text-white transition-colors">Blog</a></li><li><a href="#" class="hover:text-white transition-colors">Changelog</a></li></ul>
         </div>
       </div>
-      <div class="border-t pt-8 text-xs text-center" style="border-color: var(--border);">© 2026 AuthKit Inc. All rights reserved.</div>
+      <div class="border-t pt-8 text-[11px] text-center" style="border-color: var(--border);">&copy; 2026 AuthKit Inc. All rights reserved.</div>
     </div>
   </footer>
 
   <script>
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); else e.target.classList.remove('visible'); });
-    }, { threshold: 0.15 });
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
   </script>
 </body>
