@@ -1,12 +1,15 @@
-import { headers } from "next/headers";
+import dynamic from "next/dynamic";
 import { references } from "@/app/data/references";
-import GalleryClient from "@/app/components/GalleryClient";
 import GalleryStatic from "@/app/components/GalleryStatic";
-import HeroSection from "@/app/components/HeroSection";
 
-function isMobileUA(ua: string): boolean {
-  return /Android|iPhone|iPad|iPod|Mobile|NAVER|wv|WebView/i.test(ua);
-}
+const GalleryClient = dynamic(() => import("@/app/components/GalleryClient"), {
+  ssr: false,
+  loading: () => null,
+});
+const HeroSection = dynamic(() => import("@/app/components/HeroSection"), {
+  ssr: false,
+  loading: () => null,
+});
 
 function HeroStatic({ count }: { count: number }) {
   return (
@@ -28,24 +31,19 @@ function HeroStatic({ count }: { count: number }) {
   );
 }
 
-export default async function Home() {
-  const headersList = await headers();
-  const ua = headersList.get("user-agent") || "";
-  const mobile = isMobileUA(ua);
-
+export default function Home() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      {mobile ? (
-        <>
-          <HeroStatic count={references.length} />
-          <GalleryStatic references={references} />
-        </>
-      ) : (
-        <>
-          <HeroSection referenceCount={references.length} />
-          <GalleryClient references={references} />
-        </>
-      )}
+      {/* Mobile: static server-rendered, no client JS loaded */}
+      <div className="block md:hidden">
+        <HeroStatic count={references.length} />
+        <GalleryStatic references={references} />
+      </div>
+      {/* Desktop: dynamically loaded interactive experience */}
+      <div className="hidden md:block">
+        <HeroSection referenceCount={references.length} />
+        <GalleryClient references={references} />
+      </div>
     </div>
   );
 }
