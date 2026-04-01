@@ -131,6 +131,24 @@ body {
   color: var(--text);
   background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
   background-size: 24px 24px;
+  /* Prevent pull-to-refresh on mobile browsers */
+  overscroll-behavior-y: none;
+}
+
+html {
+  overscroll-behavior-y: none;
+}
+
+/* Mobile: disable GPU-heavy effects */
+@media (max-width: 768px) {
+  body {
+    background-image: none;
+  }
+  .backdrop-blur-xl,
+  .backdrop-blur-sm {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 /* ── Accent utility classes ── */
